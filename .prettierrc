@@ -1,22 +1,22 @@
 {
-    "printWidth": 125,
-    "tabWidth": 2,
+    "printWidth": 100,
+    "tabWidth": 4,
     "trailingComma": "none",
     "semi": true,
     "htmlWhitespaceSensitivity": "css",
     "quoteProps": "as-needed",
-  "overrides": [
-    {
-      "files": "*.css",
-      "options": {
-        "parser": "css"
-      }
-    },
-    {
-      "files": "*.scss",
-      "options": {
-        "parser": "scss"
-      }
-    }
-  ]
+    "overrides": [
+        {
+            "files": "*.css",
+            "options": {
+                "parser": "css"
+            }
+        },
+        {
+            "files": "*.scss",
+            "options": {
+                "parser": "scss"
+            }
+        }
+    ]
 }
