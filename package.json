@@ -60,6 +60,8 @@
         "sass": "^1.58.0"
     },
     "lint-staged": {
-        "*.js": "eslint --cache --fix"
+        "src/**/*.{js,ts,jsx,tsx}": [
+            "eslint --config ./.eslintrc.js --ext js --ext ts --ext jsx --ext tsx --fix"
+        ]
     }
 }
