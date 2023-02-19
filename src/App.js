@@ -15,7 +15,7 @@ function App() {
     return (
         <AbilityContext.Provider value={ability}>
             <div className="booking">
-                roleId = {user?.roleId} - Booking:
+                roleId = {user?.roleId} - Chức năng Booking:
                 <Can I="create" a={booking}>
                     <li>Create</li>
                 </Can>
@@ -30,7 +30,7 @@ function App() {
                 </Can>
             </div>
             <div className="patient">
-                roleId = {user?.roleId} - Patient:
+                roleId = {user?.roleId} - Chức năng Patient:
                 <Can I="create" a={patient}>
                     <li>Create</li>
                 </Can>
@@ -45,7 +45,7 @@ function App() {
                 </Can>
             </div>
             <div className="report">
-                roleId = {user?.roleId} - Report:
+                roleId = {user?.roleId} - Chức năng Report:
                 <Can I="create" a={report}>
                     <li>Create</li>
                 </Can>
