@@ -12,6 +12,7 @@ const report = new Report({ id: 1 });
 const booking = new Booking({ id: 1 });
 
 function App() {
+    console.log("sang");
     return (
         <AbilityContext.Provider value={ability}>
             <div className="booking">
