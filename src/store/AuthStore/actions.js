@@ -1,16 +1,16 @@
 import { LOGIN, LOGOUT, SET_USER } from "./contants";
 
-export const login = (payload) => ({
+const login = (payload) => ({
   type: LOGIN,
   payload
 });
 
-export const logout = (payload) => ({
+const logout = (payload) => ({
   type: LOGOUT,
   payload
 });
 
-export const setUser = (payload) => ({
+const setUser = (payload) => ({
   type: SET_USER,
   payload
 });

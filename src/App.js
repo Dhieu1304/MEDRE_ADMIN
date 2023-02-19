@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import "./App.css";
 import defineAbilityFor from "./config/defineAbility";
 import { AbilityContext, Can } from "./store/AbilityStore";
@@ -12,56 +11,55 @@ const report = new Report({ id: 1 });
 const booking = new Booking({ id: 1 });
 
 function App() {
-    console.log("sang");
-    return (
-        <AbilityContext.Provider value={ability}>
-            <div className="booking">
-                roleId = {user?.roleId} - Chức năng Booking:
-                <Can I="create" a={booking}>
-                    <li>Create</li>
-                </Can>
-                <Can I="read" a={booking}>
-                    <li>read</li>
-                </Can>
-                <Can I="write" a={booking}>
-                    <li>write</li>
-                </Can>
-                <Can I="update" a={booking}>
-                    <li>update</li>
-                </Can>
-            </div>
-            <div className="patient">
-                roleId = {user?.roleId} - Chức năng Patient:
-                <Can I="create" a={patient}>
-                    <li>Create</li>
-                </Can>
-                <Can I="read" a={patient}>
-                    <li>read</li>
-                </Can>
-                <Can I="write" a={patient}>
-                    <li>write</li>
-                </Can>
-                <Can I="update" a={patient}>
-                    <li>update</li>
-                </Can>
-            </div>
-            <div className="report">
-                roleId = {user?.roleId} - Chức năng Report:
-                <Can I="create" a={report}>
-                    <li>Create</li>
-                </Can>
-                <Can I="read" a={report}>
-                    <li>read</li>
-                </Can>
-                <Can I="write" a={report}>
-                    <li>write</li>
-                </Can>
-                <Can I="update" a={report}>
-                    <li>update</li>
-                </Can>
-            </div>
-        </AbilityContext.Provider>
-    );
+  return (
+    <AbilityContext.Provider value={ability}>
+      <div className="booking">
+        roleId = {user?.roleId} - Chức năng Booking:
+        <Can I="create" a={booking}>
+          <li>Create</li>
+        </Can>
+        <Can I="read" a={booking}>
+          <li>read</li>
+        </Can>
+        <Can I="write" a={booking}>
+          <li>write</li>
+        </Can>
+        <Can I="update" a={booking}>
+          <li>update</li>
+        </Can>
+      </div>
+      <div className="patient">
+        roleId = {user?.roleId} - Chức năng Patient:
+        <Can I="create" a={patient}>
+          <li>Create</li>
+        </Can>
+        <Can I="read" a={patient}>
+          <li>read</li>
+        </Can>
+        <Can I="write" a={patient}>
+          <li>write</li>
+        </Can>
+        <Can I="update" a={patient}>
+          <li>update</li>
+        </Can>
+      </div>
+      <div className="report">
+        roleId = {user?.roleId} - Chức năng Report:
+        <Can I="create" a={report}>
+          <li>Create</li>
+        </Can>
+        <Can I="read" a={report}>
+          <li>read</li>
+        </Can>
+        <Can I="write" a={report}>
+          <li>write</li>
+        </Can>
+        <Can I="update" a={report}>
+          <li>update</li>
+        </Can>
+      </div>
+    </AbilityContext.Provider>
+  );
 }
 
 export default App;

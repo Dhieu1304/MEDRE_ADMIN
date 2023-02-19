@@ -9,13 +9,13 @@ import { AuthProvider } from "./store/AuthStore";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-    <React.StrictMode>
-        <FetchingProvider>
-            <AuthProvider>
-                <App />
-            </AuthProvider>
-        </FetchingProvider>
-    </React.StrictMode>
+  <React.StrictMode>
+    <FetchingProvider>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </FetchingProvider>
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
