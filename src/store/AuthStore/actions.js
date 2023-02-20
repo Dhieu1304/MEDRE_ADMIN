@@ -15,8 +15,9 @@ const setUser = (payload) => ({
   payload
 });
 
-export default {
+const actions = {
   login,
   logout,
   setUser
 };
+export default actions;

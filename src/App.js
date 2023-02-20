@@ -1,7 +1,7 @@
 import "./App.css";
 import defineAbilityFor from "./config/defineAbility";
 import { AbilityContext, Can } from "./store/AbilityStore";
-import { Booking, Patient, Report } from "./entities";
+import { Patient, Report, Booking } from "./entities";
 
 const user = { roleId: 1 };
 const ability = defineAbilityFor(user);

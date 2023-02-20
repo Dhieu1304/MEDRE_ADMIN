@@ -1,9 +1,4 @@
-class Entity {
-    constructor(attrs) {
-        Object.assign(this, attrs);
-    }
-}
-
-export class Patient extends Entity {}
-export class Report extends Entity {}
-export class Booking extends Entity {}
+export { default } from "./Entity";
+export { default as Booking } from "./Booking";
+export { default as Patient } from "./Patient";
+export { default as Report } from "./Report";

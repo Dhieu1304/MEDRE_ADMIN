@@ -1,22 +1,23 @@
 import { FETCHING_API, FETCHING_API_SUCCESS, FETCHING_API_FAILED } from "./contants";
 
-export const fetchApi = (payload) => ({
+const fetchApi = (payload) => ({
   type: FETCHING_API,
   payload
 });
 
-export const fetchApiSuccess = (payload) => ({
+const fetchApiSuccess = (payload) => ({
   type: FETCHING_API_SUCCESS,
   payload
 });
 
-export const fetchApiFailed = (payload) => ({
+const fetchApiFailed = (payload) => ({
   type: FETCHING_API_FAILED,
   payload
 });
 
-export default {
+const actions = {
   fetchApi,
   fetchApiSuccess,
   fetchApiFailed
 };
+export default actions;
