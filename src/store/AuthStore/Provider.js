@@ -8,14 +8,15 @@ function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initState);
 
   const value = useMemo(
-    () =>
-      ({
-        ...state,
-        loginByEmail: async () => {
-          dispatch(actions.login("sang"));
-          return false;
-        }
-      }[state])
+    () => ({
+      ...state,
+      loginByEmail: async () => {
+        dispatch(actions.fetchApi());
+        dispatch(actions.fetchApiSuccess());
+        return false;
+      }
+    }),
+    [state]
   );
 
   return <Context.Provider value={value}>{children}</Context.Provider>;

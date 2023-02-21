@@ -1,4 +1,4 @@
-import { LOGIN, LOGOUT, SET_USER } from "./contants";
+import { FETCHING_API, FETCHING_API_FAILED, FETCHING_API_SUCCESS, LOGIN, LOGOUT, SET_USER } from "./contants";
 
 const login = (payload) => ({
   type: LOGIN,
@@ -15,9 +15,28 @@ const setUser = (payload) => ({
   payload
 });
 
+const fetchApi = (payload) => ({
+  type: FETCHING_API,
+  payload
+});
+
+const fetchApiSuccess = (payload) => ({
+  type: FETCHING_API_SUCCESS,
+  payload
+});
+
+const fetchApiFailed = (payload) => ({
+  type: FETCHING_API_FAILED,
+  payload
+});
+
 const actions = {
   login,
   logout,
-  setUser
+  setUser,
+  fetchApi,
+  fetchApiSuccess,
+  fetchApiFailed
 };
+
 export default actions;

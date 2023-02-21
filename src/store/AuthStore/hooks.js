@@ -2,7 +2,8 @@ import { useContext } from "react";
 import Context from "./Context";
 
 const useAuthStore = () => {
-  return useContext(Context);
+  const value = useContext(Context);
+  return value;
 };
 
 export { useAuthStore };
