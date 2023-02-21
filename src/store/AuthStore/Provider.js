@@ -27,6 +27,17 @@ function AuthProvider({ children }) {
         dispatch(actions.fetchApiFailed(message));
         toast.success(message);
         return false;
+      },
+      logout: async () => {
+        dispatch(actions.fetchApi());
+        const res = await authServices.logout();
+        if (res?.success) {
+          dispatch(actions.logout());
+          dispatch(actions.fetchApiSuccess());
+        } else {
+          dispatch(actions.logout());
+          dispatch(actions.fetchApiSuccess());
+        }
       }
     }),
     [state]

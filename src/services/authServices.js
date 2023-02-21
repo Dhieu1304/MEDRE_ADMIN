@@ -32,6 +32,17 @@ const loginByEmail = async (email, password) => {
   }
 };
 
+const logout = async () => {
+  localStorageUtil.removeItem(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN);
+  localStorageUtil.removeItem(localStorageUtil.LOCAL_STORAGE.REFRESH_TOKEN);
+
+  return {
+    success: true,
+    message: "Logout successfully"
+  };
+};
+
 export default {
-  loginByEmail
+  loginByEmail,
+  logout
 };

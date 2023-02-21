@@ -5,7 +5,7 @@ import { useAuthStore } from "../../store/AuthStore/hooks";
 function HomePage() {
   const authStore = useAuthStore();
 
-  return authStore.isLogin ? <span>HomePage</span> : <Navigate to={routeConfig.auth} />;
+  return authStore.isLogin ? <div>HomePage</div> : <Navigate to={routeConfig.auth} />;
 }
 
 export default HomePage;
