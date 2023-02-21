@@ -12,7 +12,7 @@ import { Login } from "../../features/auth";
 
 const theme = createTheme();
 
-export default function SignIn() {
+export default function AuthPage() {
   const navigate = useNavigate();
   return (
     <ThemeProvider theme={theme}>
@@ -23,7 +23,6 @@ export default function SignIn() {
             sx={{
               my: 8,
               mx: 4,
-              px: 4,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",

@@ -8,30 +8,22 @@ import { defineAbility } from "@casl/ability";
 */
 
 const defineAbilityFor = (user) =>
-  defineAbility((can) => {
-    const { roleId } = user;
+  defineAbility((can, cannot) => {
+    const { role } = user;
 
-    switch (roleId) {
-      // admin
-      case 1:
+    switch (role) {
+      case "Admin":
         can("manage", "all");
         break;
 
-      // doctor
-      case 2:
+      case "Doctor":
         can(["read"], ["Patient"]);
         can(["read"], ["Booking"]);
         break;
 
-      // staff
-      case 3:
-        can(["read", "update"], ["Patient"]);
-        can(["read"], ["Booking"]);
-        break;
+      case "User":
+        cannot("manage", "Payment");
 
-      // customer care staff
-      case 4:
-        can(["read", "update", "write"], ["Booking"]);
         break;
       default:
         break;

@@ -37,5 +37,3 @@ export const headerDropdownMenu = [
     label: "Change password"
   }
 ];
-
-export const drawerWidth = 240;
