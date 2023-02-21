@@ -1,5 +1,8 @@
 import { Box, Typography, Button } from "@mui/material";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import routeConfig from "../../config/routeConfig";
+import { useAuthStore } from "../../store/AuthStore";
 import AuthInput from "./components/AuthInput";
 
 export default function Login() {
@@ -12,10 +15,14 @@ export default function Login() {
     criteriaMode: "all"
   });
 
+  const authStore = useAuthStore();
+  const navigate = useNavigate();
+
   const onLogin = async ({ email, password }) => {
-    // do nothing
-    // demo code to commit eslint
-    return email && password;
+    const result = await authStore.loginByEmail(email, password);
+    if (result) {
+      navigate(routeConfig.home);
+    }
   };
 
   const requireErrorMessage = "field can not empty";
