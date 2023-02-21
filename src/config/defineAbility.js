@@ -17,8 +17,8 @@ const defineAbilityFor = (user) =>
         break;
 
       case "Doctor":
-        can(["read"], ["Patient"]);
-        can(["read"], ["Booking"]);
+        can(["read"], ["Payment"]);
+        cannot("manage", "Payment");
         break;
 
       case "User":
