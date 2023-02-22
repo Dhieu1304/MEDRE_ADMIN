@@ -5,13 +5,16 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
 import { AuthProvider } from "./store/AuthStore";
+import { AppConfigProvider } from "./store/AppConfigStore";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <AuthProvider>
-      <App />
-    </AuthProvider>
+    <AppConfigProvider>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </AppConfigProvider>
   </React.StrictMode>
 );
 
