@@ -20,6 +20,7 @@ import { Link } from "react-router-dom";
 import images from "../../../assets/images";
 import CustomDrawer, { CustomDrawerHeader } from "../../../components/CustomDrawer";
 import { sideBarItems } from "./config";
+import routeConfig from "../../../config/routeConfig";
 
 function SideBar({ open, handleDrawerClose }) {
   const theme = useTheme();
@@ -28,35 +29,35 @@ function SideBar({ open, handleDrawerClose }) {
   return (
     <CustomDrawer variant="permanent" open={open} isMobile={isMobile}>
       <CustomDrawerHeader>
-        <IconButton onClick={handleDrawerClose}>
-          <Box sx={{ display: { xs: "flex", md: "flex", alignItems: "center" } }}>
-            <Box
-              component="img"
-              sx={{
-                mr: 1
-              }}
-              src={images.logo}
-              width={30}
-            />
+        <Box sx={{ display: { xs: "flex", md: "flex", alignItems: "center" } }}>
+          <Box
+            component="img"
+            sx={{
+              mr: 1
+            }}
+            src={images.logo}
+            width={30}
+          />
 
-            <Typography
-              variant="h6"
-              noWrap
-              component="a"
-              href="/"
-              sx={{
-                mr: 2,
-                display: { md: "flex" },
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none"
-              }}
-            >
-              MEDRE
-            </Typography>
-          </Box>
+          <Typography
+            variant="h6"
+            noWrap
+            component={Link}
+            to={routeConfig.home}
+            sx={{
+              mr: 2,
+              display: { md: "flex" },
+              fontFamily: "monospace",
+              fontWeight: 700,
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none"
+            }}
+          >
+            MEDRE
+          </Typography>
+        </Box>
+        <IconButton onClick={handleDrawerClose}>
           {theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}
         </IconButton>
       </CustomDrawerHeader>

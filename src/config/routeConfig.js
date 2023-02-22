@@ -1,7 +1,8 @@
 const routeConfig = {
   home: "/",
   auth: "/auth",
-  payment: "/payment"
+  payment: "/payment",
+  default: "/*"
 };
 
 export default routeConfig;

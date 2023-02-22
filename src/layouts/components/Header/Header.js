@@ -4,11 +4,13 @@ import { Box, IconButton, Toolbar, Typography, Avatar, Menu, MenuItem, Tooltip }
 
 import MenuIcon from "@mui/icons-material/Menu";
 
+import { Link } from "react-router-dom";
 import { headerDropdownMenu } from "./config";
 
 import images from "../../../assets/images";
 import { useAuthStore } from "../../../store/AuthStore/hooks";
 import CustomAppBar from "../../../components/CustomAppBar";
+import routeConfig from "../../../config/routeConfig";
 
 function Header({ open, handleDrawerOpen }) {
   const authStore = useAuthStore();
@@ -55,8 +57,8 @@ function Header({ open, handleDrawerOpen }) {
             <Typography
               variant="h6"
               noWrap
-              component="a"
-              href="/"
+              component={Link}
+              to={routeConfig.home}
               sx={{
                 mr: 2,
                 display: { md: "flex" },
