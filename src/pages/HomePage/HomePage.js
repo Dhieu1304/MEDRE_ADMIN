@@ -1,11 +1,16 @@
-import { Navigate } from "react-router-dom";
-import routeConfig from "../../config/routeConfig";
-import { useAuthStore } from "../../store/AuthStore/hooks";
+import { useAppConfigStore } from "../../store/AppConfigStore/hooks";
+import "../../config/i18n";
 
 function HomePage() {
-  const authStore = useAuthStore();
+  const { mode, locale } = useAppConfigStore();
 
-  return authStore.isLogin ? <span>HomePage</span> : <Navigate to={routeConfig.auth} />;
+  return (
+    <div>
+      HomePage
+      <p>mode: {mode}</p>
+      <p>locale: {locale}</p>
+    </div>
+  );
 }
 
 export default HomePage;

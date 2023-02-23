@@ -17,46 +17,50 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 import { useTheme } from "@mui/material/styles";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import images from "../../../assets/images";
 import CustomDrawer, { CustomDrawerHeader } from "../../../components/CustomDrawer";
 import { sideBarItems } from "./config";
+import routeConfig from "../../../config/routeConfig";
 
 function SideBar({ open, handleDrawerClose }) {
   const theme = useTheme();
   const isMobile = useMediaQuery("(max-width:768px)");
 
+  const { t } = useTranslation("layout", { keyPrefix: "sidebar" });
+
   return (
     <CustomDrawer variant="permanent" open={open} isMobile={isMobile}>
       <CustomDrawerHeader>
-        <IconButton onClick={handleDrawerClose}>
-          <Box sx={{ display: { xs: "flex", md: "flex", alignItems: "center" } }}>
-            <Box
-              component="img"
-              sx={{
-                mr: 1
-              }}
-              src={images.logo}
-              width={30}
-            />
+        <Box sx={{ display: { xs: "flex", md: "flex", alignItems: "center" } }}>
+          <Box
+            component="img"
+            sx={{
+              mr: 1
+            }}
+            src={images.logo}
+            width={30}
+          />
 
-            <Typography
-              variant="h6"
-              noWrap
-              component="a"
-              href="/"
-              sx={{
-                mr: 2,
-                display: { md: "flex" },
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none"
-              }}
-            >
-              MEDRE
-            </Typography>
-          </Box>
+          <Typography
+            variant="h6"
+            noWrap
+            component={Link}
+            to={routeConfig.home}
+            sx={{
+              mr: 2,
+              display: { md: "flex" },
+              fontFamily: "monospace",
+              fontWeight: 700,
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none"
+            }}
+          >
+            MEDRE
+          </Typography>
+        </Box>
+        <IconButton onClick={handleDrawerClose}>
           {theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}
         </IconButton>
       </CustomDrawerHeader>
@@ -83,7 +87,7 @@ function SideBar({ open, handleDrawerClose }) {
                 {item.icon}
               </ListItemIcon>
 
-              <ListItemText primary={item.label} sx={{ opacity: open ? 1 : 0 }} />
+              <ListItemText primary={t(item.label)} sx={{ opacity: open ? 1 : 0 }} />
             </ListItemButton>
           </ListItem>
         ))}

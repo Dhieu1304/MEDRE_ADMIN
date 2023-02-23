@@ -6,7 +6,7 @@ const getUserInfo = async () => {
     const res = await axiosClient.get(userApi.userInfo);
 
     if (res?.status) {
-      const user = res?.data?.user;
+      const user = res?.data;
 
       return {
         success: true,
