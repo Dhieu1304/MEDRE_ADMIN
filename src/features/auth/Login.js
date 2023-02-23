@@ -1,5 +1,7 @@
 import { Box, Typography, Button } from "@mui/material";
+import { useMemo } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import routeConfig from "../../config/routeConfig";
 import { useAuthStore } from "../../store/AuthStore";
@@ -17,6 +19,7 @@ export default function Login() {
 
   const authStore = useAuthStore();
   const navigate = useNavigate();
+  const { t } = useTranslation("authFeature", { keyPrefix: "login" });
 
   const onLogin = async ({ email, password }) => {
     const result = await authStore.loginByEmail(email, password);
@@ -25,12 +28,12 @@ export default function Login() {
     }
   };
 
-  const requireErrorMessage = "field can not empty";
+  const requireErrorMessage = useMemo(() => t("input.require_error_message"), []);
 
   return (
     <>
       <Typography component="h1" variant="h5">
-        Sign in
+        {t("title")}
       </Typography>
       <Box component="form" noValidate onSubmit={handleSubmit(onLogin)} sx={{ marginTop: 1 }}>
         <AuthInput
@@ -40,10 +43,10 @@ export default function Login() {
             // https://ihateregex.io/expr/phone/
             pattern: {
               value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-              message: "is wrong format"
+              message: t("input.email_format_error_message")
             }
           }}
-          label="Email"
+          label={t("input.email_label")}
           trigger={trigger}
           name="email"
           type="email"
@@ -55,21 +58,21 @@ export default function Login() {
             required: requireErrorMessage,
             minLength: {
               value: 8,
-              message: "must be at least 8 characters"
+              message: t("input.password_min_length_error_message")
             },
             pattern: {
               value: /(?=.*[a-zA-Z])(?=.*[0-9])/,
-              message: "must have at least 1 digit and 1 character"
+              message: t("input.password_format_error_message")
             }
           }}
-          label="Password"
+          label={t("input.password_label")}
           trigger={trigger}
           name="password"
           type="password"
         />
 
         <Button type="submit" fullWidth variant="contained" sx={{ mb: 2, p: 1, fontSize: 10 }}>
-          Login
+          {t("button_title")}
         </Button>
       </Box>
     </>

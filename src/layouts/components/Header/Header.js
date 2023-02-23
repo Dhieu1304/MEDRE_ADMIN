@@ -22,14 +22,7 @@ function Header({ open, handleDrawerOpen }) {
 
   const { mode, setMode, locale, setLocale } = useAppConfigStore();
 
-  const { i18n } = useTranslation();
-  // const languages = useMemo(
-  //   () => ({
-  //     enUS: "English",
-  //     deDE: "Deviet"
-  //   }),
-  //   []
-  // );
+  const { t, i18n } = useTranslation("layout", { keyPrefix: "header" });
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -113,7 +106,7 @@ function Header({ open, handleDrawerOpen }) {
           >
             {headerDropdownMenu.map((item) => (
               <MenuItem key={item.label} onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">{item.label}</Typography>
+                <Typography textAlign="center">{t(item.label)}</Typography>
               </MenuItem>
             ))}
             <MenuItem
@@ -136,7 +129,7 @@ function Header({ open, handleDrawerOpen }) {
               <Typography textAlign="center">{locale}</Typography>
             </MenuItem>
             <MenuItem onClick={onLogout}>
-              <Typography textAlign="center">Logout</Typography>
+              <Typography textAlign="center">{t("logout_label")}</Typography>
             </MenuItem>
           </Menu>
         </Box>

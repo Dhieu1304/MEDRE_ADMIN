@@ -16,6 +16,4 @@ const locales = Object.keys(translations).reduce(
   {}
 );
 
-console.log("locales: ", locales);
-
 export default locales;

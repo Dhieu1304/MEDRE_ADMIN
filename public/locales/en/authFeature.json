@@ -1,0 +1,17 @@
+{
+  "login": {
+    "title": "Sign in",
+    "button_title": "Login",
+    "input": {
+      "require_error_message": "can not empty",
+      "email_format_error_message": "is wrong format",
+      "password_min_length_error_message": "must be at least {{min_length}} characters",
+      "password_format_error_message": "must have at least one digit and one character",
+      "email_label": "Email",
+      "password_label": "Password"
+    }
+  },
+  "no_have_access": {
+    "error_message": "You don't have access"
+  }
+}

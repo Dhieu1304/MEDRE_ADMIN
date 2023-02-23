@@ -17,6 +17,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 import { useTheme } from "@mui/material/styles";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import images from "../../../assets/images";
 import CustomDrawer, { CustomDrawerHeader } from "../../../components/CustomDrawer";
 import { sideBarItems } from "./config";
@@ -25,6 +26,8 @@ import routeConfig from "../../../config/routeConfig";
 function SideBar({ open, handleDrawerClose }) {
   const theme = useTheme();
   const isMobile = useMediaQuery("(max-width:768px)");
+
+  const { t } = useTranslation("layout", { keyPrefix: "sidebar" });
 
   return (
     <CustomDrawer variant="permanent" open={open} isMobile={isMobile}>
@@ -84,7 +87,7 @@ function SideBar({ open, handleDrawerClose }) {
                 {item.icon}
               </ListItemIcon>
 
-              <ListItemText primary={item.label} sx={{ opacity: open ? 1 : 0 }} />
+              <ListItemText primary={t(item.label)} sx={{ opacity: open ? 1 : 0 }} />
             </ListItemButton>
           </ListItem>
         ))}

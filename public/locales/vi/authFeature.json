@@ -1,0 +1,17 @@
+{
+  "login": {
+    "title": "Đăng nhập",
+    "button_title": "Đăng nhập",
+    "input": {
+      "require_error_message": "không thể bỏ trống",
+      "email_format_error_message": "sai định dạng",
+      "password_min_length_error_message": "phải có ít nhất {{min_length}} ký tự",
+      "password_format_error_message": "phải có ít nhất một chữ số và một ký tự",
+      "email_label": "Email",
+      "password_label": "Mật khẩu"
+    }
+  },
+  "no_have_access": {
+    "error_message": "Bạn không có quyền truy cập"
+  }
+}

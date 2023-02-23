@@ -5,27 +5,27 @@ import routeConfig from "../../../config/routeConfig";
 export const sideBarItems = [
   {
     to: routeConfig.user,
-    label: "User",
-    icon: <FontAwesomeIcon icon={faUsers} size="1x" />
+    label: "user_label",
+    icon: <FontAwesomeIcon icon={faUsers} width={20} />
   },
   {
     to: routeConfig.home,
-    label: "Patient",
-    icon: <FontAwesomeIcon icon={faHospitalUser} size="1x" />
+    label: "patient_label",
+    icon: <FontAwesomeIcon icon={faHospitalUser} width={20} />
   },
   {
     to: routeConfig.payment,
-    label: "Payment",
-    icon: <FontAwesomeIcon icon={faCreditCard} size="1x" />
+    label: "payment_label",
+    icon: <FontAwesomeIcon icon={faCreditCard} width={20} />
   },
   {
     to: routeConfig.home,
-    label: "Schedule",
-    icon: <FontAwesomeIcon icon={faCalendarDays} size="1x" />
+    label: "schedule_label",
+    icon: <FontAwesomeIcon icon={faCalendarDays} width={20} />
   },
   {
     to: routeConfig.home,
-    label: "Booking",
-    icon: <FontAwesomeIcon icon={faCalendarPlus} size="1x" />
+    label: "booking_label",
+    icon: <FontAwesomeIcon icon={faCalendarPlus} width={20} />
   }
 ];
