@@ -8,6 +8,8 @@ import SideBar from "../components/SideBar";
 export default function DefaultLayout({ children }) {
   const [open, setOpen] = useState(false);
 
+  console.log("Sang");
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
