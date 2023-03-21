@@ -55,15 +55,15 @@ export default function Login() {
         <AuthInput
           control={control}
           rules={{
-            required: requireErrorMessage,
-            minLength: {
-              value: 8,
-              message: t("input.password_min_length_error_message")
-            },
-            pattern: {
-              value: /(?=.*[a-zA-Z])(?=.*[0-9])/,
-              message: t("input.password_format_error_message")
-            }
+            required: requireErrorMessage
+            // minLength: {
+            //   value: 8,
+            //   message: t("input.password_min_length_error_message")
+            // },
+            // pattern: {
+            //   value: /(?=.*[a-zA-Z])(?=.*[0-9])/,
+            //   message: t("input.password_format_error_message")
+            // }
           }}
           label={t("input.password_label")}
           trigger={trigger}

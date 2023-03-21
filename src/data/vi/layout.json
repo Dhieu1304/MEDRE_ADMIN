@@ -1,5 +1,6 @@
 {
   "sidebar": {
+    "staff_label": "Nhân viên",
     "user_label": "Người dùng",
     "patient_label": "Bệnh nhân",
     "payment_label": "Thanh toán",
