@@ -1,0 +1,46 @@
+{
+  "staff_list": {
+    "title": "Find staff",
+    "filter": {
+      "search": "Search by name",
+      "email": "Email",
+      "phone": "Phone",
+      "username": "Username",
+      "type": "Type",
+      "date": "Date",
+      "expertise": "Expertise",
+      "gender": "Gender",
+      "status": "Status",
+      "role": "Role"
+    },
+    "hide_filter": "Hide filter",
+    "show_filter": "Show Filter",
+    "card": {
+      "book": "Book"
+    }
+  },
+  "staff_detail": {
+    "title": "Staff detail",
+    "expertise": "Expertise",
+    "education": "Education",
+    "schedule_table": {},
+    "booking_modal": {
+      "date": "Date",
+      "time": "Time",
+      "gender": "Gender",
+      "self": "Self",
+      "other": "Other",
+      "reason": "Reason",
+      "reason_placeholder": "Your reason",
+      "info": {
+        "title": "Info",
+        "name": "Name",
+        "phone": "Phone",
+        "gender": "Gender",
+        "male": "Male",
+        "female": "Female",
+        "birthday": "Birthday"
+      }
+    }
+  }
+}

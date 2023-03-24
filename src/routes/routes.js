@@ -7,9 +7,8 @@ import StaffPage from "../pages/StaffPage/StaffPage";
 
 // Public routes
 const publicRoutes = [
-  { path: routeConfig.home, component: HomePage },
   { path: `${routeConfig.auth}/*`, component: AuthPage, layout: null },
-  { path: routeConfig.default, component: Navigate, props: { to: routeConfig.home }, layout: null }
+  { path: routeConfig.default, component: Navigate, props: { to: routeConfig.auth }, layout: null }
 ];
 
 const privateRoutes = [

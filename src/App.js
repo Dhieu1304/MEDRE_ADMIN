@@ -29,6 +29,8 @@ function App() {
     loadData();
   }, []);
 
+  // console.log("authStore: ", authStore);
+
   return (
     <ThemeProvider theme={theme}>
       {isFirstVisit ? (

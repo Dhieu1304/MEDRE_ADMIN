@@ -22,7 +22,19 @@ export default function DefaultLayout({ children }) {
       <Header open={open} handleDrawerOpen={handleDrawerOpen} />
       <SideBar open={open} handleDrawerClose={handleDrawerClose} />
 
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box
+        component="main"
+        sx={{
+          width: "100%",
+          height: "100%",
+          flexGrow: 1,
+          display: "flex",
+          flexDirection: "column",
+          px: 4,
+          overflow: "hidden"
+        }}
+        py={4}
+      >
         <CustomDrawerHeader />
 
         {children}

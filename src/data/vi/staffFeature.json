@@ -1,0 +1,46 @@
+{
+  "staff_list": {
+    "title": "Tìm kiếm nhân viên",
+    "filter": {
+      "search": "Tìm kiếm theo tên",
+      "email": "Email",
+      "phone": "Số điện thoại",
+      "username": "Username",
+      "type": "Loại khám",
+      "date": "Ngày",
+      "expertise": "Chuyên khoa",
+      "gender": "Giới tính",
+      "status": "Tình trạng",
+      "role": "Phân quyền"
+    },
+    "hide_filter": "Ẩn bộ lọc",
+    "show_filter": "Hiện bộ lọc",
+    "card": {
+      "book": "Đặt lịch"
+    }
+  },
+  "staff_detail": {
+    "title": "Thông tin chi tiết bác sĩ",
+    "expertise": "Chuyên khoa",
+    "education": "Học vấn",
+    "schedule_table": {},
+    "booking_modal": {
+      "date": "Ngày",
+      "time": "Thời gian",
+      "gender": "Giới tính",
+      "self": "Bản thân",
+      "other": "Người khác",
+      "reason": "Lý do",
+      "reason_placeholder": "Lý do khám",
+      "info": {
+        "title": "Thông tin",
+        "name": "Họ tên",
+        "phone": "Số điện thoại",
+        "gender": "Giới tính",
+        "male": "Nam",
+        "female": "Nữ",
+        "birthday": "Ngày sinh"
+      }
+    }
+  }
+}
