@@ -30,7 +30,11 @@ export default function DefaultLayout({ children }) {
           flexGrow: 1,
           display: "flex",
           flexDirection: "column",
-          px: 4,
+          px: {
+            md: 6,
+            sm: 4,
+            xs: 2
+          },
           overflow: "hidden"
         }}
         py={4}

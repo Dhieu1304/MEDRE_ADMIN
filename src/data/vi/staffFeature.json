@@ -17,6 +17,35 @@
     "show_filter": "Hiện bộ lọc",
     "card": {
       "book": "Đặt lịch"
+    },
+
+    "table": {
+      "username": "Username",
+      "phone_number": "Số điện thoại",
+      "email": "Email",
+      "name": "Họ tên",
+      "address": "Địa chỉ",
+      "gender": "Giới tính",
+      "dob": "Ngày sinh",
+      "role": "Vai trò",
+      "status": "Tình trạng"
+    },
+
+    "gender": {
+      "male": "Nam",
+      "female": "Nữ"
+    },
+
+    "status": {
+      "ok": "Ok",
+      "block": "Khóa",
+      "delete": "Xóa"
+    },
+
+    "role": {
+      "admin": "Quản trị viên",
+      "doctor": "Bác sĩ",
+      "nurse": "Y tá"
     }
   },
   "staff_detail": {

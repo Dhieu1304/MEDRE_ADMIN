@@ -17,6 +17,35 @@
     "show_filter": "Show Filter",
     "card": {
       "book": "Book"
+    },
+
+    "table": {
+      "username": "Username",
+      "phone_number": "Phone Number",
+      "email": "Email",
+      "name": "Name",
+      "address": "Address",
+      "gender": "Gender",
+      "dob": "Date of Birth",
+      "role": "Role",
+      "status": "Status"
+    },
+
+    "gender": {
+      "male": "Male",
+      "female": "Female"
+    },
+
+    "status": {
+      "ok": "Ok",
+      "block": "Block",
+      "delete": "Delete"
+    },
+
+    "role": {
+      "admin": "Admin",
+      "doctor": "Doctor",
+      "nurse": "Nurse"
     }
   },
   "staff_detail": {
