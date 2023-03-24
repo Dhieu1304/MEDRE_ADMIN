@@ -37,6 +37,8 @@ import { useFetchingStore } from "../../store/FetchingApiStore/hooks";
 import CustomOverlay from "../../components/CustomOverlay";
 import { useAppConfigStore } from "../../store/AppConfigStore/hooks";
 import useDebounce from "../../hooks/useDebounce";
+import { useCustomModal } from "../../components/CustomModal/hooks";
+import BlockStaffModal from "./components/BlockStaffModal";
 
 export default function StaffList() {
   // const staffTypesList = useMemo(() => {
@@ -58,6 +60,8 @@ export default function StaffList() {
   const [expertisesList, setExpertisesList] = useState([]);
 
   const [openFilterMobile, setOpenFilterMobile] = useState(false);
+  const blockStaffModal = useCustomModal();
+
   const isMobile = useMediaQuery("(max-width:600px)");
   const isMd = useMediaQuery((theme) => theme.breakpoints.up("md"));
 
@@ -497,264 +501,279 @@ export default function StaffList() {
   }, []);
 
   return isFetchConfigSuccess ? (
-    <Box>
-      <CustomOverlay open={isLoading} />
-      <Typography variant="h4" component="h1" mb={2}>
-        {t("title")}
-      </Typography>
+    <>
+      <Box>
+        <CustomOverlay open={isLoading} />
+        <Typography variant="h4" component="h1" mb={2}>
+          {t("title")}
+        </Typography>
 
-      {isMobile && <Button onClick={handleButtonClick}>{openFilterMobile ? t("hide_filter") : t("show_filter")}</Button>}
-      <Collapse in={!isMobile || openFilterMobile}>{renderFilter()}</Collapse>
+        {isMobile && <Button onClick={handleButtonClick}>{openFilterMobile ? t("hide_filter") : t("show_filter")}</Button>}
+        <Collapse in={!isMobile || openFilterMobile}>{renderFilter()}</Collapse>
 
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "flex-end",
-          alignItems: "center"
-        }}
-      >
-        <Button
-          color="inherit"
-          onClick={() => {
-            reset();
-          }}
+        <Box
           sx={{
-            transform: "translateY(-25%)"
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center"
           }}
         >
-          Reset
-          <RestartAltIcon />
-        </Button>
-
-        <TablePagination
-          component="div"
-          count={count}
-          page={count === 0 ? 0 : watch().page - 1}
-          // labelDisplayedRows={({ from, to, count }) => {
-          //   console.log("{from, to, count}: ", { from, to, count });
-          //   return "";
-          // }}
-          onPageChange={(e, page) => {
-            const newPage = page + 1;
-            setValue("page", newPage);
-            const params = { ...watch(), page: newPage };
-            const searchParams = qs.stringify(params);
-            navigate(`?${searchParams}`);
-            loadData({ page: newPage });
-          }}
-          rowsPerPageOptions={[1, 10, 20, 50, 100]}
-          rowsPerPage={watch().limit}
-          onRowsPerPageChange={(e) => {
-            const newLimit = parseInt(e.target.value, 10);
-            setValue("limit", newLimit);
-            // const newPage = 1;
-            // setValue("page", newPage);
-            // const params = { ...watch(), page: newPage };
-            // const searchParams = qs.stringify(params);
-            // navigate(`?${searchParams}`);
-            // loadData({ page: newPage });
-          }}
-          sx={{
-            mb: 2
-          }}
-        />
-      </Box>
-
-      {isMd ? (
-        <TableContainer component={Paper} sx={{ mb: 4 }}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                {columns.map((column) => (
-                  <TableCell
-                    key={column.id}
-                    align="left"
-                    style={{ minWidth: column.minWidth }}
-                    sx={{
-                      fontWeight: 600,
-                      display: column.display
-                    }}
-                  >
-                    {column.label}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {staffs.map((staff) => {
-                return (
-                  <TableRow key={staff?.id}>
-                    <TableCell component="th" scope="row">
-                      {staff?.username}
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      sx={{
-                        display: { lg: "table-cell" }
-                      }}
-                    >
-                      {staff?.phoneNumber}
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      sx={{
-                        display: { lg: "table-cell" }
-                      }}
-                    >
-                      {staff?.email}
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      sx={{
-                        display: { lg: "table-cell" }
-                      }}
-                    >
-                      {staff?.name}
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      sx={{
-                        display: { lg: "table-cell", md: "none", sm: "none" }
-                      }}
-                    >
-                      {staff?.address}
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      sx={{
-                        display: { lg: "table-cell", md: "none", sm: "none" }
-                      }}
-                    >
-                      {staff?.gender}
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      sx={{
-                        display: { lg: "table-cell", md: "none", sm: "none" }
-                      }}
-                    >
-                      {staff?.dob}
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      sx={{
-                        display: { lg: "table-cell" }
-                      }}
-                    >
-                      {staff?.role}
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      sx={{
-                        display: { lg: "table-cell" }
-                      }}
-                    >
-                      {staff?.status}
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      sx={{
-                        display: { lg: "table-cell" }
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "flex-end",
-                          alignItems: "center"
-                        }}
-                      >
-                        <IconButton
-                          onClick={() => {
-                            navigate(staff?.id, { relative: true });
-                          }}
-                        >
-                          <SearchIcon sx={{ color: theme.palette.success.main }} />
-                        </IconButton>
-
-                        <IconButton>
-                          <RemoveCircleIcon sx={{ color: theme.palette.error.main }} />
-                        </IconButton>
-                      </Box>
-                    </TableCell>
-                    {/* <TableCell align="left">{row.description}</TableCell>
-                  <TableCell align="left">{row.education}</TableCell>
-                  <TableCell align="left">{row.certificate}</TableCell> */}
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      ) : (
-        staffs.map((staff) => (
-          <Card
-            key={staff?.id}
+          <Button
+            color="inherit"
+            onClick={() => {
+              reset();
+            }}
             sx={{
-              height: "100%",
-              maxWidth: "100%",
-              display: "flex",
-              flexDirection: "column",
-              p: 0,
-              cursor: "pointer",
-              marginBottom: 4
+              transform: "translateY(-25%)"
             }}
           >
-            <CardHeader
-              avatar={<Avatar alt={staff?.name} src={staff?.image} />}
-              title={staff?.name}
-              subheader={
-                <Box>
-                  <Typography>{staff?.role}</Typography>
-                  <Typography>{staff?.phoneNumber}</Typography>
-                  <Typography>
-                    {t("table.status")}: {staff?.status}
-                  </Typography>
-                </Box>
-              }
-              action={
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    alignItems: "center"
-                  }}
-                >
-                  <IconButton>
-                    <SearchIcon sx={{ color: theme.palette.success.main }} />
-                  </IconButton>
+            Reset
+            <RestartAltIcon />
+          </Button>
 
-                  <IconButton>
-                    <RemoveCircleIcon sx={{ color: theme.palette.error.main }} />
-                  </IconButton>
-                </Box>
-              }
-            />
-          </Card>
-        ))
-      )}
-
-      {!!count && (
-        <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-end", alignItems: "flex-end" }}>
-          <Pagination
-            count={Math.ceil(count / watch().limit)}
-            color="primary"
-            page={watch().page}
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end"
-            }}
-            onChange={(event, newPage) => {
+          <TablePagination
+            component="div"
+            count={count}
+            page={count === 0 ? 0 : watch().page - 1}
+            // labelDisplayedRows={({ from, to, count }) => {
+            //   console.log("{from, to, count}: ", { from, to, count });
+            //   return "";
+            // }}
+            onPageChange={(e, page) => {
+              const newPage = page + 1;
               setValue("page", newPage);
               const params = { ...watch(), page: newPage };
               const searchParams = qs.stringify(params);
               navigate(`?${searchParams}`);
               loadData({ page: newPage });
             }}
+            rowsPerPageOptions={[1, 10, 20, 50, 100]}
+            rowsPerPage={watch().limit}
+            onRowsPerPageChange={(e) => {
+              const newLimit = parseInt(e.target.value, 10);
+              setValue("limit", newLimit);
+              // const newPage = 1;
+              // setValue("page", newPage);
+              // const params = { ...watch(), page: newPage };
+              // const searchParams = qs.stringify(params);
+              // navigate(`?${searchParams}`);
+              // loadData({ page: newPage });
+            }}
+            sx={{
+              mb: 2
+            }}
           />
         </Box>
+
+        {isMd ? (
+          <TableContainer component={Paper} sx={{ mb: 4 }}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  {columns.map((column) => (
+                    <TableCell
+                      key={column.id}
+                      align="left"
+                      style={{ minWidth: column.minWidth }}
+                      sx={{
+                        fontWeight: 600,
+                        display: column.display
+                      }}
+                    >
+                      {column.label}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {staffs.map((staff) => {
+                  return (
+                    <TableRow key={staff?.id}>
+                      <TableCell component="th" scope="row">
+                        {staff?.username}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        sx={{
+                          display: { lg: "table-cell" }
+                        }}
+                      >
+                        {staff?.phoneNumber}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        sx={{
+                          display: { lg: "table-cell" }
+                        }}
+                      >
+                        {staff?.email}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        sx={{
+                          display: { lg: "table-cell" }
+                        }}
+                      >
+                        {staff?.name}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        sx={{
+                          display: { lg: "table-cell", md: "none", sm: "none" }
+                        }}
+                      >
+                        {staff?.address}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        sx={{
+                          display: { lg: "table-cell", md: "none", sm: "none" }
+                        }}
+                      >
+                        {staff?.gender}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        sx={{
+                          display: { lg: "table-cell", md: "none", sm: "none" }
+                        }}
+                      >
+                        {staff?.dob}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        sx={{
+                          display: { lg: "table-cell" }
+                        }}
+                      >
+                        {staff?.role}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        sx={{
+                          display: { lg: "table-cell" }
+                        }}
+                      >
+                        {staff?.status}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        sx={{
+                          display: { lg: "table-cell" }
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "flex-end",
+                            alignItems: "center"
+                          }}
+                        >
+                          <IconButton
+                            onClick={() => {
+                              navigate(staff?.id, { relative: true });
+                            }}
+                          >
+                            <SearchIcon sx={{ color: theme.palette.success.main }} />
+                          </IconButton>
+
+                          <IconButton
+                            onClick={() => {
+                              blockStaffModal.setShow(true);
+                              blockStaffModal.setData(staff);
+                            }}
+                          >
+                            <RemoveCircleIcon sx={{ color: theme.palette.error.main }} />
+                          </IconButton>
+                        </Box>
+                      </TableCell>
+                      {/* <TableCell align="left">{row.description}</TableCell>
+                  <TableCell align="left">{row.education}</TableCell>
+                  <TableCell align="left">{row.certificate}</TableCell> */}
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        ) : (
+          staffs.map((staff) => (
+            <Card
+              key={staff?.id}
+              sx={{
+                height: "100%",
+                maxWidth: "100%",
+                display: "flex",
+                flexDirection: "column",
+                p: 0,
+                cursor: "pointer",
+                marginBottom: 4
+              }}
+            >
+              <CardHeader
+                avatar={<Avatar alt={staff?.name} src={staff?.image} />}
+                title={staff?.name}
+                subheader={
+                  <Box>
+                    <Typography>{staff?.role}</Typography>
+                    <Typography>{staff?.phoneNumber}</Typography>
+                    <Typography>
+                      {t("table.status")}: {staff?.status}
+                    </Typography>
+                  </Box>
+                }
+                action={
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      alignItems: "center"
+                    }}
+                  >
+                    <IconButton>
+                      <SearchIcon sx={{ color: theme.palette.success.main }} />
+                    </IconButton>
+
+                    <IconButton>
+                      <RemoveCircleIcon sx={{ color: theme.palette.error.main }} />
+                    </IconButton>
+                  </Box>
+                }
+              />
+            </Card>
+          ))
+        )}
+
+        {!!count && (
+          <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-end", alignItems: "flex-end" }}>
+            <Pagination
+              count={Math.ceil(count / watch().limit)}
+              color="primary"
+              page={watch().page}
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end"
+              }}
+              onChange={(event, newPage) => {
+                setValue("page", newPage);
+                const params = { ...watch(), page: newPage };
+                const searchParams = qs.stringify(params);
+                navigate(`?${searchParams}`);
+                loadData({ page: newPage });
+              }}
+            />
+          </Box>
+        )}
+      </Box>
+      {blockStaffModal.show && (
+        <BlockStaffModal
+          show={blockStaffModal.show}
+          setShow={blockStaffModal.setShow}
+          data={blockStaffModal.data}
+          setData={blockStaffModal.setData}
+        />
       )}
-    </Box>
+    </>
   ) : (
     <CustomOverlay open={isLoading} />
   );
