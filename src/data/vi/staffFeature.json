@@ -49,33 +49,43 @@
     }
   },
   "staff_detail": {
-    "title": "Thông tin chi tiết bác sĩ",
-    "expertise": "Chuyên khoa",
+    "title": {
+      "identify": "Thông tin xác thực",
+      "account": "Thông tin tài khoản",
+      "personality": "Thông tin cá nhân",
+      "doctor": "Thông tin bác sĩ"
+    },
+
+    "email": "Email",
+    "username": "Username",
+    "phone": "Số điện thoại",
+    "role": "Phân quyền",
+    "status": "Tình trạng",
+    "name": "Họ tên",
+    "dob": "Ngày sinh",
+    "address": "Địa chỉ",
+    "gender": "Giới tính",
+    "description": "Mô tả",
     "education": "Học vấn",
-    "schedule_table": {},
-    "booking_modal": {
-      "date": "Ngày",
-      "time": "Thời gian",
-      "gender": "Giới tính",
-      "self": "Bản thân",
-      "other": "Người khác",
-      "reason": "Lý do",
-      "reason_placeholder": "Lý do khám",
-      "info": {
-        "title": "Thông tin",
-        "name": "Họ tên",
-        "phone": "Số điện thoại",
-        "gender": "Giới tính",
-        "male": "Nam",
-        "female": "Nữ",
-        "birthday": "Ngày sinh"
-      }
-    }
+    "certificate": "Chứng chỉ",
+    "expertise": "Chuyên khoa"
   },
 
   "block_modal": {
     "title": "Khóa tài khoản nhân viên",
     "question": "Khóa",
     "btn_label": "Khóa"
+  },
+
+  "add_expertise_modal": {
+    "title": "Thêm chuyên khoa",
+    "expertise": "Chuyên khoa",
+    "btn_label": "Thêm"
+  },
+
+  "change_avatar_modal": {
+    "title": "Thay đổi ảnh đại diện",
+    "upload": "Tải ảnh lên",
+    "btn_label": "Lưu"
   }
 }

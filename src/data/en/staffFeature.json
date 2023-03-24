@@ -49,32 +49,42 @@
     }
   },
   "staff_detail": {
-    "title": "Staff detail",
-    "expertise": "Expertise",
+    "title": {
+      "identify": "Identify Information",
+      "account": "Account Information",
+      "personality": "Personality Information",
+      "doctor": "Doctor Information"
+    },
+
+    "email": "Email",
+    "username": "Username",
+    "phone": "Phone",
+    "role": "Role",
+    "status": "Status",
+    "name": "Name",
+    "dob": "Date of Birth",
+    "address": "Address",
+    "gender": "Gender",
+    "description": "Description",
     "education": "Education",
-    "schedule_table": {},
-    "booking_modal": {
-      "date": "Date",
-      "time": "Time",
-      "gender": "Gender",
-      "self": "Self",
-      "other": "Other",
-      "reason": "Reason",
-      "reason_placeholder": "Your reason",
-      "info": {
-        "title": "Info",
-        "name": "Name",
-        "phone": "Phone",
-        "gender": "Gender",
-        "male": "Male",
-        "female": "Female",
-        "birthday": "Birthday"
-      }
-    }
+    "certificate": "Certificate",
+    "expertise": "Expertise"
   },
   "block_modal": {
     "title": "Block staff",
     "question": "Block",
     "btn_label": "Block"
+  },
+
+  "add_expertise_modal": {
+    "title": "Add Expertise",
+    "expertise": "Expertise",
+    "btn_label": "Add"
+  },
+
+  "change_avatar_modal": {
+    "title": "Change Avatar",
+    "upload": "Upload",
+    "btn_label": "Save"
   }
 }

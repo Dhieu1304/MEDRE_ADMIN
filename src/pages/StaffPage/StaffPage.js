@@ -14,7 +14,14 @@ export default function StaffPage() {
           </FetchingApiProvider>
         }
       />
-      <Route path={routes.detail} element={<StaffDetail />} />
+      <Route
+        path={routes.detail}
+        element={
+          <FetchingApiProvider>
+            <StaffDetail />
+          </FetchingApiProvider>
+        }
+      />
       <Route path={routes.default} element={<Navigate to={routes.list} />} />
     </Routes>
   );

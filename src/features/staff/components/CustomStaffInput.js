@@ -16,6 +16,11 @@ function CustomStaffInput({ control, rules = {}, label, trigger, triggerTo, name
   };
 
   const render = ({ field: { onChange, onBlur, value }, fieldState: { error } }) => {
+    let inputType = type;
+    if (type === "password") {
+      inputType = hidePassword ? "password" : "text";
+    }
+
     if (children) {
       return (
         <FormControl sx={formControlStyle} variant="outlined" fullWidth>
@@ -51,6 +56,7 @@ function CustomStaffInput({ control, rules = {}, label, trigger, triggerTo, name
         </FormControl>
       );
     }
+
     const InputProps =
       type === "password"
         ? {
@@ -67,11 +73,6 @@ function CustomStaffInput({ control, rules = {}, label, trigger, triggerTo, name
           }
         : undefined;
 
-    let inputType = type;
-    if (type === "password") {
-      inputType = hidePassword ? "password" : "text";
-    }
-
     return (
       <Box
         component={TextField}
@@ -87,7 +88,9 @@ function CustomStaffInput({ control, rules = {}, label, trigger, triggerTo, name
             ? {
                 shrink: true
               }
-            : {}
+            : {
+                shrink: !!value
+              }
         }
         type={inputType}
         helperText={<Box component="span">{inputErrorFormat(label, error?.message)}</Box>}

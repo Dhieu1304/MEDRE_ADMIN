@@ -38,7 +38,16 @@ function CustomModal({ show, setShow, setData, children, title, submitBtnLabel, 
             <Close />
           </IconButton>
         </Box>
-        <Box py={2}>{children}</Box>
+        <Box
+          py={2}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+        >
+          {children}
+        </Box>
         <Grid container spacing={2} justifyContent="flex-end">
           <Grid item columns={2}>
             <Button variant="outlined" onClick={handleClose}>

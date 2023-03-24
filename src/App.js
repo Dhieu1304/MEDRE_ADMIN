@@ -23,13 +23,11 @@ function App() {
 
   useEffect(() => {
     const loadData = async () => {
-      await authStore.loadUserInfo();
+      await authStore.loadStaffInfo();
       setIsFirstVisit(false);
     };
     loadData();
   }, []);
-
-  // console.log("authStore: ", authStore);
 
   return (
     <ThemeProvider theme={theme}>

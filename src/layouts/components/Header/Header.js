@@ -3,7 +3,7 @@ import { Box, IconButton, Toolbar, Typography, Avatar, Menu, MenuItem, Tooltip }
 
 import MenuIcon from "@mui/icons-material/Menu";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { headerDropdownMenu } from "./config";
@@ -17,6 +17,8 @@ import { DARK, LIGHT } from "../../../config/themeConfig";
 
 function Header({ open, handleDrawerOpen }) {
   const authStore = useAuthStore();
+
+  const navigate = useNavigate();
 
   const [anchorElUser, setAnchorElUser] = useState(null);
 
@@ -84,8 +86,8 @@ function Header({ open, handleDrawerOpen }) {
         <Box sx={{ display: { xs: "flex", md: "flex", marginLeft: "auto" } }}>
           <Tooltip title="Open settings">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar alt={authStore.user?.name} src={authStore.user?.avatar || " "} />
-              {/* src={authStore.user?.avatar} */}
+              <Avatar alt={authStore.staff?.name} src={authStore.staff?.image || " "} />
+              {/* src={authStore.staff?.avatar} */}
             </IconButton>
           </Tooltip>
           <Menu
@@ -109,6 +111,15 @@ function Header({ open, handleDrawerOpen }) {
                 <Typography textAlign="center">{t(item.label)}</Typography>
               </MenuItem>
             ))}
+
+            <MenuItem
+              onClick={() => {
+                navigate(`${routeConfig.staff}/${authStore.staff?.id}`);
+              }}
+            >
+              <Typography textAlign="center">{t("profile_label")}</Typography>
+            </MenuItem>
+
             <MenuItem
               onClick={() => {
                 setMode((prev) => {

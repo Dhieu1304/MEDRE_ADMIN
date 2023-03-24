@@ -44,6 +44,32 @@ const getStaffList = async ({ page, limit, expertise, type, from, to, name }) =>
   }
 };
 
+const getStaffInfo = async () => {
+  try {
+    const res = await axiosClient.get(staffApi.staffInfo());
+
+    if (res?.status) {
+      const staff = res?.data?.staff;
+
+      return {
+        success: true,
+        staff,
+        message: res?.message
+      };
+    }
+    return {
+      success: false,
+      message: `Status is ${res.status}`
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
 const getStaffDetail = async (id) => {
   try {
     const res = await axiosClient.get(staffApi.staffDetail(id));
@@ -122,5 +148,6 @@ const getStaffExpertises = async () => {
 export default {
   getStaffList,
   getStaffDetail,
-  getStaffExpertises
+  getStaffExpertises,
+  getStaffInfo
 };
