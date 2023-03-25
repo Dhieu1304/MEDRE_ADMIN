@@ -1,0 +1,92 @@
+{
+  "staff_list": {
+    "title": "Find staff",
+    "filter": {
+      "search": "Search by name",
+      "email": "Email",
+      "phone": "Phone",
+      "username": "Username",
+      "type": "Type",
+      "date": "Date",
+      "expertise": "Expertise",
+      "gender": "Gender",
+      "status": "Status",
+      "role": "Role"
+    },
+    "hide_filter": "Hide filter",
+    "show_filter": "Show Filter",
+    "card": {
+      "book": "Book"
+    },
+
+    "table": {
+      "username": "Username",
+      "phone_number": "Phone Number",
+      "email": "Email",
+      "name": "Name",
+      "address": "Address",
+      "gender": "Gender",
+      "dob": "Date of Birth",
+      "role": "Role",
+      "status": "Status"
+    },
+
+    "gender": {
+      "male": "Male",
+      "female": "Female"
+    },
+
+    "status": {
+      "ok": "Ok",
+      "block": "Block",
+      "delete": "Delete"
+    },
+
+    "role": {
+      "admin": "Admin",
+      "doctor": "Doctor",
+      "nurse": "Nurse"
+    }
+  },
+  "staff_detail": {
+    "title": {
+      "identify": "Identify Information",
+      "account": "Account Information",
+      "personality": "Personality Information",
+      "doctor": "Doctor Information"
+    },
+
+    "email": "Email",
+    "username": "Username",
+    "phone": "Phone",
+    "role": "Role",
+    "status": "Status",
+    "name": "Name",
+    "dob": "Date of Birth",
+    "address": "Address",
+    "gender": "Gender",
+    "description": "Description",
+    "education": "Education",
+    "certificate": "Certificate",
+    "expertise": "Expertise",
+    "schedule_btn": "Schedule",
+    "save_btn": "Save"
+  },
+  "block_modal": {
+    "title": "Block staff",
+    "question": "Block",
+    "btn_label": "Block"
+  },
+
+  "add_expertise_modal": {
+    "title": "Add Expertise",
+    "expertise": "Expertise",
+    "btn_label": "Add"
+  },
+
+  "change_avatar_modal": {
+    "title": "Change Avatar",
+    "upload": "Upload",
+    "btn_label": "Save"
+  }
+}

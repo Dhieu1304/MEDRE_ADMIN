@@ -4,6 +4,11 @@ import routeConfig from "../../../config/routeConfig";
 
 export const sideBarItems = [
   {
+    to: routeConfig.staff,
+    label: "staff_label",
+    icon: <FontAwesomeIcon icon={faUsers} width={20} />
+  },
+  {
     to: routeConfig.user,
     label: "user_label",
     icon: <FontAwesomeIcon icon={faUsers} width={20} />

@@ -1,5 +1,6 @@
 {
   "sidebar": {
+    "staff_label": "Staff",
     "user_label": "User",
     "patient_label": "Patient",
     "payment_label": "Payment",

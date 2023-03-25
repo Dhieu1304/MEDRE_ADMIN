@@ -1,9 +1,18 @@
 const authApi = {
-  loginByEmail: "/auth/login-by-email"
+  loginByEmail: "/auth/staff/login-by-email"
 };
 
-const userApi = {
-  userInfo: "/user/info"
+const userApi = {};
+const staffApi = {
+  staffInfo: () => "/staff/info",
+  staffList: () => "/staff/all",
+  staffDetail: (id) => `/staff/detail/${id}`,
+  expertiseList: () => "/expertise/list"
 };
 
-export { authApi, userApi };
+const scheduleApi = {
+  schedule: () => "/schedule",
+  timeList: () => "/time-schedule/time"
+};
+
+export { authApi, userApi, staffApi, scheduleApi };

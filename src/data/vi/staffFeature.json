@@ -1,0 +1,93 @@
+{
+  "staff_list": {
+    "title": "Tìm kiếm nhân viên",
+    "filter": {
+      "search": "Tìm kiếm theo tên",
+      "email": "Email",
+      "phone": "Số điện thoại",
+      "username": "Username",
+      "type": "Loại khám",
+      "date": "Ngày",
+      "expertise": "Chuyên khoa",
+      "gender": "Giới tính",
+      "status": "Tình trạng",
+      "role": "Phân quyền"
+    },
+    "hide_filter": "Ẩn bộ lọc",
+    "show_filter": "Hiện bộ lọc",
+    "card": {
+      "book": "Đặt lịch"
+    },
+
+    "table": {
+      "username": "Username",
+      "phone_number": "Số điện thoại",
+      "email": "Email",
+      "name": "Họ tên",
+      "address": "Địa chỉ",
+      "gender": "Giới tính",
+      "dob": "Ngày sinh",
+      "role": "Vai trò",
+      "status": "Tình trạng"
+    },
+
+    "gender": {
+      "male": "Nam",
+      "female": "Nữ"
+    },
+
+    "status": {
+      "ok": "Ok",
+      "block": "Khóa",
+      "delete": "Xóa"
+    },
+
+    "role": {
+      "admin": "Quản trị viên",
+      "doctor": "Bác sĩ",
+      "nurse": "Y tá"
+    }
+  },
+  "staff_detail": {
+    "title": {
+      "identify": "Thông tin xác thực",
+      "account": "Thông tin tài khoản",
+      "personality": "Thông tin cá nhân",
+      "doctor": "Thông tin bác sĩ"
+    },
+
+    "email": "Email",
+    "username": "Username",
+    "phone": "Số điện thoại",
+    "role": "Phân quyền",
+    "status": "Tình trạng",
+    "name": "Họ tên",
+    "dob": "Ngày sinh",
+    "address": "Địa chỉ",
+    "gender": "Giới tính",
+    "description": "Mô tả",
+    "education": "Học vấn",
+    "certificate": "Chứng chỉ",
+    "expertise": "Chuyên khoa",
+    "schedule_btn": "Lịch khám",
+    "save_btn": "Lưu"
+  },
+
+  "block_modal": {
+    "title": "Khóa tài khoản nhân viên",
+    "question": "Khóa",
+    "btn_label": "Khóa"
+  },
+
+  "add_expertise_modal": {
+    "title": "Thêm chuyên khoa",
+    "expertise": "Chuyên khoa",
+    "btn_label": "Thêm"
+  },
+
+  "change_avatar_modal": {
+    "title": "Thay đổi ảnh đại diện",
+    "upload": "Tải ảnh lên",
+    "btn_label": "Lưu"
+  }
+}

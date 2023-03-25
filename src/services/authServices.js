@@ -7,7 +7,7 @@ const loginByEmail = async (email, password) => {
     const res = await axiosClient.post(authApi.loginByEmail, { email, password });
 
     if (res?.status) {
-      const user = res?.data?.user;
+      const staff = res?.data?.staff;
       const tokens = res?.data?.tokens;
 
       localStorageUtil.setItem(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN, tokens?.access?.token);
@@ -15,7 +15,7 @@ const loginByEmail = async (email, password) => {
 
       return {
         success: true,
-        user,
+        staff,
         message: res?.message
       };
     }

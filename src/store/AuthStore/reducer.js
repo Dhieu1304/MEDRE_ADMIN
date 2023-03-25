@@ -1,7 +1,7 @@
-import { FETCHING_API, FETCHING_API_SUCCESS, FETCHING_API_FAILED, LOGIN, LOGOUT, SET_USER } from "./contants";
+import { FETCHING_API, FETCHING_API_SUCCESS, FETCHING_API_FAILED, LOGIN, LOGOUT, SET_STAFF } from "./contants";
 
 const initState = {
-  user: {},
+  staff: {},
   isLogin: false,
   isLoading: false,
   isFetchApiError: false,
@@ -14,20 +14,20 @@ function reducer(state, action) {
       return {
         ...state,
         isLogin: true,
-        user: action.payload
+        staff: action.payload
       };
     }
     case LOGOUT: {
       return {
         ...state,
         isLogin: false,
-        user: {}
+        staff: {}
       };
     }
-    case SET_USER:
+    case SET_STAFF:
       return {
         ...state,
-        user: action.payload
+        staff: action.payload
       };
 
     case FETCHING_API:
