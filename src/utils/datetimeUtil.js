@@ -1,4 +1,4 @@
-// import formatDate from "date-and-time";
+import formatDate from "date-and-time";
 import en from "date-and-time/locale/en";
 import vi from "date-and-time/locale/vi";
 
@@ -7,6 +7,7 @@ const getNext7DaysFrom = (date = new Date()) => {
   curDate.setHours(0);
   curDate.setMinutes(0);
   curDate.setSeconds(0);
+  curDate.setMilliseconds(0);
 
   const arr = [];
   for (let i = 0; i <= 6; i++) {
@@ -39,4 +40,26 @@ const getWeekByDate = (date = new Date()) => {
   return week;
 };
 
-export { getNext7DaysFrom, formatDateLocale, getWeekByDate };
+// Chuyển h,m,s và ms về 0 để khi dùng cho hàm subtract
+// nếu ko được subtract thì kết quả trừ sẽ bị chênh lệch
+const normalizeDate = (date) => {
+  const newDate = new Date(date);
+  newDate.setHours(0);
+  newDate.setMinutes(0);
+  newDate.setSeconds(0);
+  newDate.setMilliseconds(0);
+
+  return newDate;
+};
+
+// return date1 - date2
+const subtractDate = (date1, date2) => {
+  const d1 = normalizeDate(date1);
+  const d2 = normalizeDate(date2);
+
+  const daysBetween = formatDate.subtract(d1, d2).toDays();
+
+  return daysBetween;
+};
+
+export { getNext7DaysFrom, formatDateLocale, getWeekByDate, subtractDate };

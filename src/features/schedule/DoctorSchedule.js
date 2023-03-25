@@ -10,315 +10,336 @@ import {
   useTheme,
   Box,
   Button,
-  IconButton
+  IconButton,
+  CardHeader,
+  Avatar,
+  Typography,
+  Card
 } from "@mui/material";
 
 import formatDate from "date-and-time";
 import { useEffect, useMemo, useState } from "react";
-// import { useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
+import { useParams } from "react-router-dom";
+
+import CustomOverlay from "../../components/CustomOverlay";
 
 import scheduleServices from "../../services/scheduleServices";
-import { getWeekByDate } from "../../utils/datetimeUtil";
-
-const groupArrayByKey = (arr, keys, key) => {
-  const defaultGroups = keys.reduce((group, keyi) => ({ ...group, [keyi]: [] }), {});
-
-  return arr.reduce(
-    (groups, item) => {
-      const value = item[key];
-      if (groups[value]) {
-        groups[value].push(item);
-      }
-      return groups;
-    },
-    { ...defaultGroups }
-  );
-};
-
-// const createData = (name, schedules, currentDate) => {
-const createData = (name) => {
-  // const row = schedules.reduce(
-  //   (newRow, schedule) => {
-  //     const count = Math.ceil(formatDate.subtract(new Date(schedule?.date), currentDate).toDays());
-  //     const key = `d${count}`;
-  //     const index = Math.floor(Math.random() * 5) + 1;
-  //     switch (index) {
-  //       case 2:
-  //         return {
-  //           ...newRow,
-  //           [key]: { variant: BOOKED, data: schedule }
-  //         };
-  //       case 3:
-  //         return {
-  //           ...newRow,
-  //           [key]: { variant: EMPTY_PAST, data: schedule }
-  //         };
-  //       case 4:
-  //         return {
-  //           ...newRow,
-  //           [key]: { variant: RESERVED, data: schedule }
-  //         };
-  //       case 5:
-  //         return {
-  //           ...newRow,
-  //           [key]: { variant: BUSY, data: schedule }
-  //         };
-  //       case 1:
-  //       default:
-  //         return {
-  //           ...newRow,
-  //           [key]: { variant: EMPTY, data: schedule }
-  //         };
-  //     }
-  //   },
-  //   { d1: null, d2: null, d3: null, d4: null, d5: null, d6: null, d7: null }
-  // );
-
-  const row = { d1: null, d2: null, d3: null, d4: null, d5: null, d6: null, d7: null };
-
-  return {
-    name,
-    ...row
-  };
-};
-
-const createDatas = (times, schedules, currentDate) => {
-  // const createDatas = (times) => {
-  const groupSchedule = groupArrayByKey(
-    schedules,
-    times.map((time) => time.name),
-    "time"
-  );
-
-  return Object.keys(groupSchedule).map((time) => {
-    return createData(time, groupSchedule[time], currentDate);
-  });
-
-  // return times.map((time) => {
-  //   const name = time?.name;
-  //   const row = { d1: null, d2: null, d3: null, d4: null, d5: null, d6: null, d7: null };
-  //   const newRow = Object.keys(row).reduce((result, key) => {
-  //     const index = Math.floor(Math.random() * 5) + 1;
-  //     switch (index) {
-  //       case 2:
-  //         return {
-  //           ...result,
-  //           [key]: BOOKED
-  //         };
-  //       case 3:
-  //         return {
-  //           ...result,
-  //           [key]: EMPTY_PAST
-  //         };
-  //       case 4:
-  //         return {
-  //           ...result,
-  //           [key]: RESERVED
-  //         };
-  //       case 5:
-  //         return {
-  //           ...result,
-  //           [key]: BUSY
-  //         };
-  //       case 1:
-  //       default:
-  //         return {
-  //           ...result,
-  //           [key]: EMPTY
-  //         };
-  //     }
-  //   }, {});
-
-  //   return {
-  //     name,
-  //     ...newRow
-  //   };
-  //   // return { name, d1, d2, d3, d4, d5, d6, d7 };
-  // });
-};
+import staffServices from "../../services/staffServices";
+import { useFetchingStore } from "../../store/FetchingApiStore";
+import { getWeekByDate, subtractDate } from "../../utils/datetimeUtil";
+import ScheduleButton, { EMPTY } from "./components/ScheduleButton";
 
 function DoctorSchedule() {
   const [schedules, setSchedules] = useState([]);
   const [times, setTimes] = useState([]);
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [doctor, setDoctor] = useState();
 
   const theme = useTheme();
 
-  // const { t } = useTranslation("doctorFeature", { keyPrefix: "doctor_detail.schedule_table" });
+  const [isFetchConfigSuccess, setIsFetchConfigSuccess] = useState(false);
 
-  useEffect(() => {
-    const loadData = async () => {
-      const res2 = await scheduleServices.getScheduleList();
-      const schedulesData = res2.schedules;
-      setSchedules(schedulesData);
+  const { isLoading, fetchApi } = useFetchingStore();
 
-      const res3 = await scheduleServices.getTimeList();
-      const timesData = res3.times;
-      setTimes(timesData);
-    };
-    loadData();
-  }, []);
+  const params = useParams();
 
-  // const renderCell = (cell) => {
-  const renderCell = () => {
-    // let variant = cell?.variant;
-    // variant = EMPTY;
-    // const data = cell?.data;
-    // let handleClick;
-    // switch (variant) {
-    //   case EMPTY:
-    //     handleClick = () => {
-    //       setCurrentDate((prev) => prev);
-    //     };
-    //     break;
-    //   default:
-    //     break;
-    // }
+  const { t } = useTranslation("scheduleFeature", { keyPrefix: "doctorSchedule" });
 
-    return <>Sang</>;
+  const renderCell = (cell) => {
+    if (cell) {
+      return <ScheduleButton variant={EMPTY} onClick={() => {}} />;
+    }
+    return <div />;
   };
 
   const heads = useMemo(() => getWeekByDate(currentDate), [currentDate]);
-  const rows = useMemo(() => createDatas(times, schedules, currentDate), [times, schedules, currentDate]);
+  // const rows = useMemo(() => createDatas(times, schedules, currentDate), [times, schedules, currentDate]);
+
+  const loadData = async () => {
+    await fetchApi(async () => {
+      const res = await scheduleServices.getScheduleList(heads[0], heads[6]);
+
+      if (res.success) {
+        const schedulesData = res.schedules;
+        setSchedules(schedulesData);
+        return { success: true, error: "" };
+      }
+      setSchedules([]);
+      return { success: false, error: res.message };
+    });
+  };
+
+  useEffect(() => {
+    loadData();
+  }, [heads]);
+
+  const loadConfig = async () => {
+    await fetchApi(async () => {
+      const res = await scheduleServices.getTimeList();
+
+      if (res.success) {
+        setTimes(res.times);
+        return { success: true, error: "" };
+      }
+      setTimes([]);
+      return { success: false, error: res.message };
+    });
+
+    await fetchApi(async () => {
+      const staffId = params?.staffId;
+      const res = await staffServices.getStaffDetail(staffId);
+
+      if (res.success) {
+        setDoctor(res.staff);
+        return { success: true, error: "" };
+      }
+      return { success: false, error: res.message };
+    });
+
+    setIsFetchConfigSuccess(true);
+  };
+
+  useEffect(() => {
+    loadConfig();
+  }, []);
+
+  const rows = useMemo(() => {
+    if (times.length < 0) {
+      return null;
+    }
+
+    const data = times.reduce((result, time) => {
+      return {
+        ...result,
+        [time?.id]: {
+          ...time,
+          // schedules: [],
+          day1: null,
+          day2: null,
+          day3: null,
+          day4: null,
+          day5: null,
+          day6: null,
+          day7: null
+        }
+      };
+    }, {});
+
+    schedules.forEach((schedule) => {
+      const timeId = schedule.idTime;
+      if (data[timeId] !== undefined) {
+        // data[timeId].schedules.push(schedule);
+
+        const firstDate = heads[0];
+        const date = new Date(schedule?.date);
+        const subtract = subtractDate(date, firstDate);
+
+        switch (subtract) {
+          case 0:
+            data[timeId].day1 = schedule;
+            break;
+          case 1:
+            data[timeId].day2 = schedule;
+            break;
+          case 2:
+            data[timeId].day3 = schedule;
+            break;
+          case 3:
+            data[timeId].day4 = schedule;
+            break;
+          case 4:
+            data[timeId].day5 = schedule;
+            break;
+          case 5:
+            data[timeId].day6 = schedule;
+            break;
+          case 6:
+            data[timeId].day7 = schedule;
+            break;
+          default:
+            break;
+        }
+      }
+    });
+
+    const result = Object.keys(data)
+      .map((key) => {
+        return data[key];
+      })
+      .sort((a, b) => {
+        return a?.timeStart.localeCompare(b?.timeStart);
+      });
+
+    return result;
+  }, [times, schedules]);
 
   return (
-    <Box>
-      <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center", mb: 4 }} />
+    isFetchConfigSuccess && (
+      <Box>
+        <CustomOverlay open={isLoading} />
+        <Typography variant="h4" sx={{ mb: 4 }}>
+          {t("title")}
+        </Typography>
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 4 }}>
+          <Card
+            sx={{
+              height: "100%",
+              maxWidth: 500,
+              display: "flex",
+              flexDirection: "column",
+              p: 0,
+              cursor: "pointer",
+              border: "none",
+              boxShadow: "none"
+            }}
+          >
+            <CardHeader
+              avatar={<Avatar alt={doctor?.name} src={doctor?.image} />}
+              title={<Typography variant="h6">{doctor?.name}</Typography>}
+              subheader={doctor?.certificate && `(${doctor?.certificate})`}
+            />
+          </Card>
 
-      <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center", mb: 4 }}>
-        <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
-          {formatDate.format(heads[0], "DD/MM")} - {formatDate.format(heads[6], "DD/MM")}
+          <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
+            <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
+              {formatDate.format(heads[0], "DD/MM")} - {formatDate.format(heads[6], "DD/MM")}
+            </Box>
+            <IconButton
+              onClick={() => {
+                const newCurrentDate = new Date(currentDate);
+                newCurrentDate.setDate(newCurrentDate.getDate() - 6);
+                setCurrentDate(() => newCurrentDate);
+              }}
+            >
+              <ArrowLeftIcon fontSize="large" />
+            </IconButton>
+            <Button
+              variant="contained"
+              onClick={() => {
+                setCurrentDate(() => new Date());
+              }}
+              size="small"
+            >
+              {t("current_week")}
+            </Button>
+            <IconButton
+              onClick={() => {
+                const newCurrentDate = new Date(currentDate);
+                newCurrentDate.setDate(newCurrentDate.getDate() + 6);
+                setCurrentDate(() => newCurrentDate);
+              }}
+            >
+              <ArrowRightIcon fontSize="large" />
+            </IconButton>
+          </Box>
         </Box>
-        <IconButton
-          onClick={() => {
-            const newCurrentDate = new Date(currentDate);
-            newCurrentDate.setDate(newCurrentDate.getDate() - 6);
-            setCurrentDate(() => newCurrentDate);
-          }}
-        >
-          <ArrowLeftIcon fontSize="large" />
-        </IconButton>
-        <Button
-          variant="contained"
-          onClick={() => {
-            setCurrentDate(() => new Date());
-          }}
-        >
-          Current Week
-        </Button>
-        <IconButton
-          onClick={() => {
-            const newCurrentDate = new Date(currentDate);
-            newCurrentDate.setDate(newCurrentDate.getDate() + 6);
-            setCurrentDate(() => newCurrentDate);
-          }}
-        >
-          <ArrowRightIcon fontSize="large" />
-        </IconButton>
-      </Box>
-      <TableContainer component={Paper}>
-        <Table size="small" aria-label="a dense table">
-          <TableHead>
-            <TableRow>
-              <TableCell
-                sx={{
-                  border: "1px solid rgba(0,0,0,0.1)"
-                }}
-              />
-              {heads.map((cell) => {
-                const isToday = Math.floor(formatDate.subtract(new Date(), cell).toDays()) === 0;
+        <TableContainer component={Paper}>
+          <Table size="small" aria-label="a dense table">
+            <TableHead>
+              <TableRow>
+                <TableCell
+                  sx={{
+                    border: "1px solid rgba(0,0,0,0.2)"
+                  }}
+                />
+                {heads.map((cell) => {
+                  const isToday = formatDate.isSameDay(new Date(), cell);
+                  return (
+                    <TableCell
+                      sx={{
+                        border: "1px solid rgba(0,0,0,0.2)",
+                        fontWeight: "600",
+                        backgroundColor: isToday && theme.palette.primary.main,
+                        color: isToday && "white"
+                      }}
+                      key={cell}
+                      align="center"
+                    >
+                      {formatDate.format(cell, "DD/MM")}
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => {
                 return (
-                  <TableCell
-                    sx={{
-                      border: "1px solid rgba(0,0,0,0.1)",
-                      fontWeight: "600",
-                      backgroundColor: isToday && theme.palette.primary.main,
-                      color: isToday && "white"
-                    }}
-                    key={cell}
-                    align="center"
-                  >
-                    {formatDate.format(cell, "DD/MM")}
-                  </TableCell>
+                  <TableRow key={row.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                    <TableCell
+                      sx={{
+                        border: "1px solid rgba(0,0,0,0.2)",
+                        fontWeight: "600"
+                      }}
+                      component="th"
+                      scope="row"
+                    >
+                      {row.timeStart} - {row.timeEnd}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        border: "1px solid rgba(0,0,0,0.2)"
+                      }}
+                      align="center"
+                    >
+                      {renderCell(row.day1)}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        border: "1px solid rgba(0,0,0,0.2)"
+                      }}
+                      align="center"
+                    >
+                      {renderCell(row.day2)}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        border: "1px solid rgba(0,0,0,0.2)"
+                      }}
+                      align="center"
+                    >
+                      {renderCell(row.day3)}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        border: "1px solid rgba(0,0,0,0.2)"
+                      }}
+                      align="center"
+                    >
+                      {renderCell(row.day4)}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        border: "1px solid rgba(0,0,0,0.2)"
+                      }}
+                      align="center"
+                    >
+                      {renderCell(row.day5)}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        border: "1px solid rgba(0,0,0,0.2)"
+                      }}
+                      align="center"
+                    >
+                      {renderCell(row.day6)}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        border: "1px solid rgba(0,0,0,0.2)"
+                      }}
+                      align="center"
+                    >
+                      {renderCell(row.day7)}
+                    </TableCell>
+                  </TableRow>
                 );
               })}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row.name} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                <TableCell
-                  sx={{
-                    border: "1px solid rgba(0,0,0,0.1)",
-                    fontWeight: "600"
-                  }}
-                  component="th"
-                  scope="row"
-                >
-                  {row.name}
-                </TableCell>
-                <TableCell
-                  sx={{
-                    border: "1px solid rgba(0,0,0,0.1)"
-                  }}
-                  align="center"
-                >
-                  {renderCell(row.d1)}
-                </TableCell>
-                <TableCell
-                  sx={{
-                    border: "1px solid rgba(0,0,0,0.1)"
-                  }}
-                  align="center"
-                >
-                  {renderCell(row.d2)}
-                </TableCell>
-                <TableCell
-                  sx={{
-                    border: "1px solid rgba(0,0,0,0.1)"
-                  }}
-                  align="center"
-                >
-                  {renderCell(row.d3)}
-                </TableCell>
-                <TableCell
-                  sx={{
-                    border: "1px solid rgba(0,0,0,0.1)"
-                  }}
-                  align="center"
-                >
-                  {renderCell(row.d4)}
-                </TableCell>
-                <TableCell
-                  sx={{
-                    border: "1px solid rgba(0,0,0,0.1)"
-                  }}
-                  align="center"
-                >
-                  {renderCell(row.d5)}
-                </TableCell>
-                <TableCell
-                  sx={{
-                    border: "1px solid rgba(0,0,0,0.1)"
-                  }}
-                  align="center"
-                >
-                  {renderCell(row.d6)}
-                </TableCell>
-                <TableCell
-                  sx={{
-                    border: "1px solid rgba(0,0,0,0.1)"
-                  }}
-                  align="center"
-                >
-                  {renderCell(row.d7)}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Box>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
+    )
   );
 }
 

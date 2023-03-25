@@ -49,7 +49,7 @@ const getStaffInfo = async () => {
     const res = await axiosClient.get(staffApi.staffInfo());
 
     if (res?.status) {
-      const staff = res?.data?.staff;
+      const staff = camelcaseKeys(res?.data?.staff, { deep: true });
 
       return {
         success: true,
@@ -74,7 +74,6 @@ const getStaffDetail = async (id) => {
   try {
     const res = await axiosClient.get(staffApi.staffDetail(id));
 
-    // console.log("res: ", res);
     // const res = camelcaseKeys(
     //   {
     //     status: true,

@@ -10,4 +10,9 @@ const staffApi = {
   expertiseList: () => "/expertise/list"
 };
 
-export { authApi, userApi, staffApi };
+const scheduleApi = {
+  schedule: () => "/schedule",
+  timeList: () => "/time-schedule/time"
+};
+
+export { authApi, userApi, staffApi, scheduleApi };
