@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Add as AddIcon } from "@mui/icons-material";
 import CustomStaffInput from "./components/CustomStaffInput";
 import staffServices from "../../services/staffServices";
@@ -25,6 +25,8 @@ import CustomOverlay from "../../components/CustomOverlay";
 import ChangeAvatarModal from "./components/ChangeAvatarModal";
 import { useCustomModal } from "../../components/CustomModal";
 import AddExpertiseModal from "./components/AddExpertiseModal";
+import { staffRoutes } from "../../pages/StaffPage";
+import routeConfig from "../../config/routeConfig";
 
 function StaffDetail() {
   const [staff, setStaff] = useState();
@@ -56,6 +58,8 @@ function StaffDetail() {
     defaultValues,
     criteriaMode: "all"
   });
+
+  const navigate = useNavigate();
 
   const { t } = useTranslation("staffFeature", { keyPrefix: "staff_detail" });
 
@@ -345,7 +349,16 @@ function StaffDetail() {
               justifyContent: "flex-end"
             }}
           >
-            <Button variant="contained">Save</Button>
+            <Button
+              variant="contained"
+              onClick={() => navigate(`${routeConfig.staff}/${staffId}${staffRoutes.schedule}`, { relative: true })}
+              sx={{
+                mr: 2
+              }}
+            >
+              {t("schedule_btn")}
+            </Button>
+            <Button variant="contained">{t("save_btn")}</Button>
           </Box>
         </Box>
 

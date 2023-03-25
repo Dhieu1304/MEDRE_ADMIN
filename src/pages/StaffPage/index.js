@@ -1,2 +1,2 @@
 export { default } from "./StaffPage";
-export { default as authRoutes } from "./routes";
+export { default as staffRoutes } from "./routes";

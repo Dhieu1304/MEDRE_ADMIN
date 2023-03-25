@@ -14,8 +14,8 @@ const publicRoutes = [
 const privateRoutes = [
   { path: routeConfig.home, component: HomePage },
   { path: `${routeConfig.staff}/*`, component: StaffPage },
-  { path: `${routeConfig.payment}/*`, component: PaymentPage },
-  { path: routeConfig.default, component: Navigate, props: { to: routeConfig.home }, layout: null }
+  { path: `${routeConfig.payment}/*`, component: PaymentPage }
+  // { path: routeConfig.default, component: Navigate, props: { to: routeConfig.home }, layout: null }
 ];
 
 export { publicRoutes, privateRoutes };

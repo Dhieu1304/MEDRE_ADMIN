@@ -68,7 +68,9 @@
     "description": "Mô tả",
     "education": "Học vấn",
     "certificate": "Chứng chỉ",
-    "expertise": "Chuyên khoa"
+    "expertise": "Chuyên khoa",
+    "schedule_btn": "Lịch khám",
+    "save_btn": "Lưu"
   },
 
   "block_modal": {

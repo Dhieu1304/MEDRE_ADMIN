@@ -68,7 +68,9 @@
     "description": "Description",
     "education": "Education",
     "certificate": "Certificate",
-    "expertise": "Expertise"
+    "expertise": "Expertise",
+    "schedule_btn": "Schedule",
+    "save_btn": "Save"
   },
   "block_modal": {
     "title": "Block staff",

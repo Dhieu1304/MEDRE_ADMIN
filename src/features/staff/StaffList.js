@@ -29,8 +29,13 @@ import {
 import qs from "query-string";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { useLocation, useNavigate } from "react-router-dom";
-import { RemoveCircle as RemoveCircleIcon, RestartAlt as RestartAltIcon, Search as SearchIcon } from "@mui/icons-material";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  CalendarMonth as CalendarMonthIcon,
+  RemoveCircle as RemoveCircleIcon,
+  RestartAlt as RestartAltIcon,
+  Search as SearchIcon
+} from "@mui/icons-material";
 import CustomStaffInput from "./components/CustomStaffInput";
 import staffServices from "../../services/staffServices";
 import { useFetchingStore } from "../../store/FetchingApiStore/hooks";
@@ -669,6 +674,15 @@ export default function StaffList() {
                             alignItems: "center"
                           }}
                         >
+                          <Link
+                            to={`${staff?.id}/schedule`}
+                            // onClick={() => {
+                            //   navigate(`${staff?.id}/schedule`, { relative: true });
+                            // }}
+                          >
+                            <CalendarMonthIcon sx={{ color: theme.palette.success.main }} />
+                          </Link>
+
                           <IconButton
                             onClick={() => {
                               navigate(staff?.id, { relative: true });
@@ -730,11 +744,28 @@ export default function StaffList() {
                       alignItems: "center"
                     }}
                   >
-                    <IconButton>
+                    <IconButton
+                      onClick={() => {
+                        navigate(`${staff?.id}/schedule`, { relative: true });
+                      }}
+                    >
+                      <CalendarMonthIcon sx={{ color: theme.palette.success.main }} />
+                    </IconButton>
+
+                    <IconButton
+                      onClick={() => {
+                        navigate(staff?.id, { relative: true });
+                      }}
+                    >
                       <SearchIcon sx={{ color: theme.palette.success.main }} />
                     </IconButton>
 
-                    <IconButton>
+                    <IconButton
+                      onClick={() => {
+                        blockStaffModal.setShow(true);
+                        blockStaffModal.setData(staff);
+                      }}
+                    >
                       <RemoveCircleIcon sx={{ color: theme.palette.error.main }} />
                     </IconButton>
                   </Box>
