@@ -3,6 +3,8 @@ const routeConfig = {
   auth: "/auth",
   payment: "/payment",
   staff: "/staff",
+  user: "/user",
+  schedule: "/schedule",
   default: "/*"
 };
 
