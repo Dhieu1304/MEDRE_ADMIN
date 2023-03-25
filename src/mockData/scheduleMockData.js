@@ -4870,10 +4870,112 @@ const time = {
   ]
 };
 
+const scheduleAll = {
+  status: true,
+  message: "",
+  data: {
+    results: [
+      {
+        id: "353066b6-4bb7-4df8-8f46-88f71bf6a182",
+        username: "tnsang",
+        phone_number: "0375435451",
+        email: "transang@gmail.com",
+        password: "$2y$10$LGoFD1eEZMUX0BGxTHYuhe.aCMFScC4UxfW40SoQVaDVH7sFA1Ex2",
+        name: "Trần Ngọc Sang",
+        image: "https://raw.githubusercontent.com/devnguvcl/public_hosting_image/main/img/25-3545.jpg",
+        address: "Thủ Đức, TP.HCM",
+        gender: "Male",
+        dob: "2001-03-30",
+        role: "Doctor",
+        email_verified: true,
+        phone_verified: true,
+        health_insurance: null,
+        status: "Ok",
+        description: null,
+        education: null,
+        certificate: null,
+        refresh_token:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzNTMwNjZiNi00YmI3LTRkZjgtOGY0Ni04OGY3MWJmNmExODIiLCJlbWFpbCI6InRyYW5zYW5nQGdtYWlsLmNvbSIsInBob25lX251bWJlciI6IjAzNzU0MzU0NTEiLCJyb2xlIjoiRG9jdG9yIiwiaWF0IjoxNjc5NzM4NDE2LCJleHAiOjE2ODIzMzA0MTYsInR5cGUiOiJSZWZyZXNoIn0.TD5ISX8r2zC9fcSdcLZpedAti5J33qLRK_UarXn-itU",
+        createdAt: "2023-03-24T05:01:26.146Z",
+        updatedAt: "2023-03-25T10:00:16.052Z",
+        id_expertise_expertises: [
+          {
+            id: "2d1468a6-721a-49a9-900c-f16725ce0fbe",
+            name: "Vật lý trị liệu",
+            createdAt: "2023-03-24T05:01:26.228Z",
+            updatedAt: "2023-03-24T05:01:26.228Z",
+            staff_expertise: {
+              id_staff: "353066b6-4bb7-4df8-8f46-88f71bf6a182",
+              id_expertise: "2d1468a6-721a-49a9-900c-f16725ce0fbe",
+              createdAt: "2023-03-24T05:01:26.265Z",
+              updatedAt: "2023-03-24T05:01:26.265Z"
+            }
+          },
+          {
+            id: "fb723ca8-832b-448b-8b73-ab8a632c3e84",
+            name: "Răng - hàm - mặt",
+            createdAt: "2023-03-24T05:01:26.228Z",
+            updatedAt: "2023-03-24T05:01:26.228Z",
+            staff_expertise: {
+              id_staff: "353066b6-4bb7-4df8-8f46-88f71bf6a182",
+              id_expertise: "fb723ca8-832b-448b-8b73-ab8a632c3e84",
+              createdAt: "2023-03-24T05:01:26.265Z",
+              updatedAt: "2023-03-24T05:01:26.265Z"
+            }
+          }
+        ]
+      },
+      {
+        id: "5deb962d-afd3-423d-90c2-96e3b819f597",
+        username: "ndhieu",
+        phone_number: "0375435146",
+        email: "dhieu@gmail.com",
+        password: "$2y$10$A.FxEE8Xl2XyniOJwcHEEO6CN24C429lpMSNszx8LWCn/Vke.whTa",
+        name: "Nguyễn Đình Hiệu",
+        image: "https://raw.githubusercontent.com/devnguvcl/public_hosting_image/main/img/0b2ff7a1.jpg",
+        address: "Tân Phú, TP.HCM",
+        gender: "Male",
+        dob: "2001-04-13",
+        role: "Admin",
+        email_verified: true,
+        phone_verified: true,
+        health_insurance: null,
+        status: "Ok",
+        description: null,
+        education: null,
+        certificate: null,
+        refresh_token:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1ZGViOTYyZC1hZmQzLTQyM2QtOTBjMi05NmUzYjgxOWY1OTciLCJlbWFpbCI6ImRoaWV1QGdtYWlsLmNvbSIsInBob25lX251bWJlciI6IjAzNzU0MzUxNDYiLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE2Nzk3MTkwMTksImV4cCI6MTY4MjMxMTAxOSwidHlwZSI6IlJlZnJlc2gifQ.CRnlpUIiYhsd7uOG_7EUbwB056olhqhrjHgQ4qo1IV8",
+        createdAt: "2023-03-24T05:01:26.146Z",
+        updatedAt: "2023-03-25T04:36:59.266Z",
+        id_expertise_expertises: [
+          {
+            id: "2d1468a6-721a-49a9-900c-f16725ce0fbe",
+            name: "Vật lý trị liệu",
+            createdAt: "2023-03-24T05:01:26.228Z",
+            updatedAt: "2023-03-24T05:01:26.228Z",
+            staff_expertise: {
+              id_staff: "5deb962d-afd3-423d-90c2-96e3b819f597",
+              id_expertise: "2d1468a6-721a-49a9-900c-f16725ce0fbe",
+              createdAt: "2023-03-24T05:01:26.265Z",
+              updatedAt: "2023-03-24T05:01:26.265Z"
+            }
+          }
+        ]
+      }
+    ],
+    page: 1,
+    limit: 10,
+    totalPages: 1,
+    totalResults: 2
+  }
+};
+
 const scheduleMockData = {
   list: () => schedule,
   detail: (index) => schedule.data[index],
-  time: () => time
+  time: () => time,
+  all: () => scheduleAll
 };
 
 export default scheduleMockData;

@@ -9,7 +9,7 @@ export const sideBarItems = [
     icon: <FontAwesomeIcon icon={faUsers} width={20} />
   },
   {
-    to: routeConfig.user,
+    to: routeConfig.home,
     label: "user_label",
     icon: <FontAwesomeIcon icon={faUsers} width={20} />
   },
@@ -24,7 +24,7 @@ export const sideBarItems = [
     icon: <FontAwesomeIcon icon={faCreditCard} width={20} />
   },
   {
-    to: routeConfig.home,
+    to: routeConfig.schedule,
     label: "schedule_label",
     icon: <FontAwesomeIcon icon={faCalendarDays} width={20} />
   },

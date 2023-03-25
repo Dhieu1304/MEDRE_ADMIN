@@ -44,7 +44,7 @@ function DoctorSchedule() {
 
   const params = useParams();
 
-  const { t } = useTranslation("scheduleFeature", { keyPrefix: "doctorSchedule" });
+  const { t } = useTranslation("scheduleFeature", { keyPrefix: "doctor_schedule" });
 
   const renderCell = (cell) => {
     if (cell) {
@@ -58,7 +58,7 @@ function DoctorSchedule() {
 
   const loadData = async () => {
     await fetchApi(async () => {
-      const res = await scheduleServices.getScheduleList(heads[0], heads[6]);
+      const res = await scheduleServices.getScheduleListByDoctorId(heads[0], heads[6]);
 
       if (res.success) {
         const schedulesData = res.schedules;
@@ -105,7 +105,7 @@ function DoctorSchedule() {
   }, []);
 
   const rows = useMemo(() => {
-    if (times.length < 0) {
+    if (times.length <= 0) {
       return null;
     }
 
@@ -263,9 +263,9 @@ function DoctorSchedule() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => {
+              {rows?.map((row) => {
                 return (
-                  <TableRow key={row.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                  <TableRow key={row?.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                     <TableCell
                       sx={{
                         border: "1px solid rgba(0,0,0,0.2)",
@@ -274,7 +274,7 @@ function DoctorSchedule() {
                       component="th"
                       scope="row"
                     >
-                      {row.timeStart} - {row.timeEnd}
+                      {row?.timeStart} - {row?.timeEnd}
                     </TableCell>
                     <TableCell
                       sx={{
@@ -282,7 +282,7 @@ function DoctorSchedule() {
                       }}
                       align="center"
                     >
-                      {renderCell(row.day1)}
+                      {renderCell(row?.day1)}
                     </TableCell>
                     <TableCell
                       sx={{
@@ -290,7 +290,7 @@ function DoctorSchedule() {
                       }}
                       align="center"
                     >
-                      {renderCell(row.day2)}
+                      {renderCell(row?.day2)}
                     </TableCell>
                     <TableCell
                       sx={{
@@ -298,7 +298,7 @@ function DoctorSchedule() {
                       }}
                       align="center"
                     >
-                      {renderCell(row.day3)}
+                      {renderCell(row?.day3)}
                     </TableCell>
                     <TableCell
                       sx={{
@@ -306,7 +306,7 @@ function DoctorSchedule() {
                       }}
                       align="center"
                     >
-                      {renderCell(row.day4)}
+                      {renderCell(row?.day4)}
                     </TableCell>
                     <TableCell
                       sx={{
@@ -314,7 +314,7 @@ function DoctorSchedule() {
                       }}
                       align="center"
                     >
-                      {renderCell(row.day5)}
+                      {renderCell(row?.day5)}
                     </TableCell>
                     <TableCell
                       sx={{
@@ -322,7 +322,7 @@ function DoctorSchedule() {
                       }}
                       align="center"
                     >
-                      {renderCell(row.day6)}
+                      {renderCell(row?.day6)}
                     </TableCell>
                     <TableCell
                       sx={{
@@ -330,7 +330,7 @@ function DoctorSchedule() {
                       }}
                       align="center"
                     >
-                      {renderCell(row.day7)}
+                      {renderCell(row?.day7)}
                     </TableCell>
                   </TableRow>
                 );

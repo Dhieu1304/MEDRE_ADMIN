@@ -1,6 +1,10 @@
 {
-  "doctorSchedule": {
+  "doctor_schedule": {
     "title": "Schedule",
     "current_week": "Current week"
+  },
+  "schedule_list": {
+    "title": "Schedule",
+    "today": "Today"
   }
 }

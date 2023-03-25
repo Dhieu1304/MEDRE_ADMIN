@@ -1,6 +1,10 @@
 {
-  "doctorSchedule": {
+  "doctor_schedule": {
     "title": "Thông tin lịch khám",
     "current_week": "Tuần hiện tại"
+  },
+  "schedule_list": {
+    "title": "Thông tin lịch khám",
+    "today": "Hôm nay"
   }
 }
