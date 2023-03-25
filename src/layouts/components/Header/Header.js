@@ -1,5 +1,17 @@
 import PropTypes from "prop-types";
-import { Box, IconButton, Toolbar, Typography, Avatar, Menu, MenuItem, Tooltip } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  Toolbar,
+  Typography,
+  Avatar,
+  Menu,
+  MenuItem,
+  Tooltip,
+  FormGroup,
+  FormControlLabel,
+  Switch
+} from "@mui/material";
 
 import MenuIcon from "@mui/icons-material/Menu";
 
@@ -120,24 +132,44 @@ function Header({ open, handleDrawerOpen }) {
               <Typography textAlign="center">{t("profile_label")}</Typography>
             </MenuItem>
 
-            <MenuItem
-              onClick={() => {
-                setMode((prev) => {
-                  return prev === LIGHT ? DARK : LIGHT;
-                });
-              }}
-            >
-              <Typography textAlign="center">{mode}</Typography>
+            <MenuItem>
+              <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={mode === DARK}
+                      onClick={() => {
+                        setMode((prev) => {
+                          return prev === LIGHT ? DARK : LIGHT;
+                        });
+                      }}
+                    />
+                  }
+                  sx={{ ml: 0 }}
+                  label="Dark mode"
+                  labelPlacement="start"
+                />
+              </FormGroup>
             </MenuItem>
-            <MenuItem
-              onClick={() => {
-                const newLocale = locale === "viVN" ? "enUS" : "viVN";
-                const code = newLocale.slice(0, 2);
-                setLocale(newLocale);
-                i18n.changeLanguage(code);
-              }}
-            >
-              <Typography textAlign="center">{locale}</Typography>
+            <MenuItem>
+              <FormGroup sx={{ justifyContent: "flex-start" }}>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={locale === "enUS"}
+                      onClick={() => {
+                        const newLocale = locale === "viVN" ? "enUS" : "viVN";
+                        const code = newLocale.slice(0, 2);
+                        setLocale(newLocale);
+                        i18n.changeLanguage(code);
+                      }}
+                    />
+                  }
+                  sx={{ ml: 0 }}
+                  label="English"
+                  labelPlacement="start"
+                />
+              </FormGroup>
             </MenuItem>
             <MenuItem onClick={onLogout}>
               <Typography textAlign="center">{t("logout_label")}</Typography>
