@@ -6,8 +6,12 @@ const userApi = {};
 const staffApi = {
   staffInfo: () => "/staff/info",
   staffList: () => "/staff/all",
-  staffDetail: (id) => `/staff/detail/${id}`,
-  expertiseList: () => "/expertise/list"
+  staffDetail: (id) => `/staff/detail/${id}`
+};
+
+const expertiseApi = {
+  expertiseList: () => "/expertise/list",
+  createExpertise: () => "/expertise/create-expertise"
 };
 
 const scheduleApi = {
@@ -15,4 +19,4 @@ const scheduleApi = {
   timeList: () => "/time-schedule/time"
 };
 
-export { authApi, userApi, staffApi, scheduleApi };
+export { authApi, userApi, staffApi, scheduleApi, expertiseApi };

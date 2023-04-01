@@ -4,16 +4,14 @@ import { useTranslation } from "react-i18next";
 import CustomModal from "../../../components/CustomModal";
 import CustomStaffInput from "./CustomStaffInput";
 
-function AddExpertiseModal({ show, setShow, data, setData }) {
-  const { control, trigger } = useForm({
+function AddExpertiseModal({ show, setShow, data, setData, handleAddExpertise }) {
+  const { control, trigger, handleSubmit } = useForm({
     mode: "onChange",
     defaultValues: {
       expertise: ""
     },
     criteriaMode: "all"
   });
-
-  const handleAddExpertise = async () => {};
 
   const { t } = useTranslation("staffFeature", { keyPrefix: "add_expertise_modal" });
 
@@ -25,7 +23,7 @@ function AddExpertiseModal({ show, setShow, data, setData }) {
       setData={setData}
       title={t("title")}
       submitBtnLabel={t("btn_label")}
-      onSubmit={handleAddExpertise}
+      onSubmit={handleSubmit(handleAddExpertise)}
     >
       <CustomStaffInput control={control} rules={{}} label={t("expertise")} trigger={trigger} name="expertise" type="text" />
     </CustomModal>
@@ -36,7 +34,8 @@ AddExpertiseModal.propTypes = {
   show: PropTypes.bool.isRequired,
   setShow: PropTypes.func.isRequired,
   data: PropTypes.object.isRequired,
-  setData: PropTypes.func.isRequired
+  setData: PropTypes.func.isRequired,
+  handleAddExpertise: PropTypes.func.isRequired
 };
 
 export default AddExpertiseModal;

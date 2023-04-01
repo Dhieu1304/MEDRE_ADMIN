@@ -1,5 +1,5 @@
 import camelcaseKeys from "camelcase-keys";
-import { staffApi } from "../config/apiConfig";
+import { expertiseApi, staffApi } from "../config/apiConfig";
 import axiosClient from "../config/axiosClient";
 // import staffMockData from "../mockData/staffMockData";
 
@@ -109,7 +109,7 @@ const getStaffDetail = async (id) => {
 
 const getStaffExpertises = async () => {
   try {
-    const res = await axiosClient.get(staffApi.expertiseList());
+    const res = await axiosClient.get(expertiseApi.expertiseList());
 
     // let res = camelcaseKeys(
     //   {
@@ -144,9 +144,35 @@ const getStaffExpertises = async () => {
   }
 };
 
+const createExpertise = async (name) => {
+  try {
+    const res = await axiosClient.post(expertiseApi.createExpertise(), {
+      name
+    });
+
+    if (res?.status) {
+      return {
+        success: true,
+        message: res?.message
+      };
+    }
+    return {
+      success: false,
+      message: res?.message
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
 export default {
   getStaffList,
   getStaffDetail,
   getStaffExpertises,
-  getStaffInfo
+  getStaffInfo,
+  createExpertise
 };

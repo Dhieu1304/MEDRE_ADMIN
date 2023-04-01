@@ -18,6 +18,7 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { Add as AddIcon } from "@mui/icons-material";
+import { toast } from "react-toastify";
 import CustomStaffInput from "./components/CustomStaffInput";
 import staffServices from "../../services/staffServices";
 import { useFetchingStore } from "../../store/FetchingApiStore/hooks";
@@ -102,7 +103,7 @@ function StaffDetail() {
     loadData();
   }, [staffId]);
 
-  const loadConfig = async () => {
+  const loadExpertises = async () => {
     await fetchApi(async () => {
       const res = await staffServices.getStaffExpertises();
 
@@ -118,12 +119,36 @@ function StaffDetail() {
     });
   };
 
+  const loadConfig = async () => {
+    await loadExpertises();
+  };
+
   useEffect(() => {
     loadConfig();
   }, []);
 
   // console.log("expertiseListObj: ", expertiseListObj);
   // console.log("expertisesList: ", expertisesList);
+
+  const handleAddExpertise = async ({ expertise }) => {
+    await fetchApi(async () => {
+      const res = await staffServices.createExpertise(expertise);
+
+      if (res.success) {
+        // const expertisesData = res?.expertises;
+        // setExpertisesList(expertisesData);
+        // setIsFetchConfigSuccess(true);
+        addExpertiseModal.setShow(false);
+        addExpertiseModal.setData({});
+        await loadExpertises();
+        return { success: true };
+      }
+      // setExpertisesList([]);
+      // setIsFetchConfigSuccess(true);
+      toast(res.message);
+      return { error: res.message };
+    });
+  };
 
   return (
     isFetchConfigSuccess && (
@@ -383,6 +408,7 @@ function StaffDetail() {
             setShow={addExpertiseModal.setShow}
             data={addExpertiseModal.data}
             setData={addExpertiseModal.setData}
+            handleAddExpertise={handleAddExpertise}
           />
         )}
       </>
