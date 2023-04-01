@@ -32,5 +32,10 @@ export const sideBarItems = [
     to: routeConfig.home,
     label: "booking_label",
     icon: <FontAwesomeIcon icon={faCalendarPlus} width={20} />
+  },
+  {
+    to: routeConfig.meeting,
+    label: "meeting_label",
+    icon: <FontAwesomeIcon icon={faCalendarPlus} width={20} />
   }
 ];

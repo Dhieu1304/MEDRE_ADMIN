@@ -82,6 +82,9 @@ function StaffDetail() {
             dob: staffData?.dob,
             role: staffData?.role,
             status: staffData?.status,
+            description: staffData?.description,
+            education: staffData?.education,
+            certificate: staffData?.certificate,
             expertise: staffData?.idExpertiseExpertises?.map((item) => item?.id)
           };
 
@@ -118,6 +121,9 @@ function StaffDetail() {
   useEffect(() => {
     loadConfig();
   }, []);
+
+  // console.log("expertiseListObj: ", expertiseListObj);
+  // console.log("expertisesList: ", expertisesList);
 
   return (
     isFetchConfigSuccess && (
