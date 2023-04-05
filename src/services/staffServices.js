@@ -169,10 +169,96 @@ const createExpertise = async (name) => {
   }
 };
 
+const editStaffInfo = async () => {
+  try {
+    const res = await axiosClient.get(staffApi.editStaff());
+
+    // console.log("res: ", res);
+
+    if (res?.status) {
+      const staff = camelcaseKeys(res?.data?.staff, { deep: true });
+
+      return {
+        success: true,
+        staff,
+        message: res?.message
+      };
+    }
+    return {
+      success: false,
+      message: `Status is ${res.status}`
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
+const editMyProfile = async ({
+  username,
+  email,
+  phoneNumber,
+  name,
+  address,
+  gender,
+  dob,
+  role,
+  status,
+  description,
+  education,
+  certificate,
+  expertise
+}) => {
+  try {
+    const res = await axiosClient.post(staffApi.editMyProfile(), {
+      username,
+      email,
+      phoneNumber,
+      name,
+      address,
+      gender,
+      dob,
+      role,
+      status,
+      description,
+      education,
+      certificate,
+      expertise
+    });
+
+    // console.log("res: ", res);
+
+    if (res?.status) {
+      const staff = camelcaseKeys(res?.data?.staff, { deep: true });
+
+      return {
+        success: true,
+        staff,
+        message: res?.message
+      };
+    }
+    return {
+      success: false,
+      message: `Status is ${res.status}`
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
 export default {
   getStaffList,
   getStaffDetail,
   getStaffExpertises,
   getStaffInfo,
-  createExpertise
+  createExpertise,
+  editStaffInfo,
+  editMyProfile
 };

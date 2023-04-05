@@ -6,7 +6,9 @@ const userApi = {};
 const staffApi = {
   staffInfo: () => "/staff/info",
   staffList: () => "/staff/all",
-  staffDetail: (id) => `/staff/detail/${id}`
+  staffDetail: (id) => `/staff/detail/${id}`,
+  editStaff: (id) => `/staff/edit/${id}`,
+  editMyProfile: () => `/staff/my-profile/edit`
 };
 
 const expertiseApi = {

@@ -56,6 +56,9 @@ function AuthProvider({ children }) {
         dispatch(actions.fetchApiFailed(message));
         toast.success(message);
         return false;
+      },
+      setStaff: async (staff) => {
+        dispatch(actions.setStaff(staff));
       }
     }),
     [state]

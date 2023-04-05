@@ -28,10 +28,34 @@ import { useCustomModal } from "../../components/CustomModal";
 import AddExpertiseModal from "./components/AddExpertiseModal";
 import { staffRoutes } from "../../pages/StaffPage";
 import routeConfig from "../../config/routeConfig";
+import {
+  STAFF_ADDRESS_MAX_LENGTH,
+  STAFF_CERTIFICATE_MAX_LENGTH,
+  STAFF_DESCRIPTION_MAX_LENGTH,
+  STAFF_EDUCATION_MAX_LENGTH,
+  STAFF_EMAIL_MAX_LENGTH,
+  STAFF_GENDER_MAX_LENGTH,
+  STAFF_NAME_MAX_LENGTH,
+  STAFF_ROLE_MAX_LENGTH,
+  STAFF_STATUS_MAX_LENGTH,
+  STAFF_USERNAME_MAX_LENGTH
+} from "../../entities/Staff";
 
 function StaffDetail() {
   const [staff, setStaff] = useState();
   const [defaultValues, setDefaultValues] = useState({
+    username: "",
+    email: "",
+    phoneNumber: "",
+    name: "",
+    address: "",
+    gender: "",
+    dob: "",
+    role: "",
+    status: "",
+    description: "",
+    education: "",
+    certificate: "",
     expertise: []
   });
 
@@ -54,7 +78,21 @@ function StaffDetail() {
     }, {});
   }, [expertisesList]);
 
-  const { control, trigger, watch, reset } = useForm({
+  const gendersList = useMemo(
+    () => [
+      {
+        value: "Male",
+        label: "male"
+      },
+      {
+        value: "Female",
+        label: "female"
+      }
+    ],
+    []
+  );
+
+  const { control, trigger, watch, reset, handleSubmit } = useForm({
     mode: "onChange",
     defaultValues,
     criteriaMode: "all"
@@ -150,6 +188,21 @@ function StaffDetail() {
     });
   };
 
+  const handleSaveDetail = async (data) => {
+    // console.log("data: ", data);
+    await fetchApi(async () => {
+      const res = await staffServices.editMyProfile(data);
+
+      if (res.success) {
+        return { success: true };
+      }
+      // setExpertisesList([]);
+      // setIsFetchConfigSuccess(true);
+      toast(res.message);
+      return { error: res.message };
+    });
+  };
+
   return (
     isFetchConfigSuccess && (
       <>
@@ -204,7 +257,19 @@ function StaffDetail() {
               <Grid item xs={12} sm={12} md={4} lg={4}>
                 <CustomStaffInput
                   control={control}
-                  rules={{}}
+                  rules={{
+                    required: t("input_validation.required"),
+                    pattern: {
+                      value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+                      message: t("input_validation.format")
+                    },
+                    maxLength: {
+                      value: STAFF_EMAIL_MAX_LENGTH,
+                      message: t("input_validation.max_length", {
+                        maxLength: STAFF_EMAIL_MAX_LENGTH
+                      })
+                    }
+                  }}
                   label={t("email")}
                   trigger={trigger}
                   name="email"
@@ -214,7 +279,15 @@ function StaffDetail() {
               <Grid item xs={12} sm={12} md={4} lg={4}>
                 <CustomStaffInput
                   control={control}
-                  rules={{}}
+                  rules={{
+                    required: t("input_validation.required"),
+                    maxLength: {
+                      value: STAFF_USERNAME_MAX_LENGTH,
+                      message: t("input_validation.max_length", {
+                        maxLength: STAFF_USERNAME_MAX_LENGTH
+                      })
+                    }
+                  }}
                   label={t("username")}
                   trigger={trigger}
                   name="username"
@@ -224,7 +297,13 @@ function StaffDetail() {
               <Grid item xs={12} sm={12} md={4} lg={4}>
                 <CustomStaffInput
                   control={control}
-                  rules={{}}
+                  rules={{
+                    required: t("input_validation.required"),
+                    pattern: {
+                      value: /^((\+84)|0)(3[2-9]|5[6|8|9]|7[0|6-9]|8[1-5]|9[0-4|6-9])[0-9]{7}$/,
+                      message: t("input_validation.format")
+                    }
+                  }}
                   label={t("phone")}
                   trigger={trigger}
                   name="phoneNumber"
@@ -240,12 +319,35 @@ function StaffDetail() {
             </Typography>
             <Grid container spacing={3}>
               <Grid item xs={12} sm={12} md={6} lg={6}>
-                <CustomStaffInput control={control} rules={{}} label={t("role")} trigger={trigger} name="role" type="text" />
+                <CustomStaffInput
+                  control={control}
+                  rules={{
+                    required: t("input_validation.required"),
+                    maxLength: {
+                      value: STAFF_ROLE_MAX_LENGTH,
+                      message: t("input_validation.max_length", {
+                        maxLength: STAFF_ROLE_MAX_LENGTH
+                      })
+                    }
+                  }}
+                  label={t("role")}
+                  trigger={trigger}
+                  name="role"
+                  type="text"
+                />
               </Grid>
               <Grid item xs={12} sm={12} md={6} lg={6}>
                 <CustomStaffInput
                   control={control}
-                  rules={{}}
+                  rules={{
+                    required: t("input_validation.required"),
+                    maxLength: {
+                      value: STAFF_STATUS_MAX_LENGTH,
+                      message: t("input_validation.max_length", {
+                        maxLength: STAFF_STATUS_MAX_LENGTH
+                      })
+                    }
+                  }}
                   label={t("status")}
                   trigger={trigger}
                   name="status"
@@ -261,17 +363,48 @@ function StaffDetail() {
             </Typography>
             <Grid container spacing={3}>
               <Grid item xs={12} sm={12} md={6} lg={6}>
-                <CustomStaffInput control={control} rules={{}} label={t("name")} trigger={trigger} name="name" type="text" />
-              </Grid>
-
-              <Grid item xs={12} sm={12} md={6} lg={6}>
-                <CustomStaffInput control={control} rules={{}} label={t("dob")} trigger={trigger} name="dob" type="date" />
+                <CustomStaffInput
+                  control={control}
+                  rules={{
+                    required: t("input_validation.required"),
+                    maxLength: {
+                      value: STAFF_NAME_MAX_LENGTH,
+                      message: t("input_validation.max_length", {
+                        maxLength: STAFF_NAME_MAX_LENGTH
+                      })
+                    }
+                  }}
+                  label={t("name")}
+                  trigger={trigger}
+                  name="name"
+                  type="text"
+                />
               </Grid>
 
               <Grid item xs={12} sm={12} md={6} lg={6}>
                 <CustomStaffInput
                   control={control}
-                  rules={{}}
+                  rules={{
+                    required: t("input_validation.required")
+                  }}
+                  label={t("dob")}
+                  trigger={trigger}
+                  name="dob"
+                  type="date"
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <CustomStaffInput
+                  control={control}
+                  rules={{
+                    maxLength: {
+                      value: STAFF_ADDRESS_MAX_LENGTH,
+                      message: t("input_validation.max_length", {
+                        maxLength: STAFF_ADDRESS_MAX_LENGTH
+                      })
+                    }
+                  }}
                   label={t("address")}
                   trigger={trigger}
                   name="address"
@@ -281,12 +414,29 @@ function StaffDetail() {
               <Grid item xs={12} sm={12} md={6} lg={6}>
                 <CustomStaffInput
                   control={control}
-                  rules={{}}
+                  rules={{
+                    required: t("input_validation.required"),
+                    maxLength: {
+                      value: STAFF_GENDER_MAX_LENGTH,
+                      message: t("input_validation.max_length", {
+                        maxLength: STAFF_GENDER_MAX_LENGTH
+                      })
+                    }
+                  }}
                   label={t("gender")}
                   trigger={trigger}
                   name="gender"
-                  type="text"
-                />
+                >
+                  <Select>
+                    {gendersList.map((item) => {
+                      return (
+                        <MenuItem key={item?.value} value={item?.value}>
+                          <ListItemText primary={t(item?.label)} />
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </CustomStaffInput>
               </Grid>
             </Grid>
           </Box>
@@ -299,7 +449,14 @@ function StaffDetail() {
               <Grid item xs={12} sm={12} md={6} lg={6}>
                 <CustomStaffInput
                   control={control}
-                  rules={{}}
+                  rules={{
+                    maxLength: {
+                      value: STAFF_DESCRIPTION_MAX_LENGTH,
+                      message: t("input_validation.max_length", {
+                        maxLength: STAFF_DESCRIPTION_MAX_LENGTH
+                      })
+                    }
+                  }}
                   label={t("description")}
                   trigger={trigger}
                   name="description"
@@ -310,7 +467,14 @@ function StaffDetail() {
               <Grid item xs={12} sm={12} md={6} lg={6}>
                 <CustomStaffInput
                   control={control}
-                  rules={{}}
+                  rules={{
+                    maxLength: {
+                      value: STAFF_EDUCATION_MAX_LENGTH,
+                      message: t("input_validation.max_length", {
+                        maxLength: STAFF_EDUCATION_MAX_LENGTH
+                      })
+                    }
+                  }}
                   label={t("education")}
                   trigger={trigger}
                   name="education"
@@ -321,7 +485,14 @@ function StaffDetail() {
               <Grid item xs={12} sm={12} md={6} lg={6}>
                 <CustomStaffInput
                   control={control}
-                  rules={{}}
+                  rules={{
+                    maxLength: {
+                      value: STAFF_CERTIFICATE_MAX_LENGTH,
+                      message: t("input_validation.max_length", {
+                        maxLength: STAFF_CERTIFICATE_MAX_LENGTH
+                      })
+                    }
+                  }}
                   label={t("certificate")}
                   trigger={trigger}
                   name="certificate"
@@ -340,7 +511,15 @@ function StaffDetail() {
                   alignItems: "center"
                 }}
               >
-                <CustomStaffInput control={control} rules={{}} label={t("expertise")} trigger={trigger} name="expertise">
+                <CustomStaffInput
+                  control={control}
+                  rules={{
+                    required: t("input_validation.required")
+                  }}
+                  label={t("expertise")}
+                  trigger={trigger}
+                  name="expertise"
+                >
                   <Select
                     multiple
                     renderValue={(selected) => {
@@ -382,6 +561,17 @@ function StaffDetail() {
           >
             <Button
               variant="contained"
+              onClick={() => {
+                reset(defaultValues);
+              }}
+              sx={{
+                mr: 2
+              }}
+            >
+              {t("reset_btn")}
+            </Button>
+            <Button
+              variant="contained"
               onClick={() => navigate(`${routeConfig.staff}/${staffId}${staffRoutes.schedule}`, { relative: true })}
               sx={{
                 mr: 2
@@ -389,7 +579,9 @@ function StaffDetail() {
             >
               {t("schedule_btn")}
             </Button>
-            <Button variant="contained">{t("save_btn")}</Button>
+            <Button variant="contained" onClick={handleSubmit(handleSaveDetail)}>
+              {t("save_btn")}
+            </Button>
           </Box>
         </Box>
 
@@ -414,29 +606,5 @@ function StaffDetail() {
       </>
     )
   );
-  //   return (
-  //     <Grid container spacing={3}>
-  //       <Grid item xs={12} sm={6}>
-  //         <TextField label="Email" fullWidth />
-  //         <TextField label="Phone Number" fullWidth />
-  //         <TextField label="Username" fullWidth />
-  //         <TextField label="Name" fullWidth />
-  //       </Grid>
-  //       <Grid item xs={12} sm={6}>
-  //         <TextField label="Image" fullWidth />
-  //         <TextField label="Address" fullWidth />
-  //         <TextField label="Gender" fullWidth />
-  //         <TextField label="Date of Birth" fullWidth />
-  //       </Grid>
-  //       <Grid item xs={12}>
-  //         <TextField label="Role" fullWidth />
-  //         <TextField label="Description" fullWidth />
-  //         <TextField label="Education" fullWidth />
-  //         <TextField label="Certificate" fullWidth />
-  //         <TextField label="Status" fullWidth />
-  //         <Button variant="contained">Save</Button>
-  //       </Grid>
-  //     </Grid>
-  //   );
 }
 export default StaffDetail;

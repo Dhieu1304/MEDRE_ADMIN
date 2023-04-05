@@ -65,12 +65,22 @@
     "dob": "Date of Birth",
     "address": "Address",
     "gender": "Gender",
+    "male": "Male",
+    "female": "Female",
     "description": "Description",
     "education": "Education",
     "certificate": "Certificate",
     "expertise": "Expertise",
     "schedule_btn": "Schedule",
-    "save_btn": "Save"
+    "save_btn": "Save",
+    "reset_btn": "Reset",
+
+    "input_validation": {
+      "require": "field is require",
+      "max_length": "cannot cannot be more than {{maxLength}} characters",
+      "min_length": "cannot cannot be less than {{minLength}} characters",
+      "format": "field is not correct format"
+    }
   },
   "block_modal": {
     "title": "Block staff",

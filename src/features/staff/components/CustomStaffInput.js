@@ -24,7 +24,7 @@ function CustomStaffInput({ control, rules = {}, label, trigger, triggerTo, name
     if (children) {
       return (
         <FormControl sx={formControlStyle} variant="outlined" fullWidth>
-          <InputLabel variant="outlined">
+          <InputLabel variant="outlined" required={!!rules?.required}>
             <Box component="span">{label}</Box>
           </InputLabel>
 
@@ -36,7 +36,6 @@ function CustomStaffInput({ control, rules = {}, label, trigger, triggerTo, name
             if (isValidElement(child)) {
               return cloneElement(child, {
                 label,
-                required: !!rules?.required,
                 error: !!error,
                 value,
                 onBlur: () => {

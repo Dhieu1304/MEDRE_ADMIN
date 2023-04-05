@@ -65,12 +65,22 @@
     "dob": "Ngày sinh",
     "address": "Địa chỉ",
     "gender": "Giới tính",
+    "male": "Nam",
+    "female": "Nữ",
     "description": "Mô tả",
     "education": "Học vấn",
     "certificate": "Chứng chỉ",
     "expertise": "Chuyên khoa",
     "schedule_btn": "Lịch khám",
-    "save_btn": "Lưu"
+    "save_btn": "Lưu",
+    "reset_btn": "Đặt lại",
+
+    "input_validation": {
+      "required": "không được bỏ trống",
+      "max_length": "không được nhiều hơn {{maxLength}} kí tự",
+      "min_length": "không được ít hơn {{minLength}} kí tự",
+      "format": "sai định dạng"
+    }
   },
 
   "block_modal": {
