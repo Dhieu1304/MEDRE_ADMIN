@@ -1,2 +1,3 @@
-export { default as Staff } from "./Staff";
+export { default } from "./Staff";
+
 export * from "./constant";

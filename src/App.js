@@ -12,9 +12,12 @@ import { useAuthStore } from "./store/AuthStore/hooks";
 import { useAppConfigStore } from "./store/AppConfigStore";
 import { getTheme } from "./config/themeConfig";
 import CustomOverlay from "./components/CustomOverlay";
+import defineAbilityFor from "./config/defineAbility";
+import { AbilityContext } from "./store/AbilityStore";
 
 function App() {
   const authStore = useAuthStore();
+  // const [ability, setAbility] = useState();
   const [isFirstVisit, setIsFirstVisit] = useState(true);
 
   const { mode, locale } = useAppConfigStore();
@@ -24,10 +27,15 @@ function App() {
   useEffect(() => {
     const loadData = async () => {
       await authStore.loadStaffInfo();
+      // if (currentStaff) {
+      //   setAbility(defineAbilityFor(currentStaff));
+      // }
       setIsFirstVisit(false);
     };
     loadData();
   }, []);
+
+  const ability = defineAbilityFor(authStore.staff);
 
   return (
     <ThemeProvider theme={theme}>
@@ -38,35 +46,38 @@ function App() {
       ) : (
         <>
           <CustomOverlay open={authStore.isLoading} />
+
           {authStore.isLogin ? (
-            <Router>
-              <Routes>
-                {privateRoutes.map((route) => {
-                  let Layout = DefaultLayout;
-                  if (route.layout) {
-                    Layout = route.layout;
-                  } else if (route.layout === null) {
-                    Layout = Fragment;
-                  }
+            <AbilityContext.Provider value={ability}>
+              <Router>
+                <Routes>
+                  {privateRoutes.map((route) => {
+                    let Layout = DefaultLayout;
+                    if (route.layout) {
+                      Layout = route.layout;
+                    } else if (route.layout === null) {
+                      Layout = Fragment;
+                    }
 
-                  const Page = route.component;
-                  const to = route.props?.to;
-                  const replace = route.props?.replace;
+                    const Page = route.component;
+                    const to = route.props?.to;
+                    const replace = route.props?.replace;
 
-                  return (
-                    <Route
-                      key={route.path}
-                      path={route.path}
-                      element={
-                        <Layout>
-                          <Page to={to} replace={replace} />
-                        </Layout>
-                      }
-                    />
-                  );
-                })}
-              </Routes>
-            </Router>
+                    return (
+                      <Route
+                        key={route.path}
+                        path={route.path}
+                        element={
+                          <Layout>
+                            <Page to={to} replace={replace} />
+                          </Layout>
+                        }
+                      />
+                    );
+                  })}
+                </Routes>
+              </Router>
+            </AbilityContext.Provider>
           ) : (
             <Router>
               <Routes>
@@ -97,6 +108,7 @@ function App() {
               </Routes>
             </Router>
           )}
+
           <ToastContainer
             position="top-right"
             autoClose={50}

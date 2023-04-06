@@ -7,7 +7,19 @@ import { Children, cloneElement, isValidElement, useState } from "react";
 import { Controller } from "react-hook-form";
 import { inputErrorFormat } from "../../../utils/stringFormat";
 
-function CustomStaffInput({ control, rules = {}, label, trigger, triggerTo, name, type = "text", placeholder, children }) {
+function CustomStaffInput({
+  control,
+  rules = {},
+  label,
+  trigger,
+  triggerTo,
+  name,
+  type = "text",
+  placeholder,
+  disabled,
+  children,
+  inputProps
+}) {
   const [hidePassword, setHidePassword] = useState(true);
 
   const formControlStyle = {
@@ -43,7 +55,8 @@ function CustomStaffInput({ control, rules = {}, label, trigger, triggerTo, name
                   onBlur();
                 },
                 onChange,
-                placeholder
+                placeholder,
+                disabled
               });
             }
             return child;
@@ -70,7 +83,7 @@ function CustomStaffInput({ control, rules = {}, label, trigger, triggerTo, name
               </InputAdornment>
             )
           }
-        : undefined;
+        : inputProps;
 
     return (
       <Box
@@ -82,6 +95,7 @@ function CustomStaffInput({ control, rules = {}, label, trigger, triggerTo, name
         error={!!error?.message}
         value={value}
         label={<Box component="span">{label}</Box>}
+        disabled={disabled}
         InputLabelProps={
           type === "date" || type === "number"
             ? {
@@ -121,7 +135,9 @@ CustomStaffInput.defaultProps = {
   triggerTo: null,
   children: null,
   type: "text",
-  placeholder: ""
+  placeholder: "",
+  disabled: undefined,
+  inputProps: undefined
 };
 
 CustomStaffInput.propTypes = {
@@ -133,7 +149,10 @@ CustomStaffInput.propTypes = {
   name: PropTypes.string.isRequired,
   type: PropTypes.string,
   placeholder: PropTypes.string,
-  children: PropTypes.node || undefined
+  children: PropTypes.node || undefined,
+
+  disabled: PropTypes.bool || undefined,
+  inputProps: PropTypes.node || undefined
 };
 
 export default CustomStaffInput;

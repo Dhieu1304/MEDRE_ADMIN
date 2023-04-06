@@ -12,14 +12,19 @@ import {
   MenuItem,
   Checkbox,
   ListItemText,
-  IconButton
+  IconButton,
+  InputAdornment
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { Add as AddIcon } from "@mui/icons-material";
 import { toast } from "react-toastify";
+import { useAbility } from "@casl/react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import CustomStaffInput from "./components/CustomStaffInput";
+
 import staffServices from "../../services/staffServices";
 import { useFetchingStore } from "../../store/FetchingApiStore/hooks";
 import CustomOverlay from "../../components/CustomOverlay";
@@ -28,39 +33,20 @@ import { useCustomModal } from "../../components/CustomModal";
 import AddExpertiseModal from "./components/AddExpertiseModal";
 import { staffRoutes } from "../../pages/StaffPage";
 import routeConfig from "../../config/routeConfig";
-import {
-  STAFF_ADDRESS_MAX_LENGTH,
-  STAFF_CERTIFICATE_MAX_LENGTH,
-  STAFF_DESCRIPTION_MAX_LENGTH,
-  STAFF_EDUCATION_MAX_LENGTH,
-  STAFF_EMAIL_MAX_LENGTH,
-  STAFF_GENDER_MAX_LENGTH,
-  STAFF_NAME_MAX_LENGTH,
-  STAFF_ROLE_MAX_LENGTH,
-  STAFF_STATUS_MAX_LENGTH,
-  STAFF_USERNAME_MAX_LENGTH
-} from "../../entities/Staff";
+import Staff, { staffActionAbility, staffInputValidate } from "../../entities/Staff";
+import { AbilityContext } from "../../store/AbilityStore";
+import { NotHaveAccessModal } from "../auth";
+import { Expertise, expertiseActionAbility } from "../../entities/Expertise";
+import EditStaffRoleModal from "./components/EditStaffRoleModal";
 
 function StaffDetail() {
   const [staff, setStaff] = useState();
-  const [defaultValues, setDefaultValues] = useState({
-    username: "",
-    email: "",
-    phoneNumber: "",
-    name: "",
-    address: "",
-    gender: "",
-    dob: "",
-    role: "",
-    status: "",
-    description: "",
-    education: "",
-    certificate: "",
-    expertise: []
-  });
+  const [defaultValues, setDefaultValues] = useState(new Staff({}));
 
   const changeAvatarModal = useCustomModal();
   const addExpertiseModal = useCustomModal();
+  const notHaveAccessModal = useCustomModal();
+  const editStaffRoleModal = useCustomModal();
 
   const params = useParams();
   const staffId = useMemo(() => params?.staffId, [params?.staffId]);
@@ -108,29 +94,12 @@ function StaffDetail() {
         const res = await staffServices.getStaffDetail(staffId);
 
         if (res.success) {
-          const staffData = res.staff;
+          const staffData = new Staff(res.staff);
           setStaff(staffData);
 
-          const newDefaultValues = {
-            username: staffData?.username,
-            email: staffData?.email,
-            phoneNumber: staffData?.phoneNumber,
-            name: staffData?.name,
-            address: staffData?.address,
-            gender: staffData?.gender,
-            dob: staffData?.dob,
-            role: staffData?.role,
-            status: staffData?.status,
-            description: staffData?.description,
-            education: staffData?.education,
-            certificate: staffData?.certificate,
-            expertise: staffData?.idExpertiseExpertises?.map((item) => item?.id)
-          };
-
+          const newDefaultValues = { ...staffData };
           setDefaultValues(newDefaultValues);
           reset(newDefaultValues);
-
-          // setValue(newDefaultValues);
 
           return { success: true };
         }
@@ -156,6 +125,8 @@ function StaffDetail() {
       return { error: res.message };
     });
   };
+
+  // console.log("exper: ", expertisesList);
 
   const loadConfig = async () => {
     await loadExpertises();
@@ -202,6 +173,12 @@ function StaffDetail() {
       return { error: res.message };
     });
   };
+
+  const ability = useAbility(AbilityContext);
+
+  const cannotUpdateStaff = ability.cannot(staffActionAbility.UPDATE, staff);
+  const canUpdateStaffRole = ability.can(staffActionAbility.UPDATE_ROLE, staff);
+  const canAddExpertise = ability.can(expertiseActionAbility.ADD, Expertise.magicWord());
 
   return (
     isFetchConfigSuccess && (
@@ -256,6 +233,7 @@ function StaffDetail() {
             <Grid container spacing={3}>
               <Grid item xs={12} sm={12} md={4} lg={4}>
                 <CustomStaffInput
+                  disabled={cannotUpdateStaff}
                   control={control}
                   rules={{
                     required: t("input_validation.required"),
@@ -264,9 +242,9 @@ function StaffDetail() {
                       message: t("input_validation.format")
                     },
                     maxLength: {
-                      value: STAFF_EMAIL_MAX_LENGTH,
+                      value: staffInputValidate.STAFF_EMAIL_MAX_LENGTH,
                       message: t("input_validation.max_length", {
-                        maxLength: STAFF_EMAIL_MAX_LENGTH
+                        maxLength: staffInputValidate.STAFF_EMAIL_MAX_LENGTH
                       })
                     }
                   }}
@@ -278,13 +256,14 @@ function StaffDetail() {
               </Grid>
               <Grid item xs={12} sm={12} md={4} lg={4}>
                 <CustomStaffInput
+                  disabled={cannotUpdateStaff}
                   control={control}
                   rules={{
                     required: t("input_validation.required"),
                     maxLength: {
-                      value: STAFF_USERNAME_MAX_LENGTH,
+                      value: staffInputValidate.STAFF_USERNAME_MAX_LENGTH,
                       message: t("input_validation.max_length", {
-                        maxLength: STAFF_USERNAME_MAX_LENGTH
+                        maxLength: staffInputValidate.STAFF_USERNAME_MAX_LENGTH
                       })
                     }
                   }}
@@ -296,6 +275,7 @@ function StaffDetail() {
               </Grid>
               <Grid item xs={12} sm={12} md={4} lg={4}>
                 <CustomStaffInput
+                  disabled={cannotUpdateStaff}
                   control={control}
                   rules={{
                     required: t("input_validation.required"),
@@ -320,13 +300,14 @@ function StaffDetail() {
             <Grid container spacing={3}>
               <Grid item xs={12} sm={12} md={6} lg={6}>
                 <CustomStaffInput
+                  disabled
                   control={control}
                   rules={{
                     required: t("input_validation.required"),
                     maxLength: {
-                      value: STAFF_ROLE_MAX_LENGTH,
+                      value: staffInputValidate.STAFF_ROLE_MAX_LENGTH,
                       message: t("input_validation.max_length", {
-                        maxLength: STAFF_ROLE_MAX_LENGTH
+                        maxLength: staffInputValidate.STAFF_ROLE_MAX_LENGTH
                       })
                     }
                   }}
@@ -334,17 +315,34 @@ function StaffDetail() {
                   trigger={trigger}
                   name="role"
                   type="text"
+                  inputProps={
+                    canUpdateStaffRole && {
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <FontAwesomeIcon
+                            size="1x"
+                            icon={faEdit}
+                            onClick={() => {
+                              editStaffRoleModal.setShow(true);
+                            }}
+                            cursor="pointer"
+                          />
+                        </InputAdornment>
+                      )
+                    }
+                  }
                 />
               </Grid>
               <Grid item xs={12} sm={12} md={6} lg={6}>
                 <CustomStaffInput
+                  disabled
                   control={control}
                   rules={{
                     required: t("input_validation.required"),
                     maxLength: {
-                      value: STAFF_STATUS_MAX_LENGTH,
+                      value: staffInputValidate.STAFF_STATUS_MAX_LENGTH,
                       message: t("input_validation.max_length", {
-                        maxLength: STAFF_STATUS_MAX_LENGTH
+                        maxLength: staffInputValidate.STAFF_STATUS_MAX_LENGTH
                       })
                     }
                   }}
@@ -364,13 +362,14 @@ function StaffDetail() {
             <Grid container spacing={3}>
               <Grid item xs={12} sm={12} md={6} lg={6}>
                 <CustomStaffInput
+                  disabled={cannotUpdateStaff}
                   control={control}
                   rules={{
                     required: t("input_validation.required"),
                     maxLength: {
-                      value: STAFF_NAME_MAX_LENGTH,
+                      value: staffInputValidate.STAFF_NAME_MAX_LENGTH,
                       message: t("input_validation.max_length", {
-                        maxLength: STAFF_NAME_MAX_LENGTH
+                        maxLength: staffInputValidate.STAFF_NAME_MAX_LENGTH
                       })
                     }
                   }}
@@ -383,6 +382,7 @@ function StaffDetail() {
 
               <Grid item xs={12} sm={12} md={6} lg={6}>
                 <CustomStaffInput
+                  disabled={cannotUpdateStaff}
                   control={control}
                   rules={{
                     required: t("input_validation.required")
@@ -396,12 +396,13 @@ function StaffDetail() {
 
               <Grid item xs={12} sm={12} md={6} lg={6}>
                 <CustomStaffInput
+                  disabled={cannotUpdateStaff}
                   control={control}
                   rules={{
                     maxLength: {
-                      value: STAFF_ADDRESS_MAX_LENGTH,
+                      value: staffInputValidate.STAFF_ADDRESS_MAX_LENGTH,
                       message: t("input_validation.max_length", {
-                        maxLength: STAFF_ADDRESS_MAX_LENGTH
+                        maxLength: staffInputValidate.STAFF_ADDRESS_MAX_LENGTH
                       })
                     }
                   }}
@@ -413,13 +414,14 @@ function StaffDetail() {
               </Grid>
               <Grid item xs={12} sm={12} md={6} lg={6}>
                 <CustomStaffInput
+                  disabled={cannotUpdateStaff}
                   control={control}
                   rules={{
                     required: t("input_validation.required"),
                     maxLength: {
-                      value: STAFF_GENDER_MAX_LENGTH,
+                      value: staffInputValidate.STAFF_GENDER_MAX_LENGTH,
                       message: t("input_validation.max_length", {
-                        maxLength: STAFF_GENDER_MAX_LENGTH
+                        maxLength: staffInputValidate.STAFF_GENDER_MAX_LENGTH
                       })
                     }
                   }}
@@ -448,12 +450,13 @@ function StaffDetail() {
             <Grid container spacing={3}>
               <Grid item xs={12} sm={12} md={6} lg={6}>
                 <CustomStaffInput
+                  disabled={cannotUpdateStaff}
                   control={control}
                   rules={{
                     maxLength: {
-                      value: STAFF_DESCRIPTION_MAX_LENGTH,
+                      value: staffInputValidate.STAFF_DESCRIPTION_MAX_LENGTH,
                       message: t("input_validation.max_length", {
-                        maxLength: STAFF_DESCRIPTION_MAX_LENGTH
+                        maxLength: staffInputValidate.STAFF_DESCRIPTION_MAX_LENGTH
                       })
                     }
                   }}
@@ -466,12 +469,13 @@ function StaffDetail() {
 
               <Grid item xs={12} sm={12} md={6} lg={6}>
                 <CustomStaffInput
+                  disabled={cannotUpdateStaff}
                   control={control}
                   rules={{
                     maxLength: {
-                      value: STAFF_EDUCATION_MAX_LENGTH,
+                      value: staffInputValidate.STAFF_EDUCATION_MAX_LENGTH,
                       message: t("input_validation.max_length", {
-                        maxLength: STAFF_EDUCATION_MAX_LENGTH
+                        maxLength: staffInputValidate.STAFF_EDUCATION_MAX_LENGTH
                       })
                     }
                   }}
@@ -484,12 +488,13 @@ function StaffDetail() {
 
               <Grid item xs={12} sm={12} md={6} lg={6}>
                 <CustomStaffInput
+                  disabled={cannotUpdateStaff}
                   control={control}
                   rules={{
                     maxLength: {
-                      value: STAFF_CERTIFICATE_MAX_LENGTH,
+                      value: staffInputValidate.STAFF_CERTIFICATE_MAX_LENGTH,
                       message: t("input_validation.max_length", {
-                        maxLength: STAFF_CERTIFICATE_MAX_LENGTH
+                        maxLength: staffInputValidate.STAFF_CERTIFICATE_MAX_LENGTH
                       })
                     }
                   }}
@@ -512,10 +517,9 @@ function StaffDetail() {
                 }}
               >
                 <CustomStaffInput
+                  disabled={cannotUpdateStaff}
                   control={control}
-                  rules={{
-                    required: t("input_validation.required")
-                  }}
+                  rules={{}}
                   label={t("expertise")}
                   trigger={trigger}
                   name="expertise"
@@ -542,9 +546,14 @@ function StaffDetail() {
                     })}
                   </Select>
                 </CustomStaffInput>
+
                 <IconButton
                   onClick={() => {
-                    addExpertiseModal.setShow(true);
+                    if (canAddExpertise) {
+                      addExpertiseModal.setShow(true);
+                    } else {
+                      notHaveAccessModal.setShow(true);
+                    }
                   }}
                 >
                   <AddIcon />
@@ -584,6 +593,24 @@ function StaffDetail() {
             </Button>
           </Box>
         </Box>
+
+        {editStaffRoleModal.show && (
+          <EditStaffRoleModal
+            show={editStaffRoleModal.show}
+            setShow={editStaffRoleModal.setShow}
+            data={editStaffRoleModal.data}
+            setData={editStaffRoleModal.setData}
+          />
+        )}
+
+        {notHaveAccessModal.show && (
+          <NotHaveAccessModal
+            show={notHaveAccessModal.show}
+            setShow={notHaveAccessModal.setShow}
+            data={notHaveAccessModal.data}
+            setData={notHaveAccessModal.setData}
+          />
+        )}
 
         {changeAvatarModal.show && (
           <ChangeAvatarModal

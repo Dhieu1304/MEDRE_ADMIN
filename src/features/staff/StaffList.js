@@ -43,7 +43,7 @@ import CustomOverlay from "../../components/CustomOverlay";
 import { useAppConfigStore } from "../../store/AppConfigStore/hooks";
 import useDebounce from "../../hooks/useDebounce";
 import { useCustomModal } from "../../components/CustomModal/hooks";
-import BlockStaffModal from "./components/BlockStaffModal";
+import EditStaffStatusModal from "./components/BlockStaffModal";
 
 export default function StaffList() {
   // const staffTypesList = useMemo(() => {
@@ -797,7 +797,7 @@ export default function StaffList() {
         )}
       </Box>
       {blockStaffModal.show && (
-        <BlockStaffModal
+        <EditStaffStatusModal
           show={blockStaffModal.show}
           setShow={blockStaffModal.setShow}
           data={blockStaffModal.data}
