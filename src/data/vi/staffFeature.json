@@ -122,6 +122,13 @@
     }
   },
 
+  "edit_staff_status_modal": {
+    "title": "Chỉnh sửa trạng thái nhân viên",
+    "block_btn_label": "Khóa",
+    "unblock_btn_label": "Mở khóa",
+    "confirm_question": "Bạn có chắc chắn khóa nhân viên {{name}}?"
+  },
+
   "change_avatar_modal": {
     "title": "Thay đổi ảnh đại diện",
     "upload": "Tải ảnh lên",

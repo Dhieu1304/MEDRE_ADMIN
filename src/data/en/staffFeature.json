@@ -120,6 +120,13 @@
     }
   },
 
+  "edit_staff_status_modal": {
+    "title": "Edit staff status",
+    "block_btn_label": "Block",
+    "unblock_btn_label": "Unblock",
+    "confirm_question": "Do you want to block staff {{name}}?"
+  },
+
   "change_avatar_modal": {
     "title": "Change Avatar",
     "upload": "Upload",

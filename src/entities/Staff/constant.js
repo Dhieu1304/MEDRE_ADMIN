@@ -22,6 +22,11 @@ export const staffRoles = {
   ROLE_CUSTOMER_SERVICE: "Customer_Service"
 };
 
+export const staffStatus = {
+  STATUS_BLOCK: "Block",
+  STATUS_UNBLOCK: "OK"
+};
+
 export const staffActionAbility = {
   READ: "READ",
   DELETE: "DELETE",

@@ -46,6 +46,7 @@ import { Expertise, expertiseActionAbility } from "../../entities/Expertise";
 import EditStaffRoleModal from "./components/EditStaffRoleModal";
 import { mergeObjectsWithoutNullAndUndefined } from "../../utils/objectUtil";
 import { useAuthStore } from "../../store/AuthStore";
+import { EditStaffStatusModal } from "./components";
 
 function StaffDetail() {
   const [staff, setStaff] = useState(new Staff());
@@ -71,6 +72,7 @@ function StaffDetail() {
   const addExpertiseModal = useCustomModal();
   const notHaveAccessModal = useCustomModal();
   const editStaffRoleModal = useCustomModal();
+  const editStaffStatusModal = useCustomModal();
 
   const params = useParams();
   const staffId = useMemo(() => params?.staffId, [params?.staffId]);
@@ -206,6 +208,10 @@ function StaffDetail() {
   };
 
   const handleAfterEditStaffRole = async () => {
+    await loadData();
+  };
+
+  const handleAfterEditStaffStatus = async () => {
     await loadData();
   };
 
@@ -411,7 +417,8 @@ function StaffDetail() {
                             size="1x"
                             icon={faGearIcon}
                             onClick={() => {
-                              editStaffRoleModal.setShow(true);
+                              editStaffStatusModal.setShow(true);
+                              editStaffStatusModal.setData(staff);
                             }}
                             cursor="pointer"
                             color={theme.palette.success.light}
@@ -728,6 +735,16 @@ function StaffDetail() {
             data={editStaffRoleModal.data}
             setData={editStaffRoleModal.setData}
             handleAfterEditStaffRole={handleAfterEditStaffRole}
+          />
+        )}
+
+        {editStaffStatusModal.show && (
+          <EditStaffStatusModal
+            show={editStaffStatusModal.show}
+            setShow={editStaffStatusModal.setShow}
+            data={editStaffStatusModal.data}
+            setData={editStaffStatusModal.setData}
+            handleAfterEditStaffStatus={handleAfterEditStaffStatus}
           />
         )}
 
