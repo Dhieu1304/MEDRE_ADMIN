@@ -1,12 +1,12 @@
-export const LIGHT = "LIGHT";
-export const DARK = "DARK";
+export const LIGHT = "light";
+export const DARK = "dark";
 
 export const getTheme = (theme) => {
   switch (theme) {
     case DARK:
       return {
         palette: {
-          mode: "dark"
+          mode: DARK
         }
       };
 
@@ -14,7 +14,10 @@ export const getTheme = (theme) => {
     default:
       return {
         palette: {
-          mode: "light"
+          mode: LIGHT,
+          text: {
+            disabled: "rgba(0,0,0,0.7)"
+          }
         }
       };
   }

@@ -43,7 +43,7 @@ import CustomOverlay from "../../components/CustomOverlay";
 import { useAppConfigStore } from "../../store/AppConfigStore/hooks";
 import useDebounce from "../../hooks/useDebounce";
 import { useCustomModal } from "../../components/CustomModal/hooks";
-import EditStaffStatusModal from "./components/BlockStaffModal";
+import { EditStaffStatusModal } from "./components";
 
 export default function StaffList() {
   // const staffTypesList = useMemo(() => {

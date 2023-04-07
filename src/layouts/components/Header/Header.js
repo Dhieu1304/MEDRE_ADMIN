@@ -15,7 +15,7 @@ import {
 
 import MenuIcon from "@mui/icons-material/Menu";
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { headerDropdownMenu } from "./config";
@@ -30,7 +30,7 @@ import { DARK, LIGHT } from "../../../config/themeConfig";
 function Header({ open, handleDrawerOpen }) {
   const authStore = useAuthStore();
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const [anchorElUser, setAnchorElUser] = useState(null);
 
@@ -123,14 +123,18 @@ function Header({ open, handleDrawerOpen }) {
                 <Typography textAlign="center">{t(item.label)}</Typography>
               </MenuItem>
             ))}
-
-            <MenuItem
-              onClick={() => {
-                navigate(`${routeConfig.staff}/${authStore.staff?.id}`);
+            <Box
+              component={Link}
+              to={`${routeConfig.staff}/${authStore.staff?.id}`}
+              sx={{
+                textDecoration: "none",
+                color: "inherit"
               }}
             >
-              <Typography textAlign="center">{t("profile_label")}</Typography>
-            </MenuItem>
+              <MenuItem>
+                <Typography textAlign="center">{t("profile_label")}</Typography>
+              </MenuItem>
+            </Box>
 
             <MenuItem>
               <FormGroup>

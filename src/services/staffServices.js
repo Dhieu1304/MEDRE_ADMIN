@@ -74,6 +74,8 @@ const getStaffDetail = async (id) => {
   try {
     const res = await axiosClient.get(staffApi.staffDetail(id));
 
+    // console.log("res: ", res);
+
     // const res = camelcaseKeys(
     //   {
     //     status: true,
@@ -169,9 +171,33 @@ const createExpertise = async (name) => {
   }
 };
 
-const editStaffInfo = async () => {
+const editStaffInfo = async ({
+  username,
+  email,
+  phoneNumber,
+  name,
+  address,
+  gender,
+  dob,
+  description,
+  education,
+  certificate,
+  expertise
+}) => {
   try {
-    const res = await axiosClient.get(staffApi.editStaff());
+    const res = await axiosClient.get(staffApi.editStaff(), {
+      username,
+      email,
+      phoneNumber,
+      name,
+      address,
+      gender,
+      dob,
+      description,
+      education,
+      certificate,
+      expertise
+    });
 
     // console.log("res: ", res);
 
@@ -205,8 +231,6 @@ const editMyProfile = async ({
   address,
   gender,
   dob,
-  role,
-  status,
   description,
   education,
   certificate,
@@ -221,15 +245,11 @@ const editMyProfile = async ({
       address,
       gender,
       dob,
-      role,
-      status,
       description,
       education,
       certificate,
       expertise
     });
-
-    // console.log("res: ", res);
 
     if (res?.status) {
       const staff = camelcaseKeys(res?.data?.staff, { deep: true });

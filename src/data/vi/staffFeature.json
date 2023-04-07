@@ -70,10 +70,15 @@
     "description": "Mô tả",
     "education": "Học vấn",
     "certificate": "Chứng chỉ",
-    "expertise": "Chuyên khoa",
+    "expertises": "Chuyên khoa",
     "schedule_btn": "Lịch khám",
     "save_btn": "Lưu",
     "reset_btn": "Đặt lại",
+
+    "email_verified_success": "Xác minh email thành công",
+    "email_verified_failed": "Xác minh email thất bại",
+    "phone_verified_success": "Xác minh số điện thoại thành công",
+    "phone_verified_failed": "Xác minh số điện thoại thất bại",
 
     "input_validation": {
       "required": "không được bỏ trống",

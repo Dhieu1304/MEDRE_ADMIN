@@ -4,18 +4,23 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import CustomModal from "../../../components/CustomModal";
 
-function ChangeAvatarModal({ show, setShow, data, setData }) {
-  const handleChangeAvatar = async () => {};
+function ChangeAvatarModal({ show, setShow, data, setData, disbled }) {
+  const handleChangeAvatar = async () => {
+    // if (!disbled) {
+    // }
+  };
 
   const [image, setImage] = useState(data?.image);
 
   const handleImageChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setImage(event.target.result);
-      };
-      reader.readAsDataURL(e.target.files[0]);
+    if (!disbled) {
+      if (e.target.files && e.target.files[0]) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          setImage(event.target.result);
+        };
+        reader.readAsDataURL(e.target.files[0]);
+      }
     }
   };
 
@@ -27,9 +32,9 @@ function ChangeAvatarModal({ show, setShow, data, setData }) {
       setShow={setShow}
       data={data}
       setData={setData}
-      title={t("title")}
-      submitBtnLabel={t("btn_label")}
-      onSubmit={handleChangeAvatar}
+      title={!disbled && t("title")}
+      submitBtnLabel={!disbled && t("btn_label")}
+      onSubmit={!disbled && handleChangeAvatar}
     >
       <Box
         sx={{
@@ -56,18 +61,22 @@ function ChangeAvatarModal({ show, setShow, data, setData }) {
           src={image}
         />
 
-        {/* <InputLabel>{t("upload")}</InputLabel> */}
-        <TextField type="file" onChange={handleImageChange} />
+        {!disbled && <TextField type="file" onChange={handleImageChange} />}
       </Box>
     </CustomModal>
   );
 }
 
+ChangeAvatarModal.defaultProps = {
+  disbled: undefined
+};
+
 ChangeAvatarModal.propTypes = {
   show: PropTypes.bool.isRequired,
   setShow: PropTypes.func.isRequired,
   data: PropTypes.object.isRequired,
-  setData: PropTypes.func.isRequired
+  setData: PropTypes.func.isRequired,
+  disbled: PropTypes.bool
 };
 
 export default ChangeAvatarModal;

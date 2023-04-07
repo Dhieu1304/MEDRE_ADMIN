@@ -18,10 +18,9 @@ class Staff {
     description = "",
     education = "",
     certificate = "",
-    refreshToken = "",
     createdAt = new Date(),
     updatedAt = new Date(),
-    idExpertiseExpertises: expertise = [],
+    idExpertiseExpertises: expertises = [],
     schedules = []
   } = {}) {
     this.id = id;
@@ -42,10 +41,9 @@ class Staff {
     this.description = description;
     this.education = education;
     this.certificate = certificate;
-    this.refreshToken = refreshToken;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
-    this.expertise = expertise;
+    this.expertises = expertises;
     this.schedules = schedules;
   }
 

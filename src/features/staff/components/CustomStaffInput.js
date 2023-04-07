@@ -1,8 +1,17 @@
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { faEdit as faEditIcon, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
 
-import { Box, FormControl, FormHelperText, InputAdornment, InputLabel, TextField } from "@mui/material";
+import {
+  Box,
+  FormControl,
+  FormHelperText,
+  InputAdornment,
+  InputLabel,
+  TextField,
+  Typography,
+  useTheme
+} from "@mui/material";
 import { Children, cloneElement, isValidElement, useState } from "react";
 import { Controller } from "react-hook-form";
 import { inputErrorFormat } from "../../../utils/stringFormat";
@@ -18,8 +27,14 @@ function CustomStaffInput({
   placeholder,
   disabled,
   children,
-  inputProps
+  InputProps: CustomInputProps,
+  multiline,
+  rows,
+  message,
+  showCanEditIcon
 }) {
+  const theme = useTheme();
+
   const [hidePassword, setHidePassword] = useState(true);
 
   const formControlStyle = {
@@ -27,6 +42,56 @@ function CustomStaffInput({
     padding: 0
   };
 
+  const labelShinkFontSize = 20;
+
+  const renderLabel = () => (
+    <Box
+      sx={{
+        fontSize: labelShinkFontSize
+      }}
+      component="span"
+    >
+      {label}
+      {showCanEditIcon && !disabled && (
+        <Box
+          component={FontAwesomeIcon}
+          size="1x"
+          icon={faEditIcon}
+          cursor="pointer"
+          color={theme.palette.success.light}
+          sx={{
+            ml: 1
+          }}
+        />
+      )}
+    </Box>
+  );
+
+  const InputLabelPropsSx = {
+    "&.MuiInputLabel-outlined.MuiInputLabel-shrink span": {
+      "&:first-of-type": {
+        fontSize: labelShinkFontSize,
+        fontWeight: "600",
+        color: "rgba(0,0,0,0.8)"
+      }
+    },
+    "&.MuiInputLabel-outlined:not(.MuiInputLabel-shrink) span": {
+      "&:first-of-type": {
+        fontSize: 16,
+        fontWeight: "400",
+        color: "rgba(0,0,0,0.5)"
+      }
+    },
+    "& .MuiInputLabel-asterisk": {
+      color: "red",
+      fontSize: 25
+    },
+    "& .MuiOutlinedInput-notchedOutline legend": {
+      fontSize: 20,
+      fontWeight: "600",
+      color: "yellow"
+    }
+  };
   const render = ({ field: { onChange, onBlur, value }, fieldState: { error } }) => {
     let inputType = type;
     if (type === "password") {
@@ -34,10 +99,20 @@ function CustomStaffInput({
     }
 
     if (children) {
+      // const shrink = Array.isArray(value) ? (value.length > 0 ? true : false) : !!value;
+      // Đừng dùng cái này => ko sẽ có lỗi
+
       return (
         <FormControl sx={formControlStyle} variant="outlined" fullWidth>
-          <InputLabel variant="outlined" required={!!rules?.required}>
-            <Box component="span">{label}</Box>
+          <InputLabel
+            variant="outlined"
+            required={!!rules?.required}
+            // shrink={shrink} // Đừng dùng cái này => ko sẽ có lỗi
+            sx={{
+              ...InputLabelPropsSx
+            }}
+          >
+            {renderLabel()}
           </InputLabel>
 
           {/* add props for children
@@ -47,7 +122,7 @@ function CustomStaffInput({
           {Children.map(children, (child) => {
             if (isValidElement(child)) {
               return cloneElement(child, {
-                label,
+                label: renderLabel(),
                 error: !!error,
                 value,
                 onBlur: () => {
@@ -65,6 +140,17 @@ function CustomStaffInput({
           <FormHelperText>
             <Box component="span">{inputErrorFormat(label, error?.message)}</Box>
           </FormHelperText>
+          {!error?.message && message && message?.text && (
+            <Typography
+              variant="body"
+              color={theme.palette[message?.type].light}
+              sx={{
+                ml: 2
+              }}
+            >
+              {message?.text}
+            </Typography>
+          )}
         </FormControl>
       );
     }
@@ -83,39 +169,49 @@ function CustomStaffInput({
               </InputAdornment>
             )
           }
-        : inputProps;
+        : CustomInputProps || {};
 
     return (
-      <Box
-        component={TextField}
-        fullWidth
-        InputProps={InputProps}
-        sx={formControlStyle}
-        required={!!rules?.required}
-        error={!!error?.message}
-        value={value}
-        label={<Box component="span">{label}</Box>}
-        disabled={disabled}
-        InputLabelProps={
-          type === "date" || type === "number"
-            ? {
-                shrink: true
-              }
-            : {
-                shrink: !!value
-              }
-        }
-        type={inputType}
-        helperText={<Box component="span">{inputErrorFormat(label, error?.message)}</Box>}
-        variant="outlined"
-        onBlur={() => {
-          trigger(name, { shouldFocus: true });
-          if (triggerTo) trigger(triggerTo, { shouldFocus: true });
-          onBlur();
-        }}
-        onChange={onChange}
-        placeholder={placeholder}
-      />
+      <>
+        <Box
+          component={TextField}
+          label={renderLabel()}
+          InputLabelProps={{
+            shrink: type === "date" || type === "number" ? true : !!value,
+            sx: { ...InputLabelPropsSx }
+          }}
+          variant="outlined"
+          fullWidth
+          InputProps={InputProps}
+          required={!!rules?.required}
+          error={!!error?.message}
+          value={value}
+          // label={label}
+          disabled={disabled}
+          type={inputType}
+          helperText={<Box component="span">{inputErrorFormat(label, error?.message)}</Box>}
+          onBlur={() => {
+            trigger(name, { shouldFocus: true });
+            if (triggerTo) trigger(triggerTo, { shouldFocus: true });
+            onBlur();
+          }}
+          onChange={onChange}
+          placeholder={placeholder}
+          multiline={multiline}
+          rows={rows}
+        />
+        {!error?.message && message && message?.text && (
+          <Typography
+            variant="body"
+            color={theme.palette[message?.type].light}
+            sx={{
+              ml: 2
+            }}
+          >
+            {message?.text}
+          </Typography>
+        )}
+      </>
     );
   };
 
@@ -132,27 +228,39 @@ function CustomStaffInput({
 }
 
 CustomStaffInput.defaultProps = {
+  rules: {},
   triggerTo: null,
   children: null,
   type: "text",
   placeholder: "",
   disabled: undefined,
-  inputProps: undefined
+  InputProps: undefined,
+  message: undefined,
+  showCanEditIcon: undefined,
+  multiline: undefined,
+  rows: undefined
 };
 
 CustomStaffInput.propTypes = {
   control: PropTypes.object.isRequired,
-  rules: PropTypes.object.isRequired,
+  rules: PropTypes.object,
   label: PropTypes.string.isRequired,
   trigger: PropTypes.func.isRequired,
-  triggerTo: PropTypes.string || undefined,
+  triggerTo: PropTypes.oneOfType([PropTypes.string]),
+
   name: PropTypes.string.isRequired,
   type: PropTypes.string,
   placeholder: PropTypes.string,
-  children: PropTypes.node || undefined,
-
-  disabled: PropTypes.bool || undefined,
-  inputProps: PropTypes.node || undefined
+  children: PropTypes.oneOfType([PropTypes.node]),
+  disabled: PropTypes.oneOfType([PropTypes.bool]),
+  InputProps: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  message: PropTypes.shape({
+    text: PropTypes.string.isRequired,
+    type: PropTypes.oneOf(["success", "error"]).isRequired
+  }),
+  showCanEditIcon: PropTypes.bool,
+  multiline: PropTypes.bool,
+  rows: PropTypes.number
 };
 
 export default CustomStaffInput;

@@ -70,10 +70,14 @@
     "description": "Description",
     "education": "Education",
     "certificate": "Certificate",
-    "expertise": "Expertise",
+    "expertises": "Expertises",
     "schedule_btn": "Schedule",
     "save_btn": "Save",
     "reset_btn": "Reset",
+    "email_verified_success": "Email verification successfully",
+    "email_verified_failed": "Email verification failed",
+    "phone_verified_success": "Phone number verification successfully",
+    "phone_verified_failed": "Phone number verification failed",
 
     "input_validation": {
       "require": "field is require",
