@@ -81,8 +81,8 @@
 
     "input_validation": {
       "require": "field is require",
-      "max_length": "cannot cannot be more than {{maxLength}} characters",
-      "min_length": "cannot cannot be less than {{minLength}} characters",
+      "max_length": "cannot be more than {{maxLength}} characters",
+      "min_length": "cannot be less than {{minLength}} characters",
       "format": "field is not correct format"
     }
   },
@@ -95,7 +95,12 @@
   "add_expertise_modal": {
     "title": "Add Expertise",
     "expertise": "Expertise",
-    "btn_label": "Add"
+    "btn_label": "Add",
+
+    "input_validation": {
+      "require": "field is require",
+      "max_length": "cannot be more than {{maxLength}} characters"
+    }
   },
 
   "change_avatar_modal": {

@@ -44,7 +44,7 @@ import { AbilityContext } from "../../store/AbilityStore";
 import { NotHaveAccessModal } from "../auth";
 import { Expertise, expertiseActionAbility } from "../../entities/Expertise";
 import EditStaffRoleModal from "./components/EditStaffRoleModal";
-import { mergeObjects } from "../../utils/objectUtil";
+import { mergeObjectsWithoutNullAndUndefined } from "../../utils/objectUtil";
 import { useAuthStore } from "../../store/AuthStore";
 
 function StaffDetail() {
@@ -126,7 +126,7 @@ function StaffDetail() {
           const expertiseIds = staffData?.expertises?.map((expertise) => expertise?.id) || [];
 
           const newDefaultValues = {
-            ...mergeObjects(defaultValues, staffData),
+            ...mergeObjectsWithoutNullAndUndefined(defaultValues, staffData),
             expertises: expertiseIds
             // gender: ""
           };
@@ -172,26 +172,6 @@ function StaffDetail() {
   // console.log("expertiseListObj: ", expertiseListObj);
   // console.log("expertisesList: ", expertisesList);
 
-  const handleAddExpertise = async ({ expertise }) => {
-    await fetchApi(async () => {
-      const res = await staffServices.createExpertise(expertise);
-
-      if (res.success) {
-        // const expertisesData = res?.expertises;
-        // setExpertisesList(expertisesData);
-        // setIsFetchConfigSuccess(true);
-        addExpertiseModal.setShow(false);
-        addExpertiseModal.setData({});
-        await loadExpertises();
-        return { success: true };
-      }
-      // setExpertisesList([]);
-      // setIsFetchConfigSuccess(true);
-      toast(res.message);
-      return { error: res.message };
-    });
-  };
-
   const ability = useAbility(AbilityContext);
 
   const canUpdateStaff = ability.can(staffActionAbility.UPDATE, staff);
@@ -219,6 +199,10 @@ function StaffDetail() {
         return { error: res.message };
       });
     }
+  };
+
+  const handleAfterAddExpertise = async () => {
+    await loadExpertises();
   };
 
   return (
@@ -580,7 +564,7 @@ function StaffDetail() {
                 />
               </Grid>
 
-              <Grid item xs={12} sm={12} md={12} lg={12}>
+              {/* <Grid item xs={12} sm={12} md={12} lg={12}>
                 <CustomStaffInput
                   disabled={!canUpdateStaff}
                   showCanEditIcon
@@ -600,7 +584,7 @@ function StaffDetail() {
                   multiline
                   rows={6}
                 />
-              </Grid>
+              </Grid> */}
               <Grid
                 item
                 xs={12}
@@ -762,9 +746,7 @@ function StaffDetail() {
           <AddExpertiseModal
             show={addExpertiseModal.show}
             setShow={addExpertiseModal.setShow}
-            data={addExpertiseModal.data}
-            setData={addExpertiseModal.setData}
-            handleAddExpertise={handleAddExpertise}
+            handleAfterAddExpertise={handleAfterAddExpertise}
           />
         )}
       </>

@@ -78,11 +78,11 @@ CustomModal.defaultProps = {
 CustomModal.propTypes = {
   show: PropTypes.bool.isRequired,
   setShow: PropTypes.func.isRequired,
-  setData: PropTypes.func || undefined,
-  children: PropTypes.node || undefined,
-  title: PropTypes.string || undefined,
-  submitBtnLabel: PropTypes.string || undefined,
-  onSubmit: PropTypes.func || undefined
+  setData: PropTypes.func,
+  children: PropTypes.node,
+  title: PropTypes.string,
+  submitBtnLabel: PropTypes.string,
+  onSubmit: PropTypes.func
 };
 
 export default CustomModal;

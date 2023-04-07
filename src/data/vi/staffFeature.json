@@ -97,7 +97,12 @@
   "add_expertise_modal": {
     "title": "Thêm chuyên khoa",
     "expertise": "Chuyên khoa",
-    "btn_label": "Thêm"
+    "btn_label": "Thêm",
+
+    "input_validation": {
+      "required": "không được bỏ trống",
+      "max_length": "không được nhiều hơn {{maxLength}} kí tự"
+    }
   },
 
   "change_avatar_modal": {

@@ -1,3 +1,5 @@
+import { Expertise } from "../Expertise";
+
 class Staff {
   constructor({
     id = "",
@@ -41,10 +43,10 @@ class Staff {
     this.description = description;
     this.education = education;
     this.certificate = certificate;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-    this.expertises = expertises;
-    this.schedules = schedules;
+    this.createdAt = { ...createdAt };
+    this.updatedAt = { ...updatedAt };
+    this.expertises = [...expertises].map((expertise) => new Expertise(expertise));
+    this.schedules = [...schedules];
   }
 
   static magicWord = () => "Staff";
