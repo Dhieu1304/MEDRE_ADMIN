@@ -31,7 +31,8 @@ function CustomStaffInput({
   multiline,
   rows,
   message,
-  showCanEditIcon
+  showCanEditIcon,
+  childrenType = "select"
 }) {
   const theme = useTheme();
 
@@ -102,57 +103,61 @@ function CustomStaffInput({
       // const shrink = Array.isArray(value) ? (value.length > 0 ? true : false) : !!value;
       // Đừng dùng cái này => ko sẽ có lỗi
 
-      return (
-        <FormControl sx={formControlStyle} variant="outlined" fullWidth>
-          <InputLabel
-            variant="outlined"
-            required={!!rules?.required}
-            // shrink={shrink} // Đừng dùng cái này => ko sẽ có lỗi
-            sx={{
-              ...InputLabelPropsSx
-            }}
-          >
-            {renderLabel()}
-          </InputLabel>
+      switch (childrenType) {
+        case "select":
+        default:
+          return (
+            <FormControl sx={formControlStyle} variant="outlined" fullWidth>
+              <InputLabel
+                variant="outlined"
+                required={!!rules?.required}
+                // shrink={shrink} // Đừng dùng cái này => ko sẽ có lỗi
+                sx={{
+                  ...InputLabelPropsSx
+                }}
+              >
+                {renderLabel()}
+              </InputLabel>
 
-          {/* add props for children
+              {/* add props for children
            https://stackoverflow.com/questions/32370994/how-to-pass-props-to-this-props-children
            */}
 
-          {Children.map(children, (child) => {
-            if (isValidElement(child)) {
-              return cloneElement(child, {
-                label: renderLabel(),
-                error: !!error,
-                value,
-                onBlur: () => {
-                  trigger(name, { shouldFocus: true });
-                  onBlur();
-                },
-                onChange,
-                placeholder,
-                disabled
-              });
-            }
-            return child;
-          })}
+              {Children.map(children, (child) => {
+                if (isValidElement(child)) {
+                  return cloneElement(child, {
+                    label: renderLabel(),
+                    error: !!error,
+                    value,
+                    onBlur: () => {
+                      trigger(name, { shouldFocus: true });
+                      onBlur();
+                    },
+                    onChange,
+                    placeholder,
+                    disabled
+                  });
+                }
+                return child;
+              })}
 
-          <FormHelperText>
-            <Box component="span">{inputErrorFormat(label, error?.message)}</Box>
-          </FormHelperText>
-          {!error?.message && message && message?.text && (
-            <Typography
-              variant="body"
-              color={theme.palette[message?.type].light}
-              sx={{
-                ml: 2
-              }}
-            >
-              {message?.text}
-            </Typography>
-          )}
-        </FormControl>
-      );
+              <FormHelperText>
+                <Box component="span">{inputErrorFormat(label, error?.message)}</Box>
+              </FormHelperText>
+              {!error?.message && message && message?.text && (
+                <Typography
+                  variant="body"
+                  color={theme.palette[message?.type].light}
+                  sx={{
+                    ml: 2
+                  }}
+                >
+                  {message?.text}
+                </Typography>
+              )}
+            </FormControl>
+          );
+      }
     }
 
     const InputProps =
@@ -228,6 +233,7 @@ function CustomStaffInput({
 }
 
 CustomStaffInput.defaultProps = {
+  label: "",
   rules: {},
   triggerTo: null,
   children: null,
@@ -238,13 +244,14 @@ CustomStaffInput.defaultProps = {
   message: undefined,
   showCanEditIcon: undefined,
   multiline: undefined,
-  rows: undefined
+  rows: undefined,
+  childrenType: "select"
 };
 
 CustomStaffInput.propTypes = {
   control: PropTypes.object.isRequired,
   rules: PropTypes.object,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   trigger: PropTypes.func.isRequired,
   triggerTo: PropTypes.oneOfType([PropTypes.string]),
 
@@ -260,7 +267,8 @@ CustomStaffInput.propTypes = {
   }),
   showCanEditIcon: PropTypes.bool,
   multiline: PropTypes.bool,
-  rows: PropTypes.number
+  rows: PropTypes.number,
+  childrenType: PropTypes.string
 };
 
 export default CustomStaffInput;

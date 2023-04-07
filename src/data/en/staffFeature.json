@@ -1,4 +1,11 @@
 {
+  "role": {
+    "admin": "Admin",
+    "doctor": "Doctor",
+    "nurse": "Nurse",
+    "customer_service": "Customer Service"
+  },
+
   "staff_list": {
     "title": "Find staff",
     "filter": {
@@ -96,6 +103,16 @@
     "title": "Add Expertise",
     "expertise": "Expertise",
     "btn_label": "Add",
+
+    "input_validation": {
+      "require": "field is require",
+      "max_length": "cannot be more than {{maxLength}} characters"
+    }
+  },
+
+  "edit_staff_role_modal": {
+    "title": "Edit staff role",
+    "btn_label": "Save",
 
     "input_validation": {
       "require": "field is require",

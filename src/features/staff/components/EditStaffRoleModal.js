@@ -1,18 +1,66 @@
 import PropTypes from "prop-types";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { useMemo } from "react";
+import { FormControlLabel, Grid, Radio, RadioGroup } from "@mui/material";
+import { toast } from "react-toastify";
 import CustomModal from "../../../components/CustomModal";
 
-function EditStaffStatusModal({ show, setShow, data, setData, handleEditStaffRolee }) {
-  const { handleSubmit } = useForm({
+import Staff from "../../../entities/Staff/Staff";
+import { staffRoles } from "../../../entities/Staff";
+import { useFetchingStore } from "../../../store/FetchingApiStore";
+import staffServices from "../../../services/staffServices";
+
+function EditStaffRoleModal({ show, setShow, data, setData, handleAfterEditStaffRole }) {
+  const { handleSubmit, control, trigger } = useForm({
     mode: "onChange",
     defaultValues: {
-      expertise: ""
+      role: data?.role || ""
     },
     criteriaMode: "all"
   });
 
-  const { t } = useTranslation("staffFeature", { keyPrefix: "add_expertise_modal" });
+  const { t } = useTranslation("staffFeature", { keyPrefix: "edit_staff_role_modal" });
+  const { t: tRole } = useTranslation("staffFeature", { keyPrefix: "role" });
+
+  const { fetchApi } = useFetchingStore();
+
+  const roleList = useMemo(
+    () => [
+      {
+        label: "admin",
+        value: staffRoles.ROLE_ADMIN
+      },
+      {
+        label: "doctor",
+        value: staffRoles.ROLE_DOCTOR
+      },
+      {
+        label: "nurse",
+        value: staffRoles.ROLE_NURSE
+      },
+      {
+        label: "customer_service",
+        value: staffRoles.ROLE_CUSTOMER_SERVICE
+      }
+    ],
+    []
+  );
+
+  const handleEditStaffRole = async ({ role }) => {
+    await fetchApi(async () => {
+      const res = await staffServices.editStaffRole({ role });
+
+      if (res?.success) {
+        setShow(false);
+        setData({});
+        if (handleAfterEditStaffRole) await handleAfterEditStaffRole();
+        return { success: true };
+      }
+      toast(res.message);
+      return { error: res.message };
+    });
+  };
 
   return (
     <CustomModal
@@ -22,19 +70,54 @@ function EditStaffStatusModal({ show, setShow, data, setData, handleEditStaffRol
       setData={setData}
       title={t("title")}
       submitBtnLabel={t("btn_label")}
-      onSubmit={handleSubmit(handleEditStaffRolee)}
+      onSubmit={handleSubmit(handleEditStaffRole)}
     >
-      {/* <CustomStaffInput control={control} rules={{}} label={t("expertise")} trigger={trigger} name="expertise" type="text" /> */}
+      <RadioGroup>
+        <Grid container spacing={2}>
+          {roleList.map((role) => {
+            return (
+              <Grid item xl={6} lg={6} md={6} sm={12} key={role.value}>
+                <Controller
+                  control={control}
+                  trigger={trigger}
+                  name="role"
+                  render={({ field: { onChange, value } }) => {
+                    const checked = role.value === value;
+                    return (
+                      <FormControlLabel
+                        control={
+                          <Radio
+                            onChange={(e) => {
+                              onChange(e.target.value);
+                            }}
+                          />
+                        }
+                        checked={checked}
+                        value={role.value}
+                        label={tRole(role.label)}
+                      />
+                    );
+                  }}
+                />
+              </Grid>
+            );
+          })}
+        </Grid>
+      </RadioGroup>
     </CustomModal>
   );
 }
 
-EditStaffStatusModal.propTypes = {
-  show: PropTypes.bool.isRequired,
-  setShow: PropTypes.func.isRequired,
-  data: PropTypes.object.isRequired,
-  setData: PropTypes.func.isRequired,
-  handleEditStaffRolee: PropTypes.func.isRequired
+EditStaffRoleModal.defaultProps = {
+  handleAfterEditStaffRole: undefined
 };
 
-export default EditStaffStatusModal;
+EditStaffRoleModal.propTypes = {
+  show: PropTypes.bool.isRequired,
+  setShow: PropTypes.func.isRequired,
+  data: PropTypes.instanceOf(Staff).isRequired,
+  setData: PropTypes.func.isRequired,
+  handleAfterEditStaffRole: PropTypes.func
+};
+
+export default EditStaffRoleModal;

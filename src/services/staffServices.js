@@ -273,6 +273,37 @@ const editMyProfile = async ({
   }
 };
 
+const editStaffRole = async ({ role }) => {
+  try {
+    // console.log({ role });
+    const res = await axiosClient.get(staffApi.editStaff(), {
+      role
+    });
+
+    // console.log("res: ", res);
+
+    if (res?.status) {
+      const staff = camelcaseKeys(res?.data?.staff, { deep: true });
+
+      return {
+        success: true,
+        staff,
+        message: res?.message
+      };
+    }
+    return {
+      success: false,
+      message: `Status is ${res.status}`
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
 export default {
   getStaffList,
   getStaffDetail,
@@ -280,5 +311,6 @@ export default {
   getStaffInfo,
   createExpertise,
   editStaffInfo,
-  editMyProfile
+  editMyProfile,
+  editStaffRole
 };

@@ -114,32 +114,32 @@ function StaffDetail() {
 
   const { t } = useTranslation("staffFeature", { keyPrefix: "staff_detail" });
 
+  const loadData = async () => {
+    await fetchApi(async () => {
+      const res = await staffServices.getStaffDetail(staffId);
+
+      if (res.success) {
+        const staffData = new Staff(res.staff);
+        setStaff(staffData);
+
+        const expertiseIds = staffData?.expertises?.map((expertise) => expertise?.id) || [];
+
+        const newDefaultValues = {
+          ...mergeObjectsWithoutNullAndUndefined(defaultValues, staffData),
+          expertises: expertiseIds
+          // gender: ""
+        };
+
+        setDefaultValues(newDefaultValues);
+        reset(newDefaultValues);
+
+        return { success: true };
+      }
+      setStaff({});
+      return { error: res.message };
+    });
+  };
   useEffect(() => {
-    const loadData = async () => {
-      await fetchApi(async () => {
-        const res = await staffServices.getStaffDetail(staffId);
-
-        if (res.success) {
-          const staffData = new Staff(res.staff);
-          setStaff(staffData);
-
-          const expertiseIds = staffData?.expertises?.map((expertise) => expertise?.id) || [];
-
-          const newDefaultValues = {
-            ...mergeObjectsWithoutNullAndUndefined(defaultValues, staffData),
-            expertises: expertiseIds
-            // gender: ""
-          };
-
-          setDefaultValues(newDefaultValues);
-          reset(newDefaultValues);
-
-          return { success: true };
-        }
-        setStaff({});
-        return { error: res.message };
-      });
-    };
     loadData();
   }, [staffId]);
 
@@ -203,6 +203,10 @@ function StaffDetail() {
 
   const handleAfterAddExpertise = async () => {
     await loadExpertises();
+  };
+
+  const handleAfterEditStaffRole = async () => {
+    await loadData();
   };
 
   return (
@@ -379,6 +383,7 @@ function StaffDetail() {
                             icon={faGearIcon}
                             onClick={() => {
                               editStaffRoleModal.setShow(true);
+                              editStaffRoleModal.setData(staff);
                             }}
                             cursor="pointer"
                             color={theme.palette.success.light}
@@ -478,6 +483,7 @@ function StaffDetail() {
                   label={t("gender")}
                   trigger={trigger}
                   name="gender"
+                  childrenType="select"
                 >
                   <Select renderValue={(selected) => selected}>
                     {gendersList.map((item) => {
@@ -605,6 +611,7 @@ function StaffDetail() {
                   label={t("expertises")}
                   trigger={trigger}
                   name="expertises"
+                  childrenType="select"
                 >
                   <Select
                     multiple
@@ -720,6 +727,7 @@ function StaffDetail() {
             setShow={editStaffRoleModal.setShow}
             data={editStaffRoleModal.data}
             setData={editStaffRoleModal.setData}
+            handleAfterEditStaffRole={handleAfterEditStaffRole}
           />
         )}
 
