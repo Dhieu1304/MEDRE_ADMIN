@@ -6,6 +6,11 @@
     "customer_service": "Chăm sóc khách hàng"
   },
 
+  "status": {
+    "ok": "OK",
+    "block": "Khóa"
+  },
+
   "staff_list": {
     "title": "Tìm kiếm nhân viên",
     "filter": {

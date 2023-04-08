@@ -11,6 +11,12 @@
       "password_label": "Password"
     }
   },
+
+  "no_have_access_modal": {
+    "title": "Warning",
+    "error_message": "You don't have access"
+  },
+
   "no_have_access": {
     "error_message": "You don't have access"
   }

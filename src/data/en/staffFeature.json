@@ -6,6 +6,11 @@
     "customer_service": "Customer Service"
   },
 
+  "status": {
+    "ok": "OK",
+    "block": "Block"
+  },
+
   "staff_list": {
     "title": "Find staff",
     "filter": {

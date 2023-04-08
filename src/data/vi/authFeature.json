@@ -11,6 +11,12 @@
       "password_label": "Mật khẩu"
     }
   },
+
+  "no_have_access_modal": {
+    "title": "Cảnh báo",
+    "error_message": "Bạn không có quyền truy cập"
+  },
+
   "no_have_access": {
     "error_message": "Bạn không có quyền truy cập"
   }

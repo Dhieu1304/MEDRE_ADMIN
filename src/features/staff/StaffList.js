@@ -30,12 +30,7 @@ import qs from "query-string";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import {
-  CalendarMonth as CalendarMonthIcon,
-  RemoveCircle as RemoveCircleIcon,
-  RestartAlt as RestartAltIcon,
-  Search as SearchIcon
-} from "@mui/icons-material";
+import { CalendarMonth as CalendarMonthIcon, RestartAlt as RestartAltIcon, Search as SearchIcon } from "@mui/icons-material";
 import CustomStaffInput from "./components/CustomStaffInput";
 import staffServices from "../../services/staffServices";
 import { useFetchingStore } from "../../store/FetchingApiStore/hooks";
@@ -43,6 +38,11 @@ import CustomOverlay from "../../components/CustomOverlay";
 import { useAppConfigStore } from "../../store/AppConfigStore/hooks";
 import useDebounce from "../../hooks/useDebounce";
 import { useCustomModal } from "../../components/CustomModal/hooks";
+import StaffRoleStatusButton from "./components/StaffRoleStatusButton";
+import { NotHaveAccessModal } from "../auth";
+import { EditStaffRoleModal, EditStaffStatusModal } from "./components";
+import { Can } from "../../store/AbilityStore";
+import { staffActionAbility } from "../../entities/Staff";
 // import { EditStaffStatusModal } from "./components";
 
 export default function StaffList() {
@@ -65,7 +65,10 @@ export default function StaffList() {
   const [expertisesList, setExpertisesList] = useState([]);
 
   const [openFilterMobile, setOpenFilterMobile] = useState(false);
-  const blockStaffModal = useCustomModal();
+
+  const notHaveAccessModal = useCustomModal();
+  const editStaffRoleModal = useCustomModal();
+  const editStaffStatusModal = useCustomModal();
 
   const isMobile = useMediaQuery("(max-width:600px)");
   const isMd = useMediaQuery((theme) => theme.breakpoints.up("md"));
@@ -505,6 +508,14 @@ export default function StaffList() {
     loadConfig();
   }, []);
 
+  const handleAfterEditStaffRole = async () => {
+    // await loadData();
+  };
+
+  const handleAfterEditStaffStatus = async () => {
+    // await loadData();
+  };
+
   return isFetchConfigSuccess ? (
     <>
       <Box>
@@ -651,7 +662,23 @@ export default function StaffList() {
                           display: { lg: "table-cell" }
                         }}
                       >
-                        {staff?.role}
+                        <Can I={staffActionAbility.UPDATE_ROLE} a={staff}>
+                          <StaffRoleStatusButton
+                            variant={staff?.role}
+                            onClick={() => {
+                              editStaffRoleModal.setShow(true);
+                              editStaffRoleModal.setData(staff);
+                            }}
+                          />
+                        </Can>
+                        <Can not I={staffActionAbility.UPDATE_ROLE} a={staff}>
+                          <StaffRoleStatusButton
+                            variant={staff?.role}
+                            onClick={() => {
+                              notHaveAccessModal.setShow(true);
+                            }}
+                          />
+                        </Can>
                       </TableCell>
                       <TableCell
                         align="left"
@@ -659,7 +686,23 @@ export default function StaffList() {
                           display: { lg: "table-cell" }
                         }}
                       >
-                        {staff?.status}
+                        <Can I={staffActionAbility.BLOCK} a={staff}>
+                          <StaffRoleStatusButton
+                            variant={staff?.status}
+                            onClick={() => {
+                              editStaffStatusModal.setShow(true);
+                              editStaffStatusModal.setData(staff);
+                            }}
+                          />
+                        </Can>
+                        <Can not I={staffActionAbility.BLOCK} a={staff}>
+                          <StaffRoleStatusButton
+                            variant={staff?.status}
+                            onClick={() => {
+                              notHaveAccessModal.setShow(true);
+                            }}
+                          />
+                        </Can>
                       </TableCell>
                       <TableCell
                         align="left"
@@ -680,24 +723,14 @@ export default function StaffList() {
                             //   navigate(`${staff?.id}/schedule`, { relative: true });
                             // }}
                           >
-                            <CalendarMonthIcon sx={{ color: theme.palette.success.main }} />
+                            <CalendarMonthIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
                           </Link>
-
                           <IconButton
                             onClick={() => {
                               navigate(staff?.id, { relative: true });
                             }}
                           >
-                            <SearchIcon sx={{ color: theme.palette.success.main }} />
-                          </IconButton>
-
-                          <IconButton
-                            onClick={() => {
-                              blockStaffModal.setShow(true);
-                              blockStaffModal.setData(staff);
-                            }}
-                          >
-                            <RemoveCircleIcon sx={{ color: theme.palette.error.main }} />
+                            <SearchIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
                           </IconButton>
                         </Box>
                       </TableCell>
@@ -759,15 +792,6 @@ export default function StaffList() {
                     >
                       <SearchIcon sx={{ color: theme.palette.success.main }} />
                     </IconButton>
-
-                    <IconButton
-                      onClick={() => {
-                        blockStaffModal.setShow(true);
-                        blockStaffModal.setData(staff);
-                      }}
-                    >
-                      <RemoveCircleIcon sx={{ color: theme.palette.error.main }} />
-                    </IconButton>
                   </Box>
                 }
               />
@@ -796,14 +820,34 @@ export default function StaffList() {
           </Box>
         )}
       </Box>
-      {/* {blockStaffModal.show && (
-        <EditStaffStatusModal
-          show={blockStaffModal.show}
-          setShow={blockStaffModal.setShow}
-          data={blockStaffModal.data}
-          setData={blockStaffModal.setData}
+      {editStaffRoleModal.show && (
+        <EditStaffRoleModal
+          show={editStaffRoleModal.show}
+          setShow={editStaffRoleModal.setShow}
+          data={editStaffRoleModal.data}
+          setData={editStaffRoleModal.setData}
+          handleAfterEditStaffRole={handleAfterEditStaffRole}
         />
-      )} */}
+      )}
+
+      {editStaffStatusModal.show && (
+        <EditStaffStatusModal
+          show={editStaffStatusModal.show}
+          setShow={editStaffStatusModal.setShow}
+          data={editStaffStatusModal.data}
+          setData={editStaffStatusModal.setData}
+          handleAfterEditStaffStatus={handleAfterEditStaffStatus}
+        />
+      )}
+
+      {notHaveAccessModal.show && (
+        <NotHaveAccessModal
+          show={notHaveAccessModal.show}
+          setShow={notHaveAccessModal.setShow}
+          data={notHaveAccessModal.data}
+          setData={notHaveAccessModal.setData}
+        />
+      )}
     </>
   ) : (
     <CustomOverlay open={isLoading} />

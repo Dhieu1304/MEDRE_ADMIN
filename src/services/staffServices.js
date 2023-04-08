@@ -19,6 +19,8 @@ const getStaffList = async ({ page, limit, expertise, type, from, to, name }) =>
     //   { deep: true }
     // );
 
+    // console.log("res: ", res);
+
     if (res?.status) {
       const staffs = camelcaseKeys(res?.data?.results, { deep: true });
       const count = res?.data?.totalResults;

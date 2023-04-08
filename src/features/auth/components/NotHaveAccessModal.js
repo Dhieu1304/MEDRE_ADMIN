@@ -6,7 +6,7 @@ function NotHaveAccessModal({ show, setShow, data, setData }) {
   const { t } = useTranslation("authFeature", { keyPrefix: "no_have_access_modal" });
   return (
     <CustomModal show={show} setShow={setShow} data={data} setData={setData} title={t("title")}>
-      Bạn ko có quyền truy cạp
+      {t("error_message")}
     </CustomModal>
   );
 }
