@@ -23,7 +23,13 @@
       "expertise": "Chuyên khoa",
       "gender": "Giới tính",
       "status": "Tình trạng",
-      "role": "Phân quyền"
+      "role": "Phân quyền",
+      "healthInsurance": "Bảo hiểm y tế",
+      "description": "Mô tả",
+      "education": "Học vấn",
+      "certificate": "Chứng chỉ",
+      "address": "Địa chỉ",
+      "reset": "Đặt lại"
     },
     "hide_filter": "Ẩn bộ lọc",
     "show_filter": "Hiện bộ lọc",
@@ -33,14 +39,23 @@
 
     "table": {
       "username": "Username",
-      "phone_number": "Số điện thoại",
+      "phoneNumber": "Số điện thoại",
       "email": "Email",
       "name": "Họ tên",
       "address": "Địa chỉ",
       "gender": "Giới tính",
       "dob": "Ngày sinh",
       "role": "Vai trò",
-      "status": "Tình trạng"
+      "status": "Tình trạng",
+      "healthInsurance": "Bảo hiểm y tế",
+      "description": "Mô tả",
+      "education": "Học vấn",
+      "certificate": "Chứng chỉ",
+
+      "emailVerifiedSuccess": "Xác minh email thành công",
+      "emailVerifiedFailed": "Xác minh email thất bại",
+      "phoneVerifiedSuccess": "Xác minh số điện thoại thành công",
+      "phoneVerifiedFailed": "Xác minh số điện thoại thất bại"
     },
 
     "gender": {

@@ -25,14 +25,25 @@ const mergeObjectsWithoutNullAndUndefined = (left, right) => {
 };
 
 // remove undefined keys
-const cleanObject = (obj) => {
-  const newObj = {};
-  Object.keys(obj).forEach((key) => {
-    if (obj[key] !== undefined) {
-      newObj[key] = obj[key];
+const cleanUndefinedValueObject = (obj) => {
+  return Object.keys(obj).reduce((acc, key) => {
+    const value = obj[key];
+    if (value !== undefined) {
+      acc[key] = value;
     }
-  });
-  return newObj;
+    return acc;
+  }, {});
 };
 
-export { mergeObjectsWithoutNullAndUndefined, cleanObject };
+// remove undefined keys
+const cleanUndefinedAndEmptyStrValueObject = (obj) => {
+  return Object.keys(obj).reduce((acc, key) => {
+    const value = obj[key];
+    if (value !== undefined && value !== "") {
+      acc[key] = value;
+    }
+    return acc;
+  }, {});
+};
+
+export { mergeObjectsWithoutNullAndUndefined, cleanUndefinedValueObject, cleanUndefinedAndEmptyStrValueObject };

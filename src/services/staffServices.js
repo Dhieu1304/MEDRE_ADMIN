@@ -1,12 +1,38 @@
 import camelcaseKeys from "camelcase-keys";
 import { expertiseApi, staffApi } from "../config/apiConfig";
 import axiosClient from "../config/axiosClient";
+import { cleanUndefinedAndEmptyStrValueObject } from "../utils/objectUtil";
 // import staffMockData from "../mockData/staffMockData";
 
-const getStaffList = async ({ page, limit, expertise, type, from, to, name }) => {
-  // console.log("getStaffList: ", { page, limit, expertise, type, from, to, name });
+const getStaffList = async ({
+  page,
+  limit,
+  name,
+  email,
+  phoneNumber,
+  username,
+  address,
+  healthInsurance,
+  description,
+  education
+}) => {
+  // console.log("getStaffList: ", { page, limit, name });
+
+  const params = cleanUndefinedAndEmptyStrValueObject({
+    page,
+    limit,
+    name,
+    email,
+    phoneNumber,
+    username,
+    address,
+    healthInsurance,
+    description,
+    education
+  });
+
   try {
-    const res = await axiosClient.get(staffApi.staffList(), { params: { page, limit, expertise, type, from, to, name } });
+    const res = await axiosClient.get(staffApi.staffList(), { params });
 
     // let res = camelcaseKeys(
     //   {

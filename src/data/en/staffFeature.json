@@ -23,7 +23,13 @@
       "expertise": "Expertise",
       "gender": "Gender",
       "status": "Status",
-      "role": "Role"
+      "role": "Role",
+      "healthInsurance": "HealthInsurance",
+      "description": "Description",
+      "education": "Education",
+      "certificate": "Certificate",
+      "address": "Address",
+      "reset": "Reset"
     },
     "hide_filter": "Hide filter",
     "show_filter": "Show Filter",
@@ -33,14 +39,23 @@
 
     "table": {
       "username": "Username",
-      "phone_number": "Phone Number",
+      "phoneNumber": "Phone Number",
       "email": "Email",
       "name": "Name",
       "address": "Address",
       "gender": "Gender",
       "dob": "Date of Birth",
       "role": "Role",
-      "status": "Status"
+      "status": "Status",
+      "healthInsurance": "HealthInsurance",
+      "description": "Description",
+      "education": "Education",
+      "certificate": "Certificate",
+
+      "emailVerifiedSuccess": "Email verification successfully",
+      "emailVerifiedFailed": "Email verification failed",
+      "phoneVerifiedSuccess": "Phone number verification successfully",
+      "phoneVerifiedFailed": "Phone number verification failed"
     },
 
     "gender": {

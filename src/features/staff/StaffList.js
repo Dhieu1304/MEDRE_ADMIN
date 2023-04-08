@@ -24,7 +24,10 @@ import {
   Checkbox,
   ListItemText,
   IconButton,
-  useTheme
+  useTheme,
+  CircularProgress,
+  Menu,
+  Switch
 } from "@mui/material";
 import qs from "query-string";
 import { useForm } from "react-hook-form";
@@ -36,16 +39,39 @@ import staffServices from "../../services/staffServices";
 import { useFetchingStore } from "../../store/FetchingApiStore/hooks";
 import CustomOverlay from "../../components/CustomOverlay";
 import { useAppConfigStore } from "../../store/AppConfigStore/hooks";
-import useDebounce from "../../hooks/useDebounce";
 import { useCustomModal } from "../../components/CustomModal/hooks";
 import StaffRoleStatusButton from "./components/StaffRoleStatusButton";
 import { NotHaveAccessModal } from "../auth";
 import { EditStaffRoleModal, EditStaffStatusModal } from "./components";
 import { Can } from "../../store/AbilityStore";
 import { staffActionAbility } from "../../entities/Staff";
+import Staff from "../../entities/Staff/Staff";
+import useObjDebounce from "../../hooks/useObjDebounce";
+import { normalizeStrToArray, normalizeStrToInt, normalizeStrToStr } from "../../utils/standardizedForForm";
 // import { EditStaffStatusModal } from "./components";
 
 export default function StaffList() {
+  const [isFirst, setIsFirst] = useState(true);
+
+  const [showMenu, setShowMenu] = useState(null);
+
+  const [showCols, setShowCols] = useState({
+    username: true,
+    phoneNumber: true,
+    email: true,
+    name: true,
+    address: true,
+    gender: true,
+    dob: true,
+    healthInsurance: false,
+    description: false,
+    education: false,
+    certificate: false,
+    role: true,
+    status: true,
+    action: true
+  });
+
   // const staffTypesList = useMemo(() => {
   //   return [
   //     {
@@ -161,41 +187,90 @@ export default function StaffList() {
 
   const columns = useMemo(
     () => [
-      { id: "username", label: t("table.username"), minWidth: 100, display: { lg: "table-cell" } },
-      { id: "phone_number", label: t("table.phone_number"), minWidth: 100, display: { lg: "table-cell" } },
-      { id: "email", label: t("table.email"), minWidth: 150, display: { lg: "table-cell" } },
-      { id: "name", label: t("table.name"), minWidth: 100, display: { lg: "table-cell" } },
-      { id: "address", label: t("table.address"), minWidth: 150, display: { lg: "table-cell", md: "none", sm: "none" } },
-      { id: "gender", label: t("table.gender"), minWidth: 50, display: { lg: "table-cell", md: "none", sm: "none" } },
-      { id: "dob", label: t("table.dob"), minWidth: 100, display: { lg: "table-cell", md: "none", sm: "none" } },
-      { id: "role", label: t("table.role"), minWidth: 100, display: { lg: "table-cell" } },
-      { id: "status", label: t("table.status"), minWidth: 50, display: { lg: "table-cell" } },
-      { id: "action", label: "", minWidth: 50, display: { lg: "table-cell" } }
+      { id: "username", label: t("table.username"), minWidth: 100, display: showCols.username ? "table-cell" : "none" },
+      {
+        id: "phoneNumber",
+        label: t("table.phoneNumber"),
+        minWidth: 100,
+        display: showCols.phoneNumber ? "table-cell" : "none"
+      },
+      { id: "email", label: t("table.email"), minWidth: 100, display: showCols.email ? "table-cell" : "none" },
+      { id: "name", label: t("table.name"), minWidth: 100, display: showCols.name ? "table-cell" : "none" },
+      { id: "address", label: t("table.address"), minWidth: 100, display: showCols.address ? "table-cell" : "none" },
+      { id: "gender", label: t("table.gender"), minWidth: 100, display: showCols.gender ? "table-cell" : "none" },
+      { id: "dob", label: t("table.dob"), minWidth: 100, display: showCols.dob ? "table-cell" : "none" },
+      {
+        id: "healthInsurance",
+        label: t("table.healthInsurance"),
+        minWidth: 200,
+        display: showCols.healthInsurance ? "table-cell" : "none"
+      },
+      {
+        id: "description",
+        label: t("table.description"),
+        minWidth: 400,
+        display: showCols.description ? "table-cell" : "none"
+      },
+      { id: "education", label: t("table.education"), minWidth: 100, display: showCols.education ? "table-cell" : "none" },
+      {
+        id: "certificate",
+        label: t("table.certificate"),
+        minWidth: 100,
+        display: showCols.certificate ? "table-cell" : "none"
+      },
+
+      { id: "role", label: t("table.role"), minWidth: 100, display: showCols.role ? "table-cell" : "none" },
+      { id: "status", label: t("table.status"), minWidth: 100, display: showCols.status ? "table-cell" : "none" },
+      { id: "action", label: "", minWidth: 100, display: showCols.action ? "table-cell" : "none" }
       // { id: "description", label: "Description", minWidth: 150 },
       // { id: "education", label: "Education", minWidth: 100 },
       // { id: "certificate", label: "Certificate", minWidth: 100 }
     ],
-    [locale]
+    [locale, showCols]
   );
 
   const defaultValues = useMemo(() => {
-    const defaultSearchParams = qs.parse(location.name);
-
-    const { name, type, date, expertise, page, limit, roles, statuses, genders } = defaultSearchParams;
+    const defaultSearchParams = qs.parse(location.search);
+    const {
+      email,
+      phoneNumber,
+      username,
+      name,
+      types,
+      expertises,
+      page,
+      limit,
+      roles,
+      statuses,
+      genders,
+      address,
+      healthInsurance,
+      description,
+      education,
+      certificate
+    } = defaultSearchParams;
 
     return {
-      name: name || "",
-      type: Array.isArray(type) ? type : [],
-      // date: date || formatDate.format(new Date(2023, 2, 12), "YYYY-MM-DD"),
-      date,
-      // from: from || formatDate.format(new Date(2023, 2, 12), "YYYY-MM-DD"),
-      // to: formatDate.format(new Date(2023, 2, 14), "YYYY-MM-DD"),
-      roles: Array.isArray(roles) ? roles : [],
-      statuses: Array.isArray(statuses) ? statuses : [],
-      genders: Array.isArray(genders) ? genders : [],
-      expertise: Array.isArray(expertise) ? expertise : [],
-      page: parseInt(page, 10) || 1,
-      limit: parseInt(limit, 10) || 10
+      // null hoặc undefined thì lấy giá trị default (bên phái)
+      email: normalizeStrToStr(email),
+      phoneNumber: normalizeStrToStr(phoneNumber),
+      username: normalizeStrToStr(username),
+      name: normalizeStrToStr(name),
+      address: normalizeStrToStr(address),
+      healthInsurance: normalizeStrToStr(healthInsurance),
+      description: normalizeStrToStr(description),
+      education: normalizeStrToStr(education),
+
+      certificate: normalizeStrToStr(certificate),
+      // đảm rằng chúng luôn là 1 array
+      types: normalizeStrToArray(types),
+      roles: normalizeStrToArray(roles),
+      statuses: normalizeStrToArray(statuses),
+      genders: normalizeStrToArray(genders),
+      expertises: normalizeStrToArray(expertises),
+
+      page: normalizeStrToInt(page, 11),
+      limit: normalizeStrToInt(limit, 10)
     };
   }, []);
 
@@ -206,19 +281,20 @@ export default function StaffList() {
   });
 
   const renderFilter = () => {
+    const gridItemProps = {
+      xs: 12,
+      sm: 6,
+      md: 4,
+      lg: 3,
+      sx: {
+        p: 0,
+        m: 0
+      }
+    };
+
     return (
       <Grid container spacing={{ xs: 2, md: 2 }} flexWrap="wrap" mb={4}>
-        <Grid
-          item
-          xs={12}
-          sm={6}
-          md={4}
-          lg={3}
-          sx={{
-            p: 0,
-            m: 0
-          }}
-        >
+        <Grid item {...gridItemProps}>
           <CustomStaffInput
             control={control}
             rules={{}}
@@ -228,17 +304,7 @@ export default function StaffList() {
             type="text"
           />
         </Grid>
-        <Grid
-          item
-          xs={12}
-          sm={6}
-          md={4}
-          lg={3}
-          sx={{
-            p: 0,
-            m: 0
-          }}
-        >
+        <Grid item {...gridItemProps}>
           <CustomStaffInput
             control={control}
             rules={{}}
@@ -248,43 +314,13 @@ export default function StaffList() {
             type="email"
           />
         </Grid>
-        <Grid
-          item
-          xs={12}
-          sm={6}
-          md={4}
-          lg={3}
-          sx={{
-            p: 0,
-            m: 0
-          }}
-        >
-          <CustomStaffInput control={control} rules={{}} label={t("filter.phone")} trigger={trigger} name="phone" />
+        <Grid item {...gridItemProps}>
+          <CustomStaffInput control={control} rules={{}} label={t("filter.phone")} trigger={trigger} name="phoneNumber" />
         </Grid>
-        <Grid
-          item
-          xs={12}
-          sm={6}
-          md={4}
-          lg={3}
-          sx={{
-            p: 0,
-            m: 0
-          }}
-        >
+        <Grid item {...gridItemProps}>
           <CustomStaffInput control={control} rules={{}} label={t("filter.username")} trigger={trigger} name="username" />
         </Grid>
-        <Grid
-          item
-          xs={12}
-          sm={6}
-          md={4}
-          lg={3}
-          sx={{
-            p: 0,
-            m: 0
-          }}
-        >
+        <Grid item {...gridItemProps}>
           <CustomStaffInput control={control} rules={{}} label={t("filter.gender")} trigger={trigger} name="genders">
             <Select
               multiple
@@ -313,17 +349,7 @@ export default function StaffList() {
             </Select>
           </CustomStaffInput>
         </Grid>
-        <Grid
-          item
-          xs={12}
-          sm={6}
-          md={4}
-          lg={3}
-          sx={{
-            p: 0,
-            m: 0
-          }}
-        >
+        <Grid item {...gridItemProps}>
           <CustomStaffInput control={control} rules={{}} label={t("filter.status")} trigger={trigger} name="statuses">
             <Select
               multiple
@@ -351,17 +377,7 @@ export default function StaffList() {
             </Select>
           </CustomStaffInput>
         </Grid>
-        <Grid
-          item
-          xs={12}
-          sm={6}
-          md={4}
-          lg={3}
-          sx={{
-            p: 0,
-            m: 0
-          }}
-        >
+        <Grid item {...gridItemProps}>
           <CustomStaffInput control={control} rules={{}} label={t("filter.role")} trigger={trigger} name="roles">
             <Select
               multiple
@@ -389,18 +405,8 @@ export default function StaffList() {
             </Select>
           </CustomStaffInput>
         </Grid>
-        <Grid
-          item
-          xs={12}
-          sm={6}
-          md={4}
-          lg={3}
-          sx={{
-            p: 0,
-            m: 0
-          }}
-        >
-          <CustomStaffInput control={control} rules={{}} label={t("filter.expertise")} trigger={trigger} name="expertise">
+        <Grid item {...gridItemProps}>
+          <CustomStaffInput control={control} rules={{}} label={t("filter.expertise")} trigger={trigger} name="expertises">
             <Select
               multiple
               renderValue={(selected) => {
@@ -416,7 +422,7 @@ export default function StaffList() {
               {expertisesList.map((item) => {
                 return (
                   <MenuItem key={item?.id} value={item?.id}>
-                    <Checkbox checked={watch().expertise?.indexOf(item?.id) > -1} />
+                    <Checkbox checked={watch().expertises?.indexOf(item?.id) > -1} />
                     <ListItemText primary={item?.name} />
                   </MenuItem>
                 );
@@ -424,22 +430,99 @@ export default function StaffList() {
             </Select>
           </CustomStaffInput>
         </Grid>
+        <Grid item {...gridItemProps}>
+          <CustomStaffInput
+            control={control}
+            rules={{}}
+            label={t("filter.address")}
+            trigger={trigger}
+            name="address"
+            type="text"
+          />
+        </Grid>
+        <Grid item {...gridItemProps}>
+          <CustomStaffInput
+            control={control}
+            rules={{}}
+            label={t("filter.description")}
+            trigger={trigger}
+            name="description"
+            type="text"
+          />
+        </Grid>
+        <Grid item {...gridItemProps}>
+          <CustomStaffInput
+            control={control}
+            rules={{}}
+            label={t("filter.education")}
+            trigger={trigger}
+            name="education"
+            type="text"
+          />
+        </Grid>
+        <Grid item {...gridItemProps}>
+          <CustomStaffInput
+            control={control}
+            rules={{}}
+            label={t("filter.certificate")}
+            trigger={trigger}
+            name="certificate"
+            type="text"
+          />
+        </Grid>
+
+        <Grid item {...gridItemProps}>
+          <CustomStaffInput
+            control={control}
+            rules={{}}
+            label={t("filter.healthInsurance")}
+            trigger={trigger}
+            name="healthInsurance"
+            type="text"
+          />
+        </Grid>
       </Grid>
     );
   };
 
-  const searchDebounce = useDebounce(watch().name, 1000);
+  const { email, phoneNumber, username, name, address, healthInsurance, description, education, certificate } = watch();
+  const { debouncedObj: searchDebounce, isWaiting: isSearchWaiting } = useObjDebounce(
+    { email, phoneNumber, username, name, address, healthInsurance, description, education, certificate },
+    1000
+  );
+
+  const { types, date, roles, statuses, genders, expertises, isWaiting: limit } = watch();
+
+  const { debouncedObj: filterDebounce, isWaiting: isFilterWaiting } = useObjDebounce(
+    {
+      types,
+      date,
+      roles,
+      statuses,
+      genders,
+      expertises,
+      limit
+    },
+    1000
+  );
 
   const loadData = async ({ page }) => {
-    // console.log("Load: ");
     // const expertise = [];
     const paramsObj = {
       // ...watch()
       // name: watch().name,
       // from: watch().date,
       // to: watch().date,
-      page,
-      limit: watch().limit
+      limit: watch().limit,
+      name: watch().name,
+      email: watch().email,
+      phoneNumber: watch().phoneNumber,
+      username: watch().username,
+      address: watch().address,
+      healthInsurance: watch().healthInsurance,
+      description: watch().description,
+      education: watch().education,
+      page
     };
     if (!paramsObj.from) {
       delete paramsObj.from;
@@ -469,6 +552,11 @@ export default function StaffList() {
   };
 
   useEffect(() => {
+    if (isFirst) {
+      setIsFirst(false);
+      return;
+    }
+
     const page = 1;
     const params = { ...watch(), page };
 
@@ -476,17 +564,7 @@ export default function StaffList() {
     setValue("page", page);
     navigate(`?${searchParams}`);
     loadData({ page });
-    // }, [watch().expertise, watch().type, watch().date]);
-  }, [watch().limit]);
-
-  useEffect(() => {
-    const page = 1;
-    const params = { ...watch(), page };
-    const searchParams = qs.stringify(params);
-    setValue("page", page);
-    navigate(`?${searchParams}`);
-    loadData({ page });
-  }, [searchDebounce]);
+  }, [...Object.values(filterDebounce), ...Object.values(searchDebounce)]);
 
   const loadConfig = async () => {
     await fetchApi(async () => {
@@ -516,13 +594,40 @@ export default function StaffList() {
     // await loadData();
   };
 
+  const options = [
+    "username",
+    "phoneNumber",
+    "email",
+    "name",
+    "address",
+    "gender",
+    "dob",
+    "healthInsurance",
+    "description",
+    "education",
+    "certificate",
+    "role",
+    "status",
+    "action"
+  ];
+
   return isFetchConfigSuccess ? (
     <>
       <Box>
         <CustomOverlay open={isLoading} />
-        <Typography variant="h4" component="h1" mb={2}>
-          {t("title")}
-        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-start",
+            alignItems: "center",
+            mb: 4
+          }}
+        >
+          <Typography variant="h4" component="h1" mr={2}>
+            {t("title")}
+          </Typography>
+          {(isSearchWaiting || isFilterWaiting) && <CircularProgress color="primary" size={24} thickness={3} />}
+        </Box>
 
         {isMobile && <Button onClick={handleButtonClick}>{openFilterMobile ? t("hide_filter") : t("show_filter")}</Button>}
         <Collapse in={!isMobile || openFilterMobile}>{renderFilter()}</Collapse>
@@ -530,55 +635,144 @@ export default function StaffList() {
         <Box
           sx={{
             display: "flex",
-            justifyContent: "flex-end",
-            alignItems: "center"
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap"
           }}
         >
-          <Button
-            color="inherit"
-            onClick={() => {
-              reset();
-            }}
+          <Box
             sx={{
-              transform: "translateY(-25%)"
+              display: "flex",
+              justifyContent: "flex-start",
+              alignItems: "center",
+              position: "relative"
             }}
           >
-            Reset
-            <RestartAltIcon />
-          </Button>
+            <Button
+              variant="outlined"
+              onClick={(event) => {
+                setShowMenu(event.currentTarget);
+              }}
+            >
+              Show
+            </Button>
+            <Menu
+              anchorEl={showMenu}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left"
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left"
+              }}
+              open={Boolean(showMenu)}
+              onClose={() => {
+                setShowMenu(null);
+              }}
+              sx={{
+                maxHeight: 250
+              }}
+            >
+              {options.map((option) => (
+                <MenuItem
+                  key={option}
+                  sx={{
+                    px: 2,
+                    py: 0
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      width: "100%"
+                    }}
+                  >
+                    <Typography fontSize={10}>{t(`table.${option}`)}</Typography>
 
-          <TablePagination
-            component="div"
-            count={count}
-            page={count === 0 ? 0 : watch().page - 1}
-            // labelDisplayedRows={({ from, to, count }) => {
-            //   console.log("{from, to, count}: ", { from, to, count });
-            //   return "";
-            // }}
-            onPageChange={(e, page) => {
-              const newPage = page + 1;
-              setValue("page", newPage);
-              const params = { ...watch(), page: newPage };
-              const searchParams = qs.stringify(params);
-              navigate(`?${searchParams}`);
-              loadData({ page: newPage });
-            }}
-            rowsPerPageOptions={[1, 10, 20, 50, 100]}
-            rowsPerPage={watch().limit}
-            onRowsPerPageChange={(e) => {
-              const newLimit = parseInt(e.target.value, 10);
-              setValue("limit", newLimit);
-              // const newPage = 1;
-              // setValue("page", newPage);
-              // const params = { ...watch(), page: newPage };
-              // const searchParams = qs.stringify(params);
-              // navigate(`?${searchParams}`);
-              // loadData({ page: newPage });
-            }}
+                    <Switch
+                      size="small"
+                      checked={showCols[option] === true}
+                      onChange={() => {
+                        setShowCols((prev) => ({
+                          ...prev,
+                          [option]: !prev[option]
+                        }));
+                      }}
+                    />
+                  </Box>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
+
+          <Box
             sx={{
-              mb: 2
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "center"
             }}
-          />
+          >
+            <Button
+              color="inherit"
+              onClick={() => {
+                /*
+              Giả sử ta ko filter gì hết là load đến page=5
+              Khi đó ở trong useEffect() lắng nghe sự thay đổi của cách watch()
+                - Bắt buộc phải có ít nhất 1 dependency là array hay obj
+                - Bởi vì nếu chỉ có string hay number nó thì khi reset (do ta ko có dùng filter nào)
+                nên giá trị của chúng ko bị thay đổi (còn array và object thì value của chúng có
+                tham chiếu mới)
+                => useEffect ko thực hiện => ko navigate đến ?page=1
+                do đó params trên path vẫn là ?page=5
+                => Lưu ý
+              */
+                reset(defaultValues);
+              }}
+              sx={{
+                transform: "translateY(-25%)"
+              }}
+            >
+              {t("filter.reset")}
+              <RestartAltIcon />
+            </Button>
+
+            <TablePagination
+              component="div"
+              count={count}
+              page={count === 0 ? 0 : watch().page - 1}
+              // labelDisplayedRows={({ from, to, count }) => {
+              //   console.log("{from, to, count}: ", { from, to, count });
+              //   return "";
+              // }}
+              onPageChange={(e, page) => {
+                const newPage = page + 1;
+                setValue("page", newPage);
+                const params = { ...watch(), page: newPage };
+                const searchParams = qs.stringify(params);
+                navigate(`?${searchParams}`);
+                loadData({ page: newPage });
+              }}
+              rowsPerPageOptions={[1, 10, 20, 50, 100]}
+              rowsPerPage={watch().limit}
+              onRowsPerPageChange={(e) => {
+                const newLimit = parseInt(e.target.value, 10);
+                setValue("limit", newLimit);
+                // const newPage = 1;
+                // setValue("page", newPage);
+                // const params = { ...watch(), page: newPage };
+                // const searchParams = qs.stringify(params);
+                // navigate(`?${searchParams}`);
+                // loadData({ page: newPage });
+              }}
+              sx={{
+                mb: 2
+              }}
+            />
+          </Box>
         </Box>
 
         {isMd ? (
@@ -586,48 +780,67 @@ export default function StaffList() {
             <Table>
               <TableHead>
                 <TableRow>
-                  {columns.map((column) => (
-                    <TableCell
-                      key={column.id}
-                      align="left"
-                      style={{ minWidth: column.minWidth }}
-                      sx={{
-                        fontWeight: 600,
-                        display: column.display
-                      }}
-                    >
-                      {column.label}
-                    </TableCell>
-                  ))}
+                  {columns.map((column) => {
+                    return (
+                      <TableCell
+                        key={column.id}
+                        align="left"
+                        style={{ minWidth: column.minWidth }}
+                        sx={{
+                          fontWeight: 600,
+                          display: column.display
+                        }}
+                      >
+                        {column.label}
+                      </TableCell>
+                    );
+                  })}
                 </TableRow>
               </TableHead>
               <TableBody>
-                {staffs.map((staff) => {
+                {staffs.map((currentStaff) => {
+                  const staff = new Staff(currentStaff);
                   return (
                     <TableRow key={staff?.id}>
-                      <TableCell component="th" scope="row">
+                      <TableCell
+                        component="th"
+                        scope="row"
+                        sx={{
+                          display: showCols.username ? "table-cell" : "none"
+                        }}
+                      >
                         {staff?.username}
                       </TableCell>
                       <TableCell
                         align="left"
                         sx={{
-                          display: { lg: "table-cell" }
+                          display: showCols.phoneNumber ? "table-cell" : "none"
                         }}
                       >
-                        {staff?.phoneNumber}
+                        <Typography variant="inherit">{staff?.phoneNumber}</Typography>
+                        {!staff.phoneVerified && (
+                          <Typography variant="caption" color={theme.palette.error.light}>
+                            {t("table.phoneVerifiedFailed")}
+                          </Typography>
+                        )}
                       </TableCell>
                       <TableCell
                         align="left"
                         sx={{
-                          display: { lg: "table-cell" }
+                          display: showCols.email ? "table-cell" : "none"
                         }}
                       >
-                        {staff?.email}
+                        <Typography variant="inherit">{staff?.email}</Typography>
+                        {!staff.emailVerified && (
+                          <Typography variant="caption" color={theme.palette.error.light}>
+                            {t("table.emailVerifiedFailed")}
+                          </Typography>
+                        )}
                       </TableCell>
                       <TableCell
                         align="left"
                         sx={{
-                          display: { lg: "table-cell" }
+                          display: showCols.name ? "table-cell" : "none"
                         }}
                       >
                         {staff?.name}
@@ -635,7 +848,7 @@ export default function StaffList() {
                       <TableCell
                         align="left"
                         sx={{
-                          display: { lg: "table-cell", md: "none", sm: "none" }
+                          display: showCols.address ? "table-cell" : "none"
                         }}
                       >
                         {staff?.address}
@@ -643,7 +856,7 @@ export default function StaffList() {
                       <TableCell
                         align="left"
                         sx={{
-                          display: { lg: "table-cell", md: "none", sm: "none" }
+                          display: showCols.gender ? "table-cell" : "none"
                         }}
                       >
                         {staff?.gender}
@@ -651,15 +864,49 @@ export default function StaffList() {
                       <TableCell
                         align="left"
                         sx={{
-                          display: { lg: "table-cell", md: "none", sm: "none" }
+                          display: showCols.dob ? "table-cell" : "none"
                         }}
                       >
                         {staff?.dob}
                       </TableCell>
+
                       <TableCell
                         align="left"
                         sx={{
-                          display: { lg: "table-cell" }
+                          display: showCols.healthInsurance ? "table-cell" : "none"
+                        }}
+                      >
+                        {staff?.healthInsurance}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        sx={{
+                          display: showCols.description ? "table-cell" : "none"
+                        }}
+                      >
+                        {staff?.description}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        sx={{
+                          display: showCols.education ? "table-cell" : "none"
+                        }}
+                      >
+                        {staff?.education}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        sx={{
+                          display: showCols.certificate ? "table-cell" : "none"
+                        }}
+                      >
+                        {staff?.certificate}
+                      </TableCell>
+
+                      <TableCell
+                        align="left"
+                        sx={{
+                          display: showCols.role ? "table-cell" : "none"
                         }}
                       >
                         <Can I={staffActionAbility.UPDATE_ROLE} a={staff}>
@@ -683,7 +930,7 @@ export default function StaffList() {
                       <TableCell
                         align="left"
                         sx={{
-                          display: { lg: "table-cell" }
+                          display: showCols.status ? "table-cell" : "none"
                         }}
                       >
                         <Can I={staffActionAbility.BLOCK} a={staff}>
@@ -707,7 +954,7 @@ export default function StaffList() {
                       <TableCell
                         align="left"
                         sx={{
-                          display: { lg: "table-cell" }
+                          display: showCols.action ? "table-cell" : "none"
                         }}
                       >
                         <Box
@@ -853,3 +1100,7 @@ export default function StaffList() {
     <CustomOverlay open={isLoading} />
   );
 }
+
+// Object.keys(watch()).map((key) => {
+//   if (key !== "address" && key !== "country") return watch()[key];
+// });

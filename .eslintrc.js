@@ -26,6 +26,7 @@ module.exports = {
         checkPropTypes: true,
         skipShapeProps: true
       }
-    ]
+    ],
+    "react/jsx-props-no-spreading": "off"
   }
 };

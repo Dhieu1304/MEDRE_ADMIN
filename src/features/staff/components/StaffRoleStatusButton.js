@@ -4,10 +4,10 @@ import { useTranslation } from "react-i18next";
 import { Lock as LockIcon, LockOpen as LockOpenIcon } from "@mui/icons-material";
 import { staffRoles, staffStatus } from "../../../entities/Staff";
 
-const StaffRoleStatusButton = ({ variant, onClick }) => {
-  const { ROLE_ADMIN, ROLE_DOCTOR, ROLE_NURSE, ROLE_CUSTOMER_SERVICE } = staffRoles;
-  const { STATUS_BLOCK, STATUS_UNBLOCK } = staffStatus;
+const { ROLE_ADMIN, ROLE_DOCTOR, ROLE_NURSE, ROLE_CUSTOMER_SERVICE } = staffRoles;
+const { STATUS_BLOCK, STATUS_UNBLOCK } = staffStatus;
 
+const StaffRoleStatusButton = ({ variant, onClick }) => {
   const { t: tRole } = useTranslation("staffFeature", { keyPrefix: "role" });
   const { t: tStatus } = useTranslation("staffFeature", { keyPrefix: "status" });
 
@@ -85,7 +85,9 @@ const StaffRoleStatusButton = ({ variant, onClick }) => {
 // StaffRoleStatusButton.defaultProps = {};
 
 StaffRoleStatusButton.propTypes = {
-  variant: PropTypes.bool.isRequired,
+  variant: PropTypes.oneOf([ROLE_ADMIN, ROLE_DOCTOR, ROLE_NURSE, ROLE_CUSTOMER_SERVICE, STATUS_UNBLOCK, STATUS_BLOCK])
+    .isRequired,
+
   onClick: PropTypes.func.isRequired
 };
 
