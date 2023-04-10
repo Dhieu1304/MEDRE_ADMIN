@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import formatDate from "date-and-time";
 import { Box, Button, Grid, InputAdornment, Menu, Switch, Typography } from "@mui/material";
 import { CalendarToday as CalendarTodayIcon } from "@mui/icons-material";
@@ -22,18 +22,21 @@ function CustomDateFromToInput({
   haveTime
 }) {
   const [preview, setPreview] = useState("");
-  const [fromToValue, setFromToValue] = useState("");
   const [showMenu, setShowMenu] = useState(null);
   const [showTime, setShowTime] = useState(haveTime);
 
-  const { control, trigger, watch, handleSubmit } = useForm({
-    mode: "onChange",
-    defaultValues: {
+  const defaultValues = useMemo(() => {
+    return {
       fromDate: watchMainForm(fromDateName),
       toDate: watchMainForm(toDateName),
       startTime: "",
       endTime: ""
-    },
+    };
+  }, []);
+
+  const { control, trigger, watch, handleSubmit } = useForm({
+    mode: "onChange",
+    defaultValues,
     criteriaMode: "all"
   });
 
@@ -75,6 +78,8 @@ function CustomDateFromToInput({
 
     return str;
   };
+
+  const [fromToValue, setFromToValue] = useState(formatDateAndTime(defaultValues));
 
   useEffect(() => {
     const newPreview = formatDateAndTime(watch());
