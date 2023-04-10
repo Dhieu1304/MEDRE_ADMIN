@@ -14,9 +14,9 @@ import {
 } from "@mui/material";
 import { Children, cloneElement, isValidElement, useState } from "react";
 import { Controller } from "react-hook-form";
-import { inputErrorFormat } from "../../../utils/stringFormat";
+import { inputErrorFormat } from "../../utils/stringFormat";
 
-function CustomStaffInput({
+function CustomInput({
   control,
   rules = {},
   label,
@@ -32,7 +32,8 @@ function CustomStaffInput({
   rows,
   message,
   showCanEditIcon,
-  childrenType = "select"
+  childrenType = "select",
+  noNameValue
 }) {
   const theme = useTheme();
 
@@ -44,29 +45,6 @@ function CustomStaffInput({
   };
 
   const labelShinkFontSize = 20;
-
-  const renderLabel = () => (
-    <Box
-      sx={{
-        fontSize: labelShinkFontSize
-      }}
-      component="span"
-    >
-      {label}
-      {showCanEditIcon && !disabled && (
-        <Box
-          component={FontAwesomeIcon}
-          size="1x"
-          icon={faEditIcon}
-          cursor="pointer"
-          color={theme.palette.success.light}
-          sx={{
-            ml: 1
-          }}
-        />
-      )}
-    </Box>
-  );
 
   const InputLabelPropsSx = {
     "&.MuiInputLabel-outlined.MuiInputLabel-shrink span": {
@@ -93,11 +71,68 @@ function CustomStaffInput({
       color: "yellow"
     }
   };
-  const render = ({ field: { onChange, onBlur, value }, fieldState: { error } }) => {
-    let inputType = type;
-    if (type === "password") {
-      inputType = hidePassword ? "password" : "text";
-    }
+
+  const renderLabel = () => (
+    <Box
+      sx={{
+        fontSize: labelShinkFontSize
+      }}
+      component="span"
+    >
+      {label}
+      {showCanEditIcon && !disabled && (
+        <Box
+          component={FontAwesomeIcon}
+          size="1x"
+          icon={faEditIcon}
+          cursor="pointer"
+          color={theme.palette.success.light}
+          sx={{
+            ml: 1
+          }}
+        />
+      )}
+    </Box>
+  );
+
+  const renderTextField = (inputType, InputProps) => {
+    // console.log("CustomInputProps: ", CustomInputProps);
+    return (
+      <Box
+        component={TextField}
+        label={renderLabel()}
+        InputLabelProps={{
+          shrink: type === "date" || type === "number" ? true : !!noNameValue,
+          sx: { ...InputLabelPropsSx }
+        }}
+        variant="outlined"
+        fullWidth
+        InputProps={{
+          ...InputProps,
+          readOnly: true
+        }}
+        required={!!rules?.required}
+        value={noNameValue}
+        disabled={disabled}
+        type={inputType}
+        placeholder={placeholder}
+        multiline={multiline}
+        rows={rows}
+      />
+    );
+  };
+
+  const renderField = ({ field: { onChange, onBlur, value }, fieldState: { error } }, inputType, InputProps) => {
+    // if (type === "date") {
+    //   console.log("name: ", name);
+    //   console.log("value: ", value);
+
+    //   if (value instanceof Date) {
+    //     console.log("value is a Date object");
+    //   } else {
+    //     console.log("value is not a Date object");
+    //   }
+    // }
 
     if (children) {
       // const shrink = Array.isArray(value) ? (value.length > 0 ? true : false) : !!value;
@@ -160,29 +195,13 @@ function CustomStaffInput({
       }
     }
 
-    const InputProps =
-      type === "password"
-        ? {
-            endAdornment: (
-              <InputAdornment position="end">
-                <FontAwesomeIcon
-                  size="1x"
-                  icon={hidePassword ? faEye : faEyeSlash}
-                  onClick={() => setHidePassword((prev) => !prev)}
-                  cursor="pointer"
-                />
-              </InputAdornment>
-            )
-          }
-        : CustomInputProps || {};
-
     return (
       <>
         <Box
           component={TextField}
           label={renderLabel()}
           InputLabelProps={{
-            shrink: type === "date" || type === "number" ? true : !!value,
+            shrink: type === "date" || type === "time" || type === "number" ? true : !!value,
             sx: { ...InputLabelPropsSx }
           }}
           variant="outlined"
@@ -220,23 +239,51 @@ function CustomStaffInput({
     );
   };
 
-  return (
-    <Controller
-      control={control}
-      rules={rules}
-      name={name}
-      render={({ field, fieldState }) => {
-        return render({ field, fieldState });
-      }}
-    />
-  );
+  const render = () => {
+    let inputType = type;
+    if (type === "password") {
+      inputType = hidePassword ? "password" : "text";
+    }
+
+    const InputProps =
+      type === "password"
+        ? {
+            endAdornment: (
+              <InputAdornment position="end">
+                <FontAwesomeIcon
+                  size="1x"
+                  icon={hidePassword ? faEye : faEyeSlash}
+                  onClick={() => setHidePassword((prev) => !prev)}
+                  cursor="pointer"
+                />
+              </InputAdornment>
+            )
+          }
+        : CustomInputProps || {};
+
+    return name ? (
+      <Controller
+        control={control}
+        rules={rules}
+        name={name}
+        render={({ field, fieldState }) => {
+          return renderField({ field, fieldState }, inputType, InputProps);
+        }}
+      />
+    ) : (
+      renderTextField(inputType, InputProps)
+    );
+  };
+
+  return render();
 }
 
-CustomStaffInput.defaultProps = {
+CustomInput.defaultProps = {
   label: "",
   rules: {},
   triggerTo: null,
   children: null,
+  name: undefined,
   type: "text",
   placeholder: "",
   disabled: undefined,
@@ -245,17 +292,18 @@ CustomStaffInput.defaultProps = {
   showCanEditIcon: undefined,
   multiline: undefined,
   rows: undefined,
-  childrenType: "select"
+  childrenType: "select",
+  noNameValue: ""
 };
 
-CustomStaffInput.propTypes = {
+CustomInput.propTypes = {
   control: PropTypes.object.isRequired,
   rules: PropTypes.object,
   label: PropTypes.string,
   trigger: PropTypes.func.isRequired,
   triggerTo: PropTypes.oneOfType([PropTypes.string]),
 
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   type: PropTypes.string,
   placeholder: PropTypes.string,
   children: PropTypes.oneOfType([PropTypes.node]),
@@ -268,7 +316,8 @@ CustomStaffInput.propTypes = {
   showCanEditIcon: PropTypes.bool,
   multiline: PropTypes.bool,
   rows: PropTypes.number,
-  childrenType: PropTypes.string
+  childrenType: PropTypes.string,
+  noNameValue: PropTypes.string
 };
 
-export default CustomStaffInput;
+export default CustomInput;

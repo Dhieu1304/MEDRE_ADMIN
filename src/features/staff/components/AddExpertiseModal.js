@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import CustomModal from "../../../components/CustomModal";
-import CustomStaffInput from "./CustomStaffInput";
+import CustomInput from "../../../components/CustomInput";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
 import staffServices from "../../../services/staffServices";
 
@@ -42,7 +42,7 @@ function AddExpertiseModal({ show, setShow, handleAfterAddExpertise }) {
       submitBtnLabel={t("btn_label")}
       onSubmit={handleSubmit(handleAddExpertise)}
     >
-      <CustomStaffInput
+      <CustomInput
         control={control}
         rules={{
           required: t("input_validation.required")

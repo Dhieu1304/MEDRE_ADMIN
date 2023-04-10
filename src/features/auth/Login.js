@@ -5,7 +5,8 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import routeConfig from "../../config/routeConfig";
 import { useAuthStore } from "../../store/AuthStore";
-import AuthInput from "./components/AuthInput";
+import CustomInput from "../../components/CustomInput";
+import { useAppConfigStore } from "../../store/AppConfigStore/hooks";
 
 export default function Login() {
   const { handleSubmit, control, trigger } = useForm({
@@ -28,48 +29,50 @@ export default function Login() {
     }
   };
 
-  const requireErrorMessage = useMemo(() => t("input.require_error_message"), []);
+  const { locale } = useAppConfigStore();
+  const requireErrorMessage = useMemo(() => t("input.require_error_message"), [locale]);
 
   return (
     <>
       <Typography component="h1" variant="h5">
         {t("title")}
       </Typography>
-      <Box component="form" noValidate onSubmit={handleSubmit(onLogin)} sx={{ marginTop: 1 }}>
-        <AuthInput
-          control={control}
-          rules={{
-            required: requireErrorMessage,
-            // https://ihateregex.io/expr/phone/
-            pattern: {
-              value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-              message: t("input.email_format_error_message")
-            }
+      <Box component="form" noValidate onSubmit={handleSubmit(onLogin)} sx={{ marginTop: 1, width: 500 }}>
+        <Box
+          sx={{
+            mb: 2,
+            width: "100%"
           }}
-          label={t("input.email_label")}
-          trigger={trigger}
-          name="email"
-          type="email"
-        />
+        >
+          <CustomInput
+            control={control}
+            rules={{
+              required: requireErrorMessage
+            }}
+            label={t("input.email_label")}
+            trigger={trigger}
+            name="email"
+            type="email"
+          />
+        </Box>
 
-        <AuthInput
-          control={control}
-          rules={{
-            required: requireErrorMessage
-            // minLength: {
-            //   value: 8,
-            //   message: t("input.password_min_length_error_message")
-            // },
-            // pattern: {
-            //   value: /(?=.*[a-zA-Z])(?=.*[0-9])/,
-            //   message: t("input.password_format_error_message")
-            // }
+        <Box
+          sx={{
+            mb: 2,
+            width: "100%"
           }}
-          label={t("input.password_label")}
-          trigger={trigger}
-          name="password"
-          type="password"
-        />
+        >
+          <CustomInput
+            control={control}
+            rules={{
+              required: requireErrorMessage
+            }}
+            label={t("input.password_label")}
+            trigger={trigger}
+            name="password"
+            type="password"
+          />
+        </Box>
 
         <Button type="submit" fullWidth variant="contained" sx={{ mb: 2, p: 1, fontSize: 10 }}>
           {t("button_title")}

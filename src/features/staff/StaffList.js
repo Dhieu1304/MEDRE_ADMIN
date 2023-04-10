@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import formatDate from "date-and-time";
 
 import {
   Table,
@@ -34,7 +35,7 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { CalendarMonth as CalendarMonthIcon, RestartAlt as RestartAltIcon, Search as SearchIcon } from "@mui/icons-material";
-import CustomStaffInput from "./components/CustomStaffInput";
+import CustomInput, { CustomDateFromToInput } from "../../components/CustomInput";
 import staffServices from "../../services/staffServices";
 import { useFetchingStore } from "../../store/FetchingApiStore/hooks";
 import CustomOverlay from "../../components/CustomOverlay";
@@ -247,10 +248,12 @@ export default function StaffList() {
       healthInsurance,
       description,
       education,
-      certificate
+      certificate,
+      from,
+      to
     } = defaultSearchParams;
 
-    return {
+    const result = {
       // null hoặc undefined thì lấy giá trị default (bên phái)
       email: normalizeStrToStr(email),
       phoneNumber: normalizeStrToStr(phoneNumber),
@@ -270,8 +273,11 @@ export default function StaffList() {
       expertises: normalizeStrToArray(expertises),
 
       page: normalizeStrToInt(page, 11),
-      limit: normalizeStrToInt(limit, 10)
+      limit: normalizeStrToInt(limit, 10),
+      from: from ? formatDate.format(new Date(from), "YYYY-MM-DD") : formatDate.format(new Date(), "YYYY-MM-DD"),
+      to: to ? formatDate.format(new Date(to), "YYYY-MM-DD") : formatDate.format(new Date(), "YYYY-MM-DD")
     };
+    return result;
   }, []);
 
   const { control, trigger, watch, setValue, reset } = useForm({
@@ -295,33 +301,19 @@ export default function StaffList() {
     return (
       <Grid container spacing={{ xs: 2, md: 2 }} flexWrap="wrap" mb={4}>
         <Grid item {...gridItemProps}>
-          <CustomStaffInput
-            control={control}
-            rules={{}}
-            label={t("filter.search")}
-            trigger={trigger}
-            name="name"
-            type="text"
-          />
+          <CustomInput control={control} rules={{}} label={t("filter.search")} trigger={trigger} name="name" type="text" />
         </Grid>
         <Grid item {...gridItemProps}>
-          <CustomStaffInput
-            control={control}
-            rules={{}}
-            label={t("filter.email")}
-            trigger={trigger}
-            name="email"
-            type="email"
-          />
+          <CustomInput control={control} rules={{}} label={t("filter.email")} trigger={trigger} name="email" type="email" />
         </Grid>
         <Grid item {...gridItemProps}>
-          <CustomStaffInput control={control} rules={{}} label={t("filter.phone")} trigger={trigger} name="phoneNumber" />
+          <CustomInput control={control} rules={{}} label={t("filter.phone")} trigger={trigger} name="phoneNumber" />
         </Grid>
         <Grid item {...gridItemProps}>
-          <CustomStaffInput control={control} rules={{}} label={t("filter.username")} trigger={trigger} name="username" />
+          <CustomInput control={control} rules={{}} label={t("filter.username")} trigger={trigger} name="username" />
         </Grid>
         <Grid item {...gridItemProps}>
-          <CustomStaffInput control={control} rules={{}} label={t("filter.gender")} trigger={trigger} name="genders">
+          <CustomInput control={control} rules={{}} label={t("filter.gender")} trigger={trigger} name="genders">
             <Select
               multiple
               renderValue={(selected) => {
@@ -347,10 +339,10 @@ export default function StaffList() {
                 );
               })}
             </Select>
-          </CustomStaffInput>
+          </CustomInput>
         </Grid>
         <Grid item {...gridItemProps}>
-          <CustomStaffInput control={control} rules={{}} label={t("filter.status")} trigger={trigger} name="statuses">
+          <CustomInput control={control} rules={{}} label={t("filter.status")} trigger={trigger} name="statuses">
             <Select
               multiple
               renderValue={(selected) => {
@@ -375,10 +367,10 @@ export default function StaffList() {
                 );
               })}
             </Select>
-          </CustomStaffInput>
+          </CustomInput>
         </Grid>
         <Grid item {...gridItemProps}>
-          <CustomStaffInput control={control} rules={{}} label={t("filter.role")} trigger={trigger} name="roles">
+          <CustomInput control={control} rules={{}} label={t("filter.role")} trigger={trigger} name="roles">
             <Select
               multiple
               renderValue={(selected) => {
@@ -403,10 +395,10 @@ export default function StaffList() {
                 );
               })}
             </Select>
-          </CustomStaffInput>
+          </CustomInput>
         </Grid>
         <Grid item {...gridItemProps}>
-          <CustomStaffInput control={control} rules={{}} label={t("filter.expertise")} trigger={trigger} name="expertises">
+          <CustomInput control={control} rules={{}} label={t("filter.expertise")} trigger={trigger} name="expertises">
             <Select
               multiple
               renderValue={(selected) => {
@@ -428,10 +420,10 @@ export default function StaffList() {
                 );
               })}
             </Select>
-          </CustomStaffInput>
+          </CustomInput>
         </Grid>
         <Grid item {...gridItemProps}>
-          <CustomStaffInput
+          <CustomInput
             control={control}
             rules={{}}
             label={t("filter.address")}
@@ -441,7 +433,7 @@ export default function StaffList() {
           />
         </Grid>
         <Grid item {...gridItemProps}>
-          <CustomStaffInput
+          <CustomInput
             control={control}
             rules={{}}
             label={t("filter.description")}
@@ -451,7 +443,7 @@ export default function StaffList() {
           />
         </Grid>
         <Grid item {...gridItemProps}>
-          <CustomStaffInput
+          <CustomInput
             control={control}
             rules={{}}
             label={t("filter.education")}
@@ -461,7 +453,7 @@ export default function StaffList() {
           />
         </Grid>
         <Grid item {...gridItemProps}>
-          <CustomStaffInput
+          <CustomInput
             control={control}
             rules={{}}
             label={t("filter.certificate")}
@@ -472,13 +464,28 @@ export default function StaffList() {
         </Grid>
 
         <Grid item {...gridItemProps}>
-          <CustomStaffInput
+          <CustomInput
             control={control}
             rules={{}}
             label={t("filter.healthInsurance")}
             trigger={trigger}
             name="healthInsurance"
             type="text"
+          />
+        </Grid>
+        <Grid item {...gridItemProps}>
+          <CustomDateFromToInput
+            // control={control}
+            // trigger={trigger}
+            watchMainForm={watch}
+            setMainFormValue={setValue}
+            label="Lịch khám"
+            fromDateName="from"
+            fromDateRules={{}}
+            toDateName="to"
+            toDateRules={{}}
+            fromDateLabel="From"
+            toDateLabel="To"
           />
         </Grid>
       </Grid>
@@ -491,7 +498,7 @@ export default function StaffList() {
     1000
   );
 
-  const { types, date, roles, statuses, genders, expertises, isWaiting: limit } = watch();
+  const { types, date, roles, statuses, genders, expertises, limit, from, to } = watch();
 
   const { debouncedObj: filterDebounce, isWaiting: isFilterWaiting } = useObjDebounce(
     {
@@ -501,7 +508,9 @@ export default function StaffList() {
       statuses,
       genders,
       expertises,
-      limit
+      limit,
+      from,
+      to
     },
     1000
   );
@@ -524,12 +533,14 @@ export default function StaffList() {
       education: watch().education,
       page
     };
-    if (!paramsObj.from) {
-      delete paramsObj.from;
-    }
-    if (!paramsObj.to) {
-      delete paramsObj.to;
-    }
+    // if (!paramsObj.from) {
+    //   delete paramsObj.from;
+    // }
+    // if (!paramsObj.to) {
+    //   delete paramsObj.to;
+    // }
+
+    // console.log("watch(): ", watch());
 
     await fetchApi(async () => {
       const res = await staffServices.getStaffList(paramsObj);
@@ -1100,7 +1111,3 @@ export default function StaffList() {
     <CustomOverlay open={isLoading} />
   );
 }
-
-// Object.keys(watch()).map((key) => {
-//   if (key !== "address" && key !== "country") return watch()[key];
-// });

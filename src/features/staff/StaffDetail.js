@@ -29,7 +29,7 @@ import { toast } from "react-toastify";
 import { useAbility } from "@casl/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear as faGearIcon } from "@fortawesome/free-solid-svg-icons";
-import CustomStaffInput from "./components/CustomStaffInput";
+import CustomInput from "../../components/CustomInput";
 
 import staffServices from "../../services/staffServices";
 import { useFetchingStore } from "../../store/FetchingApiStore/hooks";
@@ -284,7 +284,7 @@ function StaffDetail() {
             </Typography>
             <Grid container spacing={3}>
               <Grid item xs={12} sm={12} md={4} lg={4}>
-                <CustomStaffInput
+                <CustomInput
                   disabled={!canUpdateStaff}
                   showCanEditIcon
                   control={control}
@@ -319,7 +319,7 @@ function StaffDetail() {
                 />
               </Grid>
               <Grid item xs={12} sm={12} md={4} lg={4}>
-                <CustomStaffInput
+                <CustomInput
                   disabled={!canUpdateStaff}
                   showCanEditIcon
                   control={control}
@@ -339,7 +339,7 @@ function StaffDetail() {
                 />
               </Grid>
               <Grid item xs={12} sm={12} md={4} lg={4}>
-                <CustomStaffInput
+                <CustomInput
                   disabled={!canUpdateStaff}
                   showCanEditIcon
                   control={control}
@@ -372,7 +372,7 @@ function StaffDetail() {
             </Typography>
             <Grid container spacing={3}>
               <Grid item xs={12} sm={12} md={6} lg={6}>
-                <CustomStaffInput
+                <CustomInput
                   disabled
                   showCanEditIcon
                   control={control}
@@ -401,7 +401,7 @@ function StaffDetail() {
                 />
               </Grid>
               <Grid item xs={12} sm={12} md={6} lg={6}>
-                <CustomStaffInput
+                <CustomInput
                   disabled
                   showCanEditIcon
                   control={control}
@@ -438,7 +438,7 @@ function StaffDetail() {
             </Typography>
             <Grid container spacing={3}>
               <Grid item xs={12} sm={12} md={12} lg={8}>
-                <CustomStaffInput
+                <CustomInput
                   disabled={!canUpdateStaff}
                   showCanEditIcon
                   control={control}
@@ -459,7 +459,7 @@ function StaffDetail() {
               </Grid>
 
               <Grid item xs={12} sm={12} md={6} lg={2}>
-                <CustomStaffInput
+                <CustomInput
                   disabled={!canUpdateStaff}
                   showCanEditIcon
                   control={control}
@@ -474,7 +474,7 @@ function StaffDetail() {
               </Grid>
 
               <Grid item xs={12} sm={12} md={6} lg={2}>
-                <CustomStaffInput
+                <CustomInput
                   disabled={!canUpdateStaff}
                   showCanEditIcon
                   control={control}
@@ -501,11 +501,11 @@ function StaffDetail() {
                       );
                     })}
                   </Select>
-                </CustomStaffInput>
+                </CustomInput>
               </Grid>
 
               <Grid item xs={12} sm={12} md={12} lg={12}>
-                <CustomStaffInput
+                <CustomInput
                   disabled={!canUpdateStaff}
                   showCanEditIcon
                   control={control}
@@ -534,7 +534,7 @@ function StaffDetail() {
             </Typography>
             <Grid container spacing={3}>
               <Grid item xs={12} sm={12} md={6} lg={6}>
-                <CustomStaffInput
+                <CustomInput
                   disabled={!canUpdateStaff}
                   showCanEditIcon
                   control={control}
@@ -556,7 +556,7 @@ function StaffDetail() {
               </Grid>
 
               <Grid item xs={12} sm={12} md={6} lg={6}>
-                <CustomStaffInput
+                <CustomInput
                   disabled={!canUpdateStaff}
                   showCanEditIcon
                   control={control}
@@ -578,7 +578,7 @@ function StaffDetail() {
               </Grid>
 
               {/* <Grid item xs={12} sm={12} md={12} lg={12}>
-                <CustomStaffInput
+                <CustomInput
                   disabled={!canUpdateStaff}
                   showCanEditIcon
                   control={control}
@@ -610,7 +610,7 @@ function StaffDetail() {
                   alignItems: "flex-start"
                 }}
               >
-                <CustomStaffInput
+                <CustomInput
                   disabled={!canUpdateStaff}
                   showCanEditIcon
                   control={control}
@@ -675,7 +675,7 @@ function StaffDetail() {
                       );
                     })}
                   </Select>
-                </CustomStaffInput>
+                </CustomInput>
 
                 <IconButton
                   onClick={() => {
