@@ -54,7 +54,8 @@ import { normalizeStrToArray, normalizeStrToInt, normalizeStrToStr } from "../..
 export default function StaffList() {
   const [isFirst, setIsFirst] = useState(true);
 
-  const [showMenu, setShowMenu] = useState(null);
+  const [showTableColsMenu, setShowTableColsMenu] = useState(null);
+  // const [showFiltersMenu, setShowFiltersMenu] = useState(null);
 
   const [showCols, setShowCols] = useState({
     username: true,
@@ -72,6 +73,46 @@ export default function StaffList() {
     status: true,
     action: true
   });
+
+  // const [showFilters, setShowFilters] = useState({
+  //   email: true,
+  //   phoneNumber: true,
+  //   username: true,
+  //   name: true,
+  //   types: true,
+  //   expertises: true,
+  //   page: true,
+  //   limit: true,
+  //   roles: true,
+  //   statuses: true,
+  //   genders: true,
+  //   address: true,
+  //   healthInsurance: true,
+  //   description: true,
+  //   education: true,
+  //   certificate: true,
+  //   date: true
+  // });
+
+  const showFilters = {
+    email: true,
+    phoneNumber: true,
+    username: true,
+    name: true,
+    types: true,
+    expertises: true,
+    page: true,
+    limit: true,
+    roles: true,
+    statuses: true,
+    genders: true,
+    address: true,
+    healthInsurance: true,
+    description: true,
+    education: true,
+    certificate: true,
+    date: true
+  };
 
   // const staffTypesList = useMemo(() => {
   //   return [
@@ -272,7 +313,7 @@ export default function StaffList() {
       genders: normalizeStrToArray(genders),
       expertises: normalizeStrToArray(expertises),
 
-      page: normalizeStrToInt(page, 11),
+      page: normalizeStrToInt(page, 1),
       limit: normalizeStrToInt(limit, 10),
       from: from ? formatDate.format(new Date(from), "YYYY-MM-DD") : formatDate.format(new Date(), "YYYY-MM-DD"),
       to: to ? formatDate.format(new Date(to), "YYYY-MM-DD") : formatDate.format(new Date(), "YYYY-MM-DD")
@@ -300,19 +341,49 @@ export default function StaffList() {
 
     return (
       <Grid container spacing={{ xs: 2, md: 2 }} flexWrap="wrap" mb={4}>
-        <Grid item {...gridItemProps}>
+        <Grid
+          item
+          {...gridItemProps}
+          sx={{
+            display: showFilters.name ? "block" : "none"
+          }}
+        >
           <CustomInput control={control} rules={{}} label={t("filter.search")} trigger={trigger} name="name" type="text" />
         </Grid>
-        <Grid item {...gridItemProps}>
+        <Grid
+          item
+          {...gridItemProps}
+          sx={{
+            display: showFilters.email ? "block" : "none"
+          }}
+        >
           <CustomInput control={control} rules={{}} label={t("filter.email")} trigger={trigger} name="email" type="email" />
         </Grid>
-        <Grid item {...gridItemProps}>
+        <Grid
+          item
+          {...gridItemProps}
+          sx={{
+            display: showFilters.phone ? "block" : "none"
+          }}
+        >
           <CustomInput control={control} rules={{}} label={t("filter.phone")} trigger={trigger} name="phoneNumber" />
         </Grid>
-        <Grid item {...gridItemProps}>
+        <Grid
+          item
+          {...gridItemProps}
+          sx={{
+            display: showFilters.username ? "block" : "none"
+          }}
+        >
           <CustomInput control={control} rules={{}} label={t("filter.username")} trigger={trigger} name="username" />
         </Grid>
-        <Grid item {...gridItemProps}>
+        <Grid
+          item
+          {...gridItemProps}
+          sx={{
+            display: showFilters.genders ? "block" : "none"
+          }}
+        >
           <CustomInput control={control} rules={{}} label={t("filter.gender")} trigger={trigger} name="genders">
             <Select
               multiple
@@ -341,7 +412,13 @@ export default function StaffList() {
             </Select>
           </CustomInput>
         </Grid>
-        <Grid item {...gridItemProps}>
+        <Grid
+          item
+          {...gridItemProps}
+          sx={{
+            display: showFilters.statuses ? "block" : "none"
+          }}
+        >
           <CustomInput control={control} rules={{}} label={t("filter.status")} trigger={trigger} name="statuses">
             <Select
               multiple
@@ -369,7 +446,13 @@ export default function StaffList() {
             </Select>
           </CustomInput>
         </Grid>
-        <Grid item {...gridItemProps}>
+        <Grid
+          item
+          {...gridItemProps}
+          sx={{
+            display: showFilters.roles ? "block" : "none"
+          }}
+        >
           <CustomInput control={control} rules={{}} label={t("filter.role")} trigger={trigger} name="roles">
             <Select
               multiple
@@ -397,7 +480,13 @@ export default function StaffList() {
             </Select>
           </CustomInput>
         </Grid>
-        <Grid item {...gridItemProps}>
+        <Grid
+          item
+          {...gridItemProps}
+          sx={{
+            display: showFilters.expertises ? "block" : "none"
+          }}
+        >
           <CustomInput control={control} rules={{}} label={t("filter.expertise")} trigger={trigger} name="expertises">
             <Select
               multiple
@@ -422,7 +511,13 @@ export default function StaffList() {
             </Select>
           </CustomInput>
         </Grid>
-        <Grid item {...gridItemProps}>
+        <Grid
+          item
+          {...gridItemProps}
+          sx={{
+            display: showFilters.address ? "block" : "none"
+          }}
+        >
           <CustomInput
             control={control}
             rules={{}}
@@ -432,7 +527,13 @@ export default function StaffList() {
             type="text"
           />
         </Grid>
-        <Grid item {...gridItemProps}>
+        <Grid
+          item
+          {...gridItemProps}
+          sx={{
+            display: showFilters.description ? "block" : "none"
+          }}
+        >
           <CustomInput
             control={control}
             rules={{}}
@@ -442,7 +543,13 @@ export default function StaffList() {
             type="text"
           />
         </Grid>
-        <Grid item {...gridItemProps}>
+        <Grid
+          item
+          {...gridItemProps}
+          sx={{
+            display: showFilters.education ? "block" : "none"
+          }}
+        >
           <CustomInput
             control={control}
             rules={{}}
@@ -452,7 +559,13 @@ export default function StaffList() {
             type="text"
           />
         </Grid>
-        <Grid item {...gridItemProps}>
+        <Grid
+          item
+          {...gridItemProps}
+          sx={{
+            display: showFilters.certificate ? "block" : "none"
+          }}
+        >
           <CustomInput
             control={control}
             rules={{}}
@@ -463,7 +576,13 @@ export default function StaffList() {
           />
         </Grid>
 
-        <Grid item {...gridItemProps}>
+        <Grid
+          item
+          {...gridItemProps}
+          sx={{
+            display: showFilters.healthInsurance ? "block" : "none"
+          }}
+        >
           <CustomInput
             control={control}
             rules={{}}
@@ -473,7 +592,13 @@ export default function StaffList() {
             type="text"
           />
         </Grid>
-        <Grid item {...gridItemProps}>
+        <Grid
+          item
+          {...gridItemProps}
+          sx={{
+            display: showFilters.date ? "block" : "none"
+          }}
+        >
           <CustomDateFromToInput
             // control={control}
             // trigger={trigger}
@@ -634,10 +759,86 @@ export default function StaffList() {
             mb: 4
           }}
         >
-          <Typography variant="h4" component="h1" mr={2}>
-            {t("title")}
-          </Typography>
-          {(isSearchWaiting || isFilterWaiting) && <CircularProgress color="primary" size={24} thickness={3} />}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-start",
+              alignItems: "center"
+            }}
+          >
+            <Typography variant="h4" component="h1" mr={2}>
+              {t("title")}
+            </Typography>
+            {(isSearchWaiting || isFilterWaiting) && <CircularProgress color="primary" size={24} thickness={3} />}
+          </Box>
+          {/*
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "center"
+            }}
+          >
+            <Button
+              variant="outlined"
+              onClick={(event) => {
+                setShowFiltersMenu(event.currentTarget);
+              }}
+            >
+              Show
+            </Button>
+            <Menu
+              anchorEl={showTableColsMenu}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left"
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left"
+              }}
+              open={Boolean(showTableColsMenu)}
+              onClose={() => {
+                setShowFiltersMenu(null);
+              }}
+              sx={{
+                maxHeight: 250
+              }}
+            >
+              {defaultValues.map((option) => (
+                <MenuItem
+                  key={option}
+                  sx={{
+                    px: 2,
+                    py: 0
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      width: "100%"
+                    }}
+                  >
+                    <Typography fontSize={10}>{t(`filter.${option}`)}</Typography>
+
+                    <Switch
+                      size="small"
+                      checked={showCols[option] === true}
+                      onChange={() => {
+                        setShowCols((prev) => ({
+                          ...prev,
+                          [option]: !prev[option]
+                        }));
+                      }}
+                    />
+                  </Box>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box> */}
         </Box>
 
         {isMobile && <Button onClick={handleButtonClick}>{openFilterMobile ? t("hide_filter") : t("show_filter")}</Button>}
@@ -655,20 +856,19 @@ export default function StaffList() {
             sx={{
               display: "flex",
               justifyContent: "flex-start",
-              alignItems: "center",
-              position: "relative"
+              alignItems: "center"
             }}
           >
             <Button
               variant="outlined"
               onClick={(event) => {
-                setShowMenu(event.currentTarget);
+                setShowTableColsMenu(event.currentTarget);
               }}
             >
               Show
             </Button>
             <Menu
-              anchorEl={showMenu}
+              anchorEl={showTableColsMenu}
               anchorOrigin={{
                 vertical: "bottom",
                 horizontal: "left"
@@ -678,9 +878,9 @@ export default function StaffList() {
                 vertical: "top",
                 horizontal: "left"
               }}
-              open={Boolean(showMenu)}
+              open={Boolean(showTableColsMenu)}
               onClose={() => {
-                setShowMenu(null);
+                setShowTableColsMenu(null);
               }}
               sx={{
                 maxHeight: 250
