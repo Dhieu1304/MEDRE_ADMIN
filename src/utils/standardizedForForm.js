@@ -1,3 +1,5 @@
+import formatDate from "date-and-time";
+
 export const normalizeStrToStr = (str) => {
   // check null or undefined (==)
   if (str == null) {
@@ -23,4 +25,16 @@ export const normalizeStrToArray = (arr) => {
 export const normalizeStrToInt = (str, defaultNumber = 0) => {
   const num = parseInt(str, 10);
   return Number.isNaN(num) ? defaultNumber : num;
+};
+
+export const normalizeStrToDateStr = (dateStr, defaultDate) => {
+  const date = Date.parse(dateStr);
+  if (Number.isNaN(date)) {
+    if (defaultDate) {
+      return formatDate.format(new Date(defaultDate), "YYYY-MM-DD");
+    }
+
+    return "";
+  }
+  return formatDate.format(new Date(date), "YYYY-MM-DD");
 };

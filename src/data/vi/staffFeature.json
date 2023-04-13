@@ -10,12 +10,14 @@
       "date": "Ngày",
       "expertises": "Chuyên môn",
       "gender": "Giới tính",
+      "status": "Tình trạng",
       "role": "Vai trò",
       "healthInsurance": "Bảo hiểm y tế",
       "description": "Mô tả",
       "education": "Học vấn",
       "certificate": "Chứng nhận",
-      "address": "Địa chỉ"
+      "address": "Địa chỉ",
+      "schedules": "Lịch khám"
     },
 
     "select": {
@@ -30,17 +32,27 @@
         "nurse": "Y tá",
         "customerService": "Nhân viên CSKH",
         "all": "Tất cả"
+      },
+      "statuses": {
+        "block": "Khóa",
+        "unblock": "Mở khóa",
+        "all": "Tất cả"
+      },
+      "types": {
+        "offline": "Trực tiếp",
+        "online": "Trực tuyến",
+        "all": "Tất cả"
       }
     },
 
     "button": {
       "reset": "Đặt lại",
       "hideFilterCollapse": "Ẩn bộ lọc",
-      "showFilterCollapse": "Hiện bộ lọc"
+      "showFilterCollapse": "Hiện bộ lọc",
+      "showMenuColumns": "Hiện"
     }
-
   },
-  
+
   "StaffDetail": {
     "title": {
       "identify": "Thông tin xác thực",
@@ -49,7 +61,7 @@
       "doctor": "Thông tin bác sĩ"
     }
   },
-  
+
   "AddExpertiseModal": {
     "title": "Add Expertise",
     "expertise": "Expertise",
@@ -63,7 +75,6 @@
     "button": {
       "save": "Save"
     }
-
   },
 
   "BlockStaffModal": {

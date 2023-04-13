@@ -22,7 +22,7 @@ class Staff {
     certificate = "",
     createdAt = "",
     updatedAt = "",
-    idExpertiseExpertises: expertises = []
+    expertises = []
   } = {}) {
     this.id = id;
     this.username = username;

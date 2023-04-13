@@ -10,12 +10,14 @@
       "date": "Date",
       "expertises": "Expertises",
       "gender": "Gender",
+      "status": "Status",
       "role": "Role",
-      "healthInsurance": "HealthInsurance",
+      "healthInsurance": "Health Insurance",
       "description": "Description",
       "education": "Education",
       "certificate": "Certificate",
-      "address": "Address"
+      "address": "Address",
+      "schedules": "Schedules"
     },
 
     "select": {
@@ -30,17 +32,27 @@
         "nurse": "Nurse",
         "customerService": "Customer Service",
         "all": "All"
+      },
+      "statuses": {
+        "block": "Block",
+        "unblock": "Unblock",
+        "all": "All"
+      },
+      "types": {
+        "offline": "Offline",
+        "online": "Online",
+        "all": "All"
       }
     },
 
     "button": {
       "reset": "Reset",
       "hideFilterCollapse": "Hide filter",
-      "showFilterCollapse": "Show Filter"
+      "showFilterCollapse": "Show Filter",
+      "showMenuColumns": "Show"
     }
-
   },
-  
+
   "StaffDetail": {
     "title": {
       "identify": "Identify Information",
@@ -63,7 +75,6 @@
     "button": {
       "save": "Save"
     }
-
   },
 
   "BlockStaffModal": {

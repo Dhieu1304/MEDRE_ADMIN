@@ -34,7 +34,7 @@ function CustomDateFromToInput({
     };
   }, []);
 
-  const { control, trigger, watch, handleSubmit } = useForm({
+  const { control, trigger, watch, handleSubmit, reset } = useForm({
     mode: "onChange",
     defaultValues,
     criteriaMode: "all"
@@ -82,17 +82,35 @@ function CustomDateFromToInput({
   const [fromToValue, setFromToValue] = useState(formatDateAndTime(defaultValues));
 
   useEffect(() => {
+    // const newPreview = formatDateAndTime(watch());
+    // setPreview(newPreview);
+
+    const newDefaultValues = {
+      ...defaultValues,
+      fromDate: watchMainForm()[fromDateName],
+      toDate: watchMainForm()[toDateName]
+    };
+
+    const str = formatDateAndTime(newDefaultValues);
+
+    setFromToValue(str);
+
+    reset(newDefaultValues);
+  }, [watchMainForm()[fromDateName], watchMainForm()[toDateName]]);
+
+  useEffect(() => {
     const newPreview = formatDateAndTime(watch());
     setPreview(newPreview);
   }, [watch()]);
 
-  const handleFormDateSubmit = ({ fromDate, toDate, startTime, endTime }) => {
+  // const handleFormDateSubmit = ({ fromDate, toDate, startTime, endTime }) => {
+  const handleFormDateSubmit = ({ fromDate, toDate }) => {
     setMainFormValue(fromDateName, fromDate);
     setMainFormValue(toDateName, toDate);
 
-    const str = formatDateAndTime({ fromDate, toDate, startTime, endTime });
+    // const str = formatDateAndTime({ fromDate, toDate, startTime, endTime });
 
-    setFromToValue(str);
+    // setFromToValue(str);
     setShowMenu(null);
   };
 

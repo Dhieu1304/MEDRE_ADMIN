@@ -22,6 +22,12 @@ export const staffRoles = {
   ROLE_CUSTOMER_SERVICE: "Customer_Service"
 };
 
+export const staffGenders = {
+  MALE: "Male",
+  FEMALE: "Female",
+  OTHER: "Other"
+};
+
 export const staffStatus = {
   STATUS_BLOCK: "Block",
   STATUS_UNBLOCK: "Unblock"

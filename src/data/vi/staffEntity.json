@@ -1,41 +1,48 @@
 {
-    "properties": {
-        "id": "ID",
-        "username": "Username",
-        "phoneNumber": "Số điện thoại",
-        "email": "Email",
-        "password": "Mật khẩu",
-        "name": "Họ tên",
-        "image": "Ảnh",
-        "address": "Địa chỉ",
-        "gender": "Giới tính",
-        "dob": "Ngày sinh",
-        "role": "Phân quyền",
-        "healthInsurance": "Bảo hiểm y tế",
-        "description": "Mô tả",
-        "education": "Học vấn",
-        "certificate": "Chứng nhận",
-        "createdAt": "Ngày tạo",
-        "updatedAt": "Ngày cập nhập",
-        "deletedAt": "Ngày xóa" 
-    },
+  "properties": {
+    "id": "ID",
+    "username": "Username",
+    "phoneNumber": "Số điện thoại",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "name": "Họ tên",
+    "image": "Ảnh",
+    "address": "Địa chỉ",
+    "gender": "Giới tính",
+    "dob": "Ngày sinh",
+    "role": "Phân quyền",
+    "healthInsurance": "Bảo hiểm y tế",
+    "description": "Mô tả",
+    "education": "Học vấn",
+    "certificate": "Chứng nhận",
+    "createdAt": "Ngày tạo",
+    "updatedAt": "Ngày cập nhập",
+    "deletedAt": "Ngày xóa",
+    "status": "Tình trạng",
+    "expertises": "Chuyên môn"
+  },
 
-    "constants": {
-        "genders": {
-            "male": "Nam",
-            "female": "Nữ"
-        },
-        "roles": {
-            "admin": "Admin",
-            "doctor": "Bác sĩ",
-            "nurse": "Nurse",
-            "customerService": "NV CSKH"
-        }  
+  "constants": {
+    "genders": {
+      "male": "Nam",
+      "female": "Nữ",
+      "other": "Khác"
     },
-    "message": {
-        "emailVerifiedSuccess": "Xác minh email thành công",
-        "emailVerifiedFailed": "Xác minh email thất bại",
-        "phoneVerifiedSuccess": "Xác minh số điện thoại thành công",
-        "phoneVerifiedFailed": "Xác minh số điện thoại thất bại"
+    "roles": {
+      "admin": "Admin",
+      "doctor": "Bác sĩ",
+      "nurse": "Nurse",
+      "customerService": "NV CSKH"
+    },
+    "statuses": {
+      "block": "Khóa",
+      "unblock": "Mở khóa"
     }
+  },
+  "messages": {
+    "emailVerifiedSuccess": "Xác minh email thành công",
+    "emailVerifiedFailed": "Xác minh email thất bại",
+    "phoneVerifiedSuccess": "Xác minh số điện thoại thành công",
+    "phoneVerifiedFailed": "Xác minh số điện thoại thất bại"
+  }
 }

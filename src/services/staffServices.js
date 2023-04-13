@@ -5,31 +5,49 @@ import { cleanUndefinedAndEmptyStrValueObject } from "../utils/objectUtil";
 // import staffMockData from "../mockData/staffMockData";
 
 const getStaffList = async ({
-  page,
-  limit,
-  name,
   email,
   phoneNumber,
   username,
+  name,
+  type,
+  expertises,
+  page,
+  limit,
+  role,
+  status,
+  gender,
   address,
   healthInsurance,
   description,
-  education
+  education,
+  certificate,
+  from,
+  to
 }) => {
   // console.log("getStaffList: ", { page, limit, name });
 
   const params = cleanUndefinedAndEmptyStrValueObject({
-    page,
-    limit,
-    name,
     email,
     phoneNumber,
     username,
+    name,
+    type,
+    expertises,
+    page,
+    limit,
+    role,
+    status,
+    gender,
     address,
     healthInsurance,
     description,
-    education
+    education,
+    certificate,
+    from,
+    to
   });
+
+  // console.log("params: ", params);
 
   try {
     const res = await axiosClient.get(staffApi.staffList(), { params });

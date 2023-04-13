@@ -2,10 +2,10 @@ import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import CustomModal from "../../../components/CustomModal/CustomModal";
 
-function NotHaveAccessModal({ show, setShow, data, setData }) {
+function NotHaveAccessModal({ show, setShow }) {
   const { t } = useTranslation("authFeature", { keyPrefix: "no_have_access_modal" });
   return (
-    <CustomModal show={show} setShow={setShow} data={data} setData={setData} title={t("title")}>
+    <CustomModal show={show} setShow={setShow} title={t("title")}>
       {t("error_message")}
     </CustomModal>
   );
@@ -13,9 +13,7 @@ function NotHaveAccessModal({ show, setShow, data, setData }) {
 
 NotHaveAccessModal.propTypes = {
   show: PropTypes.bool.isRequired,
-  setShow: PropTypes.func.isRequired,
-  data: PropTypes.object.isRequired,
-  setData: PropTypes.func.isRequired
+  setShow: PropTypes.func.isRequired
 };
 
 export default NotHaveAccessModal;

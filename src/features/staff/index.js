@@ -1,3 +1,2 @@
-export { default as StaffList } from "./StaffList";
+export { default as StaffList } from "./StaffDetail";
 export { default as StaffDetail } from "./StaffDetail";
-export * from "./components";
