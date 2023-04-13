@@ -24,6 +24,7 @@
       "genders": {
         "male": "Male",
         "female": "Female",
+        "other": "other",
         "all": "All"
       },
       "roles": {
@@ -59,6 +60,10 @@
       "account": "Account Information",
       "personality": "Personality Information",
       "doctor": "Doctor Information"
+    },
+    "button": {
+      "reset": "Reset",
+      "save": "Save"
     }
   },
 

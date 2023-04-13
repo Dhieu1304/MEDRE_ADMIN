@@ -14,6 +14,7 @@ import { getTheme } from "./config/themeConfig";
 import CustomOverlay from "./components/CustomOverlay";
 import defineAbilityFor from "./config/defineAbility";
 import { AbilityContext } from "./store/AbilityStore";
+import { FetchingApiProvider } from "./store/FetchingApiStore";
 
 function App() {
   const authStore = useAuthStore();
@@ -39,19 +40,50 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      {isFirstVisit ? (
-        <Box width="100vw" height="100vh" bgcolor="#ccc">
-          <CustomOverlay open={authStore.isLoading} />
-        </Box>
-      ) : (
-        <>
-          <CustomOverlay open={authStore.isLoading} />
+      <FetchingApiProvider>
+        {isFirstVisit ? (
+          <Box width="100vw" height="100vh" bgcolor="#ccc">
+            <CustomOverlay open={authStore.isLoading} />
+          </Box>
+        ) : (
+          <>
+            <CustomOverlay open={authStore.isLoading} />
 
-          {authStore.isLogin ? (
-            <AbilityContext.Provider value={ability}>
+            {authStore.isLogin ? (
+              <AbilityContext.Provider value={ability}>
+                <Router>
+                  <Routes>
+                    {privateRoutes.map((route) => {
+                      let Layout = DefaultLayout;
+                      if (route.layout) {
+                        Layout = route.layout;
+                      } else if (route.layout === null) {
+                        Layout = Fragment;
+                      }
+
+                      const Page = route.component;
+                      const to = route.props?.to;
+                      const replace = route.props?.replace;
+
+                      return (
+                        <Route
+                          key={route.path}
+                          path={route.path}
+                          element={
+                            <Layout>
+                              <Page to={to} replace={replace} />
+                            </Layout>
+                          }
+                        />
+                      );
+                    })}
+                  </Routes>
+                </Router>
+              </AbilityContext.Provider>
+            ) : (
               <Router>
                 <Routes>
-                  {privateRoutes.map((route) => {
+                  {publicRoutes.map((route) => {
                     let Layout = DefaultLayout;
                     if (route.layout) {
                       Layout = route.layout;
@@ -77,52 +109,23 @@ function App() {
                   })}
                 </Routes>
               </Router>
-            </AbilityContext.Provider>
-          ) : (
-            <Router>
-              <Routes>
-                {publicRoutes.map((route) => {
-                  let Layout = DefaultLayout;
-                  if (route.layout) {
-                    Layout = route.layout;
-                  } else if (route.layout === null) {
-                    Layout = Fragment;
-                  }
+            )}
 
-                  const Page = route.component;
-                  const to = route.props?.to;
-                  const replace = route.props?.replace;
-
-                  return (
-                    <Route
-                      key={route.path}
-                      path={route.path}
-                      element={
-                        <Layout>
-                          <Page to={to} replace={replace} />
-                        </Layout>
-                      }
-                    />
-                  );
-                })}
-              </Routes>
-            </Router>
-          )}
-
-          <ToastContainer
-            position="top-right"
-            autoClose={50}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="light"
-          />
-        </>
-      )}
+            <ToastContainer
+              position="top-right"
+              autoClose={50}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="light"
+            />
+          </>
+        )}
+      </FetchingApiProvider>
     </ThemeProvider>
   );
 }

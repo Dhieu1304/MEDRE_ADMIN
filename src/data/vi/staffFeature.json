@@ -22,8 +22,9 @@
 
     "select": {
       "genders": {
-        "male": "Name",
+        "male": "Nam",
         "female": "Nữ",
+        "other": "Khác",
         "all": "Tất cả"
       },
       "roles": {

@@ -1,9 +1,10 @@
-import { FETCHING_API, FETCHING_API_SUCCESS, FETCHING_API_FAILED } from "./contants";
+import { FETCHING_API, FETCHING_API_SUCCESS, FETCHING_API_FAILED, SET_WAITING_INPUT } from "./contants";
 
 const initState = {
   isLoading: false,
   isFetchApiError: false,
-  fetchApiError: ""
+  fetchApiError: "",
+  isWatingInput: false
 };
 
 function reducer(state, action) {
@@ -28,6 +29,12 @@ function reducer(state, action) {
         isLoading: false,
         isFetchApiError: true,
         fetchApiError: action.payload
+      };
+
+    case SET_WAITING_INPUT:
+      return {
+        ...state,
+        isWatingInput: action.payload
       };
 
     default:

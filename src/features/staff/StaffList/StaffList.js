@@ -217,6 +217,8 @@ function StaffList({ expertisesList }) {
   const loadData = async ({ page }) => {
     const paramsObj = {
       ...watch(),
+      expertise: watch().expertises,
+      blocked: watch().status,
       page
     };
 

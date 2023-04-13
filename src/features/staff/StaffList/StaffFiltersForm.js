@@ -7,7 +7,7 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useAppConfigStore } from "../../../store/AppConfigStore";
 import CustomInput, { CustomDateFromToInput } from "../../../components/CustomInput";
-import { staffRoles } from "../../../entities/Staff";
+import { staffGenders, staffRoles } from "../../../entities/Staff";
 
 function StaffFiltersForm({ expertisesList }) {
   const { locale } = useAppConfigStore();
@@ -52,11 +52,15 @@ function StaffFiltersForm({ expertisesList }) {
     return [
       {
         label: tSelect("genders.male"),
-        value: "Male"
+        value: staffGenders.MALE
       },
       {
         label: tSelect("genders.female"),
-        value: "Female"
+        value: staffGenders.FEMALE
+      },
+      {
+        label: tSelect("genders.other"),
+        value: staffGenders.OTHER
       },
       {
         label: tSelect("genders.all"),

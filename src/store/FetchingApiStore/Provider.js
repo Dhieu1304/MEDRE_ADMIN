@@ -19,6 +19,9 @@ function FetchingApiProvider({ children }) {
         } else {
           dispatch(actions.fetchApiFailed(error));
         }
+      },
+      setIsWaitingInput: (isWaiting) => {
+        dispatch(actions.setIsWaitingInput(isWaiting));
       }
       // fetchApiSuccess: () => {
       //   dispatch(actions.fetchApiSuccess());

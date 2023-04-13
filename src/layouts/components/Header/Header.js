@@ -10,7 +10,9 @@ import {
   Tooltip,
   FormGroup,
   FormControlLabel,
-  Switch
+  Switch,
+  CircularProgress,
+  useTheme
 } from "@mui/material";
 
 import MenuIcon from "@mui/icons-material/Menu";
@@ -26,9 +28,14 @@ import CustomAppBar from "../../../components/CustomAppBar";
 import routeConfig from "../../../config/routeConfig";
 import { useAppConfigStore } from "../../../store/AppConfigStore/hooks";
 import { DARK, LIGHT } from "../../../config/themeConfig";
+import { useFetchingStore } from "../../../store/FetchingApiStore";
 
 function Header({ open, handleDrawerOpen }) {
   const authStore = useAuthStore();
+
+  const theme = useTheme();
+
+  const { isLoading, isWatingInput } = useFetchingStore();
 
   // const navigate = useNavigate();
 
@@ -95,7 +102,18 @@ function Header({ open, handleDrawerOpen }) {
           </Box>
         )}
 
-        <Box sx={{ display: { xs: "flex", md: "flex", marginLeft: "auto" } }}>
+        <Box sx={{ display: { xs: "flex", md: "flex", marginLeft: "auto" }, alignItems: "center" }}>
+          {(isLoading || isWatingInput) && (
+            <CircularProgress
+              size={24}
+              thickness={3}
+              sx={{
+                color: theme.palette.primary.contrastText,
+                mr: 2
+              }}
+            />
+          )}
+
           <Tooltip title="Open settings">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
               <Avatar alt={authStore.staff?.name} src={authStore.staff?.image || " "} />

@@ -1,40 +1,18 @@
 import { Route, Routes } from "react-router-dom";
 import { DoctorSchedule } from "../../features/schedule";
 import { StaffDetail, StaffList } from "../../features/staff";
-import { FetchingApiProvider } from "../../store/FetchingApiStore";
 import routes from "./routes";
 
 export default function StaffPage() {
   return (
     <Routes>
-      <Route
-        path={routes.list}
-        element={
-          <FetchingApiProvider>
-            <StaffList />
-          </FetchingApiProvider>
-        }
-      />
+      <Route path={routes.list} element={<StaffList />} />
       <Route
         path={`${routes.detail}/*`}
         element={
           <Routes>
-            <Route
-              path="/"
-              element={
-                <FetchingApiProvider>
-                  <StaffDetail />
-                </FetchingApiProvider>
-              }
-            />
-            <Route
-              path={routes.schedule}
-              element={
-                <FetchingApiProvider>
-                  <DoctorSchedule />
-                </FetchingApiProvider>
-              }
-            />
+            <Route path="/" element={<StaffDetail />} />
+            <Route path={routes.schedule} element={<DoctorSchedule />} />
           </Routes>
         }
       />

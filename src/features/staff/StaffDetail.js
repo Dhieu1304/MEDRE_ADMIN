@@ -40,7 +40,7 @@ import { useCustomModal } from "../../components/CustomModal";
 import AddExpertiseModal from "./components/AddExpertiseModal";
 import { staffRoutes } from "../../pages/StaffPage";
 import routeConfig from "../../config/routeConfig";
-import Staff, { staffActionAbility, staffInputValidate } from "../../entities/Staff";
+import Staff, { staffActionAbility, staffGenders, staffInputValidate } from "../../entities/Staff";
 import { AbilityContext } from "../../store/AbilityStore";
 import { NotHaveAccessModal } from "../auth";
 import { Expertise, expertiseActionAbility } from "../../entities/Expertise";
@@ -50,13 +50,16 @@ import { useAuthStore } from "../../store/AuthStore";
 import { EditStaffStatusModal } from "./components";
 import WithExpertisesLoaderWrapper from "./components/WithExpertisesLoaderWrapper";
 
-function StaffDetail({ expertisesList, loadExpertises }) {
+function StaffDetail({ expertisesList, loadExpertisesList }) {
   const [staff, setStaff] = useState(new Staff());
 
   const { t } = useTranslation("staffFeature", { keyPrefix: "StaffDetail" });
+  const { t: tBtn } = useTranslation("staffFeature", { keyPrefix: "StaffDetail.button" });
+
   const { t: tStaff } = useTranslation("staffEntity", { keyPrefix: "properties" });
   const { t: tStaffMessage } = useTranslation("staffEntity", { keyPrefix: "messages" });
   const { t: tInputValidation } = useTranslation("input", { keyPrefix: "validation" });
+  const { t: tStaffGender } = useTranslation("staffEntity", { keyPrefix: "constants.genders" });
 
   const [defaultValues, setDefaultValues] = useState({
     username: "",
@@ -98,19 +101,32 @@ function StaffDetail({ expertisesList, loadExpertises }) {
     }, {});
   }, [expertisesList]);
 
-  const gendersList = useMemo(
+  const staffGendersList = useMemo(
     () => [
       {
-        value: "Male",
+        value: staffGenders.MALE,
         label: "male"
       },
       {
-        value: "Female",
+        value: staffGenders.FEMALE,
         label: "female"
+      },
+      {
+        value: staffGenders.OTHER,
+        label: "other"
       }
     ],
     []
   );
+
+  const staffGendersListObj = useMemo(() => {
+    return staffGendersList.reduce((obj, cur) => {
+      return {
+        ...obj,
+        [cur?.value]: cur
+      };
+    }, {});
+  }, [staffGendersList]);
 
   const { control, trigger, watch, reset, handleSubmit } = useForm({
     mode: "onChange",
@@ -179,7 +195,7 @@ function StaffDetail({ expertisesList, loadExpertises }) {
   };
 
   const handleAfterAddExpertise = async () => {
-    await loadExpertises();
+    await loadExpertisesList();
   };
 
   const handleAfterEditStaffRole = async () => {
@@ -318,7 +334,11 @@ function StaffDetail({ expertisesList, loadExpertises }) {
                 showCanEditIcon
                 control={control}
                 rules={{
-                  required: tInputValidation("required")
+                  required: tInputValidation("required"),
+                  pattern: {
+                    value: /(84|0[3|5|7|8|9])+([0-9]{8})\b/,
+                    message: tInputValidation("format")
+                  }
                 }}
                 label={tStaff("phoneNumber")}
                 trigger={trigger}
@@ -466,11 +486,15 @@ function StaffDetail({ expertisesList, loadExpertises }) {
                 name="gender"
                 childrenType="select"
               >
-                <Select renderValue={(selected) => selected}>
-                  {gendersList.map((item) => {
+                <Select
+                  renderValue={(selected) => {
+                    return tStaffGender(staffGendersListObj[selected]?.label);
+                  }}
+                >
+                  {staffGendersList.map((item) => {
                     return (
                       <MenuItem key={item?.value} value={item?.value}>
-                        <ListItemText primary={t(item?.label)} />
+                        <ListItemText primary={tStaffGender(item?.label)} />
                       </MenuItem>
                     );
                   })}
@@ -684,7 +708,7 @@ function StaffDetail({ expertisesList, loadExpertises }) {
               }}
               startIcon={<RestartAltIcon color={theme.palette.warning.contrastText} />}
             >
-              {t("reset_btn")}
+              {tBtn("reset")}
             </Button>
 
             <Button
@@ -696,7 +720,7 @@ function StaffDetail({ expertisesList, loadExpertises }) {
               }}
               startIcon={<SaveIcon color={theme.palette.success.contrastText} />}
             >
-              {t("save_btn")}
+              {tBtn("save")}
             </Button>
           </Box>
         )}
@@ -754,7 +778,7 @@ function StaffDetail({ expertisesList, loadExpertises }) {
 
 StaffDetail.propTypes = {
   expertisesList: PropTypes.array.isRequired,
-  loadExpertises: PropTypes.func.isRequired
+  loadExpertisesList: PropTypes.func.isRequired
 };
 
 export default WithExpertisesLoaderWrapper(StaffDetail);

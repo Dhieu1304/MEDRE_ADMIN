@@ -1,4 +1,4 @@
-import { FETCHING_API, FETCHING_API_SUCCESS, FETCHING_API_FAILED } from "./contants";
+import { FETCHING_API, FETCHING_API_SUCCESS, FETCHING_API_FAILED, SET_WAITING_INPUT } from "./contants";
 
 const fetchApi = (payload) => ({
   type: FETCHING_API,
@@ -15,9 +15,15 @@ const fetchApiFailed = (payload) => ({
   payload
 });
 
+const setIsWaitingInput = (payload) => ({
+  type: SET_WAITING_INPUT,
+  payload
+});
+
 const actions = {
   fetchApi,
   fetchApiSuccess,
-  fetchApiFailed
+  fetchApiFailed,
+  setIsWaitingInput
 };
 export default actions;
