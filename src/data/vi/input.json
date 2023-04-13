@@ -1,0 +1,8 @@
+{
+    "validation": {
+        "required": "bắt buộc phải nhập",
+        "maxLength": "không được vượt quá {{maxLength}} ký tự",
+        "minLength": "không được ít hơn {{minLength}} ký tự",
+        "format": "sai định dạng"
+    }
+}

@@ -4,6 +4,8 @@ import layout from "./layout.json";
 import staffFeature from "./staffFeature.json";
 import components from "./components.json";
 import scheduleFeature from "./scheduleFeature.json";
+import input from "./input.json";
+import staffEntity from "./staffEntity.json";
 
 const en = {
   authFeature,
@@ -11,7 +13,9 @@ const en = {
   layout,
   staffFeature,
   components,
-  scheduleFeature
+  scheduleFeature,
+  input,
+  staffEntity
 };
 
 export default en;

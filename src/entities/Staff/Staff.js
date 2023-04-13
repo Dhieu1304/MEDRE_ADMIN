@@ -16,14 +16,13 @@ class Staff {
     emailVerified = "",
     phoneVerified = "",
     healthInsurance = "",
-    status = "",
+    blocked = false,
     description = "",
     education = "",
     certificate = "",
-    createdAt = new Date(),
-    updatedAt = new Date(),
-    idExpertiseExpertises: expertises = [],
-    schedules = []
+    createdAt = "",
+    updatedAt = "",
+    idExpertiseExpertises: expertises = []
   } = {}) {
     this.id = id;
     this.username = username;
@@ -39,14 +38,13 @@ class Staff {
     this.emailVerified = emailVerified;
     this.phoneVerified = phoneVerified;
     this.healthInsurance = healthInsurance;
-    this.status = status;
+    this.blocked = blocked;
     this.description = description;
     this.education = education;
     this.certificate = certificate;
     this.createdAt = { ...createdAt };
     this.updatedAt = { ...updatedAt };
     this.expertises = [...expertises].map((expertise) => new Expertise(expertise));
-    this.schedules = [...schedules];
   }
 
   static magicWord = () => "Staff";

@@ -24,7 +24,7 @@ export const staffRoles = {
 
 export const staffStatus = {
   STATUS_BLOCK: "Block",
-  STATUS_UNBLOCK: "Ok"
+  STATUS_UNBLOCK: "Unblock"
 };
 
 export const staffActionAbility = {
