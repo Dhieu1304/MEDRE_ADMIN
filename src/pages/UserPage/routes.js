@@ -1,7 +1,13 @@
 const userRoutes = {
   list: "/",
   detail: "/:userId",
+  // /:userId/schedule
   default: "/*"
 };
 
-export default userRoutes;
+const userDetailRoutes = {
+  detail: "/",
+  booking: "/booking"
+};
+
+export { userRoutes, userDetailRoutes };

@@ -75,6 +75,7 @@ function StaffDetail({ expertisesList, loadExpertisesList }) {
     description: "",
     education: "",
     certificate: "",
+    healthInsurance: "",
     expertises: []
   });
 
@@ -172,6 +173,7 @@ function StaffDetail({ expertisesList, loadExpertisesList }) {
 
   const canUpdateStaff = ability.can(staffActionAbility.UPDATE, staff);
   const canUpdateStaffRole = ability.can(staffActionAbility.UPDATE_ROLE, staff);
+  const canBlockStaff = ability.can(staffActionAbility.BLOCK, staff);
   const canAddExpertise = ability.can(expertiseActionAbility.ADD, Expertise.magicWord());
 
   const handleSaveDetail = async ({
@@ -186,6 +188,7 @@ function StaffDetail({ expertisesList, loadExpertisesList }) {
     description,
     education,
     certificate,
+    healthInsurance,
     expertises
   }) => {
     const data = {
@@ -198,6 +201,7 @@ function StaffDetail({ expertisesList, loadExpertisesList }) {
       description,
       education,
       certificate,
+      healthInsurance,
       expertises
     };
 
@@ -321,9 +325,9 @@ function StaffDetail({ expertisesList, loadExpertisesList }) {
                     message: tInputValidation("format")
                   },
                   maxLength: {
-                    value: staffInputValidate.STAFF_EMAIL_MAX_LENGTH,
+                    value: staffInputValidate.EMAIL_MAX_LENGTH,
                     message: tInputValidation("maxLength", {
-                      maxLength: staffInputValidate.STAFF_EMAIL_MAX_LENGTH
+                      maxLength: staffInputValidate.EMAIL_MAX_LENGTH
                     })
                   }
                 }}
@@ -352,9 +356,9 @@ function StaffDetail({ expertisesList, loadExpertisesList }) {
                 rules={{
                   required: tInputValidation("required"),
                   maxLength: {
-                    value: staffInputValidate.STAFF_USERNAME_MAX_LENGTH,
+                    value: staffInputValidate.USERNAME_MAX_LENGTH,
                     message: tInputValidation("maxLength", {
-                      maxLength: staffInputValidate.STAFF_USERNAME_MAX_LENGTH
+                      maxLength: staffInputValidate.USERNAME_MAX_LENGTH
                     })
                   }
                 }}
@@ -440,7 +444,7 @@ function StaffDetail({ expertisesList, loadExpertisesList }) {
                 name="status"
                 type="text"
                 InputProps={
-                  canUpdateStaffRole && {
+                  canBlockStaff && {
                     endAdornment: (
                       <InputAdornment position="end">
                         {staff.blocked ? (
@@ -480,7 +484,7 @@ function StaffDetail({ expertisesList, loadExpertisesList }) {
             {t("title.personality")}
           </Typography>
           <Grid container spacing={3}>
-            <Grid item xs={12} sm={12} md={12} lg={8}>
+            <Grid item xs={12} sm={12} md={12} lg={6}>
               <CustomInput
                 disabled={!canUpdateStaff}
                 showCanEditIcon
@@ -488,9 +492,9 @@ function StaffDetail({ expertisesList, loadExpertisesList }) {
                 rules={{
                   required: tInputValidation("required"),
                   maxLength: {
-                    value: staffInputValidate.STAFF_NAME_MAX_LENGTH,
+                    value: staffInputValidate.NAME_MAX_LENGTH,
                     message: tInputValidation("maxLength", {
-                      maxLength: staffInputValidate.STAFF_NAME_MAX_LENGTH
+                      maxLength: staffInputValidate.NAME_MAX_LENGTH
                     })
                   }
                 }}
@@ -501,7 +505,27 @@ function StaffDetail({ expertisesList, loadExpertisesList }) {
               />
             </Grid>
 
-            <Grid item xs={12} sm={12} md={6} lg={2}>
+            <Grid item xs={12} sm={12} md={12} lg={6}>
+              <CustomInput
+                disabled={!canUpdateStaff}
+                showCanEditIcon
+                control={control}
+                rules={{
+                  maxLength: {
+                    value: staffInputValidate.HEALTH_INSURANCE_MAX_LENGTH,
+                    message: tInputValidation("maxLength", {
+                      maxLength: staffInputValidate.HEALTH_INSURANCE_MAX_LENGTH
+                    })
+                  }
+                }}
+                label={tStaff("healthInsurance")}
+                trigger={trigger}
+                name="healthInsurance"
+                type="text"
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={12} md={6} lg={6}>
               <CustomInput
                 disabled={!canUpdateStaff}
                 showCanEditIcon
@@ -516,7 +540,7 @@ function StaffDetail({ expertisesList, loadExpertisesList }) {
               />
             </Grid>
 
-            <Grid item xs={12} sm={12} md={6} lg={2}>
+            <Grid item xs={12} sm={12} md={6} lg={6}>
               <CustomInput
                 disabled={!canUpdateStaff}
                 showCanEditIcon
@@ -524,9 +548,9 @@ function StaffDetail({ expertisesList, loadExpertisesList }) {
                 rules={{
                   required: tInputValidation("required"),
                   maxLength: {
-                    value: staffInputValidate.STAFF_GENDER_MAX_LENGTH,
+                    value: staffInputValidate.GENDER_MAX_LENGTH,
                     message: tInputValidation("maxLength", {
-                      maxLength: staffInputValidate.STAFF_GENDER_MAX_LENGTH
+                      maxLength: staffInputValidate.GENDER_MAX_LENGTH
                     })
                   }
                 }}
@@ -558,9 +582,9 @@ function StaffDetail({ expertisesList, loadExpertisesList }) {
                 control={control}
                 rules={{
                   maxLength: {
-                    value: staffInputValidate.STAFF_ADDRESS_MAX_LENGTH,
+                    value: staffInputValidate.ADDRESS_MAX_LENGTH,
                     message: tInputValidation("maxLength", {
-                      maxLength: staffInputValidate.STAFF_ADDRESS_MAX_LENGTH
+                      maxLength: staffInputValidate.ADDRESS_MAX_LENGTH
                     })
                   }
                 }}
@@ -587,9 +611,9 @@ function StaffDetail({ expertisesList, loadExpertisesList }) {
                 control={control}
                 rules={{
                   maxLength: {
-                    value: staffInputValidate.STAFF_EDUCATION_MAX_LENGTH,
+                    value: staffInputValidate.EDUCATION_MAX_LENGTH,
                     message: tInputValidation("maxLength", {
-                      maxLength: staffInputValidate.STAFF_EDUCATION_MAX_LENGTH
+                      maxLength: staffInputValidate.EDUCATION_MAX_LENGTH
                     })
                   }
                 }}
@@ -609,9 +633,9 @@ function StaffDetail({ expertisesList, loadExpertisesList }) {
                 control={control}
                 rules={{
                   maxLength: {
-                    value: staffInputValidate.STAFF_CERTIFICATE_MAX_LENGTH,
+                    value: staffInputValidate.CERTIFICATE_MAX_LENGTH,
                     message: tInputValidation("maxLength", {
-                      maxLength: staffInputValidate.STAFF_CERTIFICATE_MAX_LENGTH
+                      maxLength: staffInputValidate.CERTIFICATE_MAX_LENGTH
                     })
                   }
                 }}
@@ -631,9 +655,9 @@ function StaffDetail({ expertisesList, loadExpertisesList }) {
                 control={control}
                 rules={{
                   maxLength: {
-                    value: staffInputValidate.STAFF_DESCRIPTION_MAX_LENGTH,
+                    value: staffInputValidate.DESCRIPTION_MAX_LENGTH,
                     message: tInputValidation("maxLength", {
-                      maxLength: staffInputValidate.STAFF_DESCRIPTION_MAX_LENGTH
+                      maxLength: staffInputValidate.DESCRIPTION_MAX_LENGTH
                     })
                   }
                 }}

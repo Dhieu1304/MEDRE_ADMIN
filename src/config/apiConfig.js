@@ -3,7 +3,9 @@ const authApi = {
 };
 
 const userApi = {
-  userList: () => "/user/list"
+  userList: () => "/user/list",
+  userDetail: (id) => `/user/detail/${id}`,
+  editUser: (id) => `/user/edit/${id}`
 };
 const staffApi = {
   staffInfo: () => "/staff/my-profile",

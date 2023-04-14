@@ -217,7 +217,17 @@ const createExpertise = async (name) => {
   }
 };
 
-const editStaffInfo = async ({ name, address, gender, dob, description, education, certificate }) => {
+const editStaffInfo = async ({
+  name,
+  address,
+  gender,
+  dob,
+  description,
+  education,
+  healthInsurance,
+  certificate
+  // expertises
+}) => {
   try {
     const res = await axiosClient.get(staffApi.editStaff(), {
       name,
@@ -226,7 +236,9 @@ const editStaffInfo = async ({ name, address, gender, dob, description, educatio
       dob,
       description,
       education,
+      healthInsurance,
       certificate
+      // expertises
     });
 
     // console.log("editStaffInfo res: ", res);
@@ -260,6 +272,7 @@ const editMyProfile = async ({
   dob,
   description,
   education,
+  healthInsurance,
   certificate
   // expertises
 }) => {
@@ -271,6 +284,7 @@ const editMyProfile = async ({
       dob,
       description,
       education,
+      healthInsurance,
       certificate
       // expertises
     });

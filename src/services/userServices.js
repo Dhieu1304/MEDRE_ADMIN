@@ -61,6 +61,78 @@ const getUserList = async ({ email, phoneNumber, name, page, limit, blocked, gen
   }
 };
 
+const getUserDetail = async (id) => {
+  try {
+    const res = await axiosClient.get(userApi.userDetail(id));
+
+    // const res = camelcaseKeys(
+    //   {
+    //     status: true,
+    //     message: "",
+    //     data: {
+    //       user: userMockData.detail(id)
+    //     }
+    //   },
+    //   { deep: true }
+    // );
+
+    if (res?.status) {
+      const user = camelcaseKeys(res?.data, { deep: true });
+
+      return {
+        success: true,
+        user,
+        message: res?.message
+      };
+    }
+    return {
+      success: false,
+      message: `Status is ${res.status}`
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
+const editUserInfo = async ({ name, address, gender, dob }) => {
+  try {
+    const res = await axiosClient.get(userApi.editUser(), {
+      name,
+      address,
+      gender,
+      dob
+    });
+
+    // console.log("editUserInfo res: ", res);
+
+    if (res?.status) {
+      const user = camelcaseKeys(res?.data?.user, { deep: true });
+
+      return {
+        success: true,
+        user,
+        message: res?.message
+      };
+    }
+    return {
+      success: false,
+      message: `Status is ${res.status}`
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
 export default {
-  getUserList
+  getUserList,
+  getUserDetail,
+  editUserInfo
 };
