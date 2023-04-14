@@ -94,8 +94,10 @@ const getStaffInfo = async () => {
   try {
     const res = await axiosClient.get(staffApi.staffInfo());
 
+    // console.log("res: ", res);
+
     if (res?.status) {
-      const staff = camelcaseKeys(res?.data?.staff, { deep: true });
+      const staff = camelcaseKeys(res?.data, { deep: true });
 
       return {
         success: true,
@@ -217,35 +219,19 @@ const createExpertise = async (name) => {
   }
 };
 
-const editStaffInfo = async ({
-  username,
-  email,
-  phoneNumber,
-  name,
-  address,
-  gender,
-  dob,
-  description,
-  education,
-  certificate,
-  expertise
-}) => {
+const editStaffInfo = async ({ name, address, gender, dob, description, education, certificate }) => {
   try {
     const res = await axiosClient.get(staffApi.editStaff(), {
-      username,
-      email,
-      phoneNumber,
       name,
       address,
       gender,
       dob,
       description,
       education,
-      certificate,
-      expertise
+      certificate
     });
 
-    // console.log("res: ", res);
+    // console.log("editStaffInfo res: ", res);
 
     if (res?.status) {
       const staff = camelcaseKeys(res?.data?.staff, { deep: true });
@@ -270,31 +256,25 @@ const editStaffInfo = async ({
 };
 
 const editMyProfile = async ({
-  username,
-  email,
-  phoneNumber,
   name,
   address,
   gender,
   dob,
   description,
   education,
-  certificate,
-  expertise
+  certificate
+  // expertises
 }) => {
   try {
     const res = await axiosClient.post(staffApi.editMyProfile(), {
-      username,
-      email,
-      phoneNumber,
       name,
       address,
       gender,
       dob,
       description,
       education,
-      certificate,
-      expertise
+      certificate
+      // expertises
     });
 
     if (res?.status) {
@@ -319,14 +299,73 @@ const editMyProfile = async ({
   }
 };
 
-const editStaffRole = async ({ role }) => {
+const editStaffRole = async (id, { role }) => {
   try {
-    // console.log({ role });
-    const res = await axiosClient.get(staffApi.editStaff(), {
+    const res = await axiosClient.post(staffApi.editStaff(id), {
       role
     });
 
     // console.log("res: ", res);
+
+    if (res?.status) {
+      const staff = camelcaseKeys(res?.data?.staff, { deep: true });
+
+      return {
+        success: true,
+        staff,
+        message: res?.message
+      };
+    }
+    return {
+      success: false,
+      message: `Status is ${res.status}`
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
+const blockStaff = async (id, reason) => {
+  try {
+    // console.log("blockStaff: ", { id, reason });
+    const res = await axiosClient.post(staffApi.blockStaff(), {
+      id_account: id,
+      reason
+    });
+
+    if (res?.status) {
+      const staff = camelcaseKeys(res?.data?.staff, { deep: true });
+
+      return {
+        success: true,
+        staff,
+        message: res?.message
+      };
+    }
+    return {
+      success: false,
+      message: `Status is ${res.status}`
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
+const unblockStaff = async (id, reason) => {
+  try {
+    // console.log("unblockStaff: ", { id, reason });
+    const res = await axiosClient.post(staffApi.unblockStaff(), {
+      id_account: id,
+      reason
+    });
 
     if (res?.status) {
       const staff = camelcaseKeys(res?.data?.staff, { deep: true });
@@ -358,5 +397,7 @@ export default {
   createExpertise,
   editStaffInfo,
   editMyProfile,
-  editStaffRole
+  editStaffRole,
+  blockStaff,
+  unblockStaff
 };

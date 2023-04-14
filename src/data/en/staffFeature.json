@@ -87,7 +87,8 @@
     "button": {
       "block": "Block"
     },
-    "confirmQuestion": "Do you want to block staff - {{name}}?"
+    "confirmQuestion": "Do you want to block staff - {{name}}?",
+    "reason:": "Reason"
   },
 
   "UnblockStaffModal": {

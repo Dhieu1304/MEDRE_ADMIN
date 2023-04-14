@@ -26,7 +26,7 @@ import { useAppConfigStore } from "../../../store/AppConfigStore/hooks";
 import { useCustomModal } from "../../../components/CustomModal/hooks";
 
 import { NotHaveAccessModal } from "../../auth";
-import { EditStaffRoleModal, EditStaffStatusModal } from "../components";
+import { EditStaffRoleModal, BlockStaffModal } from "../components";
 
 import useObjDebounce from "../../../hooks/useObjDebounce";
 
@@ -34,6 +34,7 @@ import StaffFiltersForm from "./StaffFiltersForm";
 import StaffTable from "./StaffTable";
 import WithExpertisesLoaderWrapper from "../components/WithExpertisesLoaderWrapper";
 import { columnsIds, createDefaultValues, initialShowCols } from "./utils";
+import UnblockStaffModal from "../components/UnblockStaffModal";
 
 function StaffList({ expertisesList }) {
   const [isFirst, setIsFirst] = useState(true);
@@ -51,7 +52,8 @@ function StaffList({ expertisesList }) {
 
   const notHaveAccessModal = useCustomModal();
   const editStaffRoleModal = useCustomModal();
-  const editStaffStatusModal = useCustomModal();
+  const blockStaffModal = useCustomModal();
+  const unblockStaffModal = useCustomModal();
 
   // functions for multilingual use
 
@@ -258,11 +260,15 @@ function StaffList({ expertisesList }) {
   }, [...Object.values(filterDebounce), ...Object.values(searchDebounce)]);
 
   const handleAfterEditStaffRole = async () => {
-    // await loadData();
+    await loadData({ page: watch().page });
   };
 
-  const handleAfterEditStaffStatus = async () => {
-    // await loadData();
+  const handleAfterBlockStaff = async () => {
+    await loadData({ page: watch().page });
+  };
+
+  const handleAfterUnblockStaff = async () => {
+    await loadData({ page: watch().page });
   };
 
   return (
@@ -432,7 +438,8 @@ function StaffList({ expertisesList }) {
           staffs={staffs}
           notHaveAccessModal={notHaveAccessModal}
           editStaffRoleModal={editStaffRoleModal}
-          editStaffStatusModal={editStaffStatusModal}
+          blockStaffModal={blockStaffModal}
+          unblockStaffModal={unblockStaffModal}
           columns={columns}
           showCols={showCols}
         />
@@ -468,13 +475,23 @@ function StaffList({ expertisesList }) {
         />
       )}
 
-      {editStaffStatusModal.show && (
-        <EditStaffStatusModal
-          show={editStaffStatusModal.show}
-          setShow={editStaffStatusModal.setShow}
-          data={editStaffStatusModal.data}
-          setData={editStaffStatusModal.setData}
-          handleAfterEditStaffStatus={handleAfterEditStaffStatus}
+      {blockStaffModal.show && (
+        <BlockStaffModal
+          show={blockStaffModal.show}
+          setShow={blockStaffModal.setShow}
+          data={blockStaffModal.data}
+          setData={blockStaffModal.setData}
+          handleAfterBlockStaff={handleAfterBlockStaff}
+        />
+      )}
+
+      {unblockStaffModal.show && (
+        <UnblockStaffModal
+          show={unblockStaffModal.show}
+          setShow={unblockStaffModal.setShow}
+          data={unblockStaffModal.data}
+          setData={unblockStaffModal.setData}
+          handleAfterUnblockStaff={handleAfterUnblockStaff}
         />
       )}
 

@@ -40,15 +40,16 @@ import { useCustomModal } from "../../components/CustomModal";
 import AddExpertiseModal from "./components/AddExpertiseModal";
 import { staffRoutes } from "../../pages/StaffPage";
 import routeConfig from "../../config/routeConfig";
-import Staff, { staffActionAbility, staffGenders, staffInputValidate } from "../../entities/Staff";
+import Staff, { staffActionAbility, staffGenders, staffInputValidate, staffStatus } from "../../entities/Staff";
 import { AbilityContext } from "../../store/AbilityStore";
 import { NotHaveAccessModal } from "../auth";
 import { Expertise, expertiseActionAbility } from "../../entities/Expertise";
 import EditStaffRoleModal from "./components/EditStaffRoleModal";
 import { mergeObjectsWithoutNullAndUndefined } from "../../utils/objectUtil";
 import { useAuthStore } from "../../store/AuthStore";
-import { EditStaffStatusModal } from "./components";
+import { BlockStaffModal } from "./components";
 import WithExpertisesLoaderWrapper from "./components/WithExpertisesLoaderWrapper";
+import UnblockStaffModal from "./components/UnblockStaffModal";
 
 function StaffDetail({ expertisesList, loadExpertisesList }) {
   const [staff, setStaff] = useState(new Staff());
@@ -70,7 +71,7 @@ function StaffDetail({ expertisesList, loadExpertisesList }) {
     gender: "",
     role: "",
     status: "",
-    dob: new Date(),
+    dob: "",
     description: "",
     education: "",
     certificate: "",
@@ -83,7 +84,8 @@ function StaffDetail({ expertisesList, loadExpertisesList }) {
   const addExpertiseModal = useCustomModal();
   const notHaveAccessModal = useCustomModal();
   const editStaffRoleModal = useCustomModal();
-  const editStaffStatusModal = useCustomModal();
+  const blockStaffModal = useCustomModal();
+  const unblockStaffModal = useCustomModal();
 
   const params = useParams();
   const staffId = useMemo(() => params?.staffId, [params?.staffId]);
@@ -148,7 +150,8 @@ function StaffDetail({ expertisesList, loadExpertisesList }) {
 
         const newDefaultValues = {
           ...mergeObjectsWithoutNullAndUndefined(defaultValues, staffData),
-          expertises: expertiseIds
+          expertises: expertiseIds,
+          status: staffData?.blocked ? staffStatus.STATUS_BLOCK : staffStatus.STATUS_UNBLOCK
           // gender: ""
         };
 
@@ -171,7 +174,33 @@ function StaffDetail({ expertisesList, loadExpertisesList }) {
   const canUpdateStaffRole = ability.can(staffActionAbility.UPDATE_ROLE, staff);
   const canAddExpertise = ability.can(expertiseActionAbility.ADD, Expertise.magicWord());
 
-  const handleSaveDetail = async (data) => {
+  const handleSaveDetail = async ({
+    // username,
+    phoneNumber,
+    // email,
+    name,
+    address,
+    gender,
+    status,
+    dob,
+    description,
+    education,
+    certificate,
+    expertises
+  }) => {
+    const data = {
+      phoneNumber,
+      name,
+      address,
+      gender,
+      status,
+      dob,
+      description,
+      education,
+      certificate,
+      expertises
+    };
+
     if (canUpdateStaff) {
       await fetchApi(async () => {
         let res = {
@@ -184,6 +213,7 @@ function StaffDetail({ expertisesList, loadExpertisesList }) {
         }
 
         if (res?.success) {
+          // await authStore.loadStaffInfo();
           return { success: true };
         }
         // setExpertisesList([]);
@@ -202,7 +232,11 @@ function StaffDetail({ expertisesList, loadExpertisesList }) {
     await loadData();
   };
 
-  const handleAfterEditStaffStatus = async () => {
+  const handleAfterBlockStaff = async () => {
+    await loadData();
+  };
+
+  const handleAfterUnblockStaff = async () => {
     await loadData();
   };
 
@@ -407,16 +441,29 @@ function StaffDetail({ expertisesList, loadExpertisesList }) {
                   canUpdateStaffRole && {
                     endAdornment: (
                       <InputAdornment position="end">
-                        <FontAwesomeIcon
-                          size="1x"
-                          icon={faGearIcon}
-                          onClick={() => {
-                            editStaffStatusModal.setShow(true);
-                            editStaffStatusModal.setData(staff);
-                          }}
-                          cursor="pointer"
-                          color={theme.palette.success.light}
-                        />
+                        {staff.blocked ? (
+                          <FontAwesomeIcon
+                            size="1x"
+                            icon={faGearIcon}
+                            onClick={() => {
+                              unblockStaffModal.setShow(true);
+                              unblockStaffModal.setData(staff);
+                            }}
+                            cursor="pointer"
+                            color={theme.palette.error.light}
+                          />
+                        ) : (
+                          <FontAwesomeIcon
+                            size="1x"
+                            icon={faGearIcon}
+                            onClick={() => {
+                              blockStaffModal.setShow(true);
+                              blockStaffModal.setData(staff);
+                            }}
+                            cursor="pointer"
+                            color={theme.palette.success.light}
+                          />
+                        )}
                       </InputAdornment>
                     )
                   }
@@ -736,13 +783,23 @@ function StaffDetail({ expertisesList, loadExpertisesList }) {
         />
       )}
 
-      {editStaffStatusModal.show && (
-        <EditStaffStatusModal
-          show={editStaffStatusModal.show}
-          setShow={editStaffStatusModal.setShow}
-          data={editStaffStatusModal.data}
-          setData={editStaffStatusModal.setData}
-          handleAfterEditStaffStatus={handleAfterEditStaffStatus}
+      {blockStaffModal.show && (
+        <BlockStaffModal
+          show={blockStaffModal.show}
+          setShow={blockStaffModal.setShow}
+          data={blockStaffModal.data}
+          setData={blockStaffModal.setData}
+          handleAfterBlockStaff={handleAfterBlockStaff}
+        />
+      )}
+
+      {unblockStaffModal.show && (
+        <UnblockStaffModal
+          show={unblockStaffModal.show}
+          setShow={unblockStaffModal.setShow}
+          data={unblockStaffModal.data}
+          setData={unblockStaffModal.setData}
+          handleAfterUnblockStaff={handleAfterUnblockStaff}
         />
       )}
 

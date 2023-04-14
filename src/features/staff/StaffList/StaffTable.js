@@ -26,7 +26,15 @@ import { staffActionAbility, staffGenders, staffStatus } from "../../../entities
 import Staff from "../../../entities/Staff/Staff";
 import { useAppConfigStore } from "../../../store/AppConfigStore";
 
-function StaffTable({ staffs, columns, showCols, notHaveAccessModal, editStaffRoleModal, editStaffStatusModal }) {
+function StaffTable({
+  staffs,
+  columns,
+  showCols,
+  notHaveAccessModal,
+  editStaffRoleModal,
+  blockStaffModal,
+  unblockStaffModal
+}) {
   const theme = useTheme();
   const { locale } = useAppConfigStore();
 
@@ -202,13 +210,23 @@ function StaffTable({ staffs, columns, showCols, notHaveAccessModal, editStaffRo
                   }}
                 >
                   <Can I={staffActionAbility.BLOCK} a={staff}>
-                    <StaffRoleStatusButton
-                      variant={staff?.blocked ? staffStatus.STATUS_BLOCK : staffStatus.STATUS_UNBLOCK}
-                      onClick={() => {
-                        editStaffStatusModal.setShow(true);
-                        editStaffStatusModal.setData(staff);
-                      }}
-                    />
+                    {staff?.blocked ? (
+                      <StaffRoleStatusButton
+                        variant={staffStatus.STATUS_BLOCK}
+                        onClick={() => {
+                          unblockStaffModal.setShow(true);
+                          unblockStaffModal.setData(staff);
+                        }}
+                      />
+                    ) : (
+                      <StaffRoleStatusButton
+                        variant={staffStatus.STATUS_UNBLOCK}
+                        onClick={() => {
+                          blockStaffModal.setShow(true);
+                          blockStaffModal.setData(staff);
+                        }}
+                      />
+                    )}
                   </Can>
                   <Can not I={staffActionAbility.BLOCK} a={staff}>
                     <StaffRoleStatusButton
@@ -262,7 +280,8 @@ StaffTable.propTypes = {
   showCols: PropTypes.object.isRequired,
   notHaveAccessModal: PropTypes.object.isRequired,
   editStaffRoleModal: PropTypes.object.isRequired,
-  editStaffStatusModal: PropTypes.object.isRequired
+  blockStaffModal: PropTypes.object.isRequired,
+  unblockStaffModal: PropTypes.object.isRequired
 };
 
 export default StaffTable;

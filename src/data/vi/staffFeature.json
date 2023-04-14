@@ -64,17 +64,17 @@
   },
 
   "AddExpertiseModal": {
-    "title": "Add Expertise",
-    "expertise": "Expertise",
+    "title": "Thêm chuyên khoa",
+    "expertise": "Chuyên khoa",
     "button": {
       "add": "Add"
     }
   },
 
   "EditStaffRoleModal": {
-    "title": "Edit staff role",
+    "title": "Chỉnh sửa vai trò nhân viên",
     "button": {
-      "save": "Save"
+      "save": "Lưu"
     }
   },
 
@@ -83,7 +83,8 @@
     "button": {
       "block": "Khóa"
     },
-    "confirmQuestion": "Bạn có chắc chắn khóa nhân viên - {{name}}?"
+    "confirmQuestion": "Bạn có chắc chắn khóa nhân viên - {{name}}?",
+    "reason:": "Lý do"
   },
 
   "UnblockStaffModal": {

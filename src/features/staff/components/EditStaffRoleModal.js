@@ -20,8 +20,8 @@ function EditStaffRoleModal({ show, setShow, data, setData, handleAfterEditStaff
     criteriaMode: "all"
   });
 
-  const { t } = useTranslation("staffFeature", { keyPrefix: "edit_staff_role_modal" });
-  const { t: tRole } = useTranslation("staffFeature", { keyPrefix: "role" });
+  const { t } = useTranslation("staffFeature", { keyPrefix: "EditStaffRoleModal" });
+  const { t: tRole } = useTranslation("staffEntity", { keyPrefix: "constants.roles" });
 
   const { fetchApi } = useFetchingStore();
 
@@ -40,7 +40,7 @@ function EditStaffRoleModal({ show, setShow, data, setData, handleAfterEditStaff
         value: staffRoles.ROLE_NURSE
       },
       {
-        label: "customer_service",
+        label: "customerService",
         value: staffRoles.ROLE_CUSTOMER_SERVICE
       }
     ],
@@ -49,7 +49,7 @@ function EditStaffRoleModal({ show, setShow, data, setData, handleAfterEditStaff
 
   const handleEditStaffRole = async ({ role }) => {
     await fetchApi(async () => {
-      const res = await staffServices.editStaffRole({ role });
+      const res = await staffServices.editStaffRole(data?.id, { role });
 
       if (res?.success) {
         setShow(false);
@@ -69,7 +69,7 @@ function EditStaffRoleModal({ show, setShow, data, setData, handleAfterEditStaff
       data={data}
       setData={setData}
       title={t("title")}
-      submitBtnLabel={t("btn_label")}
+      submitBtnLabel={t("button.save")}
       onSubmit={handleSubmit(handleEditStaffRole)}
     >
       <RadioGroup>

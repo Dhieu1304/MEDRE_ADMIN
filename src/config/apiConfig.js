@@ -4,11 +4,13 @@ const authApi = {
 
 const userApi = {};
 const staffApi = {
-  staffInfo: () => "/staff/info",
+  staffInfo: () => "/staff/my-profile",
   staffList: () => "/staff/all",
   staffDetail: (id) => `/staff/detail/${id}`,
   editStaff: (id) => `/staff/edit/${id}`,
-  editMyProfile: () => `/staff/my-profile/edit`
+  editMyProfile: () => `/staff/my-profile/edit`,
+  blockStaff: () => `/staff/confirm-blocking`,
+  unblockStaff: () => `/staff/confirm-unblocking`
 };
 
 const expertiseApi = {
