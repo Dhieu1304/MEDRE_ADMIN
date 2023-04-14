@@ -60,6 +60,10 @@
       "account": "Thông tin tài khoản",
       "personality": "Thông tin cá nhân",
       "doctor": "Thông tin bác sĩ"
+    },
+    "button": {
+      "reset": "Đặt lại",
+      "save": "Lưu"
     }
   },
 

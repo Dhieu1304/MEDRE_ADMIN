@@ -4,12 +4,12 @@ import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import CustomModal from "../../../components/CustomModal";
-import Staff from "../../../entities/Staff/Staff";
+import User from "../../../entities/User/User";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
-import staffServices from "../../../services/staffServices";
+// import userServices from "../../../services/userServices";
 import CustomInput from "../../../components/CustomInput/CustomInput";
 
-function UnblockStaffModal({ show, setShow, data, setData, handleAfterUnblockStaff }) {
+function BlockUserModal({ show, setShow, data, setData, handleAfterBlockUser }) {
   const { control, trigger, handleSubmit } = useForm({
     mode: "onChange",
     defaultValues: {
@@ -18,18 +18,19 @@ function UnblockStaffModal({ show, setShow, data, setData, handleAfterUnblockSta
     criteriaMode: "all"
   });
 
-  const { t } = useTranslation("staffFeature", { keyPrefix: "UnblockStaffModal" });
+  const { t } = useTranslation("userFeature", { keyPrefix: "BlockUserModal" });
 
   const { fetchApi } = useFetchingStore();
 
-  const handleUnblockStaffStatus = async ({ reason }) => {
+  const handleBlockUserStatus = async ({ reason }) => {
     await fetchApi(async () => {
-      const res = await staffServices.unblockStaff(data?.id, reason);
+      // const res = await userServices.blockUser(data?.id, reason);
+      const res = { reason };
 
       if (res?.success) {
         setShow(false);
         setData({});
-        if (handleAfterUnblockStaff) await handleAfterUnblockStaff();
+        if (handleAfterBlockUser) await handleAfterBlockUser();
         return { success: true };
       }
       toast(res.message);
@@ -44,8 +45,8 @@ function UnblockStaffModal({ show, setShow, data, setData, handleAfterUnblockSta
       data={data}
       setData={setData}
       title={t("title")}
-      submitBtnLabel={t("button.unblock")}
-      onSubmit={handleSubmit(handleUnblockStaffStatus)}
+      submitBtnLabel={t("button.block")}
+      onSubmit={handleSubmit(handleBlockUserStatus)}
     >
       <Box
         sx={{
@@ -75,16 +76,16 @@ function UnblockStaffModal({ show, setShow, data, setData, handleAfterUnblockSta
   );
 }
 
-UnblockStaffModal.defaultProps = {
-  handleAfterUnblockStaff: undefined
+BlockUserModal.defaultProps = {
+  handleAfterBlockUser: undefined
 };
 
-UnblockStaffModal.propTypes = {
+BlockUserModal.propTypes = {
   show: PropTypes.bool.isRequired,
   setShow: PropTypes.func.isRequired,
-  data: PropTypes.instanceOf(Staff).isRequired,
+  data: PropTypes.instanceOf(User).isRequired,
   setData: PropTypes.func.isRequired,
-  handleAfterUnblockStaff: PropTypes.func
+  handleAfterBlockUser: PropTypes.func
 };
 
-export default UnblockStaffModal;
+export default BlockUserModal;

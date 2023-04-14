@@ -19,33 +19,25 @@ import { Link, useNavigate } from "react-router-dom";
 import { CalendarMonth as CalendarMonthIcon, Search as SearchIcon } from "@mui/icons-material";
 
 import { useTranslation } from "react-i18next";
-import StaffRoleStatusButton from "../components/StaffRoleStatusButton";
+import UserStatusButton from "../components/UserStatusButton";
 
 import { Can } from "../../../store/AbilityStore";
-import { staffActionAbility, staffGenders, staffStatus } from "../../../entities/Staff";
-import Staff from "../../../entities/Staff/Staff";
+import { userActionAbility, userGenders, userStatus } from "../../../entities/User";
+import User from "../../../entities/User/User";
 import { useAppConfigStore } from "../../../store/AppConfigStore";
 
-function StaffTable({
-  staffs,
-  columns,
-  showCols,
-  notHaveAccessModal,
-  editStaffRoleModal,
-  blockStaffModal,
-  unblockStaffModal
-}) {
+function UserTable({ users, columns, showCols, notHaveAccessModal, blockUserModal, unblockUserModal }) {
   const theme = useTheme();
   const { locale } = useAppConfigStore();
 
-  const { t: tStaffMessage } = useTranslation("staffEntity", { keyPrefix: "messages" });
-  const { t: tStaffGender } = useTranslation("staffEntity", { keyPrefix: "constants.genders" });
+  const { t: tUserMessage } = useTranslation("userEntity", { keyPrefix: "messages" });
+  const { t: tUserGender } = useTranslation("userEntity", { keyPrefix: "constants.genders" });
 
-  const staffGendersObj = useMemo(() => {
+  const userGendersObj = useMemo(() => {
     return {
-      [staffGenders.MALE]: tStaffGender("male"),
-      [staffGenders.FEMALE]: tStaffGender("female"),
-      [staffGenders.OTHER]: tStaffGender("other")
+      [userGenders.MALE]: tUserGender("male"),
+      [userGenders.FEMALE]: tUserGender("female"),
+      [userGenders.OTHER]: tUserGender("other")
     };
   }, [locale]);
 
@@ -74,29 +66,20 @@ function StaffTable({
           </TableRow>
         </TableHead>
         <TableBody>
-          {staffs.map((currentStaff) => {
-            const staff = new Staff(currentStaff);
+          {users.map((currentUser) => {
+            const user = new User(currentUser);
             return (
-              <TableRow key={staff?.id}>
-                <TableCell
-                  component="th"
-                  scope="row"
-                  sx={{
-                    display: showCols?.username ? "table-cell" : "none"
-                  }}
-                >
-                  {staff?.username}
-                </TableCell>
+              <TableRow key={user?.id}>
                 <TableCell
                   align="left"
                   sx={{
                     display: showCols?.phoneNumber ? "table-cell" : "none"
                   }}
                 >
-                  <Typography variant="inherit">{staff?.phoneNumber}</Typography>
-                  {!staff.phoneVerified && (
+                  <Typography variant="inherit">{user?.phoneNumber}</Typography>
+                  {!user.phoneVerified && (
                     <Typography variant="caption" color={theme.palette.error.light}>
-                      {tStaffMessage("phoneVerifiedFailed")}
+                      {tUserMessage("phoneVerifiedFailed")}
                     </Typography>
                   )}
                 </TableCell>
@@ -106,10 +89,10 @@ function StaffTable({
                     display: showCols?.email ? "table-cell" : "none"
                   }}
                 >
-                  <Typography variant="inherit">{staff?.email}</Typography>
-                  {!staff.emailVerified && (
+                  <Typography variant="inherit">{user?.email}</Typography>
+                  {!user.emailVerified && (
                     <Typography variant="caption" color={theme.palette.error.light}>
-                      {tStaffMessage("emailVerifiedFailed")}
+                      {tUserMessage("emailVerifiedFailed")}
                     </Typography>
                   )}
                 </TableCell>
@@ -119,7 +102,7 @@ function StaffTable({
                     display: showCols?.name ? "table-cell" : "none"
                   }}
                 >
-                  {staff?.name}
+                  {user?.name}
                 </TableCell>
                 <TableCell
                   align="left"
@@ -127,7 +110,7 @@ function StaffTable({
                     display: showCols?.address ? "table-cell" : "none"
                   }}
                 >
-                  {staff?.address}
+                  {user?.address}
                 </TableCell>
                 <TableCell
                   align="left"
@@ -135,7 +118,7 @@ function StaffTable({
                     display: showCols?.gender ? "table-cell" : "none"
                   }}
                 >
-                  {staffGendersObj?.[staff?.gender]}
+                  {userGendersObj?.[user?.gender]}
                 </TableCell>
                 <TableCell
                   align="left"
@@ -143,7 +126,7 @@ function StaffTable({
                     display: showCols?.dob ? "table-cell" : "none"
                   }}
                 >
-                  {staff?.dob}
+                  {user?.dob}
                 </TableCell>
 
                 <TableCell
@@ -152,85 +135,37 @@ function StaffTable({
                     display: showCols?.healthInsurance ? "table-cell" : "none"
                   }}
                 >
-                  {staff?.healthInsurance}
-                </TableCell>
-                <TableCell
-                  align="left"
-                  sx={{
-                    display: showCols?.description ? "table-cell" : "none"
-                  }}
-                >
-                  {staff?.description}
-                </TableCell>
-                <TableCell
-                  align="left"
-                  sx={{
-                    display: showCols?.education ? "table-cell" : "none"
-                  }}
-                >
-                  {staff?.education}
-                </TableCell>
-                <TableCell
-                  align="left"
-                  sx={{
-                    display: showCols?.certificate ? "table-cell" : "none"
-                  }}
-                >
-                  {staff?.certificate}
+                  {user?.healthInsurance}
                 </TableCell>
 
-                <TableCell
-                  align="left"
-                  sx={{
-                    display: showCols?.role ? "table-cell" : "none"
-                  }}
-                >
-                  <Can I={staffActionAbility.UPDATE_ROLE} a={staff}>
-                    <StaffRoleStatusButton
-                      variant={staff?.role}
-                      onClick={() => {
-                        editStaffRoleModal.setShow(true);
-                        editStaffRoleModal.setData(staff);
-                      }}
-                    />
-                  </Can>
-                  <Can not I={staffActionAbility.UPDATE_ROLE} a={staff}>
-                    <StaffRoleStatusButton
-                      variant={staff?.role}
-                      onClick={() => {
-                        notHaveAccessModal.setShow(true);
-                      }}
-                    />
-                  </Can>
-                </TableCell>
                 <TableCell
                   align="left"
                   sx={{
                     display: showCols?.status ? "table-cell" : "none"
                   }}
                 >
-                  <Can I={staffActionAbility.BLOCK} a={staff}>
-                    {staff?.blocked ? (
-                      <StaffRoleStatusButton
-                        variant={staffStatus.STATUS_BLOCK}
+                  <Can I={userActionAbility.BLOCK} a={user}>
+                    {user?.blocked ? (
+                      <UserStatusButton
+                        variant={userStatus.STATUS_BLOCK}
                         onClick={() => {
-                          unblockStaffModal.setShow(true);
-                          unblockStaffModal.setData(staff);
+                          unblockUserModal.setShow(true);
+                          unblockUserModal.setData(user);
                         }}
                       />
                     ) : (
-                      <StaffRoleStatusButton
-                        variant={staffStatus.STATUS_UNBLOCK}
+                      <UserStatusButton
+                        variant={userStatus.STATUS_UNBLOCK}
                         onClick={() => {
-                          blockStaffModal.setShow(true);
-                          blockStaffModal.setData(staff);
+                          blockUserModal.setShow(true);
+                          blockUserModal.setData(user);
                         }}
                       />
                     )}
                   </Can>
-                  <Can not I={staffActionAbility.BLOCK} a={staff}>
-                    <StaffRoleStatusButton
-                      variant={staff?.blocked ? staffStatus.STATUS_BLOCK : staffStatus.STATUS_UNBLOCK}
+                  <Can not I={userActionAbility.BLOCK} a={user}>
+                    <UserStatusButton
+                      variant={user?.blocked ? userStatus.STATUS_BLOCK : userStatus.STATUS_UNBLOCK}
                       onClick={() => {
                         notHaveAccessModal.setShow(true);
                       }}
@@ -246,25 +181,22 @@ function StaffTable({
                     }}
                   >
                     <Link
-                      to={`${staff?.id}/schedule`}
+                      to={`${user?.id}/booking`}
                       // onClick={() => {
-                      //   navigate(`${staff?.id}/schedule`, { relative: true });
+                      //   navigate(`${user?.id}/schedule`, { relative: true });
                       // }}
                     >
                       <CalendarMonthIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
                     </Link>
                     <IconButton
                       onClick={() => {
-                        navigate(staff?.id, { relative: true });
+                        navigate(user?.id, { relative: true });
                       }}
                     >
                       <SearchIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
                     </IconButton>
                   </Box>
                 </TableCell>
-                {/* <TableCell align="left">{row.description}</TableCell>
-              <TableCell align="left">{row.education}</TableCell>
-              <TableCell align="left">{row.certificate}</TableCell> */}
               </TableRow>
             );
           })}
@@ -274,14 +206,13 @@ function StaffTable({
   );
 }
 
-StaffTable.propTypes = {
-  staffs: PropTypes.array.isRequired,
+UserTable.propTypes = {
+  users: PropTypes.array.isRequired,
   columns: PropTypes.array.isRequired,
   showCols: PropTypes.object.isRequired,
   notHaveAccessModal: PropTypes.object.isRequired,
-  editStaffRoleModal: PropTypes.object.isRequired,
-  blockStaffModal: PropTypes.object.isRequired,
-  unblockStaffModal: PropTypes.object.isRequired
+  blockUserModal: PropTypes.object.isRequired,
+  unblockUserModal: PropTypes.object.isRequired
 };
 
-export default StaffTable;
+export default UserTable;

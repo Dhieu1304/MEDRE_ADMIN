@@ -2,7 +2,9 @@ const authApi = {
   loginByEmail: "/auth/staff/login-by-email"
 };
 
-const userApi = {};
+const userApi = {
+  userList: () => "/user/list"
+};
 const staffApi = {
   staffInfo: () => "/staff/my-profile",
   staffList: () => "/staff/all",

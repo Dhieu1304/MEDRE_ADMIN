@@ -1,9 +1,11 @@
 import { defineAbility } from "@casl/ability";
 import Staff, { staffRoles, staffActionAbility } from "../entities/Staff";
+import User, { userActionAbility } from "../entities/User";
 import { Expertise, expertiseActionAbility } from "../entities/Expertise";
 
 const defineAbilityFor = (staff) => {
   const STAFF = Staff.magicWord();
+  const USER = User.magicWord();
   const EXPERTISE = Expertise.magicWord();
 
   return defineAbility((can, cannot) => {
@@ -25,6 +27,11 @@ const defineAbilityFor = (staff) => {
         cannot(expertiseActionAbility.ADD, EXPERTISE);
 
         // can(["read"], ["Payment"]);
+
+        // User
+        can(userActionAbility.READ, USER);
+        cannot(userActionAbility.DELETE, USER);
+
         break;
 
       case staffRoles.ROLE_NURSE:

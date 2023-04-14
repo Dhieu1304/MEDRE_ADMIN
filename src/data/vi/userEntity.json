@@ -1,0 +1,36 @@
+{
+  "properties": {
+    "id": "ID",
+    "phoneNumber": "Số điện thoại",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "name": "Họ tên",
+    "image": "Ảnh",
+    "address": "Địa chỉ",
+    "gender": "Giới tính",
+    "dob": "Ngày sinh",
+    "healthInsurance": "Bảo hiểm y tế",
+    "createdAt": "Ngày tạo",
+    "updatedAt": "Ngày cập nhập",
+    "deletedAt": "Ngày xóa",
+    "status": "Tình trạng"
+  },
+
+  "constants": {
+    "genders": {
+      "male": "Nam",
+      "female": "Nữ",
+      "other": "Khác"
+    },
+    "statuses": {
+      "block": "Khóa",
+      "unblock": "Mở khóa"
+    }
+  },
+  "messages": {
+    "emailVerifiedSuccess": "Xác minh email thành công",
+    "emailVerifiedFailed": "Xác minh email thất bại",
+    "phoneVerifiedSuccess": "Xác minh số điện thoại thành công",
+    "phoneVerifiedFailed": "Xác minh số điện thoại thất bại"
+  }
+}
