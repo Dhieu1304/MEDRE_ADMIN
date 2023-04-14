@@ -1,9 +1,6 @@
-import { Expertise } from "../Expertise";
-
-class Staff {
+class User {
   constructor({
     id = "",
-    username = "",
     phoneNumber = "",
     email = "",
     password = "",
@@ -12,21 +9,15 @@ class Staff {
     address = "",
     gender = "",
     dob = "",
-    role = "",
     emailVerified = "",
     phoneVerified = "",
     healthInsurance = "",
     blocked = false,
-    description = "",
-    education = "",
-    certificate = "",
     createdAt = "",
     updatedAt = "",
-    deletedAt = "",
-    expertises = []
+    deletedAt = ""
   } = {}) {
     this.id = id;
-    this.username = username;
     this.phoneNumber = phoneNumber;
     this.email = email;
     this.password = password;
@@ -35,21 +26,16 @@ class Staff {
     this.address = address;
     this.gender = gender;
     this.dob = dob;
-    this.role = role;
     this.emailVerified = emailVerified;
     this.phoneVerified = phoneVerified;
     this.healthInsurance = healthInsurance;
     this.blocked = blocked;
-    this.description = description;
-    this.education = education;
-    this.certificate = certificate;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
     this.deletedAt = deletedAt;
-    this.expertises = [...expertises].map((expertise) => new Expertise(expertise));
   }
 
-  static magicWord = () => "Staff";
+  static magicWord = () => "User";
 }
 
-export default Staff;
+export default User;

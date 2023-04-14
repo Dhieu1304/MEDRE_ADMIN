@@ -9,7 +9,7 @@ export const sideBarItems = [
     icon: <FontAwesomeIcon icon={faUsers} width={20} />
   },
   {
-    to: routeConfig.home,
+    to: routeConfig.user,
     label: "user_label",
     icon: <FontAwesomeIcon icon={faUsers} width={20} />
   },

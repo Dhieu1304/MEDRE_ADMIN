@@ -122,8 +122,6 @@ const getStaffDetail = async (id) => {
   try {
     const res = await axiosClient.get(staffApi.staffDetail(id));
 
-    // console.log("res: ", res);
-
     // const res = camelcaseKeys(
     //   {
     //     status: true,

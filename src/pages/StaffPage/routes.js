@@ -1,9 +1,13 @@
-const routes = {
+const staffRoutes = {
   list: "/",
   detail: "/:staffId",
   // /:staffId/schedule
-  schedule: "/schedule",
   default: "/*"
 };
 
-export default routes;
+const staffDetailRoutes = {
+  detail: "/",
+  schedule: "/schedule"
+};
+
+export { staffRoutes, staffDetailRoutes };
