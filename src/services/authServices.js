@@ -7,15 +7,18 @@ const loginByEmail = async (email, password) => {
     const res = await axiosClient.post(authApi.loginByEmail, { email, password });
 
     if (res?.status) {
-      const user = res?.data?.user;
+      const staff = res?.data?.staff;
       const tokens = res?.data?.tokens;
 
       localStorageUtil.setItem(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN, tokens?.access?.token);
       localStorageUtil.setItem(localStorageUtil.LOCAL_STORAGE.REFRESH_TOKEN, tokens?.refresh?.token);
 
+      localStorageUtil.setItem(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN_EXPIRE_TIME, tokens?.access?.expires);
+      localStorageUtil.setItem(localStorageUtil.LOCAL_STORAGE.REFRESH_TOKEN_EXPIRE_TIME, tokens?.refresh?.expires);
+
       return {
         success: true,
-        user,
+        staff,
         message: res?.message
       };
     }
@@ -35,6 +38,8 @@ const loginByEmail = async (email, password) => {
 const logout = async () => {
   localStorageUtil.removeItem(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN);
   localStorageUtil.removeItem(localStorageUtil.LOCAL_STORAGE.REFRESH_TOKEN);
+  localStorageUtil.removeItem(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN_EXPIRE_TIME);
+  localStorageUtil.removeItem(localStorageUtil.LOCAL_STORAGE.REFRESH_TOKEN_EXPIRE_TIME);
 
   return {
     success: true,

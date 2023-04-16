@@ -1,0 +1,155 @@
+{
+  "role": {
+    "admin": "Admin",
+    "doctor": "Doctor",
+    "nurse": "Nurse",
+    "customer_service": "Customer Service"
+  },
+
+  "status": {
+    "ok": "OK",
+    "block": "Block"
+  },
+
+  "staff_list": {
+    "title": "Find staff",
+    "filter": {
+      "search": "Search by name",
+      "email": "Email",
+      "phone": "Phone",
+      "username": "Username",
+      "type": "Type",
+      "date": "Date",
+      "expertise": "Expertise",
+      "gender": "Gender",
+      "status": "Status",
+      "role": "Role",
+      "healthInsurance": "HealthInsurance",
+      "description": "Description",
+      "education": "Education",
+      "certificate": "Certificate",
+      "address": "Address",
+      "reset": "Reset"
+    },
+    "hide_filter": "Hide filter",
+    "show_filter": "Show Filter",
+    "card": {
+      "book": "Book"
+    },
+
+    "table": {
+      "username": "Username",
+      "phoneNumber": "Phone Number",
+      "email": "Email",
+      "name": "Name",
+      "address": "Address",
+      "gender": "Gender",
+      "dob": "Date of Birth",
+      "role": "Role",
+      "status": "Status",
+      "healthInsurance": "HealthInsurance",
+      "description": "Description",
+      "education": "Education",
+      "certificate": "Certificate",
+
+      "emailVerifiedSuccess": "Email verification successfully",
+      "emailVerifiedFailed": "Email verification failed",
+      "phoneVerifiedSuccess": "Phone number verification successfully",
+      "phoneVerifiedFailed": "Phone number verification failed"
+    },
+
+    "gender": {
+      "male": "Male",
+      "female": "Female"
+    },
+
+    "status": {
+      "ok": "Ok",
+      "block": "Block",
+      "delete": "Delete"
+    },
+
+    "role": {
+      "admin": "Admin",
+      "doctor": "Doctor",
+      "nurse": "Nurse"
+    }
+  },
+  "staff_detail": {
+    "title": {
+      "identify": "Identify Information",
+      "account": "Account Information",
+      "personality": "Personality Information",
+      "doctor": "Doctor Information"
+    },
+
+    "email": "Email",
+    "username": "Username",
+    "phone": "Phone",
+    "role": "Role",
+    "status": "Status",
+    "name": "Name",
+    "dob": "Date of Birth",
+    "address": "Address",
+    "gender": "Gender",
+    "male": "Male",
+    "female": "Female",
+    "description": "Description",
+    "education": "Education",
+    "certificate": "Certificate",
+    "expertises": "Expertises",
+    "schedule_btn": "Schedule",
+    "save_btn": "Save",
+    "reset_btn": "Reset",
+    "email_verified_success": "Email verification successfully",
+    "email_verified_failed": "Email verification failed",
+    "phone_verified_success": "Phone number verification successfully",
+    "phone_verified_failed": "Phone number verification failed",
+
+    "input_validation": {
+      "require": "field is require",
+      "max_length": "cannot be more than {{maxLength}} characters",
+      "min_length": "cannot be less than {{minLength}} characters",
+      "format": "field is not correct format"
+    }
+  },
+  "block_modal": {
+    "title": "Block staff",
+    "question": "Block",
+    "btn_label": "Block"
+  },
+
+  "add_expertise_modal": {
+    "title": "Add Expertise",
+    "expertise": "Expertise",
+    "btn_label": "Add",
+
+    "input_validation": {
+      "require": "field is require",
+      "max_length": "cannot be more than {{maxLength}} characters"
+    }
+  },
+
+  "edit_staff_role_modal": {
+    "title": "Edit staff role",
+    "btn_label": "Save",
+
+    "input_validation": {
+      "require": "field is require",
+      "max_length": "cannot be more than {{maxLength}} characters"
+    }
+  },
+
+  "edit_staff_status_modal": {
+    "title": "Edit staff status",
+    "block_btn_label": "Block",
+    "unblock_btn_label": "Unblock",
+    "confirm_question": "Do you want to block staff {{name}}?"
+  },
+
+  "change_avatar_modal": {
+    "title": "Change Avatar",
+    "upload": "Upload",
+    "btn_label": "Save"
+  }
+}

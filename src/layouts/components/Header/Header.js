@@ -1,5 +1,17 @@
 import PropTypes from "prop-types";
-import { Box, IconButton, Toolbar, Typography, Avatar, Menu, MenuItem, Tooltip } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  Toolbar,
+  Typography,
+  Avatar,
+  Menu,
+  MenuItem,
+  Tooltip,
+  FormGroup,
+  FormControlLabel,
+  Switch
+} from "@mui/material";
 
 import MenuIcon from "@mui/icons-material/Menu";
 
@@ -17,6 +29,8 @@ import { DARK, LIGHT } from "../../../config/themeConfig";
 
 function Header({ open, handleDrawerOpen }) {
   const authStore = useAuthStore();
+
+  // const navigate = useNavigate();
 
   const [anchorElUser, setAnchorElUser] = useState(null);
 
@@ -84,8 +98,8 @@ function Header({ open, handleDrawerOpen }) {
         <Box sx={{ display: { xs: "flex", md: "flex", marginLeft: "auto" } }}>
           <Tooltip title="Open settings">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar alt={authStore.user?.name} src={authStore.user?.avatar || " "} />
-              {/* src={authStore.user?.avatar} */}
+              <Avatar alt={authStore.staff?.name} src={authStore.staff?.image || " "} />
+              {/* src={authStore.staff?.avatar} */}
             </IconButton>
           </Tooltip>
           <Menu
@@ -109,24 +123,57 @@ function Header({ open, handleDrawerOpen }) {
                 <Typography textAlign="center">{t(item.label)}</Typography>
               </MenuItem>
             ))}
-            <MenuItem
-              onClick={() => {
-                setMode((prev) => {
-                  return prev === LIGHT ? DARK : LIGHT;
-                });
+            <Box
+              component={Link}
+              to={`${routeConfig.staff}/${authStore.staff?.id}`}
+              sx={{
+                textDecoration: "none",
+                color: "inherit"
               }}
             >
-              <Typography textAlign="center">{mode}</Typography>
+              <MenuItem>
+                <Typography textAlign="center">{t("profile_label")}</Typography>
+              </MenuItem>
+            </Box>
+
+            <MenuItem>
+              <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={mode === DARK}
+                      onClick={() => {
+                        setMode((prev) => {
+                          return prev === LIGHT ? DARK : LIGHT;
+                        });
+                      }}
+                    />
+                  }
+                  sx={{ ml: 0 }}
+                  label="Dark mode"
+                  labelPlacement="start"
+                />
+              </FormGroup>
             </MenuItem>
-            <MenuItem
-              onClick={() => {
-                const newLocale = locale === "viVN" ? "enUS" : "viVN";
-                const code = newLocale.slice(0, 2);
-                setLocale(newLocale);
-                i18n.changeLanguage(code);
-              }}
-            >
-              <Typography textAlign="center">{locale}</Typography>
+            <MenuItem>
+              <FormGroup sx={{ justifyContent: "flex-start" }}>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={locale === "enUS"}
+                      onClick={() => {
+                        const newLocale = locale === "viVN" ? "enUS" : "viVN";
+                        const code = newLocale.slice(0, 2);
+                        setLocale(newLocale);
+                        i18n.changeLanguage(code);
+                      }}
+                    />
+                  }
+                  sx={{ ml: 0 }}
+                  label="English"
+                  labelPlacement="start"
+                />
+              </FormGroup>
             </MenuItem>
             <MenuItem onClick={onLogout}>
               <Typography textAlign="center">{t("logout_label")}</Typography>

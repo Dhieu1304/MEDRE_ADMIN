@@ -4,7 +4,12 @@ import routeConfig from "../../../config/routeConfig";
 
 export const sideBarItems = [
   {
-    to: routeConfig.user,
+    to: routeConfig.staff,
+    label: "staff_label",
+    icon: <FontAwesomeIcon icon={faUsers} width={20} />
+  },
+  {
+    to: routeConfig.home,
     label: "user_label",
     icon: <FontAwesomeIcon icon={faUsers} width={20} />
   },
@@ -19,13 +24,18 @@ export const sideBarItems = [
     icon: <FontAwesomeIcon icon={faCreditCard} width={20} />
   },
   {
-    to: routeConfig.home,
+    to: routeConfig.schedule,
     label: "schedule_label",
     icon: <FontAwesomeIcon icon={faCalendarDays} width={20} />
   },
   {
     to: routeConfig.home,
     label: "booking_label",
+    icon: <FontAwesomeIcon icon={faCalendarPlus} width={20} />
+  },
+  {
+    to: routeConfig.meeting,
+    label: "meeting_label",
     icon: <FontAwesomeIcon icon={faCalendarPlus} width={20} />
   }
 ];

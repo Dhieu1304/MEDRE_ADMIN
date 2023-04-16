@@ -1,3 +1,3 @@
-export { default as FetchingProvider } from "./Provider";
+export { default as FetchingApiProvider } from "./Provider";
 
 export * from "./hooks";

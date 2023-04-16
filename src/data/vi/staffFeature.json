@@ -1,0 +1,157 @@
+{
+  "role": {
+    "admin": "Quản trị viên",
+    "doctor": "Bác sĩ",
+    "nurse": "Y tá",
+    "customer_service": "Chăm sóc khách hàng"
+  },
+
+  "status": {
+    "ok": "OK",
+    "block": "Khóa"
+  },
+
+  "staff_list": {
+    "title": "Tìm kiếm nhân viên",
+    "filter": {
+      "search": "Tìm kiếm theo tên",
+      "email": "Email",
+      "phone": "Số điện thoại",
+      "username": "Username",
+      "type": "Loại khám",
+      "date": "Ngày",
+      "expertise": "Chuyên khoa",
+      "gender": "Giới tính",
+      "status": "Tình trạng",
+      "role": "Phân quyền",
+      "healthInsurance": "Bảo hiểm y tế",
+      "description": "Mô tả",
+      "education": "Học vấn",
+      "certificate": "Chứng chỉ",
+      "address": "Địa chỉ",
+      "reset": "Đặt lại"
+    },
+    "hide_filter": "Ẩn bộ lọc",
+    "show_filter": "Hiện bộ lọc",
+    "card": {
+      "book": "Đặt lịch"
+    },
+
+    "table": {
+      "username": "Username",
+      "phoneNumber": "Số điện thoại",
+      "email": "Email",
+      "name": "Họ tên",
+      "address": "Địa chỉ",
+      "gender": "Giới tính",
+      "dob": "Ngày sinh",
+      "role": "Vai trò",
+      "status": "Tình trạng",
+      "healthInsurance": "Bảo hiểm y tế",
+      "description": "Mô tả",
+      "education": "Học vấn",
+      "certificate": "Chứng chỉ",
+
+      "emailVerifiedSuccess": "Xác minh email thành công",
+      "emailVerifiedFailed": "Xác minh email thất bại",
+      "phoneVerifiedSuccess": "Xác minh số điện thoại thành công",
+      "phoneVerifiedFailed": "Xác minh số điện thoại thất bại"
+    },
+
+    "gender": {
+      "male": "Nam",
+      "female": "Nữ"
+    },
+
+    "status": {
+      "ok": "Ok",
+      "block": "Khóa",
+      "delete": "Xóa"
+    },
+
+    "role": {
+      "admin": "Quản trị viên",
+      "doctor": "Bác sĩ",
+      "nurse": "Y tá"
+    }
+  },
+  "staff_detail": {
+    "title": {
+      "identify": "Thông tin xác thực",
+      "account": "Thông tin tài khoản",
+      "personality": "Thông tin cá nhân",
+      "doctor": "Thông tin bác sĩ"
+    },
+
+    "email": "Email",
+    "username": "Username",
+    "phone": "Số điện thoại",
+    "role": "Phân quyền",
+    "status": "Tình trạng",
+    "name": "Họ tên",
+    "dob": "Ngày sinh",
+    "address": "Địa chỉ",
+    "gender": "Giới tính",
+    "male": "Nam",
+    "female": "Nữ",
+    "description": "Mô tả",
+    "education": "Học vấn",
+    "certificate": "Chứng chỉ",
+    "expertises": "Chuyên khoa",
+    "schedule_btn": "Lịch khám",
+    "save_btn": "Lưu",
+    "reset_btn": "Đặt lại",
+
+    "email_verified_success": "Xác minh email thành công",
+    "email_verified_failed": "Xác minh email thất bại",
+    "phone_verified_success": "Xác minh số điện thoại thành công",
+    "phone_verified_failed": "Xác minh số điện thoại thất bại",
+
+    "input_validation": {
+      "required": "không được bỏ trống",
+      "max_length": "không được nhiều hơn {{maxLength}} kí tự",
+      "min_length": "không được ít hơn {{minLength}} kí tự",
+      "format": "sai định dạng"
+    }
+  },
+
+  "block_modal": {
+    "title": "Khóa tài khoản nhân viên",
+    "question": "Khóa",
+    "btn_label": "Khóa"
+  },
+
+  "add_expertise_modal": {
+    "title": "Thêm chuyên khoa",
+    "expertise": "Chuyên khoa",
+    "btn_label": "Thêm",
+
+    "input_validation": {
+      "required": "không được bỏ trống",
+      "max_length": "không được nhiều hơn {{maxLength}} kí tự"
+    }
+  },
+
+  "edit_staff_role_modal": {
+    "title": "Chỉnh sửa vai trò nhân viên",
+    "btn_label": "Lưu",
+
+    "input_validation": {
+      "required": "không được bỏ trống",
+      "max_length": "không được nhiều hơn {{maxLength}} kí tự"
+    }
+  },
+
+  "edit_staff_status_modal": {
+    "title": "Chỉnh sửa trạng thái nhân viên",
+    "block_btn_label": "Khóa",
+    "unblock_btn_label": "Mở khóa",
+    "confirm_question": "Bạn có chắc chắn khóa nhân viên {{name}}?"
+  },
+
+  "change_avatar_modal": {
+    "title": "Thay đổi ảnh đại diện",
+    "upload": "Tải ảnh lên",
+    "btn_label": "Lưu"
+  }
+}

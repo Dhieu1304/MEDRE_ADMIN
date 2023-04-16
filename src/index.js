@@ -9,13 +9,13 @@ import { AppConfigProvider } from "./store/AppConfigStore";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <AppConfigProvider>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
-    </AppConfigProvider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <AppConfigProvider>
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  </AppConfigProvider>
+  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

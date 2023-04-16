@@ -1,0 +1,15 @@
+{
+  "sidebar": {
+    "staff_label": "Staff",
+    "user_label": "User",
+    "patient_label": "Patient",
+    "payment_label": "Payment",
+    "schedule_label": "Schedule",
+    "booking_label": "Booking"
+  },
+  "header": {
+    "profile_label": "Profile",
+    "change_password_label": "Change password",
+    "logout_label": "Logout"
+  }
+}

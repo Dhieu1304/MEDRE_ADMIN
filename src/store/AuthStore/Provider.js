@@ -5,7 +5,7 @@ import Context from "./Context";
 import reducer, { initState } from "./reducer";
 import actions from "./actions";
 import authServices from "../../services/authServices";
-import userServices from "../../services/userServices";
+import staffServices from "../../services/staffServices";
 
 function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initState);
@@ -18,8 +18,8 @@ function AuthProvider({ children }) {
         const res = await authServices.loginByEmail(email, password);
 
         if (res?.success) {
-          const { user, message } = res;
-          dispatch(actions.login(user));
+          const { staff, message } = res;
+          dispatch(actions.login(staff));
           dispatch(actions.fetchApiSuccess());
           toast.success(message);
           return true;
@@ -40,21 +40,25 @@ function AuthProvider({ children }) {
           dispatch(actions.fetchApiSuccess());
         }
       },
-      loadUserInfo: async () => {
+      loadStaffInfo: async () => {
         dispatch(actions.fetchApi());
-        const res = await userServices.getUserInfo();
+        const res = await staffServices.getStaffInfo();
 
         if (res?.success) {
-          const { user, message } = res;
-          dispatch(actions.login(user));
+          const { staff, message } = res;
+
+          dispatch(actions.login(staff));
           dispatch(actions.fetchApiSuccess());
           toast.success(message);
-          return user;
+          return staff;
         }
         const { message } = res;
         dispatch(actions.fetchApiFailed(message));
         toast.success(message);
         return false;
+      },
+      setStaff: async (staff) => {
+        dispatch(actions.setStaff(staff));
       }
     }),
     [state]

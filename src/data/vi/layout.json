@@ -1,0 +1,15 @@
+{
+  "sidebar": {
+    "staff_label": "Nhân viên",
+    "user_label": "Người dùng",
+    "patient_label": "Bệnh nhân",
+    "payment_label": "Thanh toán",
+    "schedule_label": "Lịch trình",
+    "booking_label": "Đặt hẹn"
+  },
+  "header": {
+    "profile_label": "Thông tin cá nhân",
+    "change_password_label": "Đổi mật khẩu",
+    "logout_label": "Đăng xuất"
+  }
+}

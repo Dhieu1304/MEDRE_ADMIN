@@ -10,6 +10,9 @@ function PaymentPage() {
       <Can not I="manage" a={payment}>
         <NotHaveAccess />
       </Can>
+      <Can I="manage" a={payment}>
+        Tôi có quyền
+      </Can>
     </div>
   );
 }
