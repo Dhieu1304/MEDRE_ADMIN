@@ -1,22 +1,13 @@
 import { Route, Routes } from "react-router-dom";
-import { DoctorSchedule, DoctorTimeOff } from "../../features/schedule";
-import { StaffDetail, StaffList } from "../../features/staff";
-import { staffDetailRoutes, staffRoutes } from "./routes";
+import { StaffList } from "../../features/staff";
+import { staffRoutes } from "./routes";
+import StaffDetailPage from "./StaffDetailPage";
 
 export default function StaffPage() {
   return (
     <Routes>
       <Route path={staffRoutes.list} element={<StaffList />} />
-      <Route
-        path={`${staffRoutes.detail}/*`}
-        element={
-          <Routes>
-            <Route path={staffDetailRoutes.detail} element={<StaffDetail />} />
-            <Route path={staffDetailRoutes.schedule} element={<DoctorSchedule />} />
-            <Route path={staffDetailRoutes.timeOff} element={<DoctorTimeOff />} />
-          </Routes>
-        }
-      />
+      <Route path={`${staffRoutes.detail}/*`} element={<StaffDetailPage />} />
       {/* <Route path={routes.default} element={<Navigate to={routes.list} />} /> */}
     </Routes>
   );

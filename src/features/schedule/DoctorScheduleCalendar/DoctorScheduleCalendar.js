@@ -29,13 +29,13 @@ import scheduleServices from "../../../services/scheduleServices";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
 import { getWeekByDate } from "../../../utils/datetimeUtil";
 import WithTimesLoaderWrapper from "../hocs/WithTimesLoaderWrapper";
-import WithDoctorLoaderWrapper from "../../staff/components/WithDoctorLoaderWrapper";
+import WithDoctorLoaderWrapper from "../../staff/hocs/WithDoctorLoaderWrapper";
 import timeOffServices from "../../../services/timeOffServices";
 import { useCustomModal } from "../../../components/CustomModal";
 import AddNewTimeOffModal from "../components/AddNewTimeOffModal";
 import { findBookingsByDate, groupSchedulesByTimeId } from "./utils";
 
-function DoctorSchedule({ timesList, doctor }) {
+function DoctorScheduleCalendar({ timesList, doctor }) {
   const [schedules, setSchedules] = useState([]);
   const [timeOffs, setTimeOffs] = useState([]);
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -49,7 +49,7 @@ function DoctorSchedule({ timesList, doctor }) {
 
   const addTimeOffModal = useCustomModal();
 
-  const { t } = useTranslation("scheduleFeature", { keyPrefix: "DoctorSchedule" });
+  const { t } = useTranslation("scheduleFeature", { keyPrefix: "DoctorScheduleCalendar" });
 
   const heads = useMemo(() => getWeekByDate(currentDate), [currentDate]);
 
@@ -370,9 +370,9 @@ function DoctorSchedule({ timesList, doctor }) {
   );
 }
 
-DoctorSchedule.propTypes = {
+DoctorScheduleCalendar.propTypes = {
   timesList: PropTypes.array.isRequired,
   doctor: PropTypes.object.isRequired
 };
 
-export default WithTimesLoaderWrapper(WithDoctorLoaderWrapper(DoctorSchedule));
+export default WithTimesLoaderWrapper(WithDoctorLoaderWrapper(DoctorScheduleCalendar));

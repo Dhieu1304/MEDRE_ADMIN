@@ -242,36 +242,6 @@ function StaffFiltersForm({ expertisesList }) {
       <Grid item {...gridItemProps}>
         <CustomInput control={control} rules={{}} label={tFilter("address")} trigger={trigger} name="address" type="text" />
       </Grid>
-      <Grid item {...gridItemProps}>
-        <CustomInput
-          control={control}
-          rules={{}}
-          label={tFilter("description")}
-          trigger={trigger}
-          name="description"
-          type="text"
-        />
-      </Grid>
-      <Grid item {...gridItemProps}>
-        <CustomInput
-          control={control}
-          rules={{}}
-          label={tFilter("education")}
-          trigger={trigger}
-          name="education"
-          type="text"
-        />
-      </Grid>
-      <Grid item {...gridItemProps}>
-        <CustomInput
-          control={control}
-          rules={{}}
-          label={tFilter("certificate")}
-          trigger={trigger}
-          name="certificate"
-          type="text"
-        />
-      </Grid>
 
       <Grid item {...gridItemProps}>
         <CustomInput

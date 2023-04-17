@@ -30,7 +30,7 @@ import { useAppConfigStore } from "../../store/AppConfigStore";
 import AddNewTimeOffModal from "./components/AddNewTimeOffModal";
 import { useCustomModal } from "../../components/CustomModal";
 
-function DoctorTimeOff({ doctor, doctorId }) {
+function DoctorScheduleList({ doctor, doctorId }) {
   const [timeOffs, setTimeOffs] = useState([]);
   const [count, setCount] = useState(0);
 
@@ -54,7 +54,7 @@ function DoctorTimeOff({ doctor, doctorId }) {
   const { fetchApi } = useFetchingStore();
   const { locale } = useAppConfigStore();
 
-  const { t } = useTranslation("scheduleFeature", { keyPrefix: "DoctorTimeOff" });
+  const { t } = useTranslation("scheduleFeature", { keyPrefix: "DoctorScheduleList" });
   const { t: tTimeOff } = useTranslation("timeOffEntity", { keyPrefix: "properties" });
 
   const addTimeOffModal = useCustomModal();
@@ -257,15 +257,15 @@ function DoctorTimeOff({ doctor, doctorId }) {
   );
 }
 
-DoctorTimeOff.propTypes = {
+DoctorScheduleList.propTypes = {
   doctor: PropTypes.object.isRequired,
   doctorId: PropTypes.string.isRequired
 };
 
-export default WithDoctorLoaderWrapper(DoctorTimeOff);
+export default WithDoctorLoaderWrapper(DoctorScheduleList);
 
-// const DoctorTimeOff = () => {
-//   return <div>DoctorTimeOff</div>;
+// const DoctorScheduleList = () => {
+//   return <div>DoctorScheduleList</div>;
 // };
 
-// export default DoctorTimeOff;
+// export default DoctorScheduleList;

@@ -3,7 +3,7 @@ import staffServices from "../../../services/staffServices";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
 
 const WithExpertisesLoaderWrapper = (WrappedComponent) => {
-  function ExpertisesLoaderWrapper() {
+  function ExpertisesLoaderWrapper(props) {
     const [expertisesList, setExpertisesList] = useState([]);
 
     const { fetchApi } = useFetchingStore();
@@ -26,7 +26,7 @@ const WithExpertisesLoaderWrapper = (WrappedComponent) => {
       loadExpertisesList();
     }, []);
 
-    return <WrappedComponent expertisesList={expertisesList} loadExpertisesList={loadExpertisesList} />;
+    return <WrappedComponent expertisesList={expertisesList} loadExpertisesList={loadExpertisesList} {...props} />;
   }
 
   return ExpertisesLoaderWrapper;

@@ -32,7 +32,7 @@ import useObjDebounce from "../../../hooks/useObjDebounce";
 
 import StaffFiltersForm from "./StaffFiltersForm";
 import StaffTable from "./StaffTable";
-import WithExpertisesLoaderWrapper from "../components/WithExpertisesLoaderWrapper";
+import { WithExpertisesLoaderWrapper } from "../hocs";
 import { columnsIds, createDefaultValues, initialShowCols } from "./utils";
 import UnblockStaffModal from "../components/UnblockStaffModal";
 import { Can } from "../../../store/AbilityStore";

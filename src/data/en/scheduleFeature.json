@@ -1,5 +1,12 @@
 {
-  "DoctorSchedule": {
+  "DoctorScheduleCalendar": {
+    "title": "Calendar",
+    "button": {
+      "currentWeek": "Current week",
+      "addTimeOff": "Add time off"
+    }
+  },
+  "DoctorScheduleList": {
     "title": "Schedule",
     "button": {
       "currentWeek": "Current week",

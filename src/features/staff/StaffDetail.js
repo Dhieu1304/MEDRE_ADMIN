@@ -19,13 +19,8 @@ import {
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { useNavigate, useParams } from "react-router-dom";
-import {
-  Add as AddIcon,
-  CalendarMonth as CalendarMonthIcon,
-  RestartAlt as RestartAltIcon,
-  Save as SaveIcon
-} from "@mui/icons-material";
+
+import { Add as AddIcon, RestartAlt as RestartAltIcon, Save as SaveIcon } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import { useAbility } from "@casl/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -38,8 +33,6 @@ import CustomOverlay from "../../components/CustomOverlay";
 import ChangeAvatarModal from "./components/ChangeAvatarModal";
 import { useCustomModal } from "../../components/CustomModal";
 import AddExpertiseModal from "./components/AddExpertiseModal";
-import { staffDetailRoutes } from "../../pages/StaffPage/routes";
-import routeConfig from "../../config/routeConfig";
 import Staff, { staffActionAbility, staffGenders, staffInputValidate, staffStatus } from "../../entities/Staff";
 import { AbilityContext } from "../../store/AbilityStore";
 import { NotHaveAccessModal } from "../auth";
@@ -48,10 +41,10 @@ import EditStaffRoleModal from "./components/EditStaffRoleModal";
 import { mergeObjectsWithoutNullAndUndefined } from "../../utils/objectUtil";
 import { useAuthStore } from "../../store/AuthStore";
 import { BlockStaffModal } from "./components";
-import WithExpertisesLoaderWrapper from "./components/WithExpertisesLoaderWrapper";
+import { WithExpertisesLoaderWrapper } from "./hocs";
 import UnblockStaffModal from "./components/UnblockStaffModal";
 
-function StaffDetail({ expertisesList, loadExpertisesList }) {
+function StaffDetail({ staffId, expertisesList, loadExpertisesList }) {
   const [staff, setStaff] = useState(new Staff());
 
   const { t } = useTranslation("staffFeature", { keyPrefix: "StaffDetail" });
@@ -87,9 +80,6 @@ function StaffDetail({ expertisesList, loadExpertisesList }) {
   const editStaffRoleModal = useCustomModal();
   const blockStaffModal = useCustomModal();
   const unblockStaffModal = useCustomModal();
-
-  const params = useParams();
-  const staffId = useMemo(() => params?.staffId, [params?.staffId]);
 
   const authStore = useAuthStore();
 
@@ -136,8 +126,6 @@ function StaffDetail({ expertisesList, loadExpertisesList }) {
     defaultValues,
     criteriaMode: "all"
   });
-
-  const navigate = useNavigate();
 
   const loadData = async () => {
     await fetchApi(async () => {
@@ -261,44 +249,6 @@ function StaffDetail({ expertisesList, loadExpertisesList }) {
         }}
       >
         <CustomOverlay open={isLoading} />
-
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-            alignItems: "center",
-            position: "absolute",
-            top: 0,
-            right: 0
-          }}
-        >
-          <Button
-            variant="contained"
-            onClick={() => {
-              navigate(`${routeConfig.staff}/${staffId}${staffDetailRoutes.schedule}`);
-            }}
-            sx={{
-              bgcolor: theme.palette.success.light,
-              mr: 2
-            }}
-            startIcon={<CalendarMonthIcon sx={{ color: theme.palette.success.contrastText }} />}
-          >
-            {tBtn("schedule")}
-          </Button>
-
-          <Button
-            variant="contained"
-            onClick={() => {
-              navigate(`${routeConfig.staff}/${staffId}${staffDetailRoutes.timeOff}`);
-            }}
-            sx={{
-              bgcolor: theme.palette.success.light
-            }}
-            startIcon={<CalendarMonthIcon sx={{ color: theme.palette.success.contrastText }} />}
-          >
-            {tBtn("timeOff")}{" "}
-          </Button>
-        </Box>
 
         <Box
           sx={{
@@ -882,6 +832,7 @@ function StaffDetail({ expertisesList, loadExpertisesList }) {
 }
 
 StaffDetail.propTypes = {
+  staffId: PropTypes.string.isRequired,
   expertisesList: PropTypes.array.isRequired,
   loadExpertisesList: PropTypes.func.isRequired
 };

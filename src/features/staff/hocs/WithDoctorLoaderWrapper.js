@@ -1,15 +1,13 @@
+import PropTypes from "prop-types";
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import staffServices from "../../../services/staffServices";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
 
 const WithDoctorLoaderWrapper = (WrappedComponent) => {
   function DoctorLoaderWrapper(props) {
-    const [doctor, setDoctor] = useState();
+    const [doctor, setDoctor] = useState({});
 
-    const params = useParams();
-
-    const doctorId = params?.staffId;
+    const { staffId: doctorId } = props;
 
     const { fetchApi } = useFetchingStore();
 
@@ -31,6 +29,10 @@ const WithDoctorLoaderWrapper = (WrappedComponent) => {
 
     return <WrappedComponent doctor={doctor} {...props} doctorId={doctorId} />;
   }
+
+  DoctorLoaderWrapper.propTypes = {
+    staffId: PropTypes.string.isRequired
+  };
 
   return DoctorLoaderWrapper;
 };

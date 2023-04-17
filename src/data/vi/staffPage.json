@@ -1,0 +1,10 @@
+{
+  "StaffPage": {},
+  "StaffDetailPage": {
+    "tabs": {
+      "info": "Thông tin",
+      "schedule": "Lịch khám",
+      "timeOff": "Lịch nghỉ"
+    }
+  }
+}

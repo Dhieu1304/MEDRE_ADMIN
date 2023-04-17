@@ -1,0 +1,10 @@
+{
+  "StaffPage": {},
+  "StaffDetailPage": {
+    "tabs": {
+      "info": "Info",
+      "schedule": "Schedule",
+      "timeOff": "Time Off"
+    }
+  }
+}
