@@ -1,0 +1,11 @@
+{
+  "properties": {
+    "id": "ID",
+    "date": "Ngày",
+    "timeStart": "Giờ bắt đầu",
+    "timeEnd": "Giờ kết thúc",
+    "createdAt": "Ngày tạo",
+    "updatedAt": "Ngày cập nhập",
+    "time": "Thời gian"
+  }
+}

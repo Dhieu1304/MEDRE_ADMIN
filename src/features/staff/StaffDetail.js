@@ -262,21 +262,43 @@ function StaffDetail({ expertisesList, loadExpertisesList }) {
       >
         <CustomOverlay open={isLoading} />
 
-        <Button
-          variant="contained"
-          onClick={() => {
-            navigate(`${routeConfig.staff}/${staffId}${staffDetailRoutes.schedule}`);
-          }}
+        <Box
           sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
             position: "absolute",
             top: 0,
-            right: 0,
-            bgcolor: theme.palette.success.light
+            right: 0
           }}
-          startIcon={<CalendarMonthIcon sx={{ color: theme.palette.success.contrastText }} />}
         >
-          {t("schedule_btn")}
-        </Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              navigate(`${routeConfig.staff}/${staffId}${staffDetailRoutes.schedule}`);
+            }}
+            sx={{
+              bgcolor: theme.palette.success.light,
+              mr: 2
+            }}
+            startIcon={<CalendarMonthIcon sx={{ color: theme.palette.success.contrastText }} />}
+          >
+            {tBtn("schedule")}
+          </Button>
+
+          <Button
+            variant="contained"
+            onClick={() => {
+              navigate(`${routeConfig.staff}/${staffId}${staffDetailRoutes.timeOff}`);
+            }}
+            sx={{
+              bgcolor: theme.palette.success.light
+            }}
+            startIcon={<CalendarMonthIcon sx={{ color: theme.palette.success.contrastText }} />}
+          >
+            {tBtn("timeOff")}{" "}
+          </Button>
+        </Box>
 
         <Box
           sx={{

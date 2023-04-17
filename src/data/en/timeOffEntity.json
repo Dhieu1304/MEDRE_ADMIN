@@ -1,0 +1,11 @@
+{
+  "properties": {
+    "id": "ID",
+    "date": "Date",
+    "timeStart": "Time Start",
+    "timeEnd": "Time End",
+    "createdAt": "Created at",
+    "updatedAt": "Updated at",
+    "time": "Time"
+  }
+}

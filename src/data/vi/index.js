@@ -8,6 +8,7 @@ import staffFeature from "./staffFeature.json";
 import staffEntity from "./staffEntity.json";
 import userFeature from "./userFeature.json";
 import userEntity from "./userEntity.json";
+import timeOffEntity from "./timeOffEntity.json";
 
 const vi = {
   authFeature,
@@ -19,7 +20,8 @@ const vi = {
   staffFeature,
   staffEntity,
   userFeature,
-  userEntity
+  userEntity,
+  timeOffEntity
 };
 
 export default vi;

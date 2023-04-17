@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import { DoctorSchedule } from "../../features/schedule";
+import { DoctorSchedule, DoctorTimeOff } from "../../features/schedule";
 import { StaffDetail, StaffList } from "../../features/staff";
 import { staffDetailRoutes, staffRoutes } from "./routes";
 
@@ -13,6 +13,7 @@ export default function StaffPage() {
           <Routes>
             <Route path={staffDetailRoutes.detail} element={<StaffDetail />} />
             <Route path={staffDetailRoutes.schedule} element={<DoctorSchedule />} />
+            <Route path={staffDetailRoutes.timeOff} element={<DoctorTimeOff />} />
           </Routes>
         }
       />

@@ -1,5 +1,13 @@
 {
-  "custom_modal": {
-    "cancel": "Thoát"
+  "CustomModal": {
+    "button": {
+      "cancel": "Thoát"
+    }
+  },
+  "CustomDateFromToInput": {
+    "preview": "Xem trước",
+    "button": {
+      "submit": "Xác nhận"
+    }
   }
 }

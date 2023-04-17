@@ -35,6 +35,7 @@ export const staffStatus = {
 
 export const staffActionAbility = {
   READ: "READ",
+  ADD: "ADD",
   DELETE: "DELETE",
   UPDATE: "UPDATE",
   UPDATE_ROLE: "UPDATE_ROLE",

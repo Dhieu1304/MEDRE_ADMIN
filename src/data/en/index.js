@@ -8,6 +8,7 @@ import staffFeature from "./staffFeature.json";
 import staffEntity from "./staffEntity.json";
 import userFeature from "./userFeature.json";
 import userEntity from "./userEntity.json";
+import timeOffEntity from "./timeOffEntity.json";
 
 const en = {
   authFeature,
@@ -19,7 +20,8 @@ const en = {
   staffFeature,
   staffEntity,
   userFeature,
-  userEntity
+  userEntity,
+  timeOffEntity
 };
 
 export default en;

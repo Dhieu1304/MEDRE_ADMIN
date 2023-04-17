@@ -31,7 +31,7 @@ function StaffFiltersForm({ expertisesList }) {
         value: staffRoles.ROLE_NURSE
       },
       {
-        label: tSelect("roles.nurse"),
+        label: tSelect("roles.customerService"),
         value: staffRoles.ROLE_CUSTOMER_SERVICE
       },
       {
@@ -294,8 +294,9 @@ function StaffFiltersForm({ expertisesList }) {
           fromDateRules={{}}
           toDateName="to"
           toDateRules={{}}
-          fromDateLabel="From"
-          toDateLabel="To"
+          fromDateLabel={tFilter("from")}
+          toDateLabel={tFilter("to")}
+          previewLabel={tFilter("scheduleFromToPreview")}
         />
       </Grid>
       <Grid item {...gridItemProps}>

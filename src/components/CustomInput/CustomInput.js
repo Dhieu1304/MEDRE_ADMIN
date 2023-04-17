@@ -166,6 +166,7 @@ function CustomInput({
                     value,
                     onBlur: () => {
                       trigger(name, { shouldFocus: true });
+                      if (triggerTo) trigger(triggerTo, { shouldFocus: true });
                       onBlur();
                     },
                     onChange,

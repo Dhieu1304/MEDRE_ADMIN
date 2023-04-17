@@ -1,10 +1,32 @@
 {
-  "doctor_schedule": {
+  "DoctorSchedule": {
     "title": "Thông tin lịch khám",
-    "current_week": "Tuần hiện tại"
+    "button": {
+      "currentWeek": "Tuần hiện tại",
+      "addTimeOff": "Thêm lịch nghỉ"
+    }
   },
-  "schedule_list": {
+  "ScheduleList": {
     "title": "Thông tin lịch khám",
-    "today": "Hôm nay"
+    "button": {
+      "today": "Hôm nay"
+    }
+  },
+
+  "AddNewTimeOffModal": {
+    "title": "Thêm lịch nghỉ",
+    "button": {
+      "save": "Lưu"
+    }
+  },
+
+  "DoctorTimeOff": {
+    "title": "Danh sách lịch nghỉ",
+    "filter": {
+      "dateRange": "Khoảng ngày"
+    },
+    "button": {
+      "addTimeOff": "Thêm lịch nghỉ"
+    }
   }
 }

@@ -1,5 +1,13 @@
 {
-  "custom_modal": {
-    "cancel": "Cancel"
+  "CustomModal": {
+    "button": {
+      "cancel": "Cancel"
+    }
+  },
+  "CustomDateFromToInput": {
+    "preview": "Preview",
+    "button": {
+      "submit": "Submit"
+    }
   }
 }

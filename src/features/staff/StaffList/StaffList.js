@@ -26,7 +26,7 @@ import { useAppConfigStore } from "../../../store/AppConfigStore/hooks";
 import { useCustomModal } from "../../../components/CustomModal/hooks";
 
 import { NotHaveAccessModal } from "../../auth";
-import { EditStaffRoleModal, BlockStaffModal } from "../components";
+import { EditStaffRoleModal, BlockStaffModal, AddStaffModal } from "../components";
 
 import useObjDebounce from "../../../hooks/useObjDebounce";
 
@@ -35,6 +35,9 @@ import StaffTable from "./StaffTable";
 import WithExpertisesLoaderWrapper from "../components/WithExpertisesLoaderWrapper";
 import { columnsIds, createDefaultValues, initialShowCols } from "./utils";
 import UnblockStaffModal from "../components/UnblockStaffModal";
+import { Can } from "../../../store/AbilityStore";
+import { staffActionAbility } from "../../../entities/Staff";
+import Staff from "../../../entities/Staff/Staff";
 
 function StaffList({ expertisesList }) {
   const [isFirst, setIsFirst] = useState(true);
@@ -54,6 +57,7 @@ function StaffList({ expertisesList }) {
   const editStaffRoleModal = useCustomModal();
   const blockStaffModal = useCustomModal();
   const unblockStaffModal = useCustomModal();
+  const addStaffModal = useCustomModal();
 
   // functions for multilingual use
 
@@ -332,6 +336,19 @@ function StaffList({ expertisesList }) {
             >
               {tBtn("showMenuColumns")}
             </Button>
+            <Can I={staffActionAbility.ADD} a={Staff.magicWord()}>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  addStaffModal.setShow(true);
+                }}
+                sx={{
+                  ml: 2
+                }}
+              >
+                {tBtn("add")}
+              </Button>
+            </Can>
             <Menu
               anchorEl={showTableColsMenu}
               anchorOrigin={{
@@ -465,6 +482,8 @@ function StaffList({ expertisesList }) {
           </Box>
         )}
       </Box>
+
+      {addStaffModal.show && <AddStaffModal show={addStaffModal.show} setShow={addStaffModal.setShow} />}
       {editStaffRoleModal.show && (
         <EditStaffRoleModal
           show={editStaffRoleModal.show}

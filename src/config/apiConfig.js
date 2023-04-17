@@ -23,8 +23,13 @@ const expertiseApi = {
 };
 
 const scheduleApi = {
-  schedule: () => "/schedule",
+  scheduleList: () => "/schedule/list-all",
   timeList: () => "/time-schedule/time"
 };
 
-export { authApi, userApi, staffApi, scheduleApi, expertiseApi };
+const timeOffApi = {
+  timeOffList: () => "/doctor-time-off/time-off",
+  createTimeOff: () => "/doctor-time-off/create-time-off"
+};
+
+export { authApi, userApi, staffApi, scheduleApi, expertiseApi, timeOffApi };

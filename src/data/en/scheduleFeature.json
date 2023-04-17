@@ -1,10 +1,32 @@
 {
-  "doctor_schedule": {
+  "DoctorSchedule": {
     "title": "Schedule",
-    "current_week": "Current week"
+    "button": {
+      "currentWeek": "Current week",
+      "addTimeOff": "Add time off"
+    }
   },
-  "schedule_list": {
+  "ScheduleList": {
     "title": "Schedule",
-    "today": "Today"
+    "button": {
+      "today": "Today"
+    }
+  },
+
+  "AddNewTimeOffModal": {
+    "title": "Add time off",
+    "button": {
+      "save": "Save"
+    }
+  },
+
+  "DoctorTimeOff": {
+    "title": "Doctor time off",
+    "filter": {
+      "dateRange": "Date range"
+    },
+    "button": {
+      "addTimeOff": "Add time off"
+    }
   }
 }

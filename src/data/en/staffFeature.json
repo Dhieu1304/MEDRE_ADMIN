@@ -17,7 +17,10 @@
       "education": "Education",
       "certificate": "Certificate",
       "address": "Address",
-      "schedules": "Schedules"
+      "schedules": "Schedules",
+      "from": "From",
+      "to": "To",
+      "scheduleFromToPreview": "Preview"
     },
 
     "select": {
@@ -50,7 +53,8 @@
       "reset": "Reset",
       "hideFilterCollapse": "Hide filter",
       "showFilterCollapse": "Show Filter",
-      "showMenuColumns": "Show"
+      "showMenuColumns": "Show",
+      "add": "Add"
     }
   },
 

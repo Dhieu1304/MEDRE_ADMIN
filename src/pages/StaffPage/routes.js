@@ -7,7 +7,8 @@ const staffRoutes = {
 
 const staffDetailRoutes = {
   detail: "/",
-  schedule: "/schedule"
+  schedule: "/schedule",
+  timeOff: "/timeOff"
 };
 
 export { staffRoutes, staffDetailRoutes };

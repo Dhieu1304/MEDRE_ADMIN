@@ -38,7 +38,12 @@ function ScheduleList() {
 
   const loadData = async () => {
     await fetchApi(async () => {
-      const res = await scheduleServices.getAllScheduleList(currentDate, currentDate);
+      // const res = await scheduleServices.getAllScheduleList(currentDate, currentDate);
+
+      const res = {
+        succes: false,
+        messag: ""
+      };
 
       // console.log("load data res: ", res);
 

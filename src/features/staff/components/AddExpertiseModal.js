@@ -6,6 +6,7 @@ import CustomModal from "../../../components/CustomModal";
 import CustomInput from "../../../components/CustomInput";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
 import staffServices from "../../../services/staffServices";
+import { expertiseInputValidate } from "../../../entities/Expertise";
 
 function AddExpertiseModal({ show, setShow, handleAfterAddExpertise }) {
   const { control, trigger, handleSubmit } = useForm({
@@ -16,7 +17,8 @@ function AddExpertiseModal({ show, setShow, handleAfterAddExpertise }) {
     criteriaMode: "all"
   });
 
-  const { t } = useTranslation("staffFeature", { keyPrefix: "add_expertise_modal" });
+  const { t } = useTranslation("staffFeature", { keyPrefix: "AddExpertiseModal" });
+  const { t: tInputValidation } = useTranslation("input", { keyPrefix: "validation" });
 
   const { fetchApi } = useFetchingStore();
 
@@ -39,13 +41,19 @@ function AddExpertiseModal({ show, setShow, handleAfterAddExpertise }) {
       show={show}
       setShow={setShow}
       title={t("title")}
-      submitBtnLabel={t("btn_label")}
+      submitBtnLabel={t("button.add")}
       onSubmit={handleSubmit(handleAddExpertise)}
     >
       <CustomInput
         control={control}
         rules={{
-          required: t("input_validation.required")
+          required: tInputValidation("required"),
+          maxLength: {
+            value: expertiseInputValidate.NAME_MAX_LENGTH,
+            message: tInputValidation("maxLength", {
+              maxLength: expertiseInputValidate.NAME_MAX_LENGTH
+            })
+          }
         }}
         label={t("expertise")}
         trigger={trigger}

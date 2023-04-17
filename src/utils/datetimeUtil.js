@@ -21,13 +21,13 @@ const getNext7DaysFrom = (date = new Date()) => {
 
 const formatDateLocale = { en, vi };
 
-const getWeekByDate = (date = new Date()) => {
+const getWeekByDate = (date = new Date(), startDayOfWeek = 0) => {
   const daysInWeek = 7;
   const week = [];
 
-  // Tính toán ngày đầu tiên của tuần bắt đầu từ thứ 2
+  // Tính toán ngày đầu tiên của tuần
   const firstDay = new Date(date);
-  const diff = date.getDate() - date.getDay() + (date.getDay() === 0 ? -6 : 1);
+  const diff = date.getDate() - date.getDay() + (date.getDay() === 0 ? -6 : startDayOfWeek);
   firstDay.setDate(diff);
 
   // Thêm 7 ngày vào mảng tuần
@@ -37,6 +37,7 @@ const getWeekByDate = (date = new Date()) => {
     week.push(nextDay);
   }
 
+  // console.log("week: ", week);
   return week;
 };
 
@@ -62,4 +63,34 @@ const subtractDate = (date1, date2) => {
   return daysBetween;
 };
 
-export { getNext7DaysFrom, formatDateLocale, getWeekByDate, subtractDate };
+const isEqualDateWithoutTime = (date1, date2) => {
+  return (
+    date1.getDate() === date2.getDate() &&
+    date1.getMonth() === date2.getMonth() &&
+    date1.getFullYear() === date2.getFullYear()
+  );
+};
+
+// Kiểm date có nằm giữa dateLeft và dateRight hay ko? (ko tính trường hợp date === dateLeft, date === dateRight)
+const isBetweenAndNoEqual = (date, dateLeft, dateRight) => {
+  return date > dateLeft && date < dateRight;
+};
+
+// Taoj ngày từ 1 date object và 1 chuỗi time (hh:mm:ss)
+const createDateByDateAndTimeStr = (date, timeStr) => {
+  const newDate = new Date(date);
+  const [hour, minute, second] = timeStr.split(":");
+  newDate.setHours(hour, minute, second, 0);
+  // console.log("newDate: ", newDate);
+  return newDate;
+};
+
+export {
+  getNext7DaysFrom,
+  formatDateLocale,
+  getWeekByDate,
+  subtractDate,
+  isEqualDateWithoutTime,
+  createDateByDateAndTimeStr,
+  isBetweenAndNoEqual
+};

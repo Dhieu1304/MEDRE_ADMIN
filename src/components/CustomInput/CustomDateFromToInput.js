@@ -4,6 +4,7 @@ import { Box, Button, Grid, InputAdornment, Menu, Switch, Typography } from "@mu
 import { CalendarToday as CalendarTodayIcon } from "@mui/icons-material";
 import { useForm } from "react-hook-form";
 import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 import CustomInput from "./CustomInput";
 
 function CustomDateFromToInput({
@@ -24,6 +25,8 @@ function CustomDateFromToInput({
   const [preview, setPreview] = useState("");
   const [showMenu, setShowMenu] = useState(null);
   const [showTime, setShowTime] = useState(haveTime);
+
+  const { t } = useTranslation("components", { keyPrefix: "CustomDateFromToInput" });
 
   const defaultValues = useMemo(() => {
     return {
@@ -255,7 +258,7 @@ function CustomDateFromToInput({
             }}
           >
             <Typography variant="body1" sx={{ fontWeight: "600" }}>
-              Time:
+              {t("preview")}
             </Typography>
 
             <Typography variant="body1" sx={{ fontWeight: "600" }}>
@@ -270,7 +273,7 @@ function CustomDateFromToInput({
             }}
           >
             <Button variant="contained" onClick={handleSubmit(handleFormDateSubmit)}>
-              Submit
+              {t("button.submit")}
             </Button>
           </Box>
         </Box>

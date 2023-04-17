@@ -1,8 +1,10 @@
 {
-    "validation": {
-        "required": "field is required",
-        "maxLength": "cannot be more than {{maxLength}} characters",
-        "minLength": "cannot be less than {{minLength}} characters",
-        "format": "field is not correct format"
-    }
+  "validation": {
+    "required": "field is required",
+    "maxLength": "cannot be more than {{maxLength}} characters",
+    "minLength": "cannot be less than {{minLength}} characters",
+    "format": "field is not correct format",
+    "lt": "must be less than {{right}}",
+    "rt": "must be more than {{left}}"
+  }
 }

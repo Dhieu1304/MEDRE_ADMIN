@@ -17,7 +17,10 @@
       "education": "Học vấn",
       "certificate": "Chứng nhận",
       "address": "Địa chỉ",
-      "schedules": "Lịch khám"
+      "schedules": "Lịch khám",
+      "from": "Từ",
+      "to": "Đến",
+      "scheduleFromToPreview": "Thời gian"
     },
 
     "select": {
@@ -50,7 +53,8 @@
       "reset": "Đặt lại",
       "hideFilterCollapse": "Ẩn bộ lọc",
       "showFilterCollapse": "Hiện bộ lọc",
-      "showMenuColumns": "Hiện"
+      "showMenuColumns": "Hiện",
+      "add": "Thêm"
     }
   },
 
@@ -71,7 +75,7 @@
     "title": "Thêm chuyên khoa",
     "expertise": "Chuyên khoa",
     "button": {
-      "add": "Add"
+      "add": "Thêm"
     }
   },
 
