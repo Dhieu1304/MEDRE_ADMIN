@@ -21,7 +21,8 @@ import {
 import formatDate from "date-and-time";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import qs from "query-string";
 
 import CustomOverlay from "../../../components/CustomOverlay";
 
@@ -34,11 +35,18 @@ import timeOffServices from "../../../services/timeOffServices";
 import { useCustomModal } from "../../../components/CustomModal";
 import AddNewTimeOffModal from "../components/AddNewTimeOffModal";
 import { findBookingsByDate, groupSchedulesByTimeId } from "./utils";
+import { normalizeStrToDateStr } from "../../../utils/standardizedForForm";
 
 function DoctorScheduleCalendar({ timesList, doctor }) {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const [schedules, setSchedules] = useState([]);
   const [timeOffs, setTimeOffs] = useState([]);
-  const [currentDate, setCurrentDate] = useState(new Date());
+
+  const [currentDate, setCurrentDate] = useState(
+    new Date(normalizeStrToDateStr(qs.parse(location.search)?.date, new Date()))
+  );
 
   const params = useParams();
   const { staffId } = params;
@@ -59,6 +67,7 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
 
       if (res.success) {
         const schedulesData = res.schedules;
+        // console.log("res: ", res);
         setSchedules(schedulesData);
         return { success: true, error: "" };
       }
@@ -92,6 +101,8 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
   const rows = useMemo(() => {
     return groupSchedulesByTimeId(schedules, timesList, heads, timeOffs);
   }, [heads, schedules, timesList, timeOffs]);
+
+  // console.log("heads: ", heads);
 
   // return <div>sang</div>;
 
@@ -274,6 +285,9 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
                 newCurrentDate.setDate(newCurrentDate.getDate() - 7);
                 // console.log("prev newCurrentDate: ", newCurrentDate);
                 setCurrentDate(() => newCurrentDate);
+
+                const searchParams = qs.stringify({ date: formatDate.format(newCurrentDate, "YYYY-MM-DD") });
+                navigate(`?${searchParams}`);
               }}
             >
               <ArrowLeftIcon fontSize="large" />
@@ -282,6 +296,8 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
               variant="contained"
               onClick={() => {
                 setCurrentDate(() => new Date());
+                const searchParams = qs.stringify({ date: formatDate.format(new Date(), "YYYY-MM-DD") });
+                navigate(`?${searchParams}`);
               }}
               size="small"
             >
@@ -293,6 +309,10 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
                 newCurrentDate.setDate(newCurrentDate.getDate() + 7);
                 // console.log("next newCurrentDate: ", newCurrentDate);
                 setCurrentDate(() => newCurrentDate);
+
+                const searchParams = qs.stringify({ date: formatDate.format(newCurrentDate, "YYYY-MM-DD") });
+
+                navigate(`?${searchParams}`);
               }}
             >
               <ArrowRightIcon fontSize="large" />
@@ -321,7 +341,7 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
                       key={cell}
                       align="center"
                     >
-                      {formatDate.format(cell, "DD/MM")}
+                      {formatDate.format(cell, "DD/MM (ddd)")}
                     </TableCell>
                   );
                 })}

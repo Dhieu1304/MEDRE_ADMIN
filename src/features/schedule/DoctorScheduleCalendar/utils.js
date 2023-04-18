@@ -42,6 +42,7 @@ export const groupSchedulesByTimeId = (schedules, timesList, heads, timeOffs) =>
       });
 
       if (head >= applyFrom && head <= applyTo) {
+        // console.log("push:");
         if (!schedulesByTimeId[schedule.idTime]) {
           schedulesByTimeId[schedule.idTime] = [];
         }

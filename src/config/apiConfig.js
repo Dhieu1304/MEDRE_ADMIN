@@ -24,7 +24,8 @@ const expertiseApi = {
 
 const scheduleApi = {
   scheduleList: () => "/schedule/list-all",
-  timeList: () => "/time-schedule/time"
+  timeList: () => "/time-schedule/time",
+  createSchedule: () => "/schedule/create-schedule"
 };
 
 const timeOffApi = {

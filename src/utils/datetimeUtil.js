@@ -25,10 +25,10 @@ const getWeekByDate = (date = new Date(), startDayOfWeek = 0) => {
   const daysInWeek = 7;
   const week = [];
 
-  // Tính toán ngày đầu tiên của tuần
+  // Tính toán ngày đầu tiên của tuần dựa trên startDayOfWeek
   const firstDay = new Date(date);
-  const diff = date.getDate() - date.getDay() + (date.getDay() === 0 ? -6 : startDayOfWeek);
-  firstDay.setDate(diff);
+  const diff = (date.getDay() - startDayOfWeek + daysInWeek) % daysInWeek;
+  firstDay.setDate(date.getDate() - diff);
 
   // Thêm 7 ngày vào mảng tuần
   for (let i = 0; i < daysInWeek; i++) {

@@ -59,6 +59,11 @@
     "button": {
       "save": "Lưu"
     },
+    "form": {
+      "dateRange": "Khoảng ngày",
+      "applyFrom": "Áp dụng từ",
+      "applyTo": "Đến"
+    },
     "addDoctorScheduleModal": {
       "title": "Thêm lịch khám",
       "question": "Bạn có chắc chắn thêm lịch khám cho {{name}}",

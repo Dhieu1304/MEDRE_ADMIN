@@ -105,6 +105,24 @@ function DoctorScheduleList({ doctor, doctorId }) {
     [locale]
   );
 
+  const staffTypeListObj = useMemo(() => {
+    return [
+      {
+        label: tScheduleConstants("types.offline"),
+        value: "Offline"
+      },
+      {
+        label: tScheduleConstants("types.online"),
+        value: "Online"
+      }
+    ].reduce((obj, cur) => {
+      return {
+        ...obj,
+        [cur?.value]: cur
+      };
+    }, {});
+  }, [locale]);
+
   const resetChangeApplyTimeForm = (schedulesData, value = false) => {
     const scheduleIdsObj = schedulesData.reduce((result, schedule) => {
       return {
@@ -281,7 +299,7 @@ function DoctorScheduleList({ doctor, doctorId }) {
                       {schedule?.timeSchedule?.timeStart} &rarr; {schedule?.timeSchedule?.timeEnd}
                     </TableCell>
                     <TableCell align="left" sx={{ display: "table-cell" }}>
-                      {schedule?.type}
+                      {staffTypeListObj[schedule?.type].label}
                     </TableCell>
                     <TableCell align="left" sx={{ display: "table-cell" }}>
                       {formatDate.format(new Date(schedule?.applyFrom), "DD/MM/YYYY")}

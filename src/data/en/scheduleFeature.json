@@ -54,6 +54,11 @@
     "button": {
       "save": "save"
     },
+    "form": {
+      "dateRange": "Date range",
+      "applyFrom": "Apply from",
+      "applyTo": "To"
+    },
     "addDoctorScheduleModal": {
       "title": "Add doctor schedule",
       "question": "Are you sure to add schudules for {{name}}",
