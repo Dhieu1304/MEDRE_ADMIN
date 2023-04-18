@@ -6,13 +6,7 @@
       "addTimeOff": "Add time off"
     }
   },
-  "DoctorScheduleList": {
-    "title": "Schedule",
-    "button": {
-      "currentWeek": "Current week",
-      "addTimeOff": "Add time off"
-    }
-  },
+
   "ScheduleList": {
     "title": "Schedule",
     "button": {
@@ -34,6 +28,38 @@
     },
     "button": {
       "addTimeOff": "Add time off"
+    }
+  },
+
+  "DoctorScheduleList": {
+    "title": "Doctor Schedule List",
+    "filter": {
+      "dateRange": "Date range",
+      "from": "Apply from",
+      "to": "To"
+    },
+    "changeApplyTimeModal": {
+      "title": "Change Apply Time",
+      "dateRange": "Date range",
+      "applyFrom": "Apply from",
+      "applyTo": "To",
+      "button": {
+        "save": "Save"
+      }
+    }
+  },
+
+  "AddDoctorSchedule": {
+    "title": "Add doctor schedule",
+    "button": {
+      "save": "save"
+    },
+    "addDoctorScheduleModal": {
+      "title": "Add doctor schedule",
+      "question": "Are you sure to add schudules for {{name}}",
+      "button": {
+        "save": "save"
+      }
     }
   }
 }

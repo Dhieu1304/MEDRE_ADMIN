@@ -3,7 +3,9 @@
   "StaffDetailPage": {
     "tabs": {
       "info": "Info",
+      "calendar": "Calendar",
       "schedule": "Schedule",
+      "addSchedule": "Add Schedule",
       "timeOff": "Time Off"
     }
   }

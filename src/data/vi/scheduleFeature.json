@@ -6,6 +6,7 @@
       "addTimeOff": "Thêm lịch nghỉ"
     }
   },
+
   "ScheduleList": {
     "title": "Thông tin lịch khám",
     "button": {
@@ -27,6 +28,43 @@
     },
     "button": {
       "addTimeOff": "Thêm lịch nghỉ"
+    }
+  },
+
+  "DoctorScheduleList": {
+    "title": "Danh sách lịch khám",
+    "filter": {
+      "dateRange": "Khoảng ngày",
+      "from": "Áp dụng từ",
+      "to": "Đến"
+    },
+
+    "button": {
+      "editAll": "Chỉnh sửa"
+    },
+
+    "changeApplyTimeModal": {
+      "title": "Thay đổi thời gian áp dụng",
+      "dateRange": "Khoảng ngày",
+      "applyFrom": "Áp dụng từ",
+      "applyTo": "Đến",
+      "button": {
+        "save": "Lưu"
+      }
+    }
+  },
+
+  "AddDoctorSchedule": {
+    "title": "Thêm lịch khám",
+    "button": {
+      "save": "Lưu"
+    },
+    "addDoctorScheduleModal": {
+      "title": "Thêm lịch khám",
+      "question": "Bạn có chắc chắn thêm lịch khám cho {{name}}",
+      "button": {
+        "save": "Lưu"
+      }
     }
   }
 }

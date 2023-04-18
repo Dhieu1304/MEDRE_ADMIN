@@ -9,6 +9,7 @@ const staffDetailRoutes = {
   detail: "/",
   calendar: "/calendar",
   schedule: "/schedule",
+  addSchedule: "/addSchedule",
   timeOff: "/timeOff"
 };
 

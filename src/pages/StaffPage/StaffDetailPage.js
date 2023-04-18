@@ -1,6 +1,7 @@
 import { Link, Route, Routes, useParams } from "react-router-dom";
 import { Box, Tab, Tabs, Typography } from "@mui/material";
 import {
+  Add as AddIcon,
   CalendarMonth as CalendarMonthIcon,
   Info as InfoIcon,
   Schedule as ScheduleIcon,
@@ -10,7 +11,7 @@ import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { staffDetailRoutes } from "./routes";
 import { StaffDetail } from "../../features/staff";
-import { DoctorScheduleCalendar, DoctorTimeOff } from "../../features/schedule";
+import { AddDoctorSchedule, DoctorScheduleCalendar, DoctorScheduleList, DoctorTimeOff } from "../../features/schedule";
 import routeConfig from "../../config/routeConfig";
 
 function StaffDetailPage() {
@@ -64,7 +65,7 @@ function StaffDetailPage() {
           to={path + staffDetailRoutes.detail}
         />
         <Tab
-          label={renderTableLabel("tabs.schedule")}
+          label={renderTableLabel("tabs.calendar")}
           icon={<CalendarMonthIcon />}
           iconPosition="start"
           LinkComponent={Link}
@@ -76,6 +77,13 @@ function StaffDetailPage() {
           iconPosition="start"
           LinkComponent={Link}
           to={path + staffDetailRoutes.schedule}
+        />
+        <Tab
+          label={renderTableLabel("tabs.addSchedule")}
+          icon={<AddIcon />}
+          iconPosition="start"
+          LinkComponent={Link}
+          to={path + staffDetailRoutes.addSchedule}
         />
         <Tab
           label={renderTableLabel("tabs.timeOff")}
@@ -93,7 +101,8 @@ function StaffDetailPage() {
         <Routes>
           <Route path={staffDetailRoutes.detail} element={<StaffDetail staffId={staffId} />} />
           <Route path={staffDetailRoutes.calendar} element={<DoctorScheduleCalendar staffId={staffId} />} />
-          <Route path={staffDetailRoutes.schedule} element={<DoctorScheduleCalendar staffId={staffId} />} />
+          <Route path={staffDetailRoutes.schedule} element={<DoctorScheduleList staffId={staffId} />} />
+          <Route path={staffDetailRoutes.addSchedule} element={<AddDoctorSchedule staffId={staffId} />} />
           <Route path={staffDetailRoutes.timeOff} element={<DoctorTimeOff staffId={staffId} />} />
         </Routes>
       </Box>

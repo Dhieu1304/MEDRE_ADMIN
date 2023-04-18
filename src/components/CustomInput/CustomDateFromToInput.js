@@ -27,6 +27,7 @@ function CustomDateFromToInput({
   const [showTime, setShowTime] = useState(haveTime);
 
   const { t } = useTranslation("components", { keyPrefix: "CustomDateFromToInput" });
+  const { t: tInputValidate } = useTranslation("input", { keyPrefix: "validate" });
 
   const defaultValues = useMemo(() => {
     return {
@@ -209,7 +210,9 @@ function CustomDateFromToInput({
                       const toDateOnlyDate = new Date(toDateDate.getFullYear(), toDateDate.getMonth(), toDateDate.getDate());
 
                       if (fromDateOnlyDate > toDateOnlyDate) {
-                        return "From phải < TO";
+                        return tInputValidate("rt", {
+                          left: fromDateLabel
+                        });
                       }
                       return true;
                     }

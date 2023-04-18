@@ -35,7 +35,7 @@ const cleanUndefinedValueObject = (obj) => {
   }, {});
 };
 
-// remove undefined keys
+// remove undefined and empty string keys
 const cleanUndefinedAndEmptyStrValueObject = (obj) => {
   return Object.keys(obj).reduce((acc, key) => {
     const value = obj[key];
@@ -46,4 +46,20 @@ const cleanUndefinedAndEmptyStrValueObject = (obj) => {
   }, {});
 };
 
-export { mergeObjectsWithoutNullAndUndefined, cleanUndefinedValueObject, cleanUndefinedAndEmptyStrValueObject };
+// remove undefined and empty string and false keys
+const cleanUndefinedAndEmptyStrAndFalseValueObject = (obj) => {
+  return Object.keys(obj).reduce((acc, key) => {
+    const value = obj[key];
+    if (value !== undefined && value !== "" && value !== false) {
+      acc[key] = value;
+    }
+    return acc;
+  }, {});
+};
+
+export {
+  mergeObjectsWithoutNullAndUndefined,
+  cleanUndefinedValueObject,
+  cleanUndefinedAndEmptyStrValueObject,
+  cleanUndefinedAndEmptyStrAndFalseValueObject
+};

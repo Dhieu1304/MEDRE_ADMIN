@@ -1,0 +1,23 @@
+{
+  "properties": {
+    "dayOfWeek": "Ngày trong tuần",
+    "timeSchedule": "Thời gian",
+    "type": "Loại khám",
+    "applyTime": "Thời gian áp dụng"
+  },
+  "constants": {
+    "types": {
+      "online": "Trực tiếp",
+      "offline": "trực tuyến"
+    },
+    "daysOfWeek": {
+      "monday": "Thứ 2",
+      "tuesday": "Thứ 3",
+      "wednesday": "Thứ 4",
+      "thursday": "Thứ 5",
+      "friday": "Thứ 6",
+      "saturday": "Thứ 7",
+      "sunday": "Chủ nhật"
+    }
+  }
+}

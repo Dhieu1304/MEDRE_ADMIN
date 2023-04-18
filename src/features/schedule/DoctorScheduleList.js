@@ -1,46 +1,42 @@
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useEffect, useMemo, useState } from "react";
 import {
   Box,
   Button,
+  Checkbox,
   Grid,
-  Pagination,
   Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
-  TablePagination,
   TableRow,
   Typography
 } from "@mui/material";
 import formatDate from "date-and-time";
 import { useTranslation } from "react-i18next";
-import { Add as AddIcon } from "@mui/icons-material";
-import { useTheme } from "@emotion/react";
 import PropTypes from "prop-types";
 import WithDoctorLoaderWrapper from "../staff/hocs/WithDoctorLoaderWrapper";
 import { useFetchingStore } from "../../store/FetchingApiStore";
 import { normalizeStrToDateStr } from "../../utils/standardizedForForm";
 import { getWeekByDate } from "../../utils/datetimeUtil";
 import { CustomDateFromToInput } from "../../components/CustomInput";
-import timeOffServices from "../../services/timeOffServices";
 import { useAppConfigStore } from "../../store/AppConfigStore";
-import AddNewTimeOffModal from "./components/AddNewTimeOffModal";
 import { useCustomModal } from "../../components/CustomModal";
+import scheduleServices from "../../services/scheduleServices";
+import CustomModal from "../../components/CustomModal/CustomModal";
 
 function DoctorScheduleList({ doctor, doctorId }) {
-  const [timeOffs, setTimeOffs] = useState([]);
-  const [count, setCount] = useState(0);
+  const [schedules, setSchedules] = useState([]);
 
-  const theme = useTheme();
+  const [checkedCount, setCheckedCount] = useState(0);
 
   const week = useMemo(() => {
     return getWeekByDate();
   }, []);
 
-  const { watch, setValue } = useForm({
+  const filterForm = useForm({
     mode: "onChange",
     defaultValues: {
       from: normalizeStrToDateStr(week[0]),
@@ -51,71 +47,111 @@ function DoctorScheduleList({ doctor, doctorId }) {
     criteriaMode: "all"
   });
 
+  const changeApplyTimeForm = useForm({
+    mode: "onChange",
+    defaultValues: {
+      scheduleIdsObj: {},
+      applyFrom: "",
+      applyTo: ""
+    },
+    criteriaMode: "all"
+  });
+
   const { fetchApi } = useFetchingStore();
   const { locale } = useAppConfigStore();
 
   const { t } = useTranslation("scheduleFeature", { keyPrefix: "DoctorScheduleList" });
-  const { t: tTimeOff } = useTranslation("timeOffEntity", { keyPrefix: "properties" });
+  const { t: tSchedule } = useTranslation("scheduleEntity", { keyPrefix: "properties" });
+  const { t: tScheduleConstants } = useTranslation("scheduleEntity", { keyPrefix: "constants" });
 
-  const addTimeOffModal = useCustomModal();
+  const changeApplyTimeModal = useCustomModal();
+
+  const daysOfWeek = useMemo(
+    () => [
+      tScheduleConstants("daysOfWeek.sunday"),
+      tScheduleConstants("daysOfWeek.monday"),
+      tScheduleConstants("daysOfWeek.tuesday"),
+      tScheduleConstants("daysOfWeek.wednesday"),
+      tScheduleConstants("daysOfWeek.thursday"),
+      tScheduleConstants("daysOfWeek.friday"),
+      tScheduleConstants("daysOfWeek.saturday")
+    ],
+    [locale]
+  );
 
   const columns = useMemo(
     () => [
       {
         id: "date",
-        label: tTimeOff("date"),
+        label: tSchedule("dayOfWeek"),
         minWidth: 100
       },
       {
-        id: "time",
-        label: tTimeOff("time"),
+        id: "timeSchedule",
+        label: tSchedule("timeSchedule"),
         minWidth: 100
       },
       {
-        id: "createdAt",
-        label: tTimeOff("createdAt"),
+        id: "type",
+        label: tSchedule("type"),
         minWidth: 100
       },
       {
-        id: "updatedAt",
-        label: tTimeOff("updatedAt"),
+        id: "applyTime",
+        label: tSchedule("applyTime"),
         minWidth: 100
       }
     ],
     [locale]
   );
 
-  const loadData = async ({ page }) => {
-    const paramsObj = {
-      ...watch(),
-      page
-    };
+  const resetChangeApplyTimeForm = (schedulesData, value = false) => {
+    const scheduleIdsObj = schedulesData.reduce((result, schedule) => {
+      return {
+        ...result,
+        [schedule?.id]: value
+      };
+    }, {});
+
+    //
+    changeApplyTimeForm.reset({
+      scheduleIdsObj,
+      applyFrom: "",
+      applyTo: ""
+    });
+
+    if (value) {
+      setCheckedCount(schedules?.length);
+    } else {
+      setCheckedCount(0);
+    }
+  };
+
+  const loadData = async () => {
+    const { from, to } = filterForm.watch();
 
     await fetchApi(async () => {
-      const res = await timeOffServices.getTimeOffByDoctorId(doctorId, paramsObj);
-      let countData = 0;
-      let timeOffsData = [];
-      // console.log("res: ", res);
+      const res = await scheduleServices.getScheduleListByDoctorId(doctorId, from, to);
+      let schedulesData = [];
+      //
       if (res.success) {
-        timeOffsData = res?.timeOffs || [];
-        countData = res?.count;
-        setTimeOffs(timeOffsData);
-        setCount(countData);
+        schedulesData = res?.schedules || [];
+        resetChangeApplyTimeForm(schedulesData);
+        setSchedules(schedulesData);
         return { success: true };
       }
-      setTimeOffs([]);
-      setCount(0);
+      setSchedules([]);
       return { error: res.message };
     });
   };
 
   useEffect(() => {
-    const page = 1;
-    loadData({ page });
-  }, [watch().from, watch().to]);
+    loadData();
+  }, [filterForm.watch().from, filterForm.watch().to]);
 
-  const handleAfterAddTimeOff = async () => {
-    await loadData({ page: 1 });
+  const handleChangeApplyTime = async ({ scheduleIdsObj, applyFrom, applyTo }) => {
+    const scheduleIds = Object.keys(scheduleIdsObj).filter((key) => scheduleIdsObj[key] && key);
+    await scheduleServices.changeApplyTimeScheduleByScheduleIds(doctor.id, { scheduleIds, applyFrom, applyTo });
   };
 
   return (
@@ -131,62 +167,66 @@ function DoctorScheduleList({ doctor, doctorId }) {
           <Typography variant="h4" sx={{ mb: 4 }}>
             {t("title")}
           </Typography>
-          <Button
-            variant="contained"
-            onClick={() => {
-              addTimeOffModal.setShow(true);
-              addTimeOffModal.setData(doctor);
-            }}
-            endIcon={<AddIcon fontSize="large" />}
-            sx={{
-              bgcolor: theme.palette.success.light
-            }}
-          >
-            {t("button.addTimeOff")}
-          </Button>
         </Box>
         <Grid container spacing={3} justifyContent="space-between">
           <Grid item xs={12} sm={12} md={6} lg={4}>
             <CustomDateFromToInput
-              watchMainForm={watch}
-              setMainFormValue={setValue}
+              watchMainForm={filterForm.watch}
+              setMainFormValue={filterForm.setValue}
               label={t("filter.dateRange")}
               fromDateName="from"
               fromDateRules={{}}
               toDateName="to"
               toDateRules={{}}
-              fromDateLabel="From"
-              toDateLabel="To"
+              fromDateLabel={t("filter.from")}
+              toDateLabel={t("filter.to")}
             />
           </Grid>
 
-          <Grid item xs={12} sm={12} md={6} lg={4}>
-            <TablePagination
-              component="div"
-              count={count}
-              page={count === 0 ? 0 : watch().page - 1}
-              onPageChange={(e, page) => {
-                const newPage = page + 1;
-                setValue("page", newPage);
-                loadData({ page: newPage });
-              }}
-              rowsPerPageOptions={[1, 10, 20, 50, 100]}
-              rowsPerPage={watch().limit}
-              onRowsPerPageChange={(e) => {
-                const newLimit = parseInt(e.target.value, 10);
-                setValue("limit", newLimit);
-              }}
+          {checkedCount > 0 && schedules?.length > 0 && (
+            <Box
               sx={{
-                mb: 2
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center"
               }}
-            />
-          </Grid>
+            >
+              <Button
+                variant="contained"
+                sx={{
+                  ml: 2
+                }}
+                onClick={() => {
+                  changeApplyTimeModal.setShow(true);
+                }}
+              >
+                {t("button.editAll")}
+              </Button>
+            </Box>
+          )}
         </Grid>
 
         <TableContainer component={Paper} sx={{ mb: 4 }}>
           <Table>
             <TableHead>
               <TableRow>
+                <TableCell
+                  align="center"
+                  style={{ width: 10 }}
+                  sx={{
+                    fontWeight: 600
+                  }}
+                >
+                  <Checkbox
+                    checked={checkedCount === schedules.length}
+                    onChange={(e) => {
+                      const { checked } = e.target;
+
+                      resetChangeApplyTimeForm(schedules, checked);
+                    }}
+                  />
+                </TableCell>
+
                 {columns?.map((column) => {
                   return (
                     <TableCell
@@ -204,20 +244,49 @@ function DoctorScheduleList({ doctor, doctorId }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {timeOffs.map((timeOff) => {
+              {schedules.map((schedule) => {
                 return (
-                  <TableRow key={timeOff?.id}>
+                  <TableRow key={schedule?.id}>
+                    <TableCell
+                      align="center"
+                      style={{ width: 10 }}
+                      sx={{
+                        fontWeight: 600
+                      }}
+                    >
+                      <Controller
+                        name={`scheduleIdsObj.${schedule?.id}`}
+                        control={changeApplyTimeForm.control}
+                        render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
+                          <Checkbox
+                            onBlur={onBlur}
+                            value={value}
+                            error={error}
+                            checked={value}
+                            onChange={(e) => {
+                              const { checked } = e.target;
+
+                              setCheckedCount((count) => count + (checked ? 1 : -1));
+                              onChange(e);
+                            }}
+                            name={schedule?.id}
+                          />
+                        )}
+                      />
+                    </TableCell>
                     <TableCell component="th" scope="row" sx={{ display: "table-cell" }}>
-                      {formatDate.format(new Date(timeOff?.date), "DD/MM/YYYY")}
+                      {daysOfWeek[schedule?.dayOfWeek]}
                     </TableCell>
                     <TableCell align="left" sx={{ display: "table-cell" }}>
-                      {timeOff?.timeStart} &rarr; {timeOff?.timeEnd}
+                      {schedule?.timeSchedule?.timeStart} &rarr; {schedule?.timeSchedule?.timeEnd}
                     </TableCell>
                     <TableCell align="left" sx={{ display: "table-cell" }}>
-                      {formatDate.format(new Date(timeOff?.createdAt), "DD/MM/YYYY hh:mm:ss")}
+                      {schedule?.type}
                     </TableCell>
                     <TableCell align="left" sx={{ display: "table-cell" }}>
-                      {formatDate.format(new Date(timeOff?.updatedAt), "DD/MM/YYYY hh:mm:ss")}
+                      {formatDate.format(new Date(schedule?.applyFrom), "DD/MM/YYYY")}
+                      &rarr;
+                      {formatDate.format(new Date(schedule?.applyTo), "DD/MM/YYYY")}
                     </TableCell>
                   </TableRow>
                 );
@@ -225,33 +294,28 @@ function DoctorScheduleList({ doctor, doctorId }) {
             </TableBody>
           </Table>
         </TableContainer>
-
-        {!!count && (
-          <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-end", alignItems: "flex-end" }}>
-            <Pagination
-              count={Math.ceil(count / watch().limit)}
-              color="primary"
-              page={watch().page}
-              sx={{
-                display: "flex",
-                justifyContent: "flex-end"
-              }}
-              onChange={(event, newPage) => {
-                setValue("page", newPage);
-                loadData({ page: newPage });
-              }}
-            />
-          </Box>
-        )}
       </Box>
-      {addTimeOffModal.show && (
-        <AddNewTimeOffModal
-          show={addTimeOffModal.show}
-          setShow={addTimeOffModal.setShow}
-          data={addTimeOffModal.data}
-          setData={addTimeOffModal.setData}
-          handleAfterAddTimeOff={handleAfterAddTimeOff}
-        />
+
+      {changeApplyTimeModal && (
+        <CustomModal
+          title={t("changeApplyTimeModal.title")}
+          submitBtnLabel={t("changeApplyTimeModal.button.save")}
+          show={changeApplyTimeModal.show}
+          setShow={changeApplyTimeModal.setShow}
+          onSubmit={changeApplyTimeForm.handleSubmit(handleChangeApplyTime)}
+        >
+          <CustomDateFromToInput
+            watchMainForm={changeApplyTimeForm.watch}
+            setMainFormValue={changeApplyTimeForm.setValue}
+            label={t("changeApplyTimeModal.dateRange")}
+            fromDateName="applyFrom"
+            fromDateRules={{}}
+            toDateName="applyTo"
+            toDateRules={{}}
+            fromDateLabel={t("changeApplyTimeModal.applyFrom")}
+            toDateLabel={t("changeApplyTimeModal.applyTo")}
+          />
+        </CustomModal>
       )}
     </>
   );

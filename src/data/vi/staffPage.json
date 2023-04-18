@@ -3,7 +3,9 @@
   "StaffDetailPage": {
     "tabs": {
       "info": "Thông tin",
-      "schedule": "Lịch khám",
+      "calendar": "Lịch khám",
+      "schedule": "Lịch",
+      "addSchedule": "Thêm lịch",
       "timeOff": "Lịch nghỉ"
     }
   }

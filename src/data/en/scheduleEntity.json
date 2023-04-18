@@ -1,0 +1,23 @@
+{
+  "properties": {
+    "dayOfWeek": "Day of week",
+    "timeSchedule": "Time",
+    "type": "Type",
+    "applyTime": "Apply time"
+  },
+  "constants": {
+    "types": {
+      "online": "Online",
+      "offline": "Offline"
+    },
+    "daysOfWeek": {
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday"
+    }
+  }
+}
