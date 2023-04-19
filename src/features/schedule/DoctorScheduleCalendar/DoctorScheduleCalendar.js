@@ -90,6 +90,8 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
     });
   };
 
+  // console.log("timeOffs: ", timeOffs);
+
   useEffect(() => {
     loadData();
   }, [heads]);
@@ -108,6 +110,7 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
 
   const renderCell = (schedule, colDate, time, index) => {
     const booking = findBookingsByDate(schedule?.bookings, colDate);
+    // console.log("booking: ", booking);
     const scheduleStartTime = time.timeStart;
     const scheduleEndTime = time.timeEnd;
     const scheduleStartTimeStr = `${formatDate.format(colDate, "YYYY-MM-DD")} ${scheduleStartTime}`;
@@ -215,6 +218,18 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
   };
 
   const renderCols = (row, time) => {
+    /*
+      Mỗi dayOfWeek của 1 timeId có thể có nhiều schedule do sự chồng chèo applyFrom và applyTo
+      Ví dụ: ca 8h-8h30 của dayOfWeek=2 (Thứ 3 Ngày 19-4-2023 có thể có 2 cái schdule có
+        - applyFrom - applyTo là 1-1-2022 => 1-1-2024
+        - applyFrom - applyTo là 1-6-2022 => 1-6->2023
+
+        acc[schedule.dayOfWeek] ~ acc[2] có do đó có thể được gọi 2 lần (cho cái 2 schudule.dayOfWeek = 2)
+        Tuy nhiên gán acc[schedule.dayOfWeek] = schedule vô tình sẽ ghi đè acc[schedule.dayOfWeek] 2 lần
+        => Tạm thời ko ảnh hưởng đến việc show danh sách schedule
+        => Nhưng Cần có giải pháp ở BE để tránh sự tồn tại các schedule chồng chép applyFrom và applyTo
+
+    */
     const scheduleIdsByDayOfWeek = row.reduce((acc, schedule) => {
       acc[schedule.dayOfWeek] = schedule;
       return acc;

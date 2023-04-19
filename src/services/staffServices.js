@@ -90,6 +90,58 @@ const getStaffList = async ({
   }
 };
 
+const getStaffListWithSchedules = async ({ page, limit, date }) => {
+  // console.log("getStaffList: ", { page, limit, name });
+
+  const params = cleanUndefinedAndEmptyStrValueObject({
+    page,
+    limit,
+    date
+  });
+
+  // console.log("params: ", params);
+
+  try {
+    const res = await axiosClient.get(staffApi.staffListWithSchedules(), { params });
+
+    // let res = camelcaseKeys(
+    //   {
+    //     status: true,
+    //     message: "",
+    //     data: {
+    //       staffs: staffMockData.list()
+    //     }
+    //   },
+    //   { deep: true }
+    // );
+
+    // console.log("res: ", res);
+
+    if (res?.status) {
+      const staffs = camelcaseKeys(res?.data?.results, { deep: true });
+      const count = res?.data?.totalResults;
+
+      return {
+        success: true,
+        staffs,
+        count,
+
+        message: res?.message
+      };
+    }
+    return {
+      success: false,
+      message: `Status is ${res.status}`
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
 const getStaffInfo = async () => {
   try {
     const res = await axiosClient.get(staffApi.staffInfo());
@@ -403,6 +455,7 @@ const unblockStaff = async (id, reason) => {
 
 export default {
   getStaffList,
+  getStaffListWithSchedules,
   getStaffDetail,
   getStaffExpertises,
   getStaffInfo,

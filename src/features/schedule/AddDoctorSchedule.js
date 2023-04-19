@@ -254,25 +254,6 @@ function AddDoctorSchedule({ timesList, doctor }) {
                                 );
                               }}
                             />
-
-                            {/* <FormControlLabel
-                            control={
-                              <Checkbox
-                                name={scheduleTypes.TYPE_OFFLINE}
-                                checked={watch().schedulesData[index][dayOfWeek]?.type === scheduleTypes.TYPE_OFFLINE}
-                              />
-                            }
-                            label={scheduleTypesListObj[scheduleTypes.TYPE_OFFLINE].label}
-                          />
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                name={scheduleTypes.TYPE_ONLINE}
-                                checked={watch().schedulesData[index][dayOfWeek]?.type === scheduleTypes.TYPE_ONLINE}
-                              />
-                            }
-                            label={scheduleTypesListObj[scheduleTypes.TYPE_ONLINE].label}
-                          /> */}
                           </Box>
                         </TableCell>
                       );

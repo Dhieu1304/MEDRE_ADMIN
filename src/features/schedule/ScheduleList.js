@@ -14,139 +14,169 @@ import {
   IconButton,
   // CardHeader,
   // Avatar,
-  Typography
+  Typography,
+  TableBody
   // Card
 } from "@mui/material";
 
 import formatDate from "date-and-time";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useFetchingStore } from "../../store/FetchingApiStore";
 import WithTimesLoaderWrapper from "./hocs/WithTimesLoaderWrapper";
 import staffServices from "../../services/staffServices";
 import { staffRoles } from "../../entities/Staff";
-// import timeOffServices from "../../services/timeOffServices";
-// import { createDateByDateAndTimeStr } from "../../utils/datetimeUtil";
+import timeOffServices from "../../services/timeOffServices";
+import { createDateByDateAndTimeStr, isBetweenAndNoEqual } from "../../utils/datetimeUtil";
 
-// function filterDoctorsByDayOfWeek(doctors, timesList, currentDate, timeOffs) {
-//   const timeListIds = Object.keys(timesList);
+function filterDoctorsByDayOfWeek(doctors, timesList, currentDate, timeOffs) {
+  const timesListObj = timesList.reduce((result, time) => {
+    return {
+      ...result,
+      [time.id]: time
+    };
+  }, {});
 
-//   const timesListObj = timesList.reduce((result, time) => {
-//     return {
-//       ...result,
-//       [time.id]: time
-//     };
-//   }, {});
+  const filteredDoctors = doctors.map((doctor) => {
+    const filteredSchedules = doctor.staffSchedules.filter((schedule) => {
+      return schedule.dayOfWeek === currentDate.getDay();
+    });
 
-//   const filteredDoctors = doctors.map((doctor) => {
-//     const filteredSchedules = doctor.staffSchedules.filter((schedule) => {
-//       return schedule.dayOfWeek === currentDate.getDay();
-//     });
+    const schedulesByTimeId = filteredSchedules.reduce((result, schedule) => {
+      /** ***********************************************************************
+      // [schedule.idTime] là 1 array vì nếu có 2 schedule trùng timeId và dayOfWeek
+      // Nhưng applyFrom và applyTo đè lên nhau
+      // Nghĩa là current thuộc cả applyFrom và applyTo của 2 schedule trùng timeId và dayOfWeek
 
-//     const schedulesByTimeId = filteredSchedules.reduce((result, schedule) => {
-//       const temp = result[schedule.idTime] || [];
+      Ví dụ: ca 8h-8h30 của dayOfWeek=2 (Thứ 3 Ngày 19-4-2023 có thể có 2 cái schdule có
+        - applyFrom - applyTo là 1-1-2022 => 1-1-2024
+        - applyFrom - applyTo là 1-6-2022 => 1-6->2023
 
-//       /*************************************************************************
-//       // [schedule.idTime] là 1 array vì nếu có 2 schedule trùng timeId và dayOfWeek
-//       // Nhưng applyFrom và applyTo đè lên nhau
-//       // Nghĩa là current thuộc cả applyFrom và applyTo của 2 schedule trùng timeId và dayOfWeek
-//       return {
-//         ...result,
-//         [schedule.idTime]: [...temp, schedule]
-//       };
 
-//       Tạm thời ta sẽ lấy phần tử 0 trước, sau này sẽ fix lại sau
+            return {
+        ...result,
+        [schedule.idTime]: [...temp, schedule]
+      };
 
-//       *************************************************************************/
 
-//       const currentScheduleTimeStart = createDateByDateAndTimeStr(currentDate, timesListObj[schedule.idTime].timeStart);
-//       const currentScheduleTimeEnd = createDateByDateAndTimeStr(currentDate, timesListObj[schedule.idTime].timeEnd);
+      ----
+      - Hiện tại để xử lý, tạm thời, ta sẽ ghi đè các schedule có cùng idTime và dayOfWeek
 
-//       let isTimeOff = false;
-//       timeOffs.forEach((timeOff) => {
-//         const timeOffStart = createDateByDateAndTimeStr(new Date(timeOff.date), timeOff.timeStart);
-//         const timeOffEnd = createDateByDateAndTimeStr(new Date(timeOff.date), timeOff.timeEnd);
+      Do đó sẽ tạm thời bỏ
+        const temp = result[schedule.idTime] || [];
 
-//         if (isBetweenAndNoEqual(currentScheduleTimeStart, timeOffStart, timeOffEnd)) {
-//           isTimeOff = true;
-//         } else if (isBetweenAndNoEqual(currentScheduleTimeEnd, timeOffStart, timeOffEnd)) {
-//           isTimeOff = true;
-//         } else if (isBetweenAndNoEqual(timeOffStart, currentScheduleTimeStart, currentScheduleTimeEnd)) {
-//           isTimeOff = true;
-//         } else if (isBetweenAndNoEqual(timeOffEnd, currentScheduleTimeStart, currentScheduleTimeEnd)) {
-//           isTimeOff = true;
-//         }
-//       });
 
-//       const scheduleWithIfIsTimeOff = { ...schedule, isTimeOff };
 
-//       return {
-//         ...result,
-//         [schedule.idTime]: [...temp, scheduleWithIfIsTimeOff]
-//       };
-//     }, {});
+      - Và thay
+        return {
+          ...result,
+          [schedule.idTime]: [...temp, scheduleWithIfIsTimeOff]
+        };
+        Thành
 
-//     // console.log("schedulesByTimeId: ", schedulesByTimeId);
+        return {
+          ...result,
+          [schedule.idTime]: scheduleWithIfIsTimeOff
+        };
 
-//     return { ...doctor, staffSchedules: [...filteredSchedules], schedulesByTimeId };
-//   });
-//   return filteredDoctors;
-// }
+
+      ************************************************************************ */
+
+      // KO được XÓA
+      // const temp = result[schedule.idTime] || [];
+
+      const currentScheduleTimeStart = createDateByDateAndTimeStr(currentDate, timesListObj[schedule.idTime].timeStart);
+      const currentScheduleTimeEnd = createDateByDateAndTimeStr(currentDate, timesListObj[schedule.idTime].timeEnd);
+
+      let isTimeOff = false;
+      // console.log("timeOffs[doctor?.id]: ", timeOffs[doctor?.id]);
+      timeOffs[doctor?.id]?.forEach((timeOff) => {
+        // console.log("timeOff: ", timeOff);
+        const timeOffStart = createDateByDateAndTimeStr(new Date(timeOff.date), timeOff.timeStart);
+        const timeOffEnd = createDateByDateAndTimeStr(new Date(timeOff.date), timeOff.timeEnd);
+
+        if (isBetweenAndNoEqual(currentScheduleTimeStart, timeOffStart, timeOffEnd)) {
+          isTimeOff = true;
+        } else if (isBetweenAndNoEqual(currentScheduleTimeEnd, timeOffStart, timeOffEnd)) {
+          isTimeOff = true;
+        } else if (isBetweenAndNoEqual(timeOffStart, currentScheduleTimeStart, currentScheduleTimeEnd)) {
+          isTimeOff = true;
+        } else if (isBetweenAndNoEqual(timeOffEnd, currentScheduleTimeStart, currentScheduleTimeEnd)) {
+          isTimeOff = true;
+        }
+      });
+
+      const scheduleWithIfIsTimeOff = { ...schedule, isTimeOff };
+
+      // Ko được xóa
+      // return {
+      //   ...result,
+      //   [schedule.idTime]: [...temp, scheduleWithIfIsTimeOff]
+      // };
+
+      return {
+        ...result,
+        [schedule.idTime]: scheduleWithIfIsTimeOff
+      };
+    }, {});
+
+    // console.log("schedulesByTimeId: ", schedulesByTimeId);
+
+    return { ...doctor, staffSchedules: [...filteredSchedules], schedulesByTimeId };
+  });
+  return filteredDoctors;
+}
 
 function ScheduleList({ timesList }) {
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const [doctors, setDoctors] = useState([]);
 
-  // const [timeOffs, setTimeOffs] = useState([]);
+  const [timeOffs, setTimeOffs] = useState([]);
 
   const { fetchApi } = useFetchingStore();
 
   const { t } = useTranslation("scheduleFeature", { keyPrefix: "ScheduleList" });
 
-  // const loadTimeOffs = async (doctorId) => {
-  //   const timeOffsOfDoctor = [];
-  //   await fetchApi(async () => {
-  //     const res = await timeOffServices.getTimeOffByDoctorId(doctorId, { from: currentDate, to: currentDate });
-  //
-  //     if (res.success) {
-  //       const timeOffsData = res.timeOffs;
-  //       // setTimeOffs(timeOffsData);
-  //       timeOffsOfDoctor.push(timeOffsData);
-  //       return { success: true, error: "" };
-  //     }
-  //     // setTimeOffs([]);
-  //     return { success: false, error: res.message };
-  //   });
-  //
-  //   return timeOffsOfDoctor;
-  // };
+  const loadTimeOffs = async () => {
+    await fetchApi(async () => {
+      const res = await timeOffServices.getTimeOffByDoctorId(undefined, { from: currentDate, to: currentDate });
+      if (res.success) {
+        const timeOffsData = res.timeOffs;
 
-  const loadAllTimeOffs = async () => {
-    // const allTimeOffs = [];
-    // for (const doctor of doctors) {
-    //   const timeOffsOfDoctor = await loadTimeOffs(doctor.id);
-    //   allTimeOffs.push({
-    //     [doctor.id]: timeOffsOfDoctor
-    //   });
-    // }
-    // setTimeOffs([]);
+        const timeOffsObj = timeOffsData.reduce((result, timeOff) => {
+          const newResult = [...result];
+          if (!newResult[timeOff.doctorId]) {
+            newResult[timeOff.idDoctor] = [];
+          }
+          newResult[timeOff.idDoctor].push(timeOff);
+          return [...newResult];
+        }, {});
+
+        setTimeOffs(timeOffsObj);
+        // timeOffsOfDoctor.push(timeOffsData);
+        return { success: true, error: "" };
+      }
+      setTimeOffs([]);
+      return { success: false, error: res.message };
+    });
   };
 
+  // console.log("timeOffs: ", timeOffs);
+
   useEffect(() => {
-    loadAllTimeOffs();
-  }, [doctors]);
+    loadTimeOffs();
+  }, [doctors, currentDate]);
 
   const loadData = async () => {
     await fetchApi(async () => {
       const paramsObj = {
         role: staffRoles.ROLE_DOCTOR,
         limit: 200,
-        from: currentDate,
-        to: currentDate
+        date: currentDate
       };
-      const res = await staffServices.getStaffList(paramsObj);
+      const res = await staffServices.getStaffListWithSchedules(paramsObj);
 
       // let countData = 0;
       // let staffsData = [];
@@ -165,14 +195,77 @@ function ScheduleList({ timesList }) {
     loadData();
   }, [currentDate]);
 
-  // const rows = useMemo(() => {
-  //   // return filterDoctorsByDayOfWeek(doctors, timesList, currentDate, timeOffs);
-  //   return [];
-  // }, [doctors, timeOffs, timesList]);
+  const rows = useMemo(() => {
+    return filterDoctorsByDayOfWeek(doctors, timesList, currentDate, timeOffs);
+  }, [doctors, timeOffs, timesList]);
 
-  // console.log("doctors: ", doctors);
+  if (currentDate.getDate() === 20) {
+    // console.log("Ngày 20: ");
+    // console.log("doctors: ", doctors);
+    // console.log("rows: ", rows);
+  }
   // console.log("timeOffs: ", timeOffs);
-  // console.log("rows: ", rows);
+
+  const renderButton = (schedule) => {
+    const bookings = schedule?.bookings;
+
+    if (schedule.idDoctor === "353066b6-4bb7-4df8-8f46-88f71bf6a182") {
+      // console.log("Sang schedule: ", schedule);
+    }
+
+    if (bookings.length > 0) {
+      return <Button variant="outlined">{bookings[0]?.bookingStatus}</Button>;
+    }
+    return <Button variant="contained">Book</Button>;
+  };
+
+  const renderCols = (row) => {
+    return timesList.map((time) => {
+      const timeId = time?.id;
+      const schedule = row.schedulesByTimeId[timeId];
+
+      // console.log("schedule: ", schedule);
+
+      return schedule ? (
+        <TableCell
+          key={timeId}
+          sx={{
+            border: "1px solid rgba(0,0,0,0.4)",
+            p: 0,
+            position: "relative",
+            bgcolor: schedule?.isTimeOff ? "rgba(255, 246, 143, 0.8)" : "inherit"
+          }}
+          align="center"
+        >
+          {/* {schedule.timeSchedule.timeStart} */}
+          <Box
+            sx={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: 2,
+              position: "relative"
+            }}
+          >
+            {renderButton(schedule)}
+          </Box>
+        </TableCell>
+      ) : (
+        <TableCell
+          key={timeId}
+          sx={{
+            border: "1px solid rgba(0,0,0,0.4)",
+            p: 0,
+            position: "relative"
+          }}
+          align="center"
+        />
+      );
+    });
+  };
 
   return (
     <Box>
@@ -219,7 +312,11 @@ function ScheduleList({ timesList }) {
             <TableRow>
               <TableCell
                 sx={{
-                  border: "1px solid rgba(0,0,0,0.2)"
+                  border: "1px solid rgba(0,0,0,0.2)",
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 1,
+                  backgroundColor: "#fff"
                 }}
               />
               {timesList?.map((time) => {
@@ -238,38 +335,31 @@ function ScheduleList({ timesList }) {
               })}
             </TableRow>
           </TableHead>
-          {/* <TableBody>
+          <TableBody>
             {rows.map((row) => {
               return (
                 <TableRow key={row.id}>
                   <TableCell
                     sx={{
                       border: "1px solid rgba(0,0,0,0.2)",
-                      fontWeight: "600"
+                      fontWeight: "600",
+                      minWidth: 200,
+                      position: "sticky",
+                      left: 0,
+                      zIndex: 1,
+                      backgroundColor: "#fff"
                     }}
                     component="th"
                     scope="row"
                   >
                     {row?.name}
                   </TableCell>
-                  {timesList?.map((time) => {
-                    // console.log("time?.id: ", time?.id);
-                    return (
-                      <TableCell
-                        key={time?.id}
-                        sx={{
-                          border: "1px solid rgba(0,0,0,0.2)"
-                        }}
-                        align="center"
-                      >
-                        {row?.schedules[time?.id]?.status}
-                      </TableCell>
-                    );
-                  })}
+
+                  {renderCols(row)}
                 </TableRow>
               );
             })}
-          </TableBody> */}
+          </TableBody>
         </Table>
       </TableContainer>
     </Box>

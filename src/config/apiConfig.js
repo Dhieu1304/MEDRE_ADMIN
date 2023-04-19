@@ -10,6 +10,7 @@ const userApi = {
 const staffApi = {
   staffInfo: () => "/staff/my-profile",
   staffList: () => "/staff/all",
+  staffListWithSchedules: () => "/staff/list-staff-schedule",
   staffDetail: (id) => `/staff/detail/${id}`,
   editStaff: (id) => `/staff/edit/${id}`,
   editMyProfile: () => `/staff/my-profile/edit`,
