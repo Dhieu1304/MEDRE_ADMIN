@@ -100,11 +100,9 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
     loadTimeOffs();
   }, [heads]);
 
-  const rows = useMemo(() => {
+  const [rows, schedulesTimeOff] = useMemo(() => {
     return groupSchedulesByTimeId(schedules, timesList, heads, timeOffs);
   }, [heads, schedules, timesList, timeOffs]);
-
-  // console.log("heads: ", heads);
 
   // return <div>sang</div>;
 
@@ -113,13 +111,21 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
     // console.log("booking: ", booking);
     const scheduleStartTime = time.timeStart;
     const scheduleEndTime = time.timeEnd;
+
+    // Chuyển scheduleStartTime và scheduleEndTime về dạng Date String với ngày là ứng với colDate
     const scheduleStartTimeStr = `${formatDate.format(colDate, "YYYY-MM-DD")} ${scheduleStartTime}`;
     const scheduleEndTimeStr = `${formatDate.format(colDate, "YYYY-MM-DD")} ${scheduleEndTime}`;
 
-    const isTimeOff = schedule?.isTimeOff;
+    // const isTimeOff = schedule?.isTimeOff;
+    const isTimeOff = schedulesTimeOff[schedule?.id];
     const now = new Date();
 
+    // Nếu now > startTime thì thì isOutOfTime = true;
+    // Sử dụng để hiển Box che mờ Tabel Cell nếu đã vượt giờ khám
     const isOutOfTime = formatDate.subtract(now, new Date(scheduleStartTimeStr)).toMilliseconds() > 0;
+
+    // Nếu now thuộc start -> end => là ca hiện tại => true
+    // Dùng để hiển thị màu của Table Cell khác biệt
     const isCurrentTime =
       formatDate.subtract(now, new Date(scheduleStartTimeStr)).toMilliseconds() > 0 &&
       formatDate.subtract(now, new Date(scheduleEndTimeStr)).toMilliseconds() < 0;
@@ -146,6 +152,7 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
         >
           {schedule && (
             <>
+              {/* Hiển thị loại khám Online - Offline */}
               <Box
                 sx={{
                   width: "100%",
@@ -156,9 +163,10 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
                   alignItems: "center"
                 }}
               >
-                {schedule && <Typography sx={{}}>{schedule?.type}</Typography>}
+                <Typography sx={{}}>{schedule?.type}</Typography>
               </Box>
 
+              {/* Hiển thị trạng thái booking trong schedule */}
               <Box
                 sx={{
                   display: "flex",
@@ -167,8 +175,10 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
                   flexGrow: 1,
                   bgcolor: isCurrentTime ? theme.palette.info.light : booking && theme.palette.success.light,
                   // bgcolor: isCurrentTime ? "red" : "inherit",
-                  position: "relative"
+                  position: "relative",
+                  cursor: "pointer"
                 }}
+                onClick={() => {}}
               >
                 <Typography
                   sx={{
@@ -209,7 +219,8 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
               top: 0,
               left: 0,
               zIndex: 1,
-              bgcolor: "rgba(204,204,204,0.6)"
+              bgcolor: "rgba(204,204,204,0.6)",
+              pointerEvents: "none"
             }}
           />
         )}
@@ -230,16 +241,17 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
         => Nhưng Cần có giải pháp ở BE để tránh sự tồn tại các schedule chồng chép applyFrom và applyTo
 
     */
-    const scheduleIdsByDayOfWeek = row.reduce((acc, schedule) => {
+
+    // Group các schedules lại theo dayOfWeek => để dựa trên dayOfWeek truy xuất schedule của ngày đó
+    const schedulesGroupByDayOfWeek = row.reduce((acc, schedule) => {
       acc[schedule.dayOfWeek] = schedule;
       return acc;
     }, {});
 
     const cols = Array.from({ length: 7 }, (_, index) => {
-      const schedule = scheduleIdsByDayOfWeek[index];
-
+      const schedule = schedulesGroupByDayOfWeek[index];
+      // Ngày ứng với từng cột
       const colDate = heads[index];
-
       return renderCell(schedule, colDate, time, index);
     });
 

@@ -13,6 +13,8 @@ export const groupSchedulesByTimeId = (schedules, timesList, heads, timeOffs) =>
   const timeIds = timesList?.map((time) => time?.id);
   const schedulesByTimeId = {};
 
+  const schedulesTimeOff = {};
+
   schedules.forEach((schedule) => {
     if (timeIds.includes(schedule.idTime)) {
       const { dayOfWeek } = schedule;
@@ -41,23 +43,32 @@ export const groupSchedulesByTimeId = (schedules, timesList, heads, timeOffs) =>
         }
       });
 
+      if (isTimeOff) {
+        schedulesTimeOff[schedule.id] = true;
+      }
+
+      // console.log("schedule: ", schedule);
+
       if (head >= applyFrom && head <= applyTo) {
         // console.log("push:");
         if (!schedulesByTimeId[schedule.idTime]) {
           schedulesByTimeId[schedule.idTime] = [];
         }
         schedulesByTimeId[schedule.idTime].push({
-          ...schedule,
-          isTimeOff
+          ...schedule
+          // isTimeOff
         });
       }
     }
   });
 
-  return timeIds.map((timeId) => {
-    if (schedulesByTimeId[timeId]) {
-      return schedulesByTimeId[timeId].sort((a, b) => a.day_of_week - b.day_of_week);
-    }
-    return [];
-  });
+  return [
+    timeIds.map((timeId) => {
+      if (schedulesByTimeId[timeId]) {
+        return schedulesByTimeId[timeId].sort((a, b) => a.day_of_week - b.day_of_week);
+      }
+      return [];
+    }),
+    schedulesTimeOff
+  ];
 };

@@ -31,6 +31,7 @@ import timeOffServices from "../../services/timeOffServices";
 import { createDateByDateAndTimeStr, isBetweenAndNoEqual } from "../../utils/datetimeUtil";
 
 function filterDoctorsByDayOfWeek(doctors, timesList, currentDate, timeOffs) {
+  const schedulesTimeOff = {};
   const timesListObj = timesList.reduce((result, time) => {
     return {
       ...result,
@@ -107,7 +108,12 @@ function filterDoctorsByDayOfWeek(doctors, timesList, currentDate, timeOffs) {
         }
       });
 
-      const scheduleWithIfIsTimeOff = { ...schedule, isTimeOff };
+      // KO cần cái này nữa
+      // const scheduleWithIfIsTimeOff = { ...schedule, isTimeOff };
+
+      if (isTimeOff) {
+        schedulesTimeOff[schedule.id] = true;
+      }
 
       // Ko được xóa
       // return {
@@ -117,7 +123,7 @@ function filterDoctorsByDayOfWeek(doctors, timesList, currentDate, timeOffs) {
 
       return {
         ...result,
-        [schedule.idTime]: scheduleWithIfIsTimeOff
+        [schedule.idTime]: { ...schedule }
       };
     }, {});
 
@@ -125,7 +131,7 @@ function filterDoctorsByDayOfWeek(doctors, timesList, currentDate, timeOffs) {
 
     return { ...doctor, staffSchedules: [...filteredSchedules], schedulesByTimeId };
   });
-  return filteredDoctors;
+  return [filteredDoctors, schedulesTimeOff];
 }
 
 function ScheduleList({ timesList }) {
@@ -146,12 +152,12 @@ function ScheduleList({ timesList }) {
         const timeOffsData = res.timeOffs;
 
         const timeOffsObj = timeOffsData.reduce((result, timeOff) => {
-          const newResult = [...result];
+          const newResult = { ...result };
           if (!newResult[timeOff.doctorId]) {
             newResult[timeOff.idDoctor] = [];
           }
           newResult[timeOff.idDoctor].push(timeOff);
-          return [...newResult];
+          return { ...newResult };
         }, {});
 
         setTimeOffs(timeOffsObj);
@@ -195,7 +201,7 @@ function ScheduleList({ timesList }) {
     loadData();
   }, [currentDate]);
 
-  const rows = useMemo(() => {
+  const [rows, schedulesTimeOff] = useMemo(() => {
     return filterDoctorsByDayOfWeek(doctors, timesList, currentDate, timeOffs);
   }, [doctors, timeOffs, timesList]);
 
@@ -225,6 +231,8 @@ function ScheduleList({ timesList }) {
       const schedule = row.schedulesByTimeId[timeId];
 
       // console.log("schedule: ", schedule);
+      // const isTimeOff = schedule?.isTimeOff;
+      const isTimeOff = schedulesTimeOff[schedule?.id];
 
       return schedule ? (
         <TableCell
@@ -233,7 +241,7 @@ function ScheduleList({ timesList }) {
             border: "1px solid rgba(0,0,0,0.4)",
             p: 0,
             position: "relative",
-            bgcolor: schedule?.isTimeOff ? "rgba(255, 246, 143, 0.8)" : "inherit"
+            bgcolor: isTimeOff ? "rgba(255, 246, 143, 0.8)" : "inherit"
           }}
           align="center"
         >
