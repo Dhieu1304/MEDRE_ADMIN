@@ -6,6 +6,7 @@ const routeConfig = {
   user: "/user",
   schedule: "/schedule",
   meeting: "/meeting",
+  booking: "/booking",
   default: "/*"
 };
 
