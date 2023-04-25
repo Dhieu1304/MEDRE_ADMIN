@@ -17,14 +17,15 @@ function AddNewTimeOffModal({ show, setShow, data, setData, handleAfterAddTimeOf
     defaultValues: {
       timeStart: "",
       timeEnd: "",
-      date: ""
+      from: "",
+      to: ""
     },
     criteriaMode: "all"
   });
 
   const { t } = useTranslation("scheduleFeature", { keyPrefix: "AddNewTimeOffModal" });
   const { t: tTimeOff } = useTranslation("timeOffEntity", { keyPrefix: "properties" });
-  const { t: tInputValidation } = useTranslation("input", { keyPrefix: "validation" });
+  const { t: tInputValidate } = useTranslation("input", { keyPrefix: "validation" });
 
   const { fetchApi } = useFetchingStore();
 
@@ -40,10 +41,10 @@ function AddNewTimeOffModal({ show, setShow, data, setData, handleAfterAddTimeOf
     return [timesStart, timesEnd];
   }, [timesList]);
 
-  const handleAddTimeOff = async ({ date, timeStart, timeEnd }) => {
+  const handleAddTimeOff = async ({ from, to, timeStart, timeEnd }) => {
     // console.log({ data, date, timeStart, timeEnd });
     await fetchApi(async () => {
-      const res = await timeOffServices.addNewTimeOff({ date, timeStart, timeEnd });
+      const res = await timeOffServices.addNewTimeOff({ from, to, timeStart, timeEnd });
       if (res?.success) {
         setShow(false);
         setData({});
@@ -66,23 +67,48 @@ function AddNewTimeOffModal({ show, setShow, data, setData, handleAfterAddTimeOf
       onSubmit={handleSubmit(handleAddTimeOff)}
     >
       <Grid container spacing={3}>
-        <Grid item xs={12} sm={12} md={4} lg={12} xl={6}>
+        <Grid item xs={12} sm={12} md={4} lg={6} xl={6}>
           <CustomInput
             control={control}
             rules={{
-              required: tInputValidation("required")
+              required: tInputValidate("required")
             }}
-            label={tTimeOff("date")}
+            label={tTimeOff("from")}
             trigger={trigger}
-            name="date"
+            name="from"
             type="date"
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={4} lg={6} xl={3}>
+        <Grid item xs={12} sm={12} md={4} lg={6} xl={6}>
           <CustomInput
             control={control}
             rules={{
-              required: tInputValidation("required")
+              required: `${tTimeOff("to")} ${tInputValidate("required")}`,
+              validate: (value) => {
+                const { from } = watch();
+                const to = value;
+
+                if (from <= to) {
+                  return true;
+                }
+                return tInputValidate("gte", {
+                  left: tTimeOff("toLabel"),
+                  right: tTimeOff("fromLabel")
+                });
+              }
+            }}
+            label={tTimeOff("to")}
+            trigger={trigger}
+            name="to"
+            type="date"
+            isCustomError
+          />
+        </Grid>
+        <Grid item xs={12} sm={12} md={4} lg={6} xl={6}>
+          <CustomInput
+            control={control}
+            rules={{
+              required: tInputValidate("required")
             }}
             label={tTimeOff("timeStart")}
             trigger={trigger}
@@ -105,11 +131,11 @@ function AddNewTimeOffModal({ show, setShow, data, setData, handleAfterAddTimeOf
             </Select>
           </CustomInput>
         </Grid>
-        <Grid item xs={12} sm={12} md={4} lg={6} xl={3}>
+        <Grid item xs={12} sm={12} md={4} lg={6} xl={6}>
           <CustomInput
             control={control}
             rules={{
-              required: tInputValidation("required"),
+              required: `${tTimeOff("timeEnd")} ${tInputValidate("required")}`,
               validate: (value) => {
                 const start = watch().timeStart;
                 const end = value;
@@ -117,14 +143,16 @@ function AddNewTimeOffModal({ show, setShow, data, setData, handleAfterAddTimeOf
                 if (start < end) {
                   return true;
                 }
-                return tInputValidation("rt", {
-                  left: tTimeOff("timeStart")
+                return tInputValidate("gt", {
+                  left: tTimeOff("timeEndLabel"),
+                  right: tTimeOff("timeStartLabel")
                 });
               }
             }}
             label={tTimeOff("timeEnd")}
             trigger={trigger}
             name="timeEnd"
+            isCustomError
           >
             <Select
               renderValue={(selected) => {

@@ -33,7 +33,8 @@ function CustomInput({
   message,
   showCanEditIcon,
   childrenType = "select",
-  noNameValue
+  noNameValue,
+  isCustomError
 }) {
   const theme = useTheme();
 
@@ -178,7 +179,7 @@ function CustomInput({
               })}
 
               <FormHelperText>
-                <Box component="span">{inputErrorFormat(label, error?.message)}</Box>
+                <Box component="span">{isCustomError ? error?.message : inputErrorFormat(label, error?.message)}</Box>
               </FormHelperText>
               {!error?.message && message && message?.text && (
                 <Typography
@@ -214,7 +215,7 @@ function CustomInput({
           // label={label}
           disabled={disabled}
           type={inputType}
-          helperText={<Box component="span">{inputErrorFormat(label, error?.message)}</Box>}
+          helperText={<Box component="span">{isCustomError ? error?.message : inputErrorFormat(label, error?.message)}</Box>}
           onBlur={() => {
             trigger(name, { shouldFocus: true });
             if (triggerTo) trigger(triggerTo, { shouldFocus: true });
@@ -294,7 +295,8 @@ CustomInput.defaultProps = {
   multiline: undefined,
   rows: undefined,
   childrenType: "select",
-  noNameValue: ""
+  noNameValue: "",
+  isCustomError: false
 };
 
 CustomInput.propTypes = {
@@ -318,7 +320,8 @@ CustomInput.propTypes = {
   multiline: PropTypes.bool,
   rows: PropTypes.number,
   childrenType: PropTypes.string,
-  noNameValue: PropTypes.string
+  noNameValue: PropTypes.string,
+  isCustomError: PropTypes.bool
 };
 
 export default CustomInput;

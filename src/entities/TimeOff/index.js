@@ -1,2 +1,2 @@
-export { default as Expertise } from "./Expertise";
+export { default as TimeOff } from "./TimeOff";
 export * from "./constant";

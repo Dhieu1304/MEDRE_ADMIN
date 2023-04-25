@@ -2,8 +2,14 @@
   "properties": {
     "id": "ID",
     "date": "Ngày",
+    "from": "Từ ngày",
+    "to": "Đến ngày",
     "timeStart": "Giờ bắt đầu",
     "timeEnd": "Giờ kết thúc",
+    "fromLabel": "Ngày bắt đầu",
+    "toLabel": "Ngày kết thúc",
+    "timeStartLabel": "Giờ bắt đầu",
+    "timeEndLabel": "Giờ kết thúc",
     "createdAt": "Ngày tạo",
     "updatedAt": "Ngày cập nhập",
     "time": "Thời gian"

@@ -4,7 +4,9 @@
     "maxLength": "không được vượt quá {{maxLength}} ký tự",
     "minLength": "không được ít hơn {{minLength}} ký tự",
     "format": "sai định dạng",
-    "lt": "phải nhỏ hơn {{right}}",
-    "rt": "phải lớn hơn {{left}}"
+    "lt": "{{left}} phải nhỏ hơn {{right}}",
+    "gt": "{{left}} phải lớn hơn {{right}}",
+    "lte": "{{left}} phải nhỏ hơn hoặc bằng {{right}}",
+    "gte": "{{left}} phải lớn hơn hoặc bằng {{right}}"
   }
 }

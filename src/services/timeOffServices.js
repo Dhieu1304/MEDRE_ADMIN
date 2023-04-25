@@ -50,9 +50,10 @@ const getTimeOffByDoctorId = async (doctorId, { from, to, page, limit }) => {
   }
 };
 
-const addNewTimeOff = async ({ date, timeStart, timeEnd }) => {
+const addNewTimeOff = async ({ from, to, timeStart, timeEnd }) => {
   const dataBody = cleanUndefinedAndEmptyStrValueObject({
-    date,
+    from,
+    to,
     time_start: timeStart,
     time_end: timeEnd
   });

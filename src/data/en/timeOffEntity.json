@@ -1,9 +1,15 @@
 {
   "properties": {
     "id": "ID",
-    "date": "Date",
+    "date": "Date range",
+    "from": "From",
+    "to": "To",
+    "fromLabel": "Date start",
+    "toLabel": "Date end",
     "timeStart": "Time Start",
     "timeEnd": "Time End",
+    "timeStartLabel": "Time Start",
+    "timeEndLabel": "Time End",
     "createdAt": "Created at",
     "updatedAt": "Updated at",
     "time": "Time"

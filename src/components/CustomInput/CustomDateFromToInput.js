@@ -27,7 +27,7 @@ function CustomDateFromToInput({
   const [showTime, setShowTime] = useState(haveTime);
 
   const { t } = useTranslation("components", { keyPrefix: "CustomDateFromToInput" });
-  const { t: tInputValidate } = useTranslation("input", { keyPrefix: "validate" });
+  // const { t: tInputValidate } = useTranslation("input", { keyPrefix: "validation" });
 
   const defaultValues = useMemo(() => {
     return {
@@ -196,33 +196,33 @@ function CustomDateFromToInput({
               <CustomInput
                 control={control}
                 rules={{
-                  ...toDateRules,
-                  validate: (value) => {
-                    if (watch().fromDate && value) {
-                      const fromDateDate = new Date(watch().fromDate);
-                      const toDateDate = new Date(value);
-
-                      const fromDateOnlyDate = new Date(
-                        fromDateDate.getFullYear(),
-                        fromDateDate.getMonth(),
-                        fromDateDate.getDate()
-                      );
-                      const toDateOnlyDate = new Date(toDateDate.getFullYear(), toDateDate.getMonth(), toDateDate.getDate());
-
-                      if (fromDateOnlyDate > toDateOnlyDate) {
-                        return tInputValidate("rt", {
-                          left: fromDateLabel
-                        });
-                      }
-                      return true;
-                    }
-                    return true;
-                  }
+                  ...toDateRules
+                  // validate: (value) => {
+                  //   if (watch().fromDate && value) {
+                  //     const fromDateDate = new Date(watch().fromDate);
+                  //     const toDateDate = new Date(value);
+                  //     const fromDateOnlyDate = new Date(
+                  //       fromDateDate.getFullYear(),
+                  //       fromDateDate.getMonth(),
+                  //       fromDateDate.getDate()
+                  //     );
+                  //     const toDateOnlyDate = new Date(toDateDate.getFullYear(), toDateDate.getMonth(), toDateDate.getDate());
+                  //     if (fromDateOnlyDate > toDateOnlyDate) {
+                  //       return tInputValidate("gte", {
+                  //         left: fromDateLabel,
+                  //         right: toDateLabel
+                  //       });
+                  //     }
+                  //     return true;
+                  //   }
+                  //   return true;
+                  // }
                 }}
                 label={toDateLabel}
                 trigger={trigger}
                 name="toDate"
                 type="date"
+                // isCustomError
               />
             </Grid>
             <Grid item xl={6} lg={6} md={12} sm={12} xs={12}>

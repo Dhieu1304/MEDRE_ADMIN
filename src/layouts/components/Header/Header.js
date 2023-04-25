@@ -29,6 +29,7 @@ import routeConfig from "../../../config/routeConfig";
 import { useAppConfigStore } from "../../../store/AppConfigStore/hooks";
 import { DARK, LIGHT } from "../../../config/themeConfig";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
+import localStorageUtil from "../../../utils/localStorageUtil";
 
 function Header({ open, handleDrawerOpen }) {
   const authStore = useAuthStore();
@@ -181,6 +182,7 @@ function Header({ open, handleDrawerOpen }) {
                       checked={locale === "enUS"}
                       onClick={() => {
                         const newLocale = locale === "viVN" ? "enUS" : "viVN";
+                        localStorageUtil.setItem(localStorageUtil.LOCAL_STORAGE.LOCALE, newLocale);
                         const code = newLocale.slice(0, 2);
                         setLocale(newLocale);
                         i18n.changeLanguage(code);

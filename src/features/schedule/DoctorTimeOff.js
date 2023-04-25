@@ -23,7 +23,7 @@ import PropTypes from "prop-types";
 import WithDoctorLoaderWrapper from "../staff/hocs/WithDoctorLoaderWrapper";
 import { useFetchingStore } from "../../store/FetchingApiStore";
 import { normalizeStrToDateStr } from "../../utils/standardizedForForm";
-import { getWeekByDate } from "../../utils/datetimeUtil";
+import { formatDateLocale, getWeekByDate } from "../../utils/datetimeUtil";
 import { CustomDateFromToInput } from "../../components/CustomInput";
 import timeOffServices from "../../services/timeOffServices";
 import { useAppConfigStore } from "../../store/AppConfigStore";
@@ -112,7 +112,12 @@ function DoctorTimeOff({ doctor, doctorId }) {
   useEffect(() => {
     const page = 1;
     loadData({ page });
-  }, [watch().from, watch().to]);
+  }, [watch().from, watch().to, watch().limit]);
+
+  useMemo(() => {
+    const code = locale?.slice(0, 2) || "vi";
+    formatDate.locale(formatDateLocale[code]);
+  }, [locale]);
 
   const handleAfterAddTimeOff = async () => {
     await loadData({ page: 1 });
@@ -155,8 +160,8 @@ function DoctorTimeOff({ doctor, doctorId }) {
               fromDateRules={{}}
               toDateName="to"
               toDateRules={{}}
-              fromDateLabel="From"
-              toDateLabel="To"
+              fromDateLabel={tTimeOff("from")}
+              toDateLabel={tTimeOff("to")}
             />
           </Grid>
 
@@ -208,7 +213,8 @@ function DoctorTimeOff({ doctor, doctorId }) {
                 return (
                   <TableRow key={timeOff?.id}>
                     <TableCell component="th" scope="row" sx={{ display: "table-cell" }}>
-                      {formatDate.format(new Date(timeOff?.date), "DD/MM/YYYY")}
+                      {formatDate.format(new Date(timeOff?.from), "ddd DD/MM/YYYY")} &rarr;{" "}
+                      {formatDate.format(new Date(timeOff?.to), "ddd DD/MM/YYYY")}
                     </TableCell>
                     <TableCell align="left" sx={{ display: "table-cell" }}>
                       {timeOff?.timeStart} &rarr; {timeOff?.timeEnd}

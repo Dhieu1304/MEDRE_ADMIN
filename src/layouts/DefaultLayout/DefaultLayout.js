@@ -1,11 +1,13 @@
 import { CssBaseline, Box } from "@mui/material";
 import { useState } from "react";
 import PropTypes from "prop-types";
+import { useLocation } from "react-router-dom";
 import { CustomDrawerHeader } from "../../components/CustomDrawer";
 import Header from "../components/Header/Header";
 import SideBar from "../components/SideBar";
 
 export default function DefaultLayout({ children }) {
+  const location = useLocation();
   const [open, setOpen] = useState(false);
 
   const handleDrawerOpen = () => {
@@ -17,7 +19,7 @@ export default function DefaultLayout({ children }) {
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box key={location.pathname} sx={{ display: "flex" }}>
       <CssBaseline />
       <Header open={open} handleDrawerOpen={handleDrawerOpen} />
       <SideBar open={open} handleDrawerClose={handleDrawerClose} />
