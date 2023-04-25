@@ -1,0 +1,9 @@
+{
+  "BookingModal": {
+    "title": "Thông tin lịch đặt",
+    "button": {
+      "save": "Lưu",
+      "detail": "Chi tiết"
+    }
+  }
+}

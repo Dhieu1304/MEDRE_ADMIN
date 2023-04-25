@@ -1,0 +1,36 @@
+{
+  "properties": {
+    "id": "ID",
+    "phoneNumber": "Phone Number",
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "image": "Image",
+    "address": "Address",
+    "gender": "Gender",
+    "dob": "Date of Birth",
+    "healthInsurance": "Health Insurance",
+    "createdAt": "Created at",
+    "updatedAt": "Updated at",
+    "deletedAt": "Deleted at",
+    "status": "Status"
+  },
+
+  "constants": {
+    "genders": {
+      "male": "Male",
+      "female": "Female",
+      "other": "Other"
+    },
+    "statuses": {
+      "block": "Blocked",
+      "unblock": "Unblocked"
+    }
+  },
+  "messages": {
+    "emailVerifiedSuccess": "Email verification successfully",
+    "emailVerifiedFailed": "Email verification failed",
+    "phoneVerifiedSuccess": "Phone number verification successfully",
+    "phoneVerifiedFailed": "Phone number verification failed"
+  }
+}

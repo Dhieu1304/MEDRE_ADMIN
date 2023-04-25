@@ -113,7 +113,7 @@ function CustomInput({
           readOnly: true
         }}
         required={!!rules?.required}
-        value={noNameValue}
+        value={noNameValue || ""}
         disabled={disabled}
         type={inputType}
         placeholder={placeholder}
@@ -281,8 +281,10 @@ function CustomInput({
 }
 
 CustomInput.defaultProps = {
+  control: {},
   label: "",
   rules: {},
+  trigger: undefined,
   triggerTo: null,
   children: null,
   name: undefined,
@@ -300,10 +302,10 @@ CustomInput.defaultProps = {
 };
 
 CustomInput.propTypes = {
-  control: PropTypes.object.isRequired,
+  control: PropTypes.object,
   rules: PropTypes.object,
   label: PropTypes.string,
-  trigger: PropTypes.func.isRequired,
+  trigger: PropTypes.func,
   triggerTo: PropTypes.oneOfType([PropTypes.string]),
 
   name: PropTypes.string,

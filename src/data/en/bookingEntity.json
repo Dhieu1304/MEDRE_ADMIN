@@ -1,0 +1,12 @@
+{
+  "properties": {
+    "date": "Date",
+    "time": "Time",
+    "status": "Status",
+    "code": "Code",
+    "paymentStatus": "Payment status",
+    "reason": "Reason",
+    "note": "Note",
+    "conclusion": "Doctor's Conclusion"
+  }
+}

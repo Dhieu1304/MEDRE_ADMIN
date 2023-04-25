@@ -1,0 +1,9 @@
+{
+  "BookingModal": {
+    "title": "Booking detail",
+    "button": {
+      "save": "Save",
+      "detail": "Detail"
+    }
+  }
+}

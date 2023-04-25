@@ -11,6 +11,9 @@ import staffEntity from "./staffEntity.json";
 import userFeature from "./userFeature.json";
 import userEntity from "./userEntity.json";
 import timeOffEntity from "./timeOffEntity.json";
+import bookingFeature from "./bookingFeature.json";
+import bookingEntity from "./bookingEntity.json";
+import patientEntity from "./patientEntity.json";
 
 const vi = {
   authFeature,
@@ -25,7 +28,10 @@ const vi = {
   staffEntity,
   userFeature,
   userEntity,
-  timeOffEntity
+  timeOffEntity,
+  bookingFeature,
+  bookingEntity,
+  patientEntity
 };
 
 export default vi;

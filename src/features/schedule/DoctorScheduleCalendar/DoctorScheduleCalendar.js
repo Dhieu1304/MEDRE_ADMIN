@@ -28,14 +28,22 @@ import CustomOverlay from "../../../components/CustomOverlay";
 
 import scheduleServices from "../../../services/scheduleServices";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
-import { getWeekByDate } from "../../../utils/datetimeUtil";
+import { formatDateLocale, getWeekByDate } from "../../../utils/datetimeUtil";
 import WithTimesLoaderWrapper from "../hocs/WithTimesLoaderWrapper";
 import WithDoctorLoaderWrapper from "../../staff/hocs/WithDoctorLoaderWrapper";
 import timeOffServices from "../../../services/timeOffServices";
 import { useCustomModal } from "../../../components/CustomModal";
 import AddNewTimeOffModal from "../components/AddNewTimeOffModal";
-import { findBookingsByDate, groupSchedulesByTimeId } from "./utils";
+import {
+  findBookingsByDate,
+  getSessionByTimeStart,
+  groupSchedulesDayOfWeekAndSession,
+  isTimeOffAtThisScheduleTime
+} from "./utils";
 import { normalizeStrToDateStr } from "../../../utils/standardizedForForm";
+import { scheduleSessions } from "../../../entities/Schedule";
+import BookingInfoModal from "../../booking/components/BookingInfoModal";
+import { useAppConfigStore } from "../../../store/AppConfigStore";
 
 function DoctorScheduleCalendar({ timesList, doctor }) {
   const location = useLocation();
@@ -55,7 +63,10 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
 
   const { isLoading, fetchApi } = useFetchingStore();
 
+  const { locale } = useAppConfigStore();
+
   const addTimeOffModal = useCustomModal();
+  const bookingInfoModal = useCustomModal();
 
   const { t } = useTranslation("scheduleFeature", { keyPrefix: "DoctorScheduleCalendar" });
 
@@ -100,14 +111,20 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
     loadTimeOffs();
   }, [heads]);
 
-  const [rows, schedulesTimeOff] = useMemo(() => {
-    return groupSchedulesByTimeId(schedules, timesList, heads, timeOffs);
-  }, [heads, schedules, timesList, timeOffs]);
+  useMemo(() => {
+    const code = locale?.slice(0, 2) || "vi";
+    formatDate.locale(formatDateLocale[code]);
+  }, [locale]);
+
+  const schedulesDayOfWeekAndSession = useMemo(() => {
+    return groupSchedulesDayOfWeekAndSession(schedules);
+  }, [schedules]);
 
   // return <div>sang</div>;
 
-  const renderCell = (schedule, colDate, time, index) => {
-    const booking = findBookingsByDate(schedule?.bookings, colDate);
+  const renderCell = (schedule, colDate, time) => {
+    // console.log("schedule: ", schedule);
+    const booking = findBookingsByDate(schedule?.bookings, colDate, time);
     // console.log("booking: ", booking);
     const scheduleStartTime = time.timeStart;
     const scheduleEndTime = time.timeEnd;
@@ -116,8 +133,8 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
     const scheduleStartTimeStr = `${formatDate.format(colDate, "YYYY-MM-DD")} ${scheduleStartTime}`;
     const scheduleEndTimeStr = `${formatDate.format(colDate, "YYYY-MM-DD")} ${scheduleEndTime}`;
 
-    // const isTimeOff = schedule?.isTimeOff;
-    const isTimeOff = schedulesTimeOff[schedule?.id];
+    const isTimeOff = isTimeOffAtThisScheduleTime(timeOffs, colDate, time);
+
     const now = new Date();
 
     // Nếu now > startTime thì thì isOutOfTime = true;
@@ -132,7 +149,7 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
 
     return (
       <TableCell
-        key={index}
+        key={colDate}
         sx={{
           border: "1px solid rgba(0,0,0,0.4)",
           p: 0,
@@ -176,9 +193,15 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
                   bgcolor: isCurrentTime ? theme.palette.info.light : booking && theme.palette.success.light,
                   // bgcolor: isCurrentTime ? "red" : "inherit",
                   position: "relative",
-                  cursor: "pointer"
+                  cursor: booking && "pointer"
                 }}
-                onClick={() => {}}
+                onClick={() => {
+                  if (booking) {
+                    // console.log("booking: ", booking);
+                    bookingInfoModal.setShow(true);
+                    bookingInfoModal.setData(booking?.id);
+                  }
+                }}
               >
                 <Typography
                   sx={{
@@ -228,31 +251,21 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
     );
   };
 
-  const renderCols = (row, time) => {
-    /*
-      Mỗi dayOfWeek của 1 timeId có thể có nhiều schedule do sự chồng chèo applyFrom và applyTo
-      Ví dụ: ca 8h-8h30 của dayOfWeek=2 (Thứ 3 Ngày 19-4-2023 có thể có 2 cái schdule có
-        - applyFrom - applyTo là 1-1-2022 => 1-1-2024
-        - applyFrom - applyTo là 1-6-2022 => 1-6->2023
-
-        acc[schedule.dayOfWeek] ~ acc[2] có do đó có thể được gọi 2 lần (cho cái 2 schudule.dayOfWeek = 2)
-        Tuy nhiên gán acc[schedule.dayOfWeek] = schedule vô tình sẽ ghi đè acc[schedule.dayOfWeek] 2 lần
-        => Tạm thời ko ảnh hưởng đến việc show danh sách schedule
-        => Nhưng Cần có giải pháp ở BE để tránh sự tồn tại các schedule chồng chép applyFrom và applyTo
-
-    */
-
+  const renderCols = (time) => {
     // Group các schedules lại theo dayOfWeek => để dựa trên dayOfWeek truy xuất schedule của ngày đó
-    const schedulesGroupByDayOfWeek = row.reduce((acc, schedule) => {
-      acc[schedule.dayOfWeek] = schedule;
-      return acc;
-    }, {});
 
     const cols = Array.from({ length: 7 }, (_, index) => {
-      const schedule = schedulesGroupByDayOfWeek[index];
-      // Ngày ứng với từng cột
+      const schedulesBySession = schedulesDayOfWeekAndSession[index];
+      let schedule;
+      const session = getSessionByTimeStart(time.timeStart);
+      if (session === scheduleSessions.MORNING) {
+        schedule = schedulesBySession.morning;
+      } else {
+        schedule = schedulesBySession.afternoon;
+      }
+
       const colDate = heads[index];
-      return renderCell(schedule, colDate, time, index);
+      return renderCell(schedule, colDate, time);
     });
 
     return cols;
@@ -375,7 +388,7 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows?.map((row, index) => {
+              {timesList?.map((row, index) => {
                 return (
                   <TableRow
                     key={timesList[index]?.id}
@@ -395,7 +408,7 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
                       {`${timesList[index]?.timeEnd?.split(":")[0]}:${timesList[index]?.timeEnd?.split(":")[1]}`}
                     </TableCell>
 
-                    {renderCols(row, timesList[index])}
+                    {renderCols(timesList[index])}
                   </TableRow>
                 );
               })}
@@ -403,7 +416,6 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
           </Table>
         </TableContainer>
       </Box>
-
       {addTimeOffModal.show && (
         <AddNewTimeOffModal
           show={addTimeOffModal.show}
@@ -411,6 +423,14 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
           data={addTimeOffModal.data}
           setData={addTimeOffModal.setData}
           handleAfterAddTimeOff={handleAfterAddTimeOff}
+        />
+      )}
+      {bookingInfoModal.show && (
+        <BookingInfoModal
+          show={bookingInfoModal.show}
+          setShow={bookingInfoModal.setShow}
+          data={bookingInfoModal.data}
+          setData={bookingInfoModal.setData}
         />
       )}
     </>

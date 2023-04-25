@@ -1,0 +1,12 @@
+{
+  "properties": {
+    "date": "Ngày khám",
+    "time": "Thời gian",
+    "status": "Tình trạng",
+    "code": "Code",
+    "paymentStatus": "Tình trạng thanh đoán",
+    "reason": "Lý do khám",
+    "note": "Ghi chú",
+    "conclusion": "Kết luận bác sĩ"
+  }
+}
