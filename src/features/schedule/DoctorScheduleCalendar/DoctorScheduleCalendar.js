@@ -199,7 +199,7 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
                   if (booking) {
                     // console.log("booking: ", booking);
                     bookingInfoModal.setShow(true);
-                    bookingInfoModal.setData(booking?.id);
+                    bookingInfoModal.setData(booking);
                   }
                 }}
               >

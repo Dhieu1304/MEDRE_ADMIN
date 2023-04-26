@@ -1,5 +1,4 @@
 import camelcaseKeys from "camelcase-keys";
-import scheduleMockData from "../mockData/scheduleMockData";
 import { scheduleApi } from "../config/apiConfig";
 import axiosClient from "../config/axiosClient";
 import { cleanUndefinedAndEmptyStrValueObject } from "../utils/objectUtil";
@@ -46,8 +45,8 @@ const getScheduleListByDoctorId = async (doctorId, from, to) => {
 
 const getTimeList = async () => {
   try {
-    // const res = await axiosClient.get(scheduleApi.timeList());
-    const res = camelcaseKeys(scheduleMockData.time(), { deep: true });
+    const res = await axiosClient.get(scheduleApi.timeList());
+    // const res = camelcaseKeys(scheduleMockData.time(), { deep: true });
 
     if (res?.status) {
       const times = camelcaseKeys(res?.data, { deep: true });

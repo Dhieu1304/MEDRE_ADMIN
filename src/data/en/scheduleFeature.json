@@ -12,7 +12,8 @@
     "title": "Schedule",
     "button": {
       "today": "Today",
-      "booked": "Booked"
+      "booked": "Booked",
+      "book": "Book"
     }
   },
 

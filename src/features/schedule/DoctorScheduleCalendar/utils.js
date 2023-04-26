@@ -44,7 +44,7 @@ export const isTimeOffAtThisScheduleTime = (timeOffs, colDate, time) => {
   const currentScheduleTimeStart = createDateByDateAndTimeStr(colDate, time.timeStart);
   const currentScheduleTimeEnd = createDateByDateAndTimeStr(colDate, time.timeEnd);
 
-  return timeOffs.some((timeOff) => {
+  return timeOffs?.some((timeOff) => {
     for (let date = new Date(timeOff?.from); date <= new Date(timeOff?.to); date.setDate(date.getDate() + 1)) {
       const timeOffStart = createDateByDateAndTimeStr(new Date(date), timeOff.timeStart);
       const timeOffEnd = createDateByDateAndTimeStr(new Date(date), timeOff.timeEnd);

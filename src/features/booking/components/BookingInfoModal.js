@@ -33,7 +33,7 @@ function BookingInfoModal({ show, setShow, data, setData }) {
   // console.log({ data });
 
   useEffect(() => {
-    const bookingId = data;
+    const bookingId = data?.id;
     const loadData = async () => {
       await fetchApi(async () => {
         const res = await bookingServices.getBookingDetailById(bookingId);
