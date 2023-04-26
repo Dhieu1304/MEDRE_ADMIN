@@ -3,14 +3,16 @@
     "title": "Calendar",
     "button": {
       "currentWeek": "Current week",
-      "addTimeOff": "Add time off"
+      "addTimeOff": "Add time off",
+      "booked": "Booked"
     }
   },
 
   "ScheduleList": {
     "title": "Schedule",
     "button": {
-      "today": "Today"
+      "today": "Today",
+      "booked": "Booked"
     }
   },
 
@@ -38,6 +40,10 @@
       "from": "Apply from",
       "to": "To"
     },
+    "button": {
+      "addSchedule": "Add schedule",
+      "editAll": "Chỉnh sửa"
+    },
     "changeApplyTimeModal": {
       "title": "Change Apply Time",
       "dateRange": "Date range",
@@ -49,22 +55,18 @@
     }
   },
 
-  "AddDoctorSchedule": {
+  "AddScheduleModal": {
     "title": "Add doctor schedule",
     "button": {
-      "save": "save"
+      "save": "save",
+      "addRow": "Add"
     },
     "form": {
       "dateRange": "Date range",
       "applyFrom": "Apply from",
-      "applyTo": "To"
-    },
-    "addDoctorScheduleModal": {
-      "title": "Add doctor schedule",
-      "question": "Are you sure to add schudules for {{name}}",
-      "button": {
-        "save": "save"
-      }
+      "applyTo": "To",
+      "applyFromLabel": "Start date",
+      "applyToLabel": "End date"
     }
   }
 }

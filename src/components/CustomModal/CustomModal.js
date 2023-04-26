@@ -3,7 +3,7 @@ import { Modal, Typography, Box, Button, Grid, IconButton } from "@mui/material"
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 
-function CustomModal({ show, setShow, setData, children, title, submitBtnLabel, onSubmit }) {
+function CustomModal({ show, setShow, setData, children, title, submitBtnLabel, onSubmit, width }) {
   const { t } = useTranslation("components", { keyPrefix: "CustomModal" });
 
   const handleClose = () => {
@@ -22,7 +22,7 @@ function CustomModal({ show, setShow, setData, children, title, submitBtnLabel, 
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          width: 600,
+          width: width || 600,
           bgcolor: "background.paper",
           border: "1px solid rgba(0,0,0,0.2)",
           borderRadius: 1,
@@ -68,6 +68,7 @@ function CustomModal({ show, setShow, setData, children, title, submitBtnLabel, 
 }
 
 CustomModal.defaultProps = {
+  width: undefined,
   setData: undefined,
   children: undefined,
   title: undefined,
@@ -76,6 +77,7 @@ CustomModal.defaultProps = {
 };
 
 CustomModal.propTypes = {
+  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   show: PropTypes.bool.isRequired,
   setShow: PropTypes.func.isRequired,
   setData: PropTypes.func,

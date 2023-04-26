@@ -212,7 +212,7 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
                     color: isCurrentTime ? theme.palette.info.contrastText : theme.palette.success.contrastText
                   }}
                 >
-                  {booking ? "Booked" : ""}
+                  {booking ? t("button.booked") : ""}
                 </Typography>
 
                 {isTimeOff && (

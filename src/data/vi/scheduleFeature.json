@@ -3,14 +3,16 @@
     "title": "Thông tin lịch khám",
     "button": {
       "currentWeek": "Tuần hiện tại",
-      "addTimeOff": "Thêm lịch nghỉ"
+      "addTimeOff": "Thêm lịch nghỉ",
+      "booked": "Đã đặt"
     }
   },
 
   "ScheduleList": {
     "title": "Thông tin lịch khám",
     "button": {
-      "today": "Hôm nay"
+      "today": "Hôm nay",
+      "booked": "Đã đặt"
     }
   },
 
@@ -40,6 +42,7 @@
     },
 
     "button": {
+      "addSchedule": "Thêm lịch khám",
       "editAll": "Chỉnh sửa"
     },
 
@@ -54,22 +57,18 @@
     }
   },
 
-  "AddDoctorSchedule": {
+  "AddScheduleModal": {
     "title": "Thêm lịch khám",
     "button": {
-      "save": "Lưu"
+      "save": "Lưu",
+      "addRow": "Thêm"
     },
     "form": {
       "dateRange": "Khoảng ngày",
       "applyFrom": "Áp dụng từ",
-      "applyTo": "Đến"
-    },
-    "addDoctorScheduleModal": {
-      "title": "Thêm lịch khám",
-      "question": "Bạn có chắc chắn thêm lịch khám cho {{name}}",
-      "button": {
-        "save": "Lưu"
-      }
+      "applyTo": "đến",
+      "applyFromLabel": "Ngày bắt đầu",
+      "applyToLabel": "Ngày kết thúc"
     }
   }
 }

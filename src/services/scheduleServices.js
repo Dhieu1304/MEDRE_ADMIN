@@ -71,13 +71,39 @@ const getTimeList = async () => {
   }
 };
 
-const changeApplyTimeScheduleByScheduleIds = async (doctorId, { scheduleIds, applyFrom, applyTo }) => {
-  // console.log("changeApplyTimeScheduleByScheduleIds: ", { scheduleIds, applyFrom, applyTo });
+const changeApplyToScheduleByScheduleIds = async ({ doctorId, scheduleIds, applyTo }) => {
+  // console.log("changeApplyToScheduleByScheduleIds: ", { doctorId, scheduleIds, applyTo });
 
-  const dataBody = cleanUndefinedAndEmptyStrValueObject({ doctorId, scheduleIds, applyFrom, applyTo });
+  const dataBody = cleanUndefinedAndEmptyStrValueObject({ id_doctor: doctorId, id: scheduleIds, apply_to: applyTo });
 
-  // do nothing
-  Object.keys(dataBody).forEach(() => {});
+  // console.log("dataBody: ", dataBody);
+
+  try {
+    const res = await axiosClient.post(scheduleApi.changeApplyTo(), dataBody);
+    // const res = camelcaseKeys(scheduleMockData.list(), { deep: true });
+
+    // console.log("res: ", res);
+
+    if (res?.status) {
+      const schedules = camelcaseKeys(res?.data, { deep: true });
+
+      return {
+        success: true,
+        schedules,
+        message: res?.message
+      };
+    }
+    return {
+      success: false,
+      message: `Status is ${res.status}`
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
 };
 
 const createSchedulesByDoctorId = async ({ doctorId, applyFrom, applyTo, data }) => {
@@ -88,9 +114,10 @@ const createSchedulesByDoctorId = async ({ doctorId, applyFrom, applyTo, data })
     apply_from: applyFrom,
     apply_to: applyTo,
     data: data.map((item) => ({
-      day_of_week: item.dayOfWeek,
-      id_time: item.timeId,
-      type: item.type
+      id_expertise: item.expertise,
+      type: item.type,
+      session: item.session,
+      repeat_on: item.repeatOn.sort()
     }))
   });
 
@@ -126,6 +153,6 @@ const createSchedulesByDoctorId = async ({ doctorId, applyFrom, applyTo, data })
 export default {
   getScheduleListByDoctorId,
   getTimeList,
-  changeApplyTimeScheduleByScheduleIds,
+  changeApplyToScheduleByScheduleIds,
   createSchedulesByDoctorId
 };

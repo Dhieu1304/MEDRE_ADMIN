@@ -1,17 +1,16 @@
-import { Link, Route, Routes, useParams } from "react-router-dom";
+import { Link, Route, Routes, useLocation, useParams } from "react-router-dom";
 import { Box, Tab, Tabs, Typography } from "@mui/material";
 import {
-  Add as AddIcon,
   CalendarMonth as CalendarMonthIcon,
   Info as InfoIcon,
   Schedule as ScheduleIcon,
   TimerOff as TimerOffIcon
 } from "@mui/icons-material";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { staffDetailRoutes } from "./routes";
 import { StaffDetail } from "../../features/staff";
-import { AddDoctorSchedule, DoctorScheduleCalendar, DoctorScheduleList, DoctorTimeOff } from "../../features/schedule";
+import { DoctorScheduleCalendar, DoctorScheduleList, DoctorTimeOff } from "../../features/schedule";
 import routeConfig from "../../config/routeConfig";
 
 function StaffDetailPage() {
@@ -24,6 +23,28 @@ function StaffDetailPage() {
   const { t } = useTranslation("staffPage", {
     keyPrefix: "StaffDetailPage"
   });
+
+  const location = useLocation();
+
+  useEffect(() => {
+    const currentPath = location.pathname;
+    // console.log("currentPath: ", currentPath);
+    switch (currentPath) {
+      case path + staffDetailRoutes.calendar:
+        setValue(1);
+        break;
+      case path + staffDetailRoutes.schedule:
+        setValue(2);
+        break;
+      case path + staffDetailRoutes.timeOff:
+        setValue(3);
+        break;
+      case path + staffDetailRoutes.detail:
+      default:
+        setValue(0);
+        break;
+    }
+  }, [location]);
 
   const renderTableLabel = (label) => {
     return (
@@ -46,6 +67,7 @@ function StaffDetailPage() {
       <Tabs
         value={value}
         onChange={(e, newValue) => {
+          // console.log("newValue: ", newValue);
           setValue(newValue);
         }}
         sx={{
@@ -58,6 +80,7 @@ function StaffDetailPage() {
         }}
       >
         <Tab
+          value={0}
           label={renderTableLabel("tabs.info")}
           icon={<InfoIcon />}
           iconPosition="start"
@@ -65,6 +88,7 @@ function StaffDetailPage() {
           to={path + staffDetailRoutes.detail}
         />
         <Tab
+          value={1}
           label={renderTableLabel("tabs.calendar")}
           icon={<CalendarMonthIcon />}
           iconPosition="start"
@@ -72,20 +96,16 @@ function StaffDetailPage() {
           to={path + staffDetailRoutes.calendar}
         />
         <Tab
+          value={2}
           label={renderTableLabel("tabs.schedule")}
           icon={<ScheduleIcon />}
           iconPosition="start"
           LinkComponent={Link}
           to={path + staffDetailRoutes.schedule}
         />
+
         <Tab
-          label={renderTableLabel("tabs.addSchedule")}
-          icon={<AddIcon />}
-          iconPosition="start"
-          LinkComponent={Link}
-          to={path + staffDetailRoutes.addSchedule}
-        />
-        <Tab
+          value={3}
           label={renderTableLabel("tabs.timeOff")}
           icon={<TimerOffIcon />}
           iconPosition="start"
@@ -102,7 +122,6 @@ function StaffDetailPage() {
           <Route path={staffDetailRoutes.detail} element={<StaffDetail staffId={staffId} />} />
           <Route path={staffDetailRoutes.calendar} element={<DoctorScheduleCalendar staffId={staffId} />} />
           <Route path={staffDetailRoutes.schedule} element={<DoctorScheduleList staffId={staffId} />} />
-          <Route path={staffDetailRoutes.addSchedule} element={<AddDoctorSchedule staffId={staffId} />} />
           <Route path={staffDetailRoutes.timeOff} element={<DoctorTimeOff staffId={staffId} />} />
         </Routes>
       </Box>

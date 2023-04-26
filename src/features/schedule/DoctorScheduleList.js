@@ -12,11 +12,14 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography
+  Typography,
+  useTheme
 } from "@mui/material";
 import formatDate from "date-and-time";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
+import { Add as AddIcon } from "@mui/icons-material";
+import { toast } from "react-toastify";
 import WithDoctorLoaderWrapper from "../staff/hocs/WithDoctorLoaderWrapper";
 import { useFetchingStore } from "../../store/FetchingApiStore";
 import { normalizeStrToDateStr } from "../../utils/standardizedForForm";
@@ -26,6 +29,9 @@ import { useAppConfigStore } from "../../store/AppConfigStore";
 import { useCustomModal } from "../../components/CustomModal";
 import scheduleServices from "../../services/scheduleServices";
 import CustomModal from "../../components/CustomModal/CustomModal";
+import { scheduleSessions, scheduleTypes } from "../../entities/Schedule/constant";
+import CustomInput from "../../components/CustomInput/CustomInput";
+import AddScheduleModal from "./components/AddScheduleModal";
 
 function DoctorScheduleList({ doctor, doctorId }) {
   const [schedules, setSchedules] = useState([]);
@@ -51,7 +57,7 @@ function DoctorScheduleList({ doctor, doctorId }) {
     mode: "onChange",
     defaultValues: {
       scheduleIdsObj: {},
-      applyFrom: "",
+
       applyTo: ""
     },
     criteriaMode: "all"
@@ -60,11 +66,15 @@ function DoctorScheduleList({ doctor, doctorId }) {
   const { fetchApi } = useFetchingStore();
   const { locale } = useAppConfigStore();
 
+  const theme = useTheme();
+
   const { t } = useTranslation("scheduleFeature", { keyPrefix: "DoctorScheduleList" });
   const { t: tSchedule } = useTranslation("scheduleEntity", { keyPrefix: "properties" });
   const { t: tScheduleConstants } = useTranslation("scheduleEntity", { keyPrefix: "constants" });
+  const { t: tInputValidate } = useTranslation("input", { keyPrefix: "validation" });
 
-  const changeApplyTimeModal = useCustomModal();
+  const changeApplyToModal = useCustomModal();
+  const addScheduleModal = useCustomModal();
 
   const daysOfWeek = useMemo(
     () => [
@@ -82,13 +92,18 @@ function DoctorScheduleList({ doctor, doctorId }) {
   const columns = useMemo(
     () => [
       {
-        id: "date",
-        label: tSchedule("dayOfWeek"),
+        id: "repeatOn",
+        label: tSchedule("repeatOn"),
         minWidth: 100
       },
       {
-        id: "timeSchedule",
-        label: tSchedule("timeSchedule"),
+        id: "session",
+        label: tSchedule("session"),
+        minWidth: 100
+      },
+      {
+        id: "expertise",
+        label: tSchedule("expertise"),
         minWidth: 100
       },
       {
@@ -105,15 +120,33 @@ function DoctorScheduleList({ doctor, doctorId }) {
     [locale]
   );
 
-  const staffTypeListObj = useMemo(() => {
+  const scheduleTypeListObj = useMemo(() => {
     return [
       {
         label: tScheduleConstants("types.offline"),
-        value: "Offline"
+        value: scheduleTypes.TYPE_OFFLINE
       },
       {
         label: tScheduleConstants("types.online"),
-        value: "Online"
+        value: scheduleTypes.TYPE_ONLINE
+      }
+    ].reduce((obj, cur) => {
+      return {
+        ...obj,
+        [cur?.value]: cur
+      };
+    }, {});
+  }, [locale]);
+
+  const scheduleSessionListObj = useMemo(() => {
+    return [
+      {
+        label: tScheduleConstants("sessions.morning"),
+        value: scheduleSessions.MORNING
+      },
+      {
+        label: tScheduleConstants("sessions.afternoon"),
+        value: scheduleSessions.AFFTERNOON
       }
     ].reduce((obj, cur) => {
       return {
@@ -134,7 +167,6 @@ function DoctorScheduleList({ doctor, doctorId }) {
     //
     changeApplyTimeForm.reset({
       scheduleIdsObj,
-      applyFrom: "",
       applyTo: ""
     });
 
@@ -167,9 +199,46 @@ function DoctorScheduleList({ doctor, doctorId }) {
     loadData();
   }, [filterForm.watch().from, filterForm.watch().to]);
 
-  const handleChangeApplyTime = async ({ scheduleIdsObj, applyFrom, applyTo }) => {
+  // const schedulesGroupByApplyTime = useMemo(() => {
+  //   // group schedules by applyTime
+  //   return schedules.reduce((acc, schedule) => {
+  //     const applyTime = schedule?.applyFrom + " → " + schedule?.applyTo;
+  //     return acc[applyTime]
+  //       ? {
+  //           ...acc,
+  //           [applyTime]: [...acc[applyTime], schedule]
+  //         }
+  //       : {
+  //           ...acc,
+  //           [applyTime]: [schedule]
+  //         };
+  //   }, {});
+  // }, [schedules]);
+
+  // console.log("rows: ", rows);
+
+  const handleChangeApplyEnd = async ({ scheduleIdsObj, applyTo }) => {
+    // console.log({ scheduleIdsObj, applyTo });
     const scheduleIds = Object.keys(scheduleIdsObj).filter((key) => scheduleIdsObj[key] && key);
-    await scheduleServices.changeApplyTimeScheduleByScheduleIds(doctor.id, { scheduleIds, applyFrom, applyTo });
+
+    await fetchApi(async () => {
+      const res = await scheduleServices.changeApplyToScheduleByScheduleIds({ doctorId, scheduleIds, applyTo });
+
+      if (res?.success) {
+        changeApplyToModal.setShow(false);
+        changeApplyToModal.setData({});
+        await loadData();
+        return { success: true };
+      }
+      toast(res.message);
+      changeApplyToModal.setShow(false);
+      changeApplyToModal.setData({});
+      return { error: res.message };
+    });
+  };
+
+  const handleAfterAddSchedule = async () => {
+    await loadData();
   };
 
   return (
@@ -185,8 +254,28 @@ function DoctorScheduleList({ doctor, doctorId }) {
           <Typography variant="h4" sx={{ mb: 4 }}>
             {t("title")}
           </Typography>
+          <Button
+            variant="contained"
+            onClick={() => {
+              addScheduleModal.setShow(true);
+              addScheduleModal.setData(doctor);
+            }}
+            endIcon={<AddIcon fontSize="large" />}
+            sx={{
+              bgcolor: theme.palette.success.light
+            }}
+          >
+            {t("button.addSchedule")}
+          </Button>
         </Box>
-        <Grid container spacing={3} justifyContent="space-between">
+        <Grid
+          container
+          spacing={3}
+          justifyContent="space-between"
+          sx={{
+            mb: 4
+          }}
+        >
           <Grid item xs={12} sm={12} md={6} lg={4}>
             <CustomDateFromToInput
               watchMainForm={filterForm.watch}
@@ -215,7 +304,7 @@ function DoctorScheduleList({ doctor, doctorId }) {
                   ml: 2
                 }}
                 onClick={() => {
-                  changeApplyTimeModal.setShow(true);
+                  changeApplyToModal.setShow(true);
                 }}
               >
                 {t("button.editAll")}
@@ -223,6 +312,44 @@ function DoctorScheduleList({ doctor, doctorId }) {
             </Box>
           )}
         </Grid>
+
+        {/* {Object.keys(schedulesGroupByApplyTime).map((key) => {
+          const schedules = schedulesGroupByApplyTime[key];
+          const applyFrom = key.split("→")[0];
+          const applyTo = key.split("→")[1];
+
+          const applyFromString = formatDate.format(
+            // new Date(applyFrom.split("-")[0], applyFrom.split("-")[1], applyFrom.split("-")[2]),
+            new Date(...applyFrom.split("-")),
+            "DD/MM/YYYY"
+          );
+          const applyToString = formatDate.format(
+            // new Date(applyTo.split("-")[0], applyTo.split("-")[1], applyTo.split("-")[2]),
+            new Date(...applyTo.split("-")),
+            "DD/MM/YYYY"
+          );
+
+          const applyTimeString = applyFromString + " → " + applyToString;
+
+          return (
+            <Box
+              sx={{
+                mb: 2
+              }}
+            >
+              <Typography
+                variant="body1"
+                sx={{
+                  mb: 2,
+                  fontWeight: "600"
+                }}
+              >
+                {applyTimeString}
+              </Typography>
+
+            </Box>
+          );
+        })} */}
 
         <TableContainer component={Paper} sx={{ mb: 4 }}>
           <Table>
@@ -293,13 +420,22 @@ function DoctorScheduleList({ doctor, doctorId }) {
                       />
                     </TableCell>
                     <TableCell component="th" scope="row" sx={{ display: "table-cell" }}>
-                      {daysOfWeek[schedule?.dayOfWeek]}
+                      {schedule?.repeatOn
+                        ?.split(",")
+                        .map(Number)
+                        .map((dayOfWeek) => {
+                          return daysOfWeek[dayOfWeek];
+                        })
+                        .join(", ")}
                     </TableCell>
                     <TableCell align="left" sx={{ display: "table-cell" }}>
-                      {schedule?.timeSchedule?.timeStart} &rarr; {schedule?.timeSchedule?.timeEnd}
+                      {scheduleSessionListObj[schedule?.session].label}
                     </TableCell>
                     <TableCell align="left" sx={{ display: "table-cell" }}>
-                      {staffTypeListObj[schedule?.type].label}
+                      {schedule?.scheduleExpertise?.name}
+                    </TableCell>
+                    <TableCell align="left" sx={{ display: "table-cell" }}>
+                      {scheduleTypeListObj[schedule?.type].label}
                     </TableCell>
                     <TableCell align="left" sx={{ display: "table-cell" }}>
                       {formatDate.format(new Date(schedule?.applyFrom), "DD/MM/YYYY")}
@@ -314,26 +450,35 @@ function DoctorScheduleList({ doctor, doctorId }) {
         </TableContainer>
       </Box>
 
-      {changeApplyTimeModal && (
+      {changeApplyToModal && (
         <CustomModal
           title={t("changeApplyTimeModal.title")}
           submitBtnLabel={t("changeApplyTimeModal.button.save")}
-          show={changeApplyTimeModal.show}
-          setShow={changeApplyTimeModal.setShow}
-          onSubmit={changeApplyTimeForm.handleSubmit(handleChangeApplyTime)}
+          show={changeApplyToModal.show}
+          setShow={changeApplyToModal.setShow}
+          onSubmit={changeApplyTimeForm.handleSubmit(handleChangeApplyEnd)}
         >
-          <CustomDateFromToInput
-            watchMainForm={changeApplyTimeForm.watch}
-            setMainFormValue={changeApplyTimeForm.setValue}
-            label={t("changeApplyTimeModal.dateRange")}
-            fromDateName="applyFrom"
-            fromDateRules={{}}
-            toDateName="applyTo"
-            toDateRules={{}}
-            fromDateLabel={t("changeApplyTimeModal.applyFrom")}
-            toDateLabel={t("changeApplyTimeModal.applyTo")}
+          <CustomInput
+            control={changeApplyTimeForm.control}
+            rules={{
+              required: tInputValidate("required")
+            }}
+            label={tSchedule("applyTo")}
+            trigger={changeApplyTimeForm.trigger}
+            name="applyTo"
+            type="date"
           />
         </CustomModal>
+      )}
+
+      {addScheduleModal.show && (
+        <AddScheduleModal
+          show={addScheduleModal.show}
+          setShow={addScheduleModal.setShow}
+          data={addScheduleModal.data}
+          setData={addScheduleModal.setData}
+          handleAfterAddSchedule={handleAfterAddSchedule}
+        />
       )}
     </>
   );
