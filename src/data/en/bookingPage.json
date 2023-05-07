@@ -1,0 +1,26 @@
+{
+  "bookingList": {},
+
+  "bookingDetail": {
+    "bookingDate": "Date",
+    "bookingStatus": "Status",
+    "paymentStatus": "Payment",
+    "reason": "Reason",
+    "note": "Note",
+    "bookedAt": "Booked Time",
+    "timeStart": "Start",
+    "timeEnd": "End",
+    "type": "Type",
+    "schedule_expertise": "Expertise",
+    "schedule_staff": "Doctor",
+    "userBookName": "Name",
+    "userBookEmail": "Email",
+    "userBookPhone": "Phone",
+    "patientName": "Name",
+    "patientPhone": "Phone",
+    "patientGender": "Gender",
+    "patientAddress": "Address",
+    "patientDob": "Date of birth",
+    "patientHealthInsurance": "Health Insurance"
+  }
+}
