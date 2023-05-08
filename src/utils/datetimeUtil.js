@@ -76,6 +76,21 @@ const isBetweenAndNoEqual = (date, dateLeft, dateRight) => {
   return date > dateLeft && date < dateRight;
 };
 
+const isBetweenOrEqualWithoutTime = (date, dateLeft, dateRight) => {
+  // Đặt giờ của ngày tháng năm để cùng là 12 giờ trưa (12:00:00)
+  date.setHours(12, 0, 0, 0);
+  dateLeft.setHours(12, 0, 0, 0);
+  dateRight.setHours(12, 0, 0, 0);
+
+  // Lấy giá trị Unix timestamp tương ứng với ngày tháng năm
+  const dateTimestamp = date.getTime();
+  const dateLeftTimestamp = dateLeft.getTime();
+  const dateRightTimestamp = dateRight.getTime();
+
+  // Kiểm tra liệu ngày `date` có nằm trong khoảng thời gian giữa `dateLeft` và `dateRight` hay không
+  return dateLeftTimestamp <= dateTimestamp && dateTimestamp <= dateRightTimestamp;
+};
+
 // Taoj ngày từ 1 date object và 1 chuỗi time (hh:mm:ss)
 const createDateByDateAndTimeStr = (date, timeStr) => {
   const newDate = new Date(date);
@@ -91,6 +106,7 @@ export {
   getWeekByDate,
   subtractDate,
   isEqualDateWithoutTime,
+  isBetweenOrEqualWithoutTime,
   createDateByDateAndTimeStr,
   isBetweenAndNoEqual
 };

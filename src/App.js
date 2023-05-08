@@ -28,9 +28,6 @@ function App() {
   useEffect(() => {
     const loadData = async () => {
       await authStore.loadStaffInfo();
-      // if (currentStaff) {
-      //   setAbility(defineAbilityFor(currentStaff));
-      // }
       setIsFirstVisit(false);
     };
     loadData();

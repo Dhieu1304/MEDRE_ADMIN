@@ -7,7 +7,7 @@ import localStorageUtil from "../../utils/localStorageUtil";
 function AppConfigProvider({ children }) {
   const [mode, setMode] = useState(LIGHT);
 
-  const currentLocale = localStorageUtil.getItem(localStorageUtil.LOCAL_STORAGE.LOCALE || "viVN");
+  const currentLocale = localStorageUtil.getItem(localStorageUtil.LOCAL_STORAGE.LOCALE) || "viVN";
   const [locale, setLocale] = useState(currentLocale);
 
   const value = useMemo(

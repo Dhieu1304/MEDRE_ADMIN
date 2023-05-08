@@ -15,7 +15,7 @@
   "constants": {
     "types": {
       "online": "Trực tiếp",
-      "offline": "trực tuyến"
+      "offline": "Trực tuyến"
     },
     "sessions": {
       "morning": "Buổi sáng",

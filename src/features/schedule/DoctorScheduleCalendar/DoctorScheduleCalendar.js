@@ -34,12 +34,7 @@ import WithDoctorLoaderWrapper from "../../staff/hocs/WithDoctorLoaderWrapper";
 import timeOffServices from "../../../services/timeOffServices";
 import { useCustomModal } from "../../../components/CustomModal";
 import AddNewTimeOffModal from "../components/AddNewTimeOffModal";
-import {
-  findBookingsByDate,
-  getSessionByTimeStart,
-  groupSchedulesDayOfWeekAndSession,
-  isTimeOffAtThisScheduleTime
-} from "./utils";
+import { findBookingsByDate, groupSchedulesDayOfWeekAndSession, isTimeOffAtThisScheduleTime } from "./utils";
 import { normalizeStrToDateStr } from "../../../utils/standardizedForForm";
 import { scheduleSessions } from "../../../entities/Schedule";
 import BookingInfoModal from "../../booking/components/BookingInfoModal";
@@ -51,6 +46,9 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
 
   const [schedules, setSchedules] = useState([]);
   const [timeOffs, setTimeOffs] = useState([]);
+
+  // console.log("schedules: ", schedules);
+  // console.log("timeOffs: ", timeOffs);
 
   const [currentDate, setCurrentDate] = useState(
     new Date(normalizeStrToDateStr(qs.parse(location.search)?.date, new Date()))
@@ -255,13 +253,22 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
     // Group các schedules lại theo dayOfWeek => để dựa trên dayOfWeek truy xuất schedule của ngày đó
 
     const cols = Array.from({ length: 7 }, (_, index) => {
+      // schedulesBySession là 1 obj có 2 key morning và afternoon
       const schedulesBySession = schedulesDayOfWeekAndSession[index];
       let schedule;
-      const session = getSessionByTimeStart(time.timeStart);
-      if (session === scheduleSessions.MORNING) {
-        schedule = schedulesBySession.morning;
-      } else {
-        schedule = schedulesBySession.afternoon;
+      const { session } = time;
+
+      switch (session) {
+        case scheduleSessions.MORNING:
+          schedule = schedulesBySession.morning || schedulesBySession.wholeDay;
+          break;
+
+        case scheduleSessions.AFFTERNOON:
+          schedule = schedulesBySession.afternoon || schedulesBySession.wholeDay;
+          break;
+
+        default:
+          break;
       }
 
       const colDate = heads[index];
