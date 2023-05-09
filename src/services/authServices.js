@@ -1,10 +1,26 @@
 import { authApi } from "../config/apiConfig";
 import axiosClient from "../config/axiosClient";
+import patternConfig from "../config/patternConfig";
 import localStorageUtil from "../utils/localStorageUtil";
 
-const loginByEmail = async (email, password) => {
+const login = async (emailOrUsernameOrPhoneNumber, password) => {
   try {
-    const res = await axiosClient.post(authApi.loginByEmail, { email, password });
+    let res;
+    if (patternConfig.phonePattern.test(emailOrUsernameOrPhoneNumber)) {
+      const phoneNumber = emailOrUsernameOrPhoneNumber;
+      // console.log("phoneNumber: ", phoneNumber);
+      res = await axiosClient.post(authApi.loginByPhoneNumber(), { phone_number: phoneNumber, password });
+    } else if (patternConfig.emailPattern.test(emailOrUsernameOrPhoneNumber)) {
+      const email = emailOrUsernameOrPhoneNumber;
+      // console.log("email: ", email);
+      res = await axiosClient.post(authApi.loginByEmail(), { email, password });
+    } else {
+      const username = emailOrUsernameOrPhoneNumber;
+      // console.log("username: ", username);
+      res = await axiosClient.post(authApi.loginByUsername(), { username, password });
+    }
+
+    // console.log("res: ", res);
 
     if (res?.status) {
       const staff = res?.data?.staff;
@@ -24,7 +40,7 @@ const loginByEmail = async (email, password) => {
     }
     return {
       success: false,
-      message: `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`
     };
   } catch (e) {
     // console.error(e.message);
@@ -48,6 +64,6 @@ const logout = async () => {
 };
 
 export default {
-  loginByEmail,
+  login,
   logout
 };

@@ -1,11 +1,9 @@
 import PropTypes from "prop-types";
 import { useMemo, useReducer } from "react";
-import { toast } from "react-toastify";
 import Context from "./Context";
 import reducer, { initState } from "./reducer";
 import actions from "./actions";
 import authServices from "../../services/authServices";
-import staffServices from "../../services/staffServices";
 
 function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initState);
@@ -13,21 +11,26 @@ function AuthProvider({ children }) {
   const value = useMemo(
     () => ({
       ...state,
-      loginByEmail: async (email, password) => {
+      login: async (emailOrUsernameOrPhoneNumber, password) => {
         dispatch(actions.fetchApi());
-        const res = await authServices.loginByEmail(email, password);
+
+        const res = await authServices.login(emailOrUsernameOrPhoneNumber, password);
 
         if (res?.success) {
           const { staff, message } = res;
           dispatch(actions.login(staff));
           dispatch(actions.fetchApiSuccess());
-          toast.success(message);
-          return true;
+          return {
+            success: true,
+            message
+          };
         }
         const { message } = res;
         dispatch(actions.fetchApiFailed(message));
-        toast.success(message);
-        return false;
+        return {
+          success: false,
+          message
+        };
       },
       logout: async () => {
         dispatch(actions.fetchApi());
@@ -40,24 +43,12 @@ function AuthProvider({ children }) {
           dispatch(actions.fetchApiSuccess());
         }
       },
-      loadStaffInfo: async () => {
-        dispatch(actions.fetchApi());
-        const res = await staffServices.getStaffInfo();
-
-        if (res?.success) {
-          const { staff, message } = res;
-
+      autoLogin: (staff) => {
+        if (staff) {
           dispatch(actions.login(staff));
-          dispatch(actions.fetchApiSuccess());
-          toast.success(message);
-          return staff;
         }
-        const { message } = res;
-        dispatch(actions.fetchApiFailed(message));
-        toast.success(message);
-        return false;
       },
-      setStaff: async (staff) => {
+      setStaff: (staff) => {
         dispatch(actions.setStaff(staff));
       }
     }),

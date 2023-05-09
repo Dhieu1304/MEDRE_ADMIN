@@ -7,6 +7,9 @@
     "lt": "{{left}} phải nhỏ hơn {{right}}",
     "gt": "{{left}} phải lớn hơn {{right}}",
     "lte": "{{left}} phải nhỏ hơn hoặc bằng {{right}}",
-    "gte": "{{left}} phải lớn hơn hoặc bằng {{right}}"
+    "gte": "{{left}} phải lớn hơn hoặc bằng {{right}}",
+    "same": "{{left}} phải giống với {{right}}",
+    "passwordFormat": "phải có ít nhất một chữ số và một ký tự",
+    "length": "{{label}} phải có {{length}} ký tự"
   }
 }

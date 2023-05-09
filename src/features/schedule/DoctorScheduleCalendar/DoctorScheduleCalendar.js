@@ -72,8 +72,11 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
 
   const loadData = async () => {
     await fetchApi(async () => {
-      const res = await scheduleServices.getScheduleListByDoctorId(staffId, heads[0], heads[6]);
-
+      const res = await scheduleServices.getScheduleListByDoctorId(
+        staffId,
+        formatDate(heads[0], "YYYY-MM-DD"),
+        formatDate(heads[6], "YYYY-MM-DD")
+      );
       if (res.success) {
         const schedulesData = res.schedules;
         // console.log("res: ", res);
@@ -87,7 +90,10 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
 
   const loadTimeOffs = async () => {
     await fetchApi(async () => {
-      const res = await timeOffServices.getTimeOffByDoctorId(staffId, { from: heads[0], to: heads[6] });
+      const res = await timeOffServices.getTimeOffByDoctorId(staffId, {
+        from: formatDate(heads[0], "YYYY-MM-DD"),
+        to: formatDate(heads[6], "YYYY-MM-DD")
+      });
 
       if (res.success) {
         const timeOffsData = res.timeOffs;

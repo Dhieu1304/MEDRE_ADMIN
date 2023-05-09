@@ -6,14 +6,17 @@ import reportWebVitals from "./reportWebVitals";
 
 import { AuthProvider } from "./store/AuthStore";
 import { AppConfigProvider } from "./store/AppConfigStore";
+import { FetchingApiProvider } from "./store/FetchingApiStore";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   // <React.StrictMode>
   <AppConfigProvider>
-    <AuthProvider>
-      <App />
-    </AuthProvider>
+    <FetchingApiProvider>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </FetchingApiProvider>
   </AppConfigProvider>
   // </React.StrictMode>
 );

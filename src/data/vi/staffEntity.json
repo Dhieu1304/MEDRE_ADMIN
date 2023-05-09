@@ -5,6 +5,7 @@
     "phoneNumber": "Số điện thoại",
     "email": "Email",
     "password": "Mật khẩu",
+    "emailOrUsernameOrPhoneNumber": "Email, username hoặc số điện thoại",
     "name": "Họ tên",
     "image": "Ảnh",
     "address": "Địa chỉ",

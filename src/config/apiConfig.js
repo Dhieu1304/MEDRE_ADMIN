@@ -1,5 +1,7 @@
 const authApi = {
-  loginByEmail: "/auth/staff/login-by-email"
+  loginByEmail: () => "/auth/staff/login-by-email",
+  loginByPhoneNumber: () => "/auth/staff/login-by-phone-number",
+  loginByUsername: () => "/auth/staff/login-by-username"
 };
 
 const userApi = {
