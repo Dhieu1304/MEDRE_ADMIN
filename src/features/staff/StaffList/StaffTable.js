@@ -1,4 +1,3 @@
-import React, { useMemo } from "react";
 import PropTypes from "prop-types";
 
 import {
@@ -22,10 +21,10 @@ import { useTranslation } from "react-i18next";
 import StaffRoleStatusButton from "../components/StaffRoleStatusButton";
 
 import { Can } from "../../../store/AbilityStore";
-import { staffActionAbility, staffGenders, staffStatus } from "../../../entities/Staff";
+import { staffActionAbility, staffStatuses } from "../../../entities/Staff";
 import Staff from "../../../entities/Staff/Staff";
-import { useAppConfigStore } from "../../../store/AppConfigStore";
 import { columnsIds } from "./utils";
+import { useStaffGendersContantTranslation } from "../hooks/useConstantsTranslation";
 
 function StaffTable({
   staffs,
@@ -37,18 +36,10 @@ function StaffTable({
   unblockStaffModal
 }) {
   const theme = useTheme();
-  const { locale } = useAppConfigStore();
 
   const { t: tStaffMessage } = useTranslation("staffEntity", { keyPrefix: "messages" });
-  const { t: tStaffGender } = useTranslation("staffEntity", { keyPrefix: "constants.genders" });
 
-  const staffGendersObj = useMemo(() => {
-    return {
-      [staffGenders.MALE]: tStaffGender("male"),
-      [staffGenders.FEMALE]: tStaffGender("female"),
-      [staffGenders.OTHER]: tStaffGender("other")
-    };
-  }, [locale]);
+  const [, staffGenderContantListObj] = useStaffGendersContantTranslation();
 
   const navigate = useNavigate();
 
@@ -157,7 +148,7 @@ function StaffTable({
                     zIndex: 1
                   }}
                 >
-                  {staffGendersObj?.[staff?.gender]}
+                  {staffGenderContantListObj?.[staff?.gender]?.label}
                 </TableCell>
                 <TableCell
                   align="left"
@@ -241,7 +232,7 @@ function StaffTable({
                   <Can I={staffActionAbility.BLOCK} a={staff}>
                     {staff?.blocked ? (
                       <StaffRoleStatusButton
-                        variant={staffStatus.STATUS_BLOCK}
+                        variant={staffStatuses.STATUS_BLOCK}
                         onClick={() => {
                           unblockStaffModal.setShow(true);
                           unblockStaffModal.setData(staff);
@@ -249,7 +240,7 @@ function StaffTable({
                       />
                     ) : (
                       <StaffRoleStatusButton
-                        variant={staffStatus.STATUS_UNBLOCK}
+                        variant={staffStatuses.STATUS_UNBLOCK}
                         onClick={() => {
                           blockStaffModal.setShow(true);
                           blockStaffModal.setData(staff);
@@ -259,7 +250,7 @@ function StaffTable({
                   </Can>
                   <Can not I={staffActionAbility.BLOCK} a={staff}>
                     <StaffRoleStatusButton
-                      variant={staff?.blocked ? staffStatus.STATUS_BLOCK : staffStatus.STATUS_UNBLOCK}
+                      variant={staff?.blocked ? staffStatuses.STATUS_BLOCK : staffStatuses.STATUS_UNBLOCK}
                       onClick={() => {
                         notHaveAccessModal.setShow(true);
                       }}

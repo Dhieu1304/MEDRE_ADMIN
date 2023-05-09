@@ -33,7 +33,7 @@ import CustomOverlay from "../../components/CustomOverlay";
 import ChangeAvatarModal from "./components/ChangeAvatarModal";
 import { useCustomModal } from "../../components/CustomModal";
 import AddExpertiseModal from "./components/AddExpertiseModal";
-import Staff, { staffActionAbility, staffGenders, staffInputValidate, staffStatus } from "../../entities/Staff";
+import Staff, { staffActionAbility, staffGenders, staffInputValidate, staffStatuses } from "../../entities/Staff";
 import { AbilityContext } from "../../store/AbilityStore";
 import { NotHaveAccessModal } from "../auth";
 import Expertise, { expertiseActionAbility } from "../../entities/Expertise";
@@ -140,7 +140,7 @@ function StaffDetail({ staffId, expertisesList, loadExpertisesList }) {
         const newDefaultValues = {
           ...mergeObjectsWithoutNullAndUndefined(defaultValues, staffData),
           expertises: expertiseIds,
-          status: staffData?.blocked ? staffStatus.STATUS_BLOCK : staffStatus.STATUS_UNBLOCK
+          status: staffData?.blocked ? staffStatuses.STATUS_BLOCK : staffStatuses.STATUS_UNBLOCK
           // gender: ""
         };
 

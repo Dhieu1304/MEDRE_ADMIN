@@ -2,10 +2,10 @@ import PropTypes from "prop-types";
 import { Box, Button, useTheme } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { Lock as LockIcon, LockOpen as LockOpenIcon } from "@mui/icons-material";
-import { staffRoles, staffStatus } from "../../../entities/Staff";
+import { staffRoles, staffStatuses } from "../../../entities/Staff";
 
 const { ROLE_ADMIN, ROLE_DOCTOR, ROLE_NURSE, ROLE_CUSTOMER_SERVICE } = staffRoles;
-const { STATUS_BLOCK, STATUS_UNBLOCK } = staffStatus;
+const { STATUS_BLOCK, STATUS_UNBLOCK } = staffStatuses;
 
 const StaffRoleStatusButton = ({ variant, onClick }) => {
   const { t: tRole } = useTranslation("staffEntity", { keyPrefix: "constants.roles" });

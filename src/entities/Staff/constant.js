@@ -28,7 +28,7 @@ export const staffGenders = {
   OTHER: "Other"
 };
 
-export const staffStatus = {
+export const staffStatuses = {
   STATUS_BLOCK: "Block",
   STATUS_UNBLOCK: "Unblock"
 };
