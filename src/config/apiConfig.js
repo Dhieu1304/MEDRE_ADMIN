@@ -10,6 +10,7 @@ const userApi = {
   editUser: (id) => `/user/edit/${id}`
 };
 const staffApi = {
+  createStaff: () => "/staff/create",
   staffInfo: () => "/staff/my-profile",
   staffList: () => "/staff/all",
   staffListWithSchedules: () => "/staff/list-staff-schedule",

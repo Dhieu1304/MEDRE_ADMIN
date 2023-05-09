@@ -2,7 +2,45 @@ import camelcaseKeys from "camelcase-keys";
 import { expertiseApi, staffApi } from "../config/apiConfig";
 import axiosClient from "../config/axiosClient";
 import { cleanUndefinedAndEmptyStrValueObject } from "../utils/objectUtil";
-// import staffMockData from "../mockData/staffMockData";
+
+const createStaff = async ({ email, username, phoneNumber, name, role, password }) => {
+  const dataBody = cleanUndefinedAndEmptyStrValueObject({
+    email,
+    username,
+    phone_number: phoneNumber,
+    name,
+    role,
+    password
+  });
+
+  // console.log("dataBody: ", dataBody);
+  //
+  try {
+    const res = await axiosClient.post(staffApi.createStaff(), dataBody);
+
+    // console.log("res: ", res);
+
+    if (res?.status) {
+      const staff = camelcaseKeys(res?.data, { deep: true });
+
+      return {
+        staff,
+        success: true,
+        message: res?.message
+      };
+    }
+    return {
+      success: false,
+      message: res?.message || `Status is ${res.status}`
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
 
 const getStaffList = async ({
   email,
@@ -421,6 +459,7 @@ const unblockStaff = async (id, reason) => {
 };
 
 export default {
+  createStaff,
   getStaffList,
   getStaffListWithSchedules,
   getStaffDetail,
