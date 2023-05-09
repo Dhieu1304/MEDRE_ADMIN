@@ -1,15 +1,13 @@
 import PropTypes from "prop-types";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { useMemo } from "react";
 import { FormControlLabel, Grid, Radio, RadioGroup } from "@mui/material";
 import { toast } from "react-toastify";
 import CustomModal from "../../../components/CustomModal";
 
-import Staff from "../../../entities/Staff/Staff";
-import { staffRoles } from "../../../entities/Staff";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
 import staffServices from "../../../services/staffServices";
+import { useStaffRolesContantTranslation } from "../hooks/useConstantsTranslation";
 
 function EditStaffRoleModal({ show, setShow, data, setData, handleAfterEditStaffRole }) {
   const { handleSubmit, control, trigger } = useForm({
@@ -21,31 +19,10 @@ function EditStaffRoleModal({ show, setShow, data, setData, handleAfterEditStaff
   });
 
   const { t } = useTranslation("staffFeature", { keyPrefix: "EditStaffRoleModal" });
-  const { t: tRole } = useTranslation("staffEntity", { keyPrefix: "constants.roles" });
+
+  const [staffRoleContantList] = useStaffRolesContantTranslation();
 
   const { fetchApi } = useFetchingStore();
-
-  const roleList = useMemo(
-    () => [
-      {
-        label: "admin",
-        value: staffRoles.ROLE_ADMIN
-      },
-      {
-        label: "doctor",
-        value: staffRoles.ROLE_DOCTOR
-      },
-      {
-        label: "nurse",
-        value: staffRoles.ROLE_NURSE
-      },
-      {
-        label: "customerService",
-        value: staffRoles.ROLE_CUSTOMER_SERVICE
-      }
-    ],
-    []
-  );
 
   const handleEditStaffRole = async ({ role }) => {
     await fetchApi(async () => {
@@ -55,6 +32,7 @@ function EditStaffRoleModal({ show, setShow, data, setData, handleAfterEditStaff
         setShow(false);
         setData({});
         if (handleAfterEditStaffRole) await handleAfterEditStaffRole();
+        toast(res.message);
         return { success: true };
       }
       toast(res.message);
@@ -74,9 +52,9 @@ function EditStaffRoleModal({ show, setShow, data, setData, handleAfterEditStaff
     >
       <RadioGroup>
         <Grid container spacing={2}>
-          {roleList.map((role) => {
+          {staffRoleContantList.map((role) => {
             return (
-              <Grid item xl={6} lg={6} md={6} sm={12} key={role.value}>
+              <Grid item lg={6} xs={12} key={role.value}>
                 <Controller
                   control={control}
                   trigger={trigger}
@@ -93,8 +71,8 @@ function EditStaffRoleModal({ show, setShow, data, setData, handleAfterEditStaff
                           />
                         }
                         checked={checked}
-                        value={role.value}
-                        label={tRole(role.label)}
+                        value={role?.value}
+                        label={role?.label}
                       />
                     );
                   }}
@@ -115,7 +93,7 @@ EditStaffRoleModal.defaultProps = {
 EditStaffRoleModal.propTypes = {
   show: PropTypes.bool.isRequired,
   setShow: PropTypes.func.isRequired,
-  data: PropTypes.instanceOf(Staff).isRequired,
+  data: PropTypes.object.isRequired,
   setData: PropTypes.func.isRequired,
   handleAfterEditStaffRole: PropTypes.func
 };

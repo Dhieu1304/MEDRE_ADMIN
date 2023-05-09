@@ -63,7 +63,7 @@ function UnblockStaffModal({ show, setShow, data, setData, handleAfterUnblockSta
         <CustomInput
           control={control}
           rules={{}}
-          label={t("reason")}
+          label={t("form.reason")}
           trigger={trigger}
           name="reason"
           type="text"

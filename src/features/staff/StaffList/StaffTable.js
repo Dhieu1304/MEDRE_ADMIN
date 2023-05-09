@@ -282,9 +282,6 @@ function StaffTable({
                     </IconButton>
                   </Box>
                 </TableCell>
-                {/* <TableCell align="left">{row.description}</TableCell>
-              <TableCell align="left">{row.education}</TableCell>
-              <TableCell align="left">{row.certificate}</TableCell> */}
               </TableRow>
             );
           })}

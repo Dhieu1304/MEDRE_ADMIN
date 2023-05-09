@@ -6,12 +6,12 @@
     }
   },
 
-  "NoHaveAccessModal": {
+  "NotHaveAccessModal": {
     "title": "Cảnh báo",
     "errorMessage": "Bạn không có quyền truy cập"
   },
 
-  "NoHaveAccess": {
+  "NotHaveAccess": {
     "errorMessage": "Bạn không có quyền truy cập"
   }
 }

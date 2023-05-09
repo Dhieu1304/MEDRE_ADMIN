@@ -63,7 +63,7 @@ function BlockStaffModal({ show, setShow, data, setData, handleAfterBlockStaff }
         <CustomInput
           control={control}
           rules={{}}
-          label={t("reason")}
+          label={t("form.reason")}
           trigger={trigger}
           name="reason"
           type="text"

@@ -91,14 +91,19 @@
     "button": {
       "block": "Block"
     },
-    "confirmQuestion": "Do you want to block staff - {{name}}?",
-    "reason:": "Reason"
+    "form": {
+      "reason": "Reason"
+    },
+    "confirmQuestion": "Do you want to block staff - {{name}}?"
   },
 
   "UnblockStaffModal": {
     "title": "Unblock Staff",
     "button": {
       "unblock": "Unblock"
+    },
+    "form": {
+      "reason": "Reason"
     },
     "confirmQuestion": "Do you want to unblock staff - {{name}}?"
   },

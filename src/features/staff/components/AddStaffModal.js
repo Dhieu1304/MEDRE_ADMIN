@@ -8,6 +8,7 @@ import CustomInput from "../../../components/CustomInput";
 // import { useFetchingStore } from "../../../store/FetchingApiStore";
 import { staffInputValidate, staffRoles } from "../../../entities/Staff";
 import { useAppConfigStore } from "../../../store/AppConfigStore";
+// import { useStaffRolesContantTranslation } from "../hooks/useConstantsTranslation";
 
 function AddStaffModal({ show, setShow }) {
   const { control, trigger, watch, handleSubmit } = useForm({
@@ -30,6 +31,8 @@ function AddStaffModal({ show, setShow }) {
   // const { fetchApi } = useFetchingStore();
 
   const { locale } = useAppConfigStore();
+
+  // const [staffRoleContantList, staffRoleContantListObj] = useStaffRolesContantTranslation();
 
   const staffRoleListObj = useMemo(() => {
     const staffRoleList = [

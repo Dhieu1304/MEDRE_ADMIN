@@ -27,7 +27,8 @@ function CustomModal({ show, setShow, setData, children, title, submitBtnLabel, 
           border: "1px solid rgba(0,0,0,0.2)",
           borderRadius: 1,
           boxShadow: 24,
-          p: 2
+          p: 2,
+          maxWidth: "80vw"
         }}
       >
         <Box display="flex" flexDirection="row" justifyContent="space-between" alignItems="center">

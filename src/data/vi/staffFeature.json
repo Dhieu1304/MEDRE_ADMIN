@@ -91,14 +91,19 @@
     "button": {
       "block": "Khóa"
     },
-    "confirmQuestion": "Bạn có chắc chắn khóa nhân viên - {{name}}?",
-    "reason:": "Lý do"
+    "form": {
+      "reason": "Lý do"
+    },
+    "confirmQuestion": "Bạn có chắc chắn khóa nhân viên - {{name}}?"
   },
 
   "UnblockStaffModal": {
     "title": "Mở khóa tài khoản nhân viên",
     "button": {
       "unblock": "Mở khóa"
+    },
+    "form": {
+      "reason": "Lý do"
     },
     "confirmQuestion": "Bạn có chắc chắn mở khóa nhân viên - {{name}}?"
   },

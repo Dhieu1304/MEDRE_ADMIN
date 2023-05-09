@@ -32,7 +32,7 @@
     "roles": {
       "admin": "Admin",
       "doctor": "Bác sĩ",
-      "nurse": "Nurse",
+      "nurse": "Y tá",
       "customerService": "NV CSKH"
     },
     "statuses": {

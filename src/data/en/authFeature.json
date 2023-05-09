@@ -6,12 +6,12 @@
     }
   },
 
-  "NoHaveAccessModal": {
+  "NotHaveAccessModal": {
     "title": "Warning",
     "errorMessage": "You don't have access"
   },
 
-  "NoHaveAccess": {
+  "NotHaveAccess": {
     "errorMessage": "You don't have access"
   }
 }
