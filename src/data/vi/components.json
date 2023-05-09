@@ -9,5 +9,8 @@
     "button": {
       "submit": "Xác nhận"
     }
+  },
+  "NoDataBox": {
+    "title": "Không có dữ liệu phù hợp"
   }
 }

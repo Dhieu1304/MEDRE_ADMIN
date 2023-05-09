@@ -9,5 +9,9 @@
     "button": {
       "submit": "Submit"
     }
+  },
+
+  "NoDataBox": {
+    "title": "No relevant data available"
   }
 }

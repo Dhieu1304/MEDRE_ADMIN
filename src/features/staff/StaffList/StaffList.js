@@ -25,7 +25,7 @@ import CustomOverlay from "../../../components/CustomOverlay";
 import { useAppConfigStore } from "../../../store/AppConfigStore/hooks";
 import { useCustomModal } from "../../../components/CustomModal/hooks";
 
-import { NotHaveAccessModal } from "../../auth";
+import { NotHaveAccess, NotHaveAccessModal } from "../../auth";
 import { EditStaffRoleModal, BlockStaffModal, AddStaffModal } from "../components";
 
 import useObjDebounce from "../../../hooks/useObjDebounce";
@@ -38,9 +38,11 @@ import UnblockStaffModal from "../components/UnblockStaffModal";
 import { Can } from "../../../store/AbilityStore";
 import { staffActionAbility } from "../../../entities/Staff";
 import Staff from "../../../entities/Staff/Staff";
+import NoDataBox from "../../../components/NoDataBox";
 
 function StaffList({ expertisesList }) {
   const [isFirst, setIsFirst] = useState(true);
+  const [countRender, setCountRender] = useState(1);
   const { locale } = useAppConfigStore();
 
   const [staffs, setStaffs] = useState([]);
@@ -75,6 +77,7 @@ function StaffList({ expertisesList }) {
   */
   const [showCols, setShowCols] = useState({
     ...initialShowCols,
+    [columnsIds.username]: false,
     [columnsIds.description]: false,
     [columnsIds.education]: false,
     [columnsIds.certificate]: false,
@@ -85,33 +88,33 @@ function StaffList({ expertisesList }) {
   const columns = useMemo(
     () => [
       {
+        id: columnsIds.name,
+        label: tStaff(columnsIds.name),
+        minWidth: 200,
+        display: "table-cell"
+      },
+      {
         id: columnsIds.username,
         label: tStaff(columnsIds.username),
-        minWidth: 100,
+        minWidth: 150,
         display: showCols[columnsIds.username] ? "table-cell" : "none"
       },
       {
         id: columnsIds.phoneNumber,
         label: tStaff(columnsIds.phoneNumber),
-        minWidth: 100,
+        minWidth: 150,
         display: showCols[columnsIds.phoneNumber] ? "table-cell" : "none"
       },
       {
         id: columnsIds.email,
         label: tStaff(columnsIds.email),
-        minWidth: 100,
+        minWidth: 150,
         display: showCols[columnsIds.email] ? "table-cell" : "none"
-      },
-      {
-        id: columnsIds.name,
-        label: tStaff(columnsIds.name),
-        minWidth: 100,
-        display: showCols[columnsIds.name] ? "table-cell" : "none"
       },
       {
         id: columnsIds.address,
         label: tStaff(columnsIds.address),
-        minWidth: 100,
+        minWidth: 150,
         display: showCols[columnsIds.address] ? "table-cell" : "none"
       },
       {
@@ -123,7 +126,7 @@ function StaffList({ expertisesList }) {
       {
         id: columnsIds.dob,
         label: tStaff(columnsIds.dob),
-        minWidth: 100,
+        minWidth: 150,
         display: showCols[columnsIds.dob] ? "table-cell" : "none"
       },
       {
@@ -141,13 +144,13 @@ function StaffList({ expertisesList }) {
       {
         id: columnsIds.education,
         label: tStaff(columnsIds.education),
-        minWidth: 100,
+        minWidth: 150,
         display: showCols[columnsIds.education] ? "table-cell" : "none"
       },
       {
         id: columnsIds.certificate,
         label: tStaff(columnsIds.certificate),
-        minWidth: 100,
+        minWidth: 150,
         display: showCols[columnsIds.certificate] ? "table-cell" : "none"
       },
 
@@ -166,8 +169,8 @@ function StaffList({ expertisesList }) {
       {
         id: columnsIds.action,
         label: "",
-        minWidth: 100,
-        display: showCols[columnsIds.action] ? "table-cell" : "none"
+        minWidth: 80,
+        display: "table-cell"
       }
     ],
     [locale, showCols]
@@ -251,10 +254,17 @@ function StaffList({ expertisesList }) {
   useEffect(() => {
     if (isFirst) {
       setIsFirst(false);
+      setCountRender((prev) => prev + 1);
       return;
     }
 
-    const page = 1;
+    // Trong 2 lần useEffect đầu tiên thì ta lấy page theo watch().page (lấy từ location.search)
+    let page = 1;
+    if (countRender <= 2) {
+      page = watch().page;
+      setCountRender((prev) => prev + 1);
+    }
+
     const params = { ...watch(), page };
 
     const searchParams = qs.stringify(params);
@@ -277,244 +287,239 @@ function StaffList({ expertisesList }) {
 
   return (
     <>
-      <Box>
-        <CustomOverlay open={isLoading} />
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-start",
-            alignItems: "center",
-            mb: 4
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-start",
-              alignItems: "center"
-            }}
-          >
-            <Typography variant="h4" component="h1" mr={2}>
-              {t("title")}
-            </Typography>
-          </Box>
-        </Box>
-        {isMobile && (
-          <Button
-            onClick={() => {
-              setOpenFilterMobile(!openFilterMobile);
-            }}
-          >
-            {openFilterMobile ? tBtn("hideFilterCollapse") : tBtn("showFilterCollapse")}
-          </Button>
-        )}
-        <Collapse in={!isMobile || openFilterMobile}>
-          <FormProvider {...filterForm}>
-            <StaffFiltersForm expertisesList={expertisesList} />
-          </FormProvider>
-        </Collapse>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            flexWrap: "wrap"
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-start",
-              alignItems: "center"
-            }}
-          >
-            <Button
-              variant="outlined"
-              onClick={(event) => {
-                setShowTableColsMenu(event.currentTarget);
-              }}
-            >
-              {tBtn("showMenuColumns")}
-            </Button>
-            <Can I={staffActionAbility.ADD} a={Staff.magicWord()}>
-              <Button
-                variant="contained"
-                onClick={() => {
-                  addStaffModal.setShow(true);
-                }}
-                sx={{
-                  ml: 2
-                }}
-              >
-                {tBtn("add")}
-              </Button>
-            </Can>
-            <Menu
-              anchorEl={showTableColsMenu}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left"
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left"
-              }}
-              open={Boolean(showTableColsMenu)}
-              onClose={() => {
-                setShowTableColsMenu(null);
-              }}
-              sx={{
-                maxHeight: 250
-              }}
-            >
-              {columns
-                .filter((column) => column.id in showCols)
-                .map((column) => {
-                  return (
-                    <MenuItem
-                      key={column.id}
-                      sx={{
-                        px: 2,
-                        py: 0
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          width: "100%"
-                        }}
-                      >
-                        <Typography fontSize={10}>{column.label}</Typography>
+      <CustomOverlay open={isLoading} />
 
-                        <Switch
-                          size="small"
-                          checked={showCols[column.id] === true}
-                          onChange={() => {
-                            setShowCols((prev) => ({
-                              ...prev,
-                              [column.id]: !prev[column.id]
-                            }));
-                          }}
-                        />
-                      </Box>
-                    </MenuItem>
-                  );
-                })}
-            </Menu>
+      <Can I={staffActionAbility.VIEW} a={Staff.magicWord()}>
+        <Box>
+          <Box sx={{ display: "flex", justifyContent: "flex-start", alignItems: "center", mb: 4 }}>
+            <Box sx={{ display: "flex", justifyContent: "flex-start", alignItems: "center" }}>
+              <Typography component="h1" variant="h4" fontWeight={600} fontSize={{ sm: 30, xs: 25 }} sx={{ mr: 4 }}>
+                {t("title")}
+              </Typography>
+            </Box>
           </Box>
-
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              alignItems: "center"
-            }}
-          >
+          {isMobile && (
             <Button
-              color="inherit"
               onClick={() => {
-                reset(createDefaultValues());
-              }}
-              sx={{
-                transform: "translateY(-25%)"
+                setOpenFilterMobile((prev) => !prev);
               }}
             >
-              {tBtn("reset")}
-              <RestartAltIcon />
+              {openFilterMobile ? tBtn("hideFilterCollapse") : tBtn("showFilterCollapse")}
             </Button>
-
-            <TablePagination
-              component="div"
-              count={count}
-              page={count === 0 ? 0 : watch().page - 1}
-              onPageChange={(e, page) => {
-                const newPage = page + 1;
-                setValue("page", newPage);
-                const params = { ...watch(), page: newPage };
-                const searchParams = qs.stringify(params);
-                navigate(`?${searchParams}`);
-                loadData({ page: newPage });
-              }}
-              rowsPerPageOptions={[1, 10, 20, 50, 100]}
-              rowsPerPage={watch().limit}
-              onRowsPerPageChange={(e) => {
-                const newLimit = parseInt(e.target.value, 10);
-                setValue("limit", newLimit);
-              }}
-              sx={{
-                mb: 2
-              }}
-            />
-          </Box>
-        </Box>
-
-        <StaffTable
-          staffs={staffs}
-          notHaveAccessModal={notHaveAccessModal}
-          editStaffRoleModal={editStaffRoleModal}
-          blockStaffModal={blockStaffModal}
-          unblockStaffModal={unblockStaffModal}
-          columns={columns}
-          showCols={showCols}
-        />
-
-        {!!count && (
-          <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-end", alignItems: "flex-end" }}>
-            <Pagination
-              count={Math.ceil(count / watch().limit)}
-              color="primary"
-              page={watch().page}
+          )}
+          <Collapse in={!isMobile || openFilterMobile}>
+            <FormProvider {...filterForm}>
+              <StaffFiltersForm expertisesList={expertisesList} />
+            </FormProvider>
+          </Collapse>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { md: "row", xs: "column" },
+              justifyContent: "space-between",
+              alignItems: { md: "center", xs: "flex-start" }
+            }}
+          >
+            <Box
               sx={{
                 display: "flex",
-                justifyContent: "flex-end"
+                justifyContent: "flex-start",
+                alignItems: "center"
               }}
-              onChange={(event, newPage) => {
-                setValue("page", newPage);
-                const params = { ...watch(), page: newPage };
-                const searchParams = qs.stringify(params);
-                navigate(`?${searchParams}`);
-                loadData({ page: newPage });
-              }}
-            />
+            >
+              <Button
+                variant="outlined"
+                onClick={(event) => {
+                  setShowTableColsMenu(event.currentTarget);
+                }}
+              >
+                {tBtn("showMenuColumns")}
+              </Button>
+              <Button
+                color="inherit"
+                onClick={() => {
+                  reset(createDefaultValues());
+                }}
+                sx={{
+                  display: { md: "none", xs: "flex" }
+                }}
+              >
+                {tBtn("reset")}
+                <RestartAltIcon />
+              </Button>
+              <Can I={staffActionAbility.ADD} a={Staff.magicWord()}>
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    addStaffModal.setShow(true);
+                  }}
+                  sx={{ ml: 2 }}
+                >
+                  {tBtn("add")}
+                </Button>
+              </Can>
+              <Menu
+                anchorEl={showTableColsMenu}
+                anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+                keepMounted
+                transformOrigin={{ vertical: "top", horizontal: "left" }}
+                open={Boolean(showTableColsMenu)}
+                onClose={() => {
+                  setShowTableColsMenu(null);
+                }}
+                sx={{
+                  maxHeight: 250
+                }}
+              >
+                {columns
+                  .filter((column) => column.id in showCols)
+                  .map((column) => {
+                    return (
+                      <MenuItem
+                        key={column.id}
+                        sx={{
+                          px: 2,
+                          py: 0
+                        }}
+                      >
+                        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+                          <Typography fontSize={10}>{column.label}</Typography>
+
+                          <Switch
+                            size="small"
+                            checked={showCols[column.id] === true}
+                            onChange={() => {
+                              setShowCols((prev) => ({
+                                ...prev,
+                                [column.id]: !prev[column.id]
+                              }));
+                            }}
+                          />
+                        </Box>
+                      </MenuItem>
+                    );
+                  })}
+              </Menu>
+            </Box>
+
+            <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
+              <Button
+                color="inherit"
+                onClick={() => {
+                  reset(createDefaultValues());
+                }}
+                sx={{
+                  display: {
+                    md: "flex",
+                    xs: "none"
+                  }
+                }}
+              >
+                {tBtn("reset")}
+                <RestartAltIcon />
+              </Button>
+
+              <TablePagination
+                component="div"
+                count={count}
+                page={count === 0 ? 0 : watch().page - 1}
+                onPageChange={(e, page) => {
+                  const newPage = page + 1;
+                  setValue("page", newPage);
+                  const params = { ...watch(), page: newPage };
+                  const searchParams = qs.stringify(params);
+                  navigate(`?${searchParams}`);
+                  loadData({ page: newPage });
+                }}
+                rowsPerPageOptions={[1, 10, 20, 50, 100]}
+                rowsPerPage={watch().limit}
+                onRowsPerPageChange={(e) => {
+                  const newLimit = parseInt(e.target.value, 10);
+                  setValue("limit", newLimit);
+                }}
+                sx={{
+                  p: 0,
+                  mb: 0
+                }}
+              />
+            </Box>
           </Box>
+
+          {count ? (
+            <>
+              <StaffTable
+                staffs={staffs}
+                notHaveAccessModal={notHaveAccessModal}
+                editStaffRoleModal={editStaffRoleModal}
+                blockStaffModal={blockStaffModal}
+                unblockStaffModal={unblockStaffModal}
+                columns={columns}
+                showCols={showCols}
+              />
+
+              <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-end", alignItems: "flex-end" }}>
+                <Pagination
+                  count={Math.ceil(count / watch().limit)}
+                  color="primary"
+                  page={watch().page}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "flex-end"
+                  }}
+                  onChange={(event, newPage) => {
+                    setValue("page", newPage);
+                    const params = { ...watch(), page: newPage };
+                    const searchParams = qs.stringify(params);
+                    navigate(`?${searchParams}`);
+                    loadData({ page: newPage });
+                  }}
+                />
+              </Box>
+            </>
+          ) : (
+            <NoDataBox />
+          )}
+        </Box>
+
+        {addStaffModal.show && <AddStaffModal show={addStaffModal.show} setShow={addStaffModal.setShow} />}
+        {editStaffRoleModal.show && (
+          <EditStaffRoleModal
+            show={editStaffRoleModal.show}
+            setShow={editStaffRoleModal.setShow}
+            data={editStaffRoleModal.data}
+            setData={editStaffRoleModal.setData}
+            handleAfterEditStaffRole={handleAfterEditStaffRole}
+          />
         )}
-      </Box>
 
-      {addStaffModal.show && <AddStaffModal show={addStaffModal.show} setShow={addStaffModal.setShow} />}
-      {editStaffRoleModal.show && (
-        <EditStaffRoleModal
-          show={editStaffRoleModal.show}
-          setShow={editStaffRoleModal.setShow}
-          data={editStaffRoleModal.data}
-          setData={editStaffRoleModal.setData}
-          handleAfterEditStaffRole={handleAfterEditStaffRole}
-        />
-      )}
+        {blockStaffModal.show && (
+          <BlockStaffModal
+            show={blockStaffModal.show}
+            setShow={blockStaffModal.setShow}
+            data={blockStaffModal.data}
+            setData={blockStaffModal.setData}
+            handleAfterBlockStaff={handleAfterBlockStaff}
+          />
+        )}
 
-      {blockStaffModal.show && (
-        <BlockStaffModal
-          show={blockStaffModal.show}
-          setShow={blockStaffModal.setShow}
-          data={blockStaffModal.data}
-          setData={blockStaffModal.setData}
-          handleAfterBlockStaff={handleAfterBlockStaff}
-        />
-      )}
+        {unblockStaffModal.show && (
+          <UnblockStaffModal
+            show={unblockStaffModal.show}
+            setShow={unblockStaffModal.setShow}
+            data={unblockStaffModal.data}
+            setData={unblockStaffModal.setData}
+            handleAfterUnblockStaff={handleAfterUnblockStaff}
+          />
+        )}
 
-      {unblockStaffModal.show && (
-        <UnblockStaffModal
-          show={unblockStaffModal.show}
-          setShow={unblockStaffModal.setShow}
-          data={unblockStaffModal.data}
-          setData={unblockStaffModal.setData}
-          handleAfterUnblockStaff={handleAfterUnblockStaff}
-        />
-      )}
+        {notHaveAccessModal.show && (
+          <NotHaveAccessModal show={notHaveAccessModal.show} setShow={notHaveAccessModal.setShow} />
+        )}
+      </Can>
 
-      {notHaveAccessModal.show && <NotHaveAccessModal show={notHaveAccessModal.show} setShow={notHaveAccessModal.setShow} />}
+      <Can not I={staffActionAbility.VIEW} a={Staff.magicWord()}>
+        <NotHaveAccess />
+      </Can>
     </>
   );
 }

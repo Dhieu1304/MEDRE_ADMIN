@@ -25,6 +25,7 @@ import { Can } from "../../../store/AbilityStore";
 import { staffActionAbility, staffGenders, staffStatus } from "../../../entities/Staff";
 import Staff from "../../../entities/Staff/Staff";
 import { useAppConfigStore } from "../../../store/AppConfigStore";
+import { columnsIds } from "./utils";
 
 function StaffTable({
   staffs,
@@ -52,11 +53,20 @@ function StaffTable({
   const navigate = useNavigate();
 
   return (
-    <TableContainer component={Paper} sx={{ mb: 4 }}>
-      <Table>
+    <TableContainer component={Paper} sx={{ mb: 4, height: 600 }}>
+      <Table stickyHeader>
         <TableHead>
           <TableRow>
             {columns?.map((column) => {
+              const firstColSx =
+                column?.id === columnsIds.name
+                  ? {
+                      position: "sticky",
+                      left: 0,
+                      zIndex: 4
+                    }
+                  : {};
+
               return (
                 <TableCell
                   key={column.id}
@@ -64,7 +74,9 @@ function StaffTable({
                   style={{ minWidth: column.minWidth }}
                   sx={{
                     fontWeight: 600,
-                    display: column.display
+                    display: column.display,
+                    zIndex: 1,
+                    ...firstColSx
                   }}
                 >
                   {column.label}
@@ -79,10 +91,24 @@ function StaffTable({
             return (
               <TableRow key={staff?.id}>
                 <TableCell
+                  align="left"
+                  sx={{
+                    display: "table-cell",
+                    position: "sticky",
+                    left: 0,
+                    zIndex: 2,
+                    minWidth: 120,
+                    backgroundColor: "white"
+                  }}
+                >
+                  {staff?.name}
+                </TableCell>
+                <TableCell
                   component="th"
                   scope="row"
                   sx={{
-                    display: showCols?.username ? "table-cell" : "none"
+                    display: showCols?.username ? "table-cell" : "none",
+                    zIndex: 1
                   }}
                 >
                   {staff?.username}
@@ -90,7 +116,8 @@ function StaffTable({
                 <TableCell
                   align="left"
                   sx={{
-                    display: showCols?.phoneNumber ? "table-cell" : "none"
+                    display: showCols?.phoneNumber ? "table-cell" : "none",
+                    zIndex: 1
                   }}
                 >
                   <Typography variant="inherit">{staff?.phoneNumber}</Typography>
@@ -103,7 +130,8 @@ function StaffTable({
                 <TableCell
                   align="left"
                   sx={{
-                    display: showCols?.email ? "table-cell" : "none"
+                    display: showCols?.email ? "table-cell" : "none",
+                    zIndex: 1
                   }}
                 >
                   <Typography variant="inherit">{staff?.email}</Typography>
@@ -116,15 +144,8 @@ function StaffTable({
                 <TableCell
                   align="left"
                   sx={{
-                    display: showCols?.name ? "table-cell" : "none"
-                  }}
-                >
-                  {staff?.name}
-                </TableCell>
-                <TableCell
-                  align="left"
-                  sx={{
-                    display: showCols?.address ? "table-cell" : "none"
+                    display: showCols?.address ? "table-cell" : "none",
+                    zIndex: 1
                   }}
                 >
                   {staff?.address}
@@ -132,7 +153,8 @@ function StaffTable({
                 <TableCell
                   align="left"
                   sx={{
-                    display: showCols?.gender ? "table-cell" : "none"
+                    display: showCols?.gender ? "table-cell" : "none",
+                    zIndex: 1
                   }}
                 >
                   {staffGendersObj?.[staff?.gender]}
@@ -140,7 +162,8 @@ function StaffTable({
                 <TableCell
                   align="left"
                   sx={{
-                    display: showCols?.dob ? "table-cell" : "none"
+                    display: showCols?.dob ? "table-cell" : "none",
+                    zIndex: 1
                   }}
                 >
                   {staff?.dob}
@@ -149,7 +172,8 @@ function StaffTable({
                 <TableCell
                   align="left"
                   sx={{
-                    display: showCols?.healthInsurance ? "table-cell" : "none"
+                    display: showCols?.healthInsurance ? "table-cell" : "none",
+                    zIndex: 1
                   }}
                 >
                   {staff?.healthInsurance}
@@ -157,7 +181,8 @@ function StaffTable({
                 <TableCell
                   align="left"
                   sx={{
-                    display: showCols?.description ? "table-cell" : "none"
+                    display: showCols?.description ? "table-cell" : "none",
+                    zIndex: 1
                   }}
                 >
                   {staff?.description}
@@ -165,7 +190,8 @@ function StaffTable({
                 <TableCell
                   align="left"
                   sx={{
-                    display: showCols?.education ? "table-cell" : "none"
+                    display: showCols?.education ? "table-cell" : "none",
+                    zIndex: 1
                   }}
                 >
                   {staff?.education}
@@ -173,7 +199,8 @@ function StaffTable({
                 <TableCell
                   align="left"
                   sx={{
-                    display: showCols?.certificate ? "table-cell" : "none"
+                    display: showCols?.certificate ? "table-cell" : "none",
+                    zIndex: 1
                   }}
                 >
                   {staff?.certificate}
@@ -182,7 +209,8 @@ function StaffTable({
                 <TableCell
                   align="left"
                   sx={{
-                    display: showCols?.role ? "table-cell" : "none"
+                    display: showCols?.role ? "table-cell" : "none",
+                    zIndex: 1
                   }}
                 >
                   <Can I={staffActionAbility.UPDATE_ROLE} a={staff}>
@@ -206,7 +234,8 @@ function StaffTable({
                 <TableCell
                   align="left"
                   sx={{
-                    display: showCols?.status ? "table-cell" : "none"
+                    display: showCols?.status ? "table-cell" : "none",
+                    zIndex: 1
                   }}
                 >
                   <Can I={staffActionAbility.BLOCK} a={staff}>

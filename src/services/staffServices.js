@@ -52,17 +52,6 @@ const getStaffList = async ({
   try {
     const res = await axiosClient.get(staffApi.staffList(), { params });
 
-    // let res = camelcaseKeys(
-    //   {
-    //     status: true,
-    //     message: "",
-    //     data: {
-    //       staffs: staffMockData.list()
-    //     }
-    //   },
-    //   { deep: true }
-    // );
-
     // console.log("res: ", res);
 
     if (res?.status) {
@@ -79,7 +68,7 @@ const getStaffList = async ({
     }
     return {
       success: false,
-      message: `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`
     };
   } catch (e) {
     // console.error(e.message);
@@ -131,7 +120,7 @@ const getStaffListWithSchedules = async ({ page, limit, date }) => {
     }
     return {
       success: false,
-      message: `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`
     };
   } catch (e) {
     // console.error(e.message);
@@ -174,17 +163,6 @@ const getStaffDetail = async (id) => {
   try {
     const res = await axiosClient.get(staffApi.staffDetail(id));
 
-    // const res = camelcaseKeys(
-    //   {
-    //     status: true,
-    //     message: "",
-    //     data: {
-    //       staff: staffMockData.detail(id)
-    //     }
-    //   },
-    //   { deep: true }
-    // );
-
     if (res?.status) {
       const staff = camelcaseKeys(res?.data, { deep: true });
 
@@ -196,7 +174,7 @@ const getStaffDetail = async (id) => {
     }
     return {
       success: false,
-      message: `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`
     };
   } catch (e) {
     // console.error(e.message);
@@ -211,17 +189,6 @@ const getStaffExpertises = async () => {
   try {
     const res = await axiosClient.get(expertiseApi.expertiseList());
 
-    // let res = camelcaseKeys(
-    //   {
-    //     status: true,
-    //     message: "",
-    //     data: {
-    //       staffs: staffMockData.list()
-    //     }
-    //   },
-    //   { deep: true }
-    // );
-
     if (res?.status) {
       const expertises = camelcaseKeys(res?.data, { deep: true });
 
@@ -233,7 +200,7 @@ const getStaffExpertises = async () => {
     }
     return {
       success: false,
-      message: `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`
     };
   } catch (e) {
     // console.error(e.message);
@@ -258,7 +225,7 @@ const createExpertise = async (name) => {
     }
     return {
       success: false,
-      message: res?.message
+      message: res?.message || `Status is ${res.status}`
     };
   } catch (e) {
     // console.error(e.message);
@@ -306,7 +273,7 @@ const editStaffInfo = async ({
     }
     return {
       success: false,
-      message: `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`
     };
   } catch (e) {
     // console.error(e.message);
@@ -352,7 +319,7 @@ const editMyProfile = async ({
     }
     return {
       success: false,
-      message: `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`
     };
   } catch (e) {
     // console.error(e.message);
@@ -382,7 +349,7 @@ const editStaffRole = async (id, { role }) => {
     }
     return {
       success: false,
-      message: `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`
     };
   } catch (e) {
     // console.error(e.message);

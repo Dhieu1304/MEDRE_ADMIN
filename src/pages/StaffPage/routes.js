@@ -1,7 +1,6 @@
 const staffRoutes = {
   list: "/",
   detail: "/:staffId",
-  // /:staffId/schedule
   default: "/*"
 };
 

@@ -3,10 +3,10 @@ import PropTypes from "prop-types";
 import CustomModal from "../../../components/CustomModal/CustomModal";
 
 function NotHaveAccessModal({ show, setShow }) {
-  const { t } = useTranslation("authFeature", { keyPrefix: "no_have_access_modal" });
+  const { t } = useTranslation("authFeature", { keyPrefix: "NotHaveAccessModal" });
   return (
     <CustomModal show={show} setShow={setShow} title={t("title")}>
-      {t("error_message")}
+      {t("errorMessage")}
     </CustomModal>
   );
 }

@@ -6,7 +6,8 @@ import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import images from "../../assets/images";
 
 import routeConfig from "../../config/routeConfig";
-import routes from "./routes";
+import { authRoutes } from "./routes";
+
 import { Login } from "../../features/auth";
 
 export default function AuthPage() {
@@ -52,8 +53,8 @@ export default function AuthPage() {
           </Box>
 
           <Routes>
-            <Route path={routes.login} element={<Login />} />
-            <Route path={routes.default} element={<Navigate to={routeConfig.auth + routes.login} />} />
+            <Route path={authRoutes.login} element={<Login />} />
+            <Route path={authRoutes.default} element={<Navigate to={routeConfig.auth + authRoutes.login} />} />
           </Routes>
         </Box>
       </Grid>

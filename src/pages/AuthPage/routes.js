@@ -1,6 +1,6 @@
-const routes = {
+const authRoutes = {
   login: "/login",
   default: "/*"
 };
 
-export default routes;
+export { authRoutes };

@@ -28,13 +28,9 @@ export const columnsIds = {
   action: "action"
 };
 
-/*
-    - Generate YYY from XXX, remove "action" because it must appear in the table
-    - The rest of the keys will default to true
-*/
-
 export const initialShowCols = Object.keys(columnsIds).reduce((obj, key) => {
-  if (key === columnsIds.action) {
+  // Bỏ qua key action và name
+  if (key === columnsIds.action || key === columnsIds.name) {
     return { ...obj };
   }
   return { ...obj, [key]: true };
