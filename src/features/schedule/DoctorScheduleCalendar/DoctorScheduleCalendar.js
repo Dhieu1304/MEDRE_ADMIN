@@ -39,6 +39,7 @@ import { normalizeStrToDateStr } from "../../../utils/standardizedForForm";
 import { scheduleSessions } from "../../../entities/Schedule";
 import BookingInfoModal from "../../booking/components/BookingInfoModal";
 import { useAppConfigStore } from "../../../store/AppConfigStore";
+import { useScheduleTypesContantTranslation } from "../hooks/useScheduleConstantsTranslation";
 
 function DoctorScheduleCalendar({ timesList, doctor }) {
   const location = useLocation();
@@ -67,15 +68,20 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
   const bookingInfoModal = useCustomModal();
 
   const { t } = useTranslation("scheduleFeature", { keyPrefix: "DoctorScheduleCalendar" });
+  const [scheduleTypeContantListObj] = useScheduleTypesContantTranslation();
+  // console.log({ scheduleTypeContantList, scheduleTypeContantListObj });
 
   const heads = useMemo(() => getWeekByDate(currentDate), [currentDate]);
 
   const loadData = async () => {
     await fetchApi(async () => {
+      // console.log("loadData: ");
+      // console.log("heads[0]: ", heads[0]);
+      // console.log("heads[6]: ", heads[6]);
       const res = await scheduleServices.getScheduleListByDoctorId(
         staffId,
-        formatDate(heads[0], "YYYY-MM-DD"),
-        formatDate(heads[6], "YYYY-MM-DD")
+        formatDate.format(heads[0], "YYYY-MM-DD"),
+        formatDate.format(heads[6], "YYYY-MM-DD")
       );
       if (res.success) {
         const schedulesData = res.schedules;
@@ -88,11 +94,14 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
     });
   };
 
+  // console.log("schedules: ", schedules);S
+  // console.log("timeOffs: ", timeOffs);S
+
   const loadTimeOffs = async () => {
     await fetchApi(async () => {
       const res = await timeOffServices.getTimeOffByDoctorId(staffId, {
-        from: formatDate(heads[0], "YYYY-MM-DD"),
-        to: formatDate(heads[6], "YYYY-MM-DD")
+        from: formatDate.format(heads[0], "YYYY-MM-DD"),
+        to: formatDate.format(heads[6], "YYYY-MM-DD")
       });
 
       if (res.success) {
@@ -184,7 +193,7 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
                   alignItems: "center"
                 }}
               >
-                <Typography sx={{}}>{schedule?.type}</Typography>
+                <Typography sx={{}}>{scheduleTypeContantListObj[schedule?.type]?.label}</Typography>
               </Box>
 
               {/* Hiển thị trạng thái booking trong schedule */}

@@ -24,7 +24,7 @@ import { Can } from "../../../store/AbilityStore";
 import { staffActionAbility, staffStatuses } from "../../../entities/Staff";
 import Staff from "../../../entities/Staff/Staff";
 import { columnsIds } from "./utils";
-import { useStaffGendersContantTranslation } from "../hooks/useConstantsTranslation";
+import { useStaffGendersContantTranslation } from "../hooks/useStaffConstantsTranslation";
 
 function StaffTable({
   staffs,

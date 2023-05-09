@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import CustomModal from "../../../components/CustomModal";
 import CustomInput from "../../../components/CustomInput";
 import { staffInputValidate } from "../../../entities/Staff";
-import { useStaffRolesContantTranslation } from "../hooks/useConstantsTranslation";
+import { useStaffRolesContantTranslation } from "../hooks/useStaffConstantsTranslation";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
 import staffServices from "../../../services/staffServices";
 import routeConfig from "../../../config/routeConfig";

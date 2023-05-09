@@ -7,7 +7,7 @@ import CustomModal from "../../../components/CustomModal";
 
 import { useFetchingStore } from "../../../store/FetchingApiStore";
 import staffServices from "../../../services/staffServices";
-import { useStaffRolesContantTranslation } from "../hooks/useConstantsTranslation";
+import { useStaffRolesContantTranslation } from "../hooks/useStaffConstantsTranslation";
 
 function EditStaffRoleModal({ show, setShow, data, setData, handleAfterEditStaffRole }) {
   const { handleSubmit, control, trigger } = useForm({
