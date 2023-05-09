@@ -1,9 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import { Fragment, useEffect, useMemo } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { createTheme, ThemeProvider } from "@mui/material";
+import { createTheme, ThemeProvider, Box, Typography } from "@mui/material";
 import * as locales from "@mui/material/locale";
 
 import { privateRoutes, publicRoutes } from "./routes";
@@ -15,14 +15,21 @@ import defineAbilityFor from "./config/defineAbility";
 import { AbilityContext } from "./store/AbilityStore";
 import { useFetchingStore } from "./store/FetchingApiStore";
 import staffServices from "./services/staffServices";
+import images from "./assets/images";
+import CustomOverlay from "./components/CustomOverlay/CustomOverlay";
 
 function App() {
+  /*
+    - Khi mới vào App, isFirstVisit = true, giao diện se hiện CustomOverlay để đợi cho useEffect thực hiện
+    load staff info
+    - Sau khi load staff info, dựa vào kết quả authStore.login để xác định route
+    - Nếu ko có isFirstVisit thì lần đầu vào app isLogin = false nên luôn mặc định chuyển nếu Login Page
+  */
+  const [isFirstVisit, setIsFirstVisit] = useState(true);
+
   const authStore = useAuthStore();
-
   const { mode, locale } = useAppConfigStore();
-
   const theme = useMemo(() => createTheme(getTheme(mode), locales[locale]), [mode, locale]);
-
   const { fetchApi } = useFetchingStore();
 
   useEffect(() => {
@@ -37,12 +44,44 @@ function App() {
         }
         return { error: res.message };
       });
+      setIsFirstVisit(false);
     };
     loadData();
   }, []);
 
   const ability = defineAbilityFor(authStore.staff);
 
+  if (isFirstVisit) {
+    return (
+      <ThemeProvider theme={theme}>
+        <CustomOverlay open />
+        <Box
+          component="div"
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "flex-start",
+            width: "100vw",
+            height: "100vh",
+            cursor: "pointer",
+            pt: 10
+          }}
+        >
+          <Box
+            component="img"
+            sx={{
+              mr: 1
+            }}
+            src={images.logo}
+            width={40}
+          />
+          <Typography component="h1" variant="h3">
+            Medre Admin
+          </Typography>
+        </Box>
+      </ThemeProvider>
+    );
+  }
   return (
     <ThemeProvider theme={theme}>
       {authStore.isLogin ? (

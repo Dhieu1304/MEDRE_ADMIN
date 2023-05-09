@@ -2,13 +2,20 @@ import PropTypes from "prop-types";
 import { useMemo, useState } from "react";
 import { LIGHT } from "../../config/themeConfig";
 import Context from "./Context";
-import localStorageUtil from "../../utils/localStorageUtil";
 
 function AppConfigProvider({ children }) {
   const [mode, setMode] = useState(LIGHT);
 
-  const currentLocale = localStorageUtil.getItem(localStorageUtil.LOCAL_STORAGE.LOCALE) || "viVN";
-  const [locale, setLocale] = useState(currentLocale);
+  const localeCodeObj = useMemo(() => {
+    return {
+      vi: "viVN",
+      en: "enUS"
+    };
+  }, []);
+
+  const currentLocaleCode = localStorage.getItem("i18nextLng") || "en";
+
+  const [locale, setLocale] = useState(localeCodeObj[currentLocaleCode]);
 
   const value = useMemo(
     () => ({

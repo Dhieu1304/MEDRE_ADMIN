@@ -20,8 +20,8 @@ const privateRoutes = [
   { path: `${routeConfig.user}/*`, component: UserPage },
   { path: `${routeConfig.schedule}/*`, component: SchedulePage },
   { path: `${routeConfig.payment}/*`, component: PaymentPage },
-  { path: `${routeConfig.meeting}/*`, component: MeetingPage, layout: null }
-  // { path: routeConfig.default, component: Navigate, props: { to: routeConfig.home }, layout: null }
+  { path: `${routeConfig.meeting}/*`, component: MeetingPage, layout: null },
+  { path: routeConfig.default, component: Navigate, props: { replace: true, to: routeConfig.home }, layout: null }
 ];
 
 export { publicRoutes, privateRoutes };

@@ -1,9 +1,7 @@
 import { Box, Typography, Button, useTheme } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import routeConfig from "../../config/routeConfig";
 import { useAuthStore } from "../../store/AuthStore";
 import CustomInput from "../../components/CustomInput";
 import { useFetchingStore } from "../../store/FetchingApiStore";
@@ -20,7 +18,6 @@ export default function Login() {
   });
 
   const authStore = useAuthStore();
-  const navigate = useNavigate();
   const theme = useTheme();
   const { isLoading } = useFetchingStore();
 
@@ -30,13 +27,13 @@ export default function Login() {
 
   const onLogin = async ({ emailOrUsernameOrPhoneNumber, password }) => {
     const res = await authStore.login(emailOrUsernameOrPhoneNumber, password);
-
-    // console.log("res: ", res);
-
     toast(res?.message);
-    if (res?.success) {
-      navigate(routeConfig.home);
-    }
+
+    // Sau khi login thì tự động navigate sang home nên ko cần tự nưa.
+
+    // if (res?.success) {
+    //   navigate(routeConfig.home);
+    // }
   };
 
   return (
