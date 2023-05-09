@@ -18,3 +18,9 @@ export const scheduleDayOfWeeks = {
   FRIDAY: 5,
   SATURDAY: 6
 };
+
+export const scheduleActionAbility = {
+  VIEW: "VIEW",
+  UPDATE: "UPDATE",
+  ADD: "ADD"
+};

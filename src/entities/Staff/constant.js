@@ -34,10 +34,11 @@ export const staffStatus = {
 };
 
 export const staffActionAbility = {
-  READ: "READ",
+  VIEW: "VIEW",
   ADD: "ADD",
   DELETE: "DELETE",
   UPDATE: "UPDATE",
   UPDATE_ROLE: "UPDATE_ROLE",
+  UPDATE_DOCTOR_EXPERTISES: "UPDATE_DOCTOR_EXPERTISES",
   BLOCK: "BLOCK"
 };

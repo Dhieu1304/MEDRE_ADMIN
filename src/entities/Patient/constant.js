@@ -1,6 +1,5 @@
-export const userInputValidate = {
+export const patientInputValidate = {
   EMAIL_MAX_LENGTH: 50,
-  USERNAME_MAX_LENGTH: 20,
   PHONE_NUMBER_MAX_LENGTH: 20,
   PASSWORD_MAX_LENGTH: 20,
   PASSWORD_MIN_LENGTH: 8,
@@ -10,18 +9,18 @@ export const userInputValidate = {
   HEALTH_INSURANCE_MAX_LENGTH: 100
 };
 
-export const userGenders = {
+export const patientGenders = {
   MALE: "Male",
   FEMALE: "Female",
   OTHER: "Other"
 };
 
-export const userStatus = {
+export const patientStatus = {
   STATUS_BLOCK: "Block",
   STATUS_UNBLOCK: "Unblock"
 };
 
-export const userActionAbility = {
+export const patientActionAbility = {
   VIEW: "VIEW",
   DELETE: "DELETE",
   UPDATE: "UPDATE",

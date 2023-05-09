@@ -1,5 +1,3 @@
-import { Expertise } from "../Expertise";
-
 class Staff {
   constructor({
     id = "",
@@ -46,7 +44,7 @@ class Staff {
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
     this.deletedAt = deletedAt;
-    this.expertises = [...expertises].map((expertise) => new Expertise(expertise));
+    this.expertises = [...expertises];
   }
 
   static magicWord = () => "Staff";

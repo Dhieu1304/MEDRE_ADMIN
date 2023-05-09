@@ -36,7 +36,7 @@ import AddExpertiseModal from "./components/AddExpertiseModal";
 import Staff, { staffActionAbility, staffGenders, staffInputValidate, staffStatus } from "../../entities/Staff";
 import { AbilityContext } from "../../store/AbilityStore";
 import { NotHaveAccessModal } from "../auth";
-import { Expertise, expertiseActionAbility } from "../../entities/Expertise";
+import Expertise, { expertiseActionAbility } from "../../entities/Expertise";
 import EditStaffRoleModal from "./components/EditStaffRoleModal";
 import { mergeObjectsWithoutNullAndUndefined } from "../../utils/objectUtil";
 import { useAuthStore } from "../../store/AuthStore";

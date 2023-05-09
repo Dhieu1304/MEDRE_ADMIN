@@ -3,7 +3,7 @@ export const expertiseInputValidate = {
 };
 
 export const expertiseActionAbility = {
-  READ: "READ",
+  VIEW: "VIEW",
   ADD: "ADD",
   UPDATE: "UPDATE"
 };

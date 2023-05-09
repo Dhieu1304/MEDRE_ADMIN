@@ -1,2 +1,3 @@
-export { default as Expertise } from "./Expertise";
+export { default } from "./Expertise";
+
 export * from "./constant";

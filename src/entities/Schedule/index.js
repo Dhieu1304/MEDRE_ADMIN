@@ -1,2 +1,2 @@
-export { default as Schedule } from "./Schedule";
+export { default } from "./Schedule";
 export * from "./constant";

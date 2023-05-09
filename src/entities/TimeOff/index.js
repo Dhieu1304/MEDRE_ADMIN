@@ -1,2 +1,2 @@
-export { default as TimeOff } from "./TimeOff";
+export { default } from "./TimeOff";
 export * from "./constant";
