@@ -42,4 +42,8 @@ const bookingApi = {
   bookingDetail: (id) => `/booking/detail-for-staff/${id}`
 };
 
-export { authApi, userApi, staffApi, scheduleApi, expertiseApi, timeOffApi, bookingApi };
+const patientApi = {
+  createPatient: () => "/patient/create"
+};
+
+export { authApi, userApi, staffApi, scheduleApi, expertiseApi, timeOffApi, bookingApi, patientApi };
