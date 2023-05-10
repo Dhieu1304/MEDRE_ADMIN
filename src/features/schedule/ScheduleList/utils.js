@@ -1,5 +1,5 @@
 import { scheduleSessions } from "../../../entities/Schedule";
-import { createDateByDateAndTimeStr, isBetweenAndNoEqual, isEqualDateWithoutTime } from "../../../utils/datetimeUtil";
+import { isBetweenOrEqualWithoutTime, isEqualDateWithoutTime } from "../../../utils/datetimeUtil";
 
 export const findBookingsByDate = (bookings, date, time) => {
   const timeId = time?.id;
@@ -15,7 +15,7 @@ export const findBookingsByDate = (bookings, date, time) => {
 };
 
 export const groupSchedulesBySession = (schedules, currentDate) => {
-  const schedulesGroupBySession = { morning: null, afternoon: null };
+  const schedulesGroupBySession = { morning: null, afternoon: null, wholeDay: null };
 
   schedules.forEach((schedule) => {
     const repeatOn = schedule?.repeatOn?.split(",").map(Number);
@@ -26,34 +26,47 @@ export const groupSchedulesBySession = (schedules, currentDate) => {
         schedulesGroupBySession.morning = schedule;
       } else if (schedule?.session === scheduleSessions.AFFTERNOON) {
         schedulesGroupBySession.afternoon = schedule;
+      } else if (schedule?.session === scheduleSessions.WHOLE_DAY) {
+        schedulesGroupBySession.wholeDay = schedule;
       }
   });
 
   return schedulesGroupBySession;
 };
 
+// export const groupSchedulesDayOfWeekAndSession = (schedules) => {
+//   const schedulesGroupByDayOfWeekAndSession = Array.from({ length: 7 }, () => ({
+//     morning: null,
+//     afternoon: null,
+//     wholeDay: null
+//   }));
+
+//   schedules.forEach((schedule) => {
+//     const repeatOn = schedule?.repeatOn?.split(",").map(Number);
+//     repeatOn.forEach((dayOfWeek) => {
+//       if (Number.isInteger(dayOfWeek) && dayOfWeek >= 0 && dayOfWeek <= 6) {
+//         if (schedule?.session === scheduleSessions.MORNING) {
+//           schedulesGroupByDayOfWeekAndSession[dayOfWeek].morning = schedule;
+//         } else if (schedule?.session === scheduleSessions.AFFTERNOON) {
+//           schedulesGroupByDayOfWeekAndSession[dayOfWeek].afternoon = schedule;
+//         } else if (schedule?.session === scheduleSessions.WHOLE_DAY) {
+//           schedulesGroupByDayOfWeekAndSession[dayOfWeek].wholeDay = schedule;
+//         }
+//       }
+//     });
+//   });
+
+//   return schedulesGroupByDayOfWeekAndSession;
+// };
+
 export const isTimeOffAtThisScheduleTime = (timeOffs, colDate, time) => {
-  const currentScheduleTimeStart = createDateByDateAndTimeStr(colDate, time.timeStart);
-  const currentScheduleTimeEnd = createDateByDateAndTimeStr(colDate, time.timeEnd);
-
   return timeOffs?.some((timeOff) => {
-    for (let date = new Date(timeOff?.from); date <= new Date(timeOff?.to); date.setDate(date.getDate() + 1)) {
-      const timeOffStart = createDateByDateAndTimeStr(new Date(date), timeOff.timeStart);
-      const timeOffEnd = createDateByDateAndTimeStr(new Date(date), timeOff.timeEnd);
+    if (isBetweenOrEqualWithoutTime(colDate, new Date(timeOff?.from), new Date(timeOff?.to))) {
+      if (timeOff?.session === scheduleSessions.WHOLE_DAY) return true;
 
-      if (isBetweenAndNoEqual(currentScheduleTimeStart, timeOffStart, timeOffEnd)) {
-        return true;
-      }
-      if (isBetweenAndNoEqual(currentScheduleTimeEnd, timeOffStart, timeOffEnd)) {
-        return true;
-      }
-      if (isBetweenAndNoEqual(timeOffStart, currentScheduleTimeStart, currentScheduleTimeEnd)) {
-        return true;
-      }
-      if (isBetweenAndNoEqual(timeOffEnd, currentScheduleTimeStart, currentScheduleTimeEnd)) {
-        return true;
-      }
+      return timeOff?.session === time?.session;
     }
+
     return false;
   });
 };

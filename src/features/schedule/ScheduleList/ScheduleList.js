@@ -33,20 +33,26 @@ import { findBookingsByDate, groupSchedulesBySession, isTimeOffAtThisScheduleTim
 import { scheduleSessions } from "../../../entities/Schedule";
 import BookingInfoModal from "../../booking/components/BookingInfoModal";
 import { useCustomModal } from "../../../components/CustomModal";
+import CustomOverlay from "../../../components/CustomOverlay/CustomOverlay";
 
 function ScheduleList({ timesList }) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [doctors, setDoctors] = useState([]);
-  const [timeOffsObj, setTimeOffsObj] = useState([]);
+  const [timeOffsGroupByDoctorId, setTimeOffsGroupByDoctorId] = useState([]);
 
-  const { fetchApi } = useFetchingStore();
+  const { isLoading, fetchApi } = useFetchingStore();
   const { t } = useTranslation("scheduleFeature", { keyPrefix: "ScheduleList" });
   const theme = useTheme();
   const bookingInfoModal = useCustomModal();
 
+  // console.log("currentDate: ", currentDate);
+
   const loadTimeOffs = async () => {
     await fetchApi(async () => {
-      const res = await timeOffServices.getTimeOffByDoctorId(undefined, { from: currentDate, to: currentDate });
+      const res = await timeOffServices.getTimeOffByDoctorId(undefined, {
+        from: formatDate.format(currentDate, "YYYY-MM-DD"),
+        to: formatDate.format(currentDate, "YYYY-MM-DD")
+      });
       if (res.success) {
         const timeOffsData = res.timeOffs;
 
@@ -59,16 +65,17 @@ function ScheduleList({ timesList }) {
           return { ...newResult };
         }, {});
 
-        setTimeOffsObj({ ...timeOffsObjData });
+        setTimeOffsGroupByDoctorId({ ...timeOffsObjData });
         // timeOffsOfDoctor.push(timeOffsData);
         return { success: true, error: "" };
       }
-      setTimeOffsObj([]);
+      setTimeOffsGroupByDoctorId([]);
       return { success: false, error: res.message };
     });
   };
 
-  // console.log("timeOffs: ", timeOffs);
+  // console.log("doctors: ", doctors);
+  // console.log("timeOffsObj: ", timeOffsGroupByDoctorId);
 
   useEffect(() => {
     loadTimeOffs();
@@ -79,7 +86,7 @@ function ScheduleList({ timesList }) {
       const paramsObj = {
         role: staffRoles.ROLE_DOCTOR,
         limit: 200,
-        date: currentDate
+        date: formatDate.format(currentDate, "YYYY-MM-DD")
       };
       const res = await staffServices.getStaffListWithSchedules(paramsObj);
 
@@ -139,30 +146,48 @@ function ScheduleList({ timesList }) {
   };
 
   const renderCols = (doctor) => {
+    // console.log("doctor?.staffSchedules: ", doctor?.staffSchedules);
     const schedulesGroupBySession = groupSchedulesBySession(doctor?.staffSchedules, currentDate);
 
     // console.log("schedulesGroupBySession: ", schedulesGroupBySession);
 
     return timesList.map((time) => {
       const timeId = time?.id;
+
       let schedule;
-      if (time?.session === scheduleSessions.MORNING) {
-        schedule = schedulesGroupBySession.morning;
-      } else {
-        schedule = schedulesGroupBySession.afternoon;
+      const { session } = time;
+
+      switch (session) {
+        case scheduleSessions.MORNING:
+          schedule = schedulesGroupBySession.morning || schedulesGroupBySession.wholeDay;
+          break;
+
+        case scheduleSessions.AFFTERNOON:
+          schedule = schedulesGroupBySession.afternoon || schedulesGroupBySession.wholeDay;
+          break;
+
+        default:
+          break;
       }
 
-      const timeOffs = timeOffsObj[doctor?.id];
+      // console.log("schedule: ", schedule);
+
+      const timeOffs = timeOffsGroupByDoctorId[doctor?.id];
 
       const isTimeOff = isTimeOffAtThisScheduleTime(timeOffs, currentDate, time);
 
       const booking = findBookingsByDate(schedule?.bookings, currentDate, time);
 
+      // console.log("isTimeOff: ", isTimeOff);
+      // console.log("booking: ", booking);
+
+      // return null;
+
       return schedule ? (
         <TableCell
           key={timeId}
           sx={{
-            border: "1px solid rgba(0,0,0,0.4)",
+            border: "1px solid rgba(0,0,0,0.2)",
             p: 0,
             position: "relative",
             bgcolor: isTimeOff ? "rgba(255, 246, 143, 0.4)" : "inherit"
@@ -255,6 +280,7 @@ function ScheduleList({ timesList }) {
 
   return (
     <>
+      <CustomOverlay open={isLoading} />
       <Box>
         <Typography variant="h4" sx={{ mb: 4 }}>
           {t("title")}
@@ -293,8 +319,13 @@ function ScheduleList({ timesList }) {
             </IconButton>
           </Box>
         </Box>
-        <TableContainer component={Paper}>
-          <Table size="small" aria-label="a dense table">
+        <TableContainer
+          component={Paper}
+          sx={{
+            height: 600
+          }}
+        >
+          <Table size="small" aria-label="a dense table" stickyHeader>
             <TableHead>
               <TableRow>
                 <TableCell
@@ -302,7 +333,7 @@ function ScheduleList({ timesList }) {
                     border: "1px solid rgba(0,0,0,0.2)",
                     position: "sticky",
                     left: 0,
-                    zIndex: 1,
+                    zIndex: 2,
                     backgroundColor: "#fff"
                   }}
                 />
@@ -311,7 +342,10 @@ function ScheduleList({ timesList }) {
                     <TableCell
                       sx={{
                         border: "1px solid rgba(0,0,0,0.2)",
-                        fontWeight: "600"
+                        fontWeight: "600",
+                        position: "sticky",
+                        left: 0,
+                        zIndex: 1
                       }}
                       key={time?.id}
                       align="center"
