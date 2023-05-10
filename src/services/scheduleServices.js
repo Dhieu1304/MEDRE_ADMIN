@@ -32,7 +32,7 @@ const getScheduleListByDoctorId = async (doctorId, from, to) => {
     }
     return {
       success: false,
-      message: `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`
     };
   } catch (e) {
     // console.error(e.message);
@@ -59,7 +59,7 @@ const getTimeList = async () => {
     }
     return {
       success: false,
-      message: `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`
     };
   } catch (e) {
     // console.error(e.message);
@@ -70,10 +70,10 @@ const getTimeList = async () => {
   }
 };
 
-const changeApplyToScheduleByScheduleIds = async ({ doctorId, scheduleIds, applyTo }) => {
+const changeApplyToScheduleByScheduleIds = async ({ scheduleIds, applyTo }) => {
   // console.log("changeApplyToScheduleByScheduleIds: ", { doctorId, scheduleIds, applyTo });
 
-  const dataBody = cleanUndefinedAndEmptyStrValueObject({ id_doctor: doctorId, id: scheduleIds, apply_to: applyTo });
+  const dataBody = cleanUndefinedAndEmptyStrValueObject({ id: scheduleIds, apply_to: applyTo });
 
   // console.log("dataBody: ", dataBody);
 
@@ -94,7 +94,7 @@ const changeApplyToScheduleByScheduleIds = async ({ doctorId, scheduleIds, apply
     }
     return {
       success: false,
-      message: `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`
     };
   } catch (e) {
     // console.error(e.message);
@@ -138,7 +138,7 @@ const createSchedulesByDoctorId = async ({ doctorId, applyFrom, applyTo, data })
     }
     return {
       success: false,
-      message: `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`
     };
   } catch (e) {
     // console.error(e.message);

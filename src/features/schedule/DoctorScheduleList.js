@@ -178,7 +178,7 @@ function DoctorScheduleList({ doctor, doctorId }) {
     const scheduleIds = Object.keys(scheduleIdsObj).filter((key) => scheduleIdsObj[key] && key);
 
     await fetchApi(async () => {
-      const res = await scheduleServices.changeApplyToScheduleByScheduleIds({ doctorId, scheduleIds, applyTo });
+      const res = await scheduleServices.changeApplyToScheduleByScheduleIds({ scheduleIds, applyTo });
 
       if (res?.success) {
         changeApplyToModal.setShow(false);
