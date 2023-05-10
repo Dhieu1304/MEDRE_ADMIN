@@ -10,8 +10,16 @@
     "timeEnd": "Time End",
     "timeStartLabel": "Time Start",
     "timeEndLabel": "Time End",
+    "session": "Session",
     "createdAt": "Created at",
     "updatedAt": "Updated at",
     "time": "Time"
+  },
+  "constants": {
+    "sessions": {
+      "morning": "Morning",
+      "afternoon": "Afternoon",
+      "wholeDay": "Whole day"
+    }
   }
 }

@@ -10,8 +10,17 @@
     "toLabel": "Ngày kết thúc",
     "timeStartLabel": "Giờ bắt đầu",
     "timeEndLabel": "Giờ kết thúc",
+    "session": "Buổi",
     "createdAt": "Ngày tạo",
     "updatedAt": "Ngày cập nhập",
     "time": "Thời gian"
+  },
+
+  "constants": {
+    "sessions": {
+      "morning": "Buổi sáng",
+      "afternoon": "Buổi chiều",
+      "wholeDay": "Cả ngày"
+    }
   }
 }

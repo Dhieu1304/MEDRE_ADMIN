@@ -19,7 +19,8 @@
     },
     "sessions": {
       "morning": "Buổi sáng",
-      "afternoon": "Buổi chiều"
+      "afternoon": "Buổi chiều",
+      "wholeDay": "Cả ngày"
     },
     "daysOfWeek": {
       "monday": "Thứ 2",

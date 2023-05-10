@@ -29,6 +29,7 @@ import timeOffServices from "../../services/timeOffServices";
 import { useAppConfigStore } from "../../store/AppConfigStore";
 import AddNewTimeOffModal from "./components/AddNewTimeOffModal";
 import { useCustomModal } from "../../components/CustomModal";
+import { useTimeOffSessionsContantTranslation } from "./hooks/useTimeOffConstantsTranslation";
 
 function DoctorTimeOff({ doctor, doctorId }) {
   const [timeOffs, setTimeOffs] = useState([]);
@@ -56,6 +57,7 @@ function DoctorTimeOff({ doctor, doctorId }) {
 
   const { t } = useTranslation("scheduleFeature", { keyPrefix: "DoctorTimeOff" });
   const { t: tTimeOff } = useTranslation("timeOffEntity", { keyPrefix: "properties" });
+  const [, timeOffSessionContantListObj] = useTimeOffSessionsContantTranslation();
 
   const addTimeOffModal = useCustomModal();
 
@@ -67,8 +69,8 @@ function DoctorTimeOff({ doctor, doctorId }) {
         minWidth: 100
       },
       {
-        id: "time",
-        label: tTimeOff("time"),
+        id: "session",
+        label: tTimeOff("session"),
         minWidth: 100
       },
       {
@@ -130,12 +132,12 @@ function DoctorTimeOff({ doctor, doctorId }) {
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "center"
+            alignItems: "center",
+            mb: 4
           }}
         >
-          <Typography variant="h4" sx={{ mb: 4 }}>
-            {t("title")}
-          </Typography>
+          <Typography variant="h4">{t("title")}</Typography>
+
           <Button
             variant="contained"
             onClick={() => {
@@ -217,7 +219,7 @@ function DoctorTimeOff({ doctor, doctorId }) {
                       {formatDate.format(new Date(timeOff?.to), "ddd DD/MM/YYYY")}
                     </TableCell>
                     <TableCell align="left" sx={{ display: "table-cell" }}>
-                      {timeOff?.timeStart} &rarr; {timeOff?.timeEnd}
+                      {timeOffSessionContantListObj[timeOff?.session]?.label}
                     </TableCell>
                     <TableCell align="left" sx={{ display: "table-cell" }}>
                       {formatDate.format(new Date(timeOff?.createdAt), "DD/MM/YYYY hh:mm:ss")}

@@ -68,7 +68,7 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
   const bookingInfoModal = useCustomModal();
 
   const { t } = useTranslation("scheduleFeature", { keyPrefix: "DoctorScheduleCalendar" });
-  const [scheduleTypeContantListObj] = useScheduleTypesContantTranslation();
+  const [, scheduleTypeContantListObj] = useScheduleTypesContantTranslation();
   // console.log({ scheduleTypeContantList, scheduleTypeContantListObj });
 
   const heads = useMemo(() => getWeekByDate(currentDate), [currentDate]);
@@ -338,6 +338,7 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
             >
               {t("button.addTimeOff")}
             </Button>
+
             <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center", mx: 2 }}>
               {formatDate.format(heads[0], "DD/MM/YYYY")} - {formatDate.format(heads[6], "DD/MM/YYYY")}
             </Box>

@@ -29,9 +29,15 @@ import { useAppConfigStore } from "../../store/AppConfigStore";
 import { useCustomModal } from "../../components/CustomModal";
 import scheduleServices from "../../services/scheduleServices";
 import CustomModal from "../../components/CustomModal/CustomModal";
-import { scheduleSessions, scheduleTypes } from "../../entities/Schedule/constant";
+import { scheduleActionAbility } from "../../entities/Schedule/constant";
 import CustomInput from "../../components/CustomInput/CustomInput";
 import AddScheduleModal from "./components/AddScheduleModal";
+import {
+  useScheduleSessionsContantTranslation,
+  useScheduleTypesContantTranslation
+} from "./hooks/useScheduleConstantsTranslation";
+import Schedule from "../../entities/Schedule/Schedule";
+import { Can } from "../../store/AbilityStore";
 
 function DoctorScheduleList({ doctor, doctorId }) {
   const [schedules, setSchedules] = useState([]);
@@ -120,41 +126,9 @@ function DoctorScheduleList({ doctor, doctorId }) {
     [locale]
   );
 
-  const scheduleTypeListObj = useMemo(() => {
-    return [
-      {
-        label: tScheduleConstants("types.offline"),
-        value: scheduleTypes.TYPE_OFFLINE
-      },
-      {
-        label: tScheduleConstants("types.online"),
-        value: scheduleTypes.TYPE_ONLINE
-      }
-    ].reduce((obj, cur) => {
-      return {
-        ...obj,
-        [cur?.value]: cur
-      };
-    }, {});
-  }, [locale]);
+  const [, scheduleTypeContantListObj] = useScheduleTypesContantTranslation();
 
-  const scheduleSessionListObj = useMemo(() => {
-    return [
-      {
-        label: tScheduleConstants("sessions.morning"),
-        value: scheduleSessions.MORNING
-      },
-      {
-        label: tScheduleConstants("sessions.afternoon"),
-        value: scheduleSessions.AFFTERNOON
-      }
-    ].reduce((obj, cur) => {
-      return {
-        ...obj,
-        [cur?.value]: cur
-      };
-    }, {});
-  }, [locale]);
+  const [, scheduleSessionContantListObj] = useScheduleSessionsContantTranslation();
 
   const resetChangeApplyTimeForm = (schedulesData, value = false) => {
     const scheduleIdsObj = schedulesData.reduce((result, schedule) => {
@@ -199,24 +173,6 @@ function DoctorScheduleList({ doctor, doctorId }) {
     loadData();
   }, [filterForm.watch().from, filterForm.watch().to]);
 
-  // const schedulesGroupByApplyTime = useMemo(() => {
-  //   // group schedules by applyTime
-  //   return schedules.reduce((acc, schedule) => {
-  //     const applyTime = schedule?.applyFrom + " → " + schedule?.applyTo;
-  //     return acc[applyTime]
-  //       ? {
-  //           ...acc,
-  //           [applyTime]: [...acc[applyTime], schedule]
-  //         }
-  //       : {
-  //           ...acc,
-  //           [applyTime]: [schedule]
-  //         };
-  //   }, {});
-  // }, [schedules]);
-
-  // console.log("rows: ", rows);
-
   const handleChangeApplyEnd = async ({ scheduleIdsObj, applyTo }) => {
     // console.log({ scheduleIdsObj, applyTo });
     const scheduleIds = Object.keys(scheduleIdsObj).filter((key) => scheduleIdsObj[key] && key);
@@ -248,25 +204,27 @@ function DoctorScheduleList({ doctor, doctorId }) {
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "center"
+            alignItems: "center",
+            mb: 4
           }}
         >
-          <Typography variant="h4" sx={{ mb: 4 }}>
-            {t("title")}
-          </Typography>
-          <Button
-            variant="contained"
-            onClick={() => {
-              addScheduleModal.setShow(true);
-              addScheduleModal.setData(doctor);
-            }}
-            endIcon={<AddIcon fontSize="large" />}
-            sx={{
-              bgcolor: theme.palette.success.light
-            }}
-          >
-            {t("button.addSchedule")}
-          </Button>
+          <Typography variant="h4">{t("title")}</Typography>
+
+          <Can I={scheduleActionAbility.ADD} a={Schedule.magicWord()}>
+            <Button
+              variant="contained"
+              onClick={() => {
+                addScheduleModal.setShow(true);
+                addScheduleModal.setData(doctor);
+              }}
+              endIcon={<AddIcon fontSize="large" />}
+              sx={{
+                bgcolor: theme.palette.success.light
+              }}
+            >
+              {t("button.addSchedule")}
+            </Button>
+          </Can>
         </Box>
         <Grid
           container
@@ -313,64 +271,28 @@ function DoctorScheduleList({ doctor, doctorId }) {
           )}
         </Grid>
 
-        {/* {Object.keys(schedulesGroupByApplyTime).map((key) => {
-          const schedules = schedulesGroupByApplyTime[key];
-          const applyFrom = key.split("→")[0];
-          const applyTo = key.split("→")[1];
-
-          const applyFromString = formatDate.format(
-            // new Date(applyFrom.split("-")[0], applyFrom.split("-")[1], applyFrom.split("-")[2]),
-            new Date(...applyFrom.split("-")),
-            "DD/MM/YYYY"
-          );
-          const applyToString = formatDate.format(
-            // new Date(applyTo.split("-")[0], applyTo.split("-")[1], applyTo.split("-")[2]),
-            new Date(...applyTo.split("-")),
-            "DD/MM/YYYY"
-          );
-
-          const applyTimeString = applyFromString + " → " + applyToString;
-
-          return (
-            <Box
-              sx={{
-                mb: 2
-              }}
-            >
-              <Typography
-                variant="body1"
-                sx={{
-                  mb: 2,
-                  fontWeight: "600"
-                }}
-              >
-                {applyTimeString}
-              </Typography>
-
-            </Box>
-          );
-        })} */}
-
         <TableContainer component={Paper} sx={{ mb: 4 }}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell
-                  align="center"
-                  style={{ width: 10 }}
-                  sx={{
-                    fontWeight: 600
-                  }}
-                >
-                  <Checkbox
-                    checked={checkedCount === schedules.length}
-                    onChange={(e) => {
-                      const { checked } = e.target;
-
-                      resetChangeApplyTimeForm(schedules, checked);
+                <Can I={scheduleActionAbility.UPDATE} a={Schedule.magicWord()}>
+                  <TableCell
+                    align="center"
+                    style={{ width: 10 }}
+                    sx={{
+                      fontWeight: 600
                     }}
-                  />
-                </TableCell>
+                  >
+                    <Checkbox
+                      checked={checkedCount === schedules.length}
+                      onChange={(e) => {
+                        const { checked } = e.target;
+
+                        resetChangeApplyTimeForm(schedules, checked);
+                      }}
+                    />
+                  </TableCell>
+                </Can>
 
                 {columns?.map((column) => {
                   return (
@@ -392,33 +314,35 @@ function DoctorScheduleList({ doctor, doctorId }) {
               {schedules.map((schedule) => {
                 return (
                   <TableRow key={schedule?.id}>
-                    <TableCell
-                      align="center"
-                      style={{ width: 10 }}
-                      sx={{
-                        fontWeight: 600
-                      }}
-                    >
-                      <Controller
-                        name={`scheduleIdsObj.${schedule?.id}`}
-                        control={changeApplyTimeForm.control}
-                        render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
-                          <Checkbox
-                            onBlur={onBlur}
-                            value={value}
-                            error={error}
-                            checked={value}
-                            onChange={(e) => {
-                              const { checked } = e.target;
+                    <Can I={scheduleActionAbility.UPDATE} a={Schedule.magicWord()}>
+                      <TableCell
+                        align="center"
+                        style={{ width: 10 }}
+                        sx={{
+                          fontWeight: 600
+                        }}
+                      >
+                        <Controller
+                          name={`scheduleIdsObj.${schedule?.id}`}
+                          control={changeApplyTimeForm.control}
+                          render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
+                            <Checkbox
+                              onBlur={onBlur}
+                              value={value}
+                              error={error}
+                              checked={value}
+                              onChange={(e) => {
+                                const { checked } = e.target;
 
-                              setCheckedCount((count) => count + (checked ? 1 : -1));
-                              onChange(e);
-                            }}
-                            name={schedule?.id}
-                          />
-                        )}
-                      />
-                    </TableCell>
+                                setCheckedCount((count) => count + (checked ? 1 : -1));
+                                onChange(e);
+                              }}
+                              name={schedule?.id}
+                            />
+                          )}
+                        />
+                      </TableCell>
+                    </Can>
                     <TableCell component="th" scope="row" sx={{ display: "table-cell" }}>
                       {schedule?.repeatOn
                         ?.split(",")
@@ -429,13 +353,13 @@ function DoctorScheduleList({ doctor, doctorId }) {
                         .join(", ")}
                     </TableCell>
                     <TableCell align="left" sx={{ display: "table-cell" }}>
-                      {scheduleSessionListObj[schedule?.session].label}
+                      {scheduleSessionContantListObj[schedule?.session]?.label}
                     </TableCell>
                     <TableCell align="left" sx={{ display: "table-cell" }}>
                       {schedule?.scheduleExpertise?.name}
                     </TableCell>
                     <TableCell align="left" sx={{ display: "table-cell" }}>
-                      {scheduleTypeListObj[schedule?.type].label}
+                      {scheduleTypeContantListObj[schedule?.type]?.label}
                     </TableCell>
                     <TableCell align="left" sx={{ display: "table-cell" }}>
                       {formatDate.format(new Date(schedule?.applyFrom), "DD/MM/YYYY")}

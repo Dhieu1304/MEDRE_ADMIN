@@ -30,6 +30,10 @@ const defineAbilityFor = (staff) => {
           id: staff?.id
         });
 
+        can(staffActionAbility.ADD_DOCTOR_TIMEOFF, STAFF, {
+          id: staff?.id
+        });
+
         cannot(staffActionAbility.BLOCK, STAFF);
         cannot(staffActionAbility.DELETE, STAFF);
         cannot(staffActionAbility.UPDATE_ROLE, STAFF);
@@ -81,6 +85,8 @@ const defineAbilityFor = (staff) => {
           id: staff?.id
         });
 
+        cannot(staffActionAbility.ADD_DOCTOR_TIMEOFF, STAFF);
+
         cannot(staffActionAbility.BLOCK, STAFF);
         cannot(staffActionAbility.DELETE, STAFF);
         cannot(staffActionAbility.UPDATE_ROLE, STAFF);
@@ -131,6 +137,8 @@ const defineAbilityFor = (staff) => {
         can(staffActionAbility.UPDATE, STAFF, {
           id: staff?.id
         });
+
+        cannot(staffActionAbility.ADD_DOCTOR_TIMEOFF, STAFF);
 
         cannot(staffActionAbility.BLOCK, STAFF);
         cannot(staffActionAbility.DELETE, STAFF);
