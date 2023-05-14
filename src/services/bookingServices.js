@@ -73,7 +73,34 @@ const getBookingDetail = async (id) => {
   }
 };
 
+const updateBooking = async (note) => {
+  try {
+    const res = await axiosClient.post(bookingApi.updateBooking, { note });
+    console.log("Update");
+    if (res?.status) {
+      // const booking = camelcaseKeys(res?.data, { deep: true });
+      const booking = res?.data;
+
+      return {
+        success: true,
+        booking,
+        message: res?.message
+      };
+    }
+    return {
+      success: false,
+      message: `Status is ${res.status}`
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
 export default {
   getBookingList,
-  getBookingDetail
+  getBookingDetail,
+  updateBooking
 };

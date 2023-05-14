@@ -24,7 +24,7 @@ function createData(component, information) {
 export default function BookingDetail() {
   const { control, trigger, handleSubmit } = useForm({
     defaultValues: {
-      conclusion: ""
+      note: ""
     }
   });
   const [booking, setBooking] = React.useState();
@@ -61,6 +61,7 @@ export default function BookingDetail() {
     createData(t("paymentStatus"), booking?.is_payment),
     createData(t("reason"), booking?.reason),
     createData(t("note"), booking?.note),
+    createData(t("conclusion"), booking?.conclusion),
     createData(t("bookedAt"), booking?.bookedAt),
     createData(t("timeStart"), booking?.booking_time_schedule?.time_start),
     createData(t("timeEnd"), booking?.booking_time_schedule?.time_end),
@@ -78,8 +79,16 @@ export default function BookingDetail() {
     createData(t("patientHealthInsurance"), booking?.booking_of_patient?.health_insurance)
   ];
 
-  const handleSaveConclusion = async (data) => {
-    console.log("data: ", data);
+  const handleSaveNote = async (data) => {
+    const data2 = {
+      id: "51c5c8e7-2529-4e77-b896-0c7e9bdeda7a",
+      note: data.note
+    };
+    console.log("2:", data2);
+    await fetchApi(async () => {
+      const res = await bookingServices.updateBooking(note);
+      console.log(res);
+    });
   };
   return (
     <>
@@ -191,14 +200,14 @@ export default function BookingDetail() {
           control={control}
           trigger={trigger}
           rules={{
-            required: "Bacw buoc"
+            required: "Bắt buộc"
           }}
-          name="conclusion"
+          name="note"
           label="Ghi chú của bác sĩ"
           multiline
           rows={5}
         />
-        <Button variant="contained" onClick={handleSubmit(handleSaveConclusion)}>
+        <Button variant="contained" onClick={handleSubmit(handleSaveNote)}>
           save
         </Button>
       </Box>

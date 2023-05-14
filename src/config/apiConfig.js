@@ -36,7 +36,8 @@ const timeOffApi = {
 
 const bookingApi = {
   bookingList: () => "/booking/list-for-staff",
-  bookingDetail: (id) => `/booking/detail-for-staff/${id}`
+  bookingDetail: (id) => `/booking/detail-for-staff/${id}`,
+  updateBooking: () => `/booking/update`
 };
 
 export { authApi, userApi, staffApi, scheduleApi, expertiseApi, timeOffApi, bookingApi };
