@@ -6,8 +6,8 @@ function BookingPage() {
   return (
     <>
       <Routes>
-        <Route path="/:id" element={<BookingList />}></Route>
-        <Route path="/" element={<BookingDetail />}></Route>
+        <Route path="/" element={<BookingList />}></Route>
+        <Route path="/:id" element={<BookingDetail />}></Route>
       </Routes>
     </>
   );
