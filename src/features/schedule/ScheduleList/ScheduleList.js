@@ -34,6 +34,7 @@ import { scheduleSessions } from "../../../entities/Schedule";
 import BookingInfoModal from "../../booking/components/BookingInfoModal";
 import { useCustomModal } from "../../../components/CustomModal";
 import CustomOverlay from "../../../components/CustomOverlay/CustomOverlay";
+import BookingModal from "../../booking/components/BookingModal";
 
 function ScheduleList({ timesList }) {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -44,6 +45,7 @@ function ScheduleList({ timesList }) {
   const { t } = useTranslation("scheduleFeature", { keyPrefix: "ScheduleList" });
   const theme = useTheme();
   const bookingInfoModal = useCustomModal();
+  const bookingModal = useCustomModal();
 
   // console.log("currentDate: ", currentDate);
 
@@ -113,7 +115,7 @@ function ScheduleList({ timesList }) {
   //   return filterDoctorsByDayOfWeek(doctors, timesList, currentDate, timeOffs);
   // }, [doctors, timeOffs, timesList]);
 
-  const renderButton = (booking) => {
+  const renderButton = (booking, schedule, time) => {
     if (booking) {
       return (
         <Button
@@ -138,6 +140,14 @@ function ScheduleList({ timesList }) {
             background: theme.palette.success.light,
             color: theme.palette.success.contrastText
           }
+        }}
+        onClick={() => {
+          bookingModal.setShow(true);
+          bookingModal.setData({
+            schedule,
+            date: currentDate,
+            time
+          });
         }}
       >
         {t("button.book")}
@@ -233,7 +243,7 @@ function ScheduleList({ timesList }) {
                     minWidth: 150
                   }}
                 >
-                  {renderButton(booking)}
+                  {renderButton(booking, schedule, time)}
                   {/* <Typography
                     sx={{
                       // marginTop: "20px",
@@ -276,6 +286,10 @@ function ScheduleList({ timesList }) {
         />
       );
     });
+  };
+
+  const handleAfterBooking = async () => {
+    loadData();
   };
 
   return (
@@ -393,7 +407,7 @@ function ScheduleList({ timesList }) {
         />
       )}
 
-      {/* {bookingModal.show && (
+      {bookingModal.show && (
         <BookingModal
           show={bookingModal.show}
           setShow={bookingModal.setShow}
@@ -401,7 +415,7 @@ function ScheduleList({ timesList }) {
           setData={bookingModal.setData}
           handleAfterBooking={handleAfterBooking}
         />
-      )} */}
+      )}
     </>
   );
 }

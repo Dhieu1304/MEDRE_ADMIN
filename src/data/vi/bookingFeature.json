@@ -1,9 +1,24 @@
 {
-  "BookingModal": {
+  "BookingInfoModal": {
     "title": "Thông tin lịch đặt",
     "button": {
       "save": "Lưu",
       "detail": "Chi tiết"
+    }
+  },
+
+  "BookingModal": {
+    "title": "Đặt lịch",
+    "subTitle": {
+      "patientInfo": "Thông tin bệnh nhân"
+    },
+    "form": {
+      "bookingFor": "Đặt lịch cho",
+      "self": "Bản thân",
+      "other": "Người khác"
+    },
+    "button": {
+      "book": "Đặt lịch"
     }
   }
 }

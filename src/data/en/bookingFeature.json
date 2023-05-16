@@ -1,9 +1,24 @@
 {
-  "BookingModal": {
+  "BookingInfoModal": {
     "title": "Booking detail",
     "button": {
       "save": "Save",
       "detail": "Detail"
+    }
+  },
+
+  "BookingModal": {
+    "title": "Booking",
+    "subTitle": {
+      "patientInfo": "Patient information"
+    },
+    "form": {
+      "bookingFor": "Booking for",
+      "self": "Self",
+      "other": "Other"
+    },
+    "button": {
+      "book": "Book"
     }
   }
 }

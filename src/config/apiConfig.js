@@ -39,11 +39,13 @@ const timeOffApi = {
 };
 
 const bookingApi = {
+  book: () => "/booking/new-booking",
   bookingDetail: (id) => `/booking/detail-for-staff/${id}`
 };
 
 const patientApi = {
-  createPatient: () => "/patient/create"
+  createPatient: () => "/patient/create-for-staff",
+  patientList: () => "/patient/list-for-staff"
 };
 
 export { authApi, userApi, staffApi, scheduleApi, expertiseApi, timeOffApi, bookingApi, patientApi };

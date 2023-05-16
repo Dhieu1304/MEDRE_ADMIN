@@ -13,7 +13,7 @@ function BookingInfoModal({ show, setShow, data, setData }) {
   const [booking, setBooking] = useState({});
   const { fetchApi } = useFetchingStore();
   const { t } = useTranslation("bookingFeature", {
-    keyPrefix: "BookingModal"
+    keyPrefix: "BookingInfoModal"
   });
 
   const { t: tBooking } = useTranslation("bookingEntity", {
