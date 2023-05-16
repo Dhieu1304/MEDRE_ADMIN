@@ -40,6 +40,7 @@ import { scheduleSessions } from "../../../entities/Schedule";
 import BookingInfoModal from "../../booking/components/BookingInfoModal";
 import { useAppConfigStore } from "../../../store/AppConfigStore";
 import { useScheduleTypesContantTranslation } from "../hooks/useScheduleConstantsTranslation";
+import CustomPageTitle from "../../../components/CustomPageTitle";
 
 function DoctorScheduleCalendar({ timesList, doctor }) {
   const location = useLocation();
@@ -301,9 +302,7 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
     <>
       <Box>
         <CustomOverlay open={isLoading} />
-        <Typography variant="h4" sx={{ mb: 4 }}>
-          {t("title")}
-        </Typography>
+        <CustomPageTitle title={t("title")} />
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 4 }}>
           <Card
             sx={{

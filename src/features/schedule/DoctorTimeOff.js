@@ -12,8 +12,7 @@ import {
   TableContainer,
   TableHead,
   TablePagination,
-  TableRow,
-  Typography
+  TableRow
 } from "@mui/material";
 import formatDate from "date-and-time";
 import { useTranslation } from "react-i18next";
@@ -30,6 +29,7 @@ import { useAppConfigStore } from "../../store/AppConfigStore";
 import AddNewTimeOffModal from "./components/AddNewTimeOffModal";
 import { useCustomModal } from "../../components/CustomModal";
 import { useTimeOffSessionsContantTranslation } from "./hooks/useTimeOffConstantsTranslation";
+import CustomPageTitle from "../../components/CustomPageTitle";
 
 function DoctorTimeOff({ doctor, doctorId }) {
   const [timeOffs, setTimeOffs] = useState([]);
@@ -128,30 +128,25 @@ function DoctorTimeOff({ doctor, doctorId }) {
   return (
     <>
       <Box>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            mb: 4
-          }}
-        >
-          <Typography variant="h4">{t("title")}</Typography>
+        <CustomPageTitle
+          title={t("title")}
+          right={
+            <Button
+              variant="contained"
+              onClick={() => {
+                addTimeOffModal.setShow(true);
+                addTimeOffModal.setData(doctor);
+              }}
+              endIcon={<AddIcon fontSize="large" />}
+              sx={{
+                bgcolor: theme.palette.success.light
+              }}
+            >
+              {t("button.addTimeOff")}
+            </Button>
+          }
+        />
 
-          <Button
-            variant="contained"
-            onClick={() => {
-              addTimeOffModal.setShow(true);
-              addTimeOffModal.setData(doctor);
-            }}
-            endIcon={<AddIcon fontSize="large" />}
-            sx={{
-              bgcolor: theme.palette.success.light
-            }}
-          >
-            {t("button.addTimeOff")}
-          </Button>
-        </Box>
         <Grid container spacing={3} justifyContent="space-between">
           <Grid item xs={12} sm={12} md={6} lg={4}>
             <CustomDateFromToInput

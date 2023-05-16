@@ -39,6 +39,7 @@ import { Can } from "../../../store/AbilityStore";
 import { staffActionAbility } from "../../../entities/Staff";
 import Staff from "../../../entities/Staff/Staff";
 import NoDataBox from "../../../components/NoDataBox";
+import CustomPageTitle from "../../../components/CustomPageTitle";
 
 function StaffList({ expertisesList }) {
   const [isFirst, setIsFirst] = useState(true);
@@ -291,13 +292,8 @@ function StaffList({ expertisesList }) {
 
       <Can I={staffActionAbility.VIEW} a={Staff.magicWord()}>
         <Box>
-          <Box sx={{ display: "flex", justifyContent: "flex-start", alignItems: "center", mb: 4 }}>
-            <Box sx={{ display: "flex", justifyContent: "flex-start", alignItems: "center" }}>
-              <Typography component="h1" variant="h4" fontWeight={600} fontSize={{ sm: 30, xs: 25 }} sx={{ mr: 4 }}>
-                {t("title")}
-              </Typography>
-            </Box>
-          </Box>
+          <CustomPageTitle title={t("title")} />
+
           {isMobile && (
             <Button
               onClick={() => {

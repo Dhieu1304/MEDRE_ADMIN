@@ -35,6 +35,7 @@ import BookingInfoModal from "../../booking/components/BookingInfoModal";
 import { useCustomModal } from "../../../components/CustomModal";
 import CustomOverlay from "../../../components/CustomOverlay/CustomOverlay";
 import BookingModal from "../../booking/components/BookingModal";
+import CustomPageTitle from "../../../components/CustomPageTitle";
 
 function ScheduleList({ timesList }) {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -296,9 +297,7 @@ function ScheduleList({ timesList }) {
     <>
       <CustomOverlay open={isLoading} />
       <Box>
-        <Typography variant="h4" sx={{ mb: 4 }}>
-          {t("title")}
-        </Typography>
+        <CustomPageTitle title={t("title")} />
         <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center", mb: 4 }}>
           <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
             <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>

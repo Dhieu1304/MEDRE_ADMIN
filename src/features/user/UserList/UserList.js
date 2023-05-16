@@ -33,6 +33,7 @@ import UserTable from "./UserTable";
 import { columnsIds, createDefaultValues, initialShowCols } from "./utils";
 import { BlockUserModal, UnblockUserModal } from "../components";
 import CustomOverlay from "../../../components/CustomOverlay/CustomOverlay";
+import CustomPageTitle from "../../../components/CustomPageTitle";
 
 function UserList() {
   const { locale } = useAppConfigStore();
@@ -220,26 +221,7 @@ function UserList() {
     <>
       <Box>
         <CustomOverlay open={isLoading} />
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-start",
-            alignItems: "center",
-            mb: 4
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-start",
-              alignItems: "center"
-            }}
-          >
-            <Typography variant="h4" component="h1" mr={2}>
-              {t("title")}
-            </Typography>
-          </Box>
-        </Box>
+        <CustomPageTitle title={t("title")} />
         {isMobile && (
           <Button
             onClick={() => {

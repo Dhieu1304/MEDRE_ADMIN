@@ -12,7 +12,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
   useTheme
 } from "@mui/material";
 import formatDate from "date-and-time";
@@ -38,6 +37,7 @@ import {
 } from "./hooks/useScheduleConstantsTranslation";
 import Schedule from "../../entities/Schedule/Schedule";
 import { Can } from "../../store/AbilityStore";
+import CustomPageTitle from "../../components/CustomPageTitle";
 
 function DoctorScheduleList({ doctor, doctorId }) {
   const [schedules, setSchedules] = useState([]);
@@ -201,32 +201,27 @@ function DoctorScheduleList({ doctor, doctorId }) {
   return (
     <>
       <Box>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            mb: 4
-          }}
-        >
-          <Typography variant="h4">{t("title")}</Typography>
+        <CustomPageTitle
+          title={t("title")}
+          right={
+            <Can I={scheduleActionAbility.ADD} a={Schedule.magicWord()}>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  addScheduleModal.setShow(true);
+                  addScheduleModal.setData(doctor);
+                }}
+                endIcon={<AddIcon fontSize="large" />}
+                sx={{
+                  bgcolor: theme.palette.success.light
+                }}
+              >
+                {t("button.addSchedule")}
+              </Button>
+            </Can>
+          }
+        />
 
-          <Can I={scheduleActionAbility.ADD} a={Schedule.magicWord()}>
-            <Button
-              variant="contained"
-              onClick={() => {
-                addScheduleModal.setShow(true);
-                addScheduleModal.setData(doctor);
-              }}
-              endIcon={<AddIcon fontSize="large" />}
-              sx={{
-                bgcolor: theme.palette.success.light
-              }}
-            >
-              {t("button.addSchedule")}
-            </Button>
-          </Can>
-        </Box>
         <Grid
           container
           spacing={3}
