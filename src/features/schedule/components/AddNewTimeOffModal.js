@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { useMemo } from "react";
 import { Checkbox, Grid, ListItemText, MenuItem, Select } from "@mui/material";
 import { toast } from "react-toastify";
 import CustomModal from "../../../components/CustomModal";
@@ -10,15 +9,15 @@ import { useFetchingStore } from "../../../store/FetchingApiStore";
 import CustomInput from "../../../components/CustomInput/CustomInput";
 import timeOffServices from "../../../services/timeOffServices";
 import WithTimesLoaderWrapper from "../hocs/WithTimesLoaderWrapper";
+import { useTimeOffSessionsContantTranslation } from "../hooks/useTimeOffConstantsTranslation";
 
-function AddNewTimeOffModal({ show, setShow, data, setData, handleAfterAddTimeOff, timesList }) {
+function AddNewTimeOffModal({ show, setShow, data, setData, handleAfterAddTimeOff }) {
   const { handleSubmit, watch, control, trigger } = useForm({
     mode: "onChange",
     defaultValues: {
-      timeStart: "",
-      timeEnd: "",
       from: "",
-      to: ""
+      to: "",
+      session: ""
     },
     criteriaMode: "all"
   });
@@ -26,28 +25,18 @@ function AddNewTimeOffModal({ show, setShow, data, setData, handleAfterAddTimeOf
   const { t } = useTranslation("scheduleFeature", { keyPrefix: "AddNewTimeOffModal" });
   const { t: tTimeOff } = useTranslation("timeOffEntity", { keyPrefix: "properties" });
   const { t: tInputValidate } = useTranslation("input", { keyPrefix: "validation" });
+  const [timeOffSessionContantList, timeOffSessionContantListObj] = useTimeOffSessionsContantTranslation();
 
   const { fetchApi } = useFetchingStore();
 
-  const [timeStartList, timeEndList] = useMemo(() => {
-    const timesStart = [];
-    const timesEnd = [];
-
-    timesList.forEach((time) => {
-      timesStart.push(time.timeStart);
-      timesEnd.push(time.timeEnd);
-    });
-
-    return [timesStart, timesEnd];
-  }, [timesList]);
-
-  const handleAddTimeOff = async ({ from, to, timeStart, timeEnd }) => {
-    // console.log({ data, date, timeStart, timeEnd });
+  const handleAddTimeOff = async ({ from, to, session }) => {
+    // console.log({ data, date, session });
     await fetchApi(async () => {
-      const res = await timeOffServices.addNewTimeOff({ from, to, timeStart, timeEnd });
+      const res = await timeOffServices.addNewTimeOff({ from, to, session });
       if (res?.success) {
         setShow(false);
         setData({});
+        toast(res.message);
         if (handleAfterAddTimeOff) await handleAfterAddTimeOff();
         return { success: true };
       }
@@ -67,7 +56,7 @@ function AddNewTimeOffModal({ show, setShow, data, setData, handleAfterAddTimeOf
       onSubmit={handleSubmit(handleAddTimeOff)}
     >
       <Grid container spacing={3}>
-        <Grid item xs={12} sm={12} md={4} lg={6} xl={6}>
+        <Grid item xs={12} md={4}>
           <CustomInput
             control={control}
             rules={{
@@ -79,7 +68,7 @@ function AddNewTimeOffModal({ show, setShow, data, setData, handleAfterAddTimeOf
             type="date"
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={4} lg={6} xl={6}>
+        <Grid item xs={12} md={4}>
           <CustomInput
             control={control}
             rules={{
@@ -104,66 +93,26 @@ function AddNewTimeOffModal({ show, setShow, data, setData, handleAfterAddTimeOf
             isCustomError
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={4} lg={6} xl={6}>
+        <Grid item xs={12} md={4}>
           <CustomInput
             control={control}
             rules={{
               required: tInputValidate("required")
             }}
-            label={tTimeOff("timeStart")}
+            label={tTimeOff("session")}
             trigger={trigger}
-            name="timeStart"
-            triggerTo="timeEnd"
+            name="session"
           >
             <Select
               renderValue={(selected) => {
-                return selected;
+                return timeOffSessionContantListObj[selected].label;
               }}
             >
-              {timeStartList.map((time) => {
+              {timeOffSessionContantList?.map((timeOffSession) => {
                 return (
-                  <MenuItem key={time} value={time}>
-                    <Checkbox checked={watch().timeStart === time} />
-                    <ListItemText primary={time} />
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </CustomInput>
-        </Grid>
-        <Grid item xs={12} sm={12} md={4} lg={6} xl={6}>
-          <CustomInput
-            control={control}
-            rules={{
-              required: `${tTimeOff("timeEnd")} ${tInputValidate("required")}`,
-              validate: (value) => {
-                const start = watch().timeStart;
-                const end = value;
-
-                if (start < end) {
-                  return true;
-                }
-                return tInputValidate("gt", {
-                  left: tTimeOff("timeEndLabel"),
-                  right: tTimeOff("timeStartLabel")
-                });
-              }
-            }}
-            label={tTimeOff("timeEnd")}
-            trigger={trigger}
-            name="timeEnd"
-            isCustomError
-          >
-            <Select
-              renderValue={(selected) => {
-                return selected;
-              }}
-            >
-              {timeEndList.map((time) => {
-                return (
-                  <MenuItem key={time} value={time}>
-                    <Checkbox checked={watch().timeEnd === time} />
-                    <ListItemText primary={time} />
+                  <MenuItem key={timeOffSession?.value} value={timeOffSession?.value}>
+                    <Checkbox checked={watch().session === timeOffSession?.value} />
+                    <ListItemText primary={timeOffSession?.label} />
                   </MenuItem>
                 );
               })}
@@ -184,8 +133,7 @@ AddNewTimeOffModal.propTypes = {
   setShow: PropTypes.func.isRequired,
   data: PropTypes.object.isRequired,
   setData: PropTypes.func.isRequired,
-  handleAfterAddTimeOff: PropTypes.func,
-  timesList: PropTypes.array.isRequired
+  handleAfterAddTimeOff: PropTypes.func
 };
 
 export default WithTimesLoaderWrapper(AddNewTimeOffModal);

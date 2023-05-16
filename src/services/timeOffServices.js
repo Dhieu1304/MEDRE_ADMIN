@@ -39,7 +39,7 @@ const getTimeOffByDoctorId = async (doctorId, { from, to, page, limit }) => {
     }
     return {
       success: false,
-      message: `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`
     };
   } catch (e) {
     // console.error(e.message);
@@ -50,12 +50,11 @@ const getTimeOffByDoctorId = async (doctorId, { from, to, page, limit }) => {
   }
 };
 
-const addNewTimeOff = async ({ from, to, timeStart, timeEnd }) => {
+const addNewTimeOff = async ({ from, to, session }) => {
   const dataBody = cleanUndefinedAndEmptyStrValueObject({
     from,
     to,
-    time_start: timeStart,
-    time_end: timeEnd
+    session
   });
 
   // console.log("dataBody: ", dataBody);
@@ -81,7 +80,7 @@ const addNewTimeOff = async ({ from, to, timeStart, timeEnd }) => {
     }
     return {
       success: false,
-      message: `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`
     };
   } catch (e) {
     // console.error(e.message);

@@ -183,6 +183,7 @@ function DoctorScheduleList({ doctor, doctorId }) {
       if (res?.success) {
         changeApplyToModal.setShow(false);
         changeApplyToModal.setData({});
+        toast(res.message);
         await loadData();
         return { success: true };
       }

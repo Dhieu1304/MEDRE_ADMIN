@@ -134,6 +134,7 @@ function AddScheduleModal({ show, setShow, data, setData, handleAfterAddSchedule
       if (res?.success) {
         setShow(false);
         setData({});
+        toast(res.message);
         if (handleAfterAddSchedule) await handleAfterAddSchedule();
         return { success: true };
       }

@@ -392,6 +392,16 @@ function ScheduleList({ timesList }) {
           setData={bookingInfoModal.setData}
         />
       )}
+
+      {/* {bookingModal.show && (
+        <BookingModal
+          show={bookingModal.show}
+          setShow={bookingModal.setShow}
+          data={bookingModal.data}
+          setData={bookingModal.setData}
+          handleAfterBooking={handleAfterBooking}
+        />
+      )} */}
     </>
   );
 }

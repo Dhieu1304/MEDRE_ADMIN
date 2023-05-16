@@ -31,7 +31,7 @@
 // import useDebounce from "../../../hooks/useDebounce";
 // import { cleanUndefinedAndNullValueObjectToStrObj } from "../../../utils/objectUtil";
 // // import patientServices from "../../../services/patientServices";
-
+//
 // function BookingModal({ show, setShow, data, setData, handleAfterBooking, patients }) {
 //   const bookingForm = useForm({
 //     defaultValues: {
@@ -41,7 +41,7 @@
 //       reason: ""
 //     }
 //   });
-
+//
 //   const addPatientForm = useForm({
 //     defaultValues: {
 //       phoneNumber: "",
@@ -52,10 +52,10 @@
 //       healthInsurance: ""
 //     }
 //   });
-
+//
 //   const { fetchApi } = useFetchingStore();
 //   const { locale } = useAppConfigStore();
-
+//
 //   const book = async ({ scheduleId, timeId, date, reason }, patientId = "") => {
 //     // await fetchApi(async () => {
 //     //   // console.log("data: ", data);
@@ -77,7 +77,7 @@
 //     //   return { error: res.message };
 //     // });
 //   };
-
+//
 //   const addPatient = async ({ phoneNumber, name, gender, address, dob, healthInsurance }) => {
 //     // let newPatient;
 //     // await fetchApi(async () => {
@@ -91,11 +91,11 @@
 //     // });
 //     // return newPatient;
 //   };
-
+//
 //   const handleBooking = async ({ scheduleId, timeId, date, reason }) => {
 //     // await book({ scheduleId, timeId, date, reason });
 //   };
-
+//
 //   const handleAddPatient = async ({ phoneNumber, name, gender, address, dob, healthInsurance }) => {
 //     // // console.log("handleAddPatient: ", { phoneNumber, name, gender, address, dob, healthInsurance });
 //     // const patientFormData = { phoneNumber, name, gender, address, dob, healthInsurance };
@@ -116,7 +116,7 @@
 //     //   await book({ ...bookingForm.watch() }, patient?.id);
 //     // }
 //   };
-
+//
 //   const handleBeforeBookingSubmit = () => {
 //     // if (isSelf) {
 //     //   // console.log("Booking Self");
@@ -124,14 +124,14 @@
 //     // }
 //     // return bookingForm.handleSubmit(addPatientForm.handleSubmit(handleAddPatient));
 //   };
-
+//
 //   const { t } = useTranslation("bookingFeature", { keyPrefix: "BookingModal" });
 //   const { t: tBooking } = useTranslation("bookingEntity", { keyPrefix: "properties" });
 //   const { t: tScheduleConstants } = useTranslation("scheduleEntity", { keyPrefix: "constants" });
 //   const { t: tPatient } = useTranslation("patientEntity", { keyPrefix: "properties" });
 //   const { t: tPatientConstants } = useTranslation("patientEntity", { keyPrefix: "constants" });
 //   const { t: tInputValidate } = useTranslation("input", { keyPrefix: "validation" });
-
+//
 //   const scheduleTypeListObj = useMemo(() => {
 //     return [
 //       {
@@ -149,7 +149,7 @@
 //       };
 //     }, {});
 //   }, [locale]);
-
+//
 //   const genderListObj = useMemo(() => {
 //     return [
 //       {
@@ -175,7 +175,7 @@
 //       };
 //     }, {});
 //   }, [locale]);
-
+//
 //   return (
 //     <CustomModal
 //       show={show}
@@ -240,7 +240,7 @@
 //             {`${data?.time?.timeEnd?.split(":")[0]}:${data?.time?.timeEnd?.split(":")[1]}`}
 //           </Typography>
 //         </Box>
-
+//
 //         <FormControl
 //           sx={{
 //             mb: 2
@@ -252,7 +252,7 @@
 //             <FormControlLabel value="other" control={<Radio onClick={() => setIsSelf(false)} />} label={t("form.other")} />
 //           </RadioGroup>
 //         </FormControl>
-
+//
 //         <Box
 //           sx={{
 //             mb: 2
@@ -278,7 +278,7 @@
 //               />
 //             )}
 //           </Box>
-
+//
 //           <Grid container spacing={2}>
 //             <Grid item lg={6} xs={12}>
 //               <CustomInput
@@ -329,7 +329,7 @@
 //                 >
 //                   {Object.keys(genderListObj).map((key) => {
 //                     const item = genderListObj[key];
-
+//
 //                     return (
 //                       <MenuItem key={item?.value} value={item?.value}>
 //                         <Checkbox checked={addPatientForm.watch().gender === item?.value} />
@@ -350,7 +350,7 @@
 //                 type="date"
 //               />
 //             </Grid>
-
+//
 //             <Grid item xs={12}>
 //               <CustomInput
 //                 control={addPatientForm.control}
@@ -367,7 +367,7 @@
 //                 name="healthInsurance"
 //               />
 //             </Grid>
-
+//
 //             <Grid item xs={12}>
 //               <CustomInput
 //                 control={addPatientForm.control}
@@ -389,7 +389,7 @@
 //             </Grid>
 //           </Grid>
 //         </Box>
-
+//
 //         <CustomInput
 //           control={bookingForm.control}
 //           label={tBooking("reason")}
@@ -412,14 +412,13 @@
 //     </CustomModal>
 //   );
 // }
-
+//
 // BookingModal.propTypes = {
 //   show: PropTypes.bool.isRequired,
 //   setShow: PropTypes.func.isRequired,
 //   data: PropTypes.object.isRequired,
 //   setData: PropTypes.func.isRequired,
-//   handleAfterBooking: PropTypes.func.isRequired,
-//   patients: PropTypes.array.isRequired
+//   handleAfterBooking: PropTypes.func.isRequired
 // };
-
+//
 // export default WithPatientsLoaderWrapper(BookingModal);
