@@ -8,6 +8,7 @@ import User from "../../../entities/User/User";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
 // import userServices from "../../../services/userServices";
 import CustomInput from "../../../components/CustomInput/CustomInput";
+import userServices from "../../../services/userServices";
 
 function UnblockUserModal({ show, setShow, data, setData, handleAfterUnblockUser }) {
   const { control, trigger, handleSubmit } = useForm({
@@ -24,8 +25,7 @@ function UnblockUserModal({ show, setShow, data, setData, handleAfterUnblockUser
 
   const handleUnblockUserStatus = async ({ reason }) => {
     await fetchApi(async () => {
-      // const res = await userServices.unblockUser(data?.id, reason);
-      const res = { reason };
+      const res = await userServices.unblockUser(data?.id, reason);
 
       if (res?.success) {
         setShow(false);

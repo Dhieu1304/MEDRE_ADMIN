@@ -50,7 +50,7 @@ const getUserList = async ({ email, phoneNumber, name, page, limit, blocked, gen
     }
     return {
       success: false,
-      message: `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`
     };
   } catch (e) {
     // console.error(e.message);
@@ -87,7 +87,7 @@ const getUserDetail = async (id) => {
     }
     return {
       success: false,
-      message: `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`
     };
   } catch (e) {
     // console.error(e.message);
@@ -120,7 +120,71 @@ const editUserInfo = async ({ name, address, gender, dob }) => {
     }
     return {
       success: false,
-      message: `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
+const blockUser = async (id, reason) => {
+  try {
+    // console.log("blockUser: ", { id, reason });
+    const res = await axiosClient.post(userApi.blockUser(), {
+      id_account: id,
+      reason
+    });
+
+    // console.log("res: ", res);
+
+    if (res?.status) {
+      const user = camelcaseKeys(res?.data?.user, { deep: true });
+
+      return {
+        success: true,
+        user,
+        message: res?.message
+      };
+    }
+    return {
+      success: false,
+      message: res?.message || `Status is ${res.status}`
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
+const unblockUser = async (id, reason) => {
+  try {
+    // console.log("unblockUser: ", { id, reason });
+    const res = await axiosClient.post(userApi.unblockUser(), {
+      id_account: id,
+      reason
+    });
+
+    // console.log("res: ", res);
+
+    if (res?.status) {
+      const user = camelcaseKeys(res?.data?.user, { deep: true });
+
+      return {
+        success: true,
+        user,
+        message: res?.message
+      };
+    }
+    return {
+      success: false,
+      message: res?.message || `Status is ${res.status}`
     };
   } catch (e) {
     // console.error(e.message);
@@ -134,5 +198,7 @@ const editUserInfo = async ({ name, address, gender, dob }) => {
 export default {
   getUserList,
   getUserDetail,
-  editUserInfo
+  editUserInfo,
+  blockUser,
+  unblockUser
 };

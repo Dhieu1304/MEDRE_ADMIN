@@ -52,7 +52,7 @@
       "block": "Khóa"
     },
     "confirmQuestion": "Bạn có chắc chắn khóa người dùng - {{name}}?",
-    "reason:": "Lý do"
+    "reason": "Lý do"
   },
 
   "UnblockUserModal": {
@@ -60,7 +60,8 @@
     "button": {
       "unblock": "Mở khóa"
     },
-    "confirmQuestion": "Bạn có chắc chắn mở khóa người dùng - {{name}}?"
+    "confirmQuestion": "Bạn có chắc chắn mở khóa người dùng - {{name}}?",
+    "reason": "Lý do"
   },
 
   "ChangeAvatarModal": {

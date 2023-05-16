@@ -7,7 +7,9 @@ const authApi = {
 const userApi = {
   userList: () => "/user/list",
   userDetail: (id) => `/user/detail/${id}`,
-  editUser: (id) => `/user/edit/${id}`
+  editUser: (id) => `/user/edit/${id}`,
+  blockUser: () => `/staff/confirm-blocking`,
+  unblockUser: () => `/staff/confirm-unblocking`
 };
 const staffApi = {
   createStaff: () => "/staff/create",

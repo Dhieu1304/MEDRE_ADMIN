@@ -52,7 +52,7 @@
       "block": "Block"
     },
     "confirmQuestion": "Do you want to block user - {{name}}?",
-    "reason:": "Reason"
+    "reason": "Reason"
   },
 
   "UnblockUserModal": {
@@ -60,7 +60,8 @@
     "button": {
       "unblock": "Unblock"
     },
-    "confirmQuestion": "Do you want to unblock user - {{name}}?"
+    "confirmQuestion": "Do you want to unblock user - {{name}}?",
+    "reason": "Reason"
   },
 
   "ChangeAvatarModal": {

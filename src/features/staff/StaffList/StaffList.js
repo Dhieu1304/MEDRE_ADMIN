@@ -292,22 +292,27 @@ function StaffList({ expertisesList }) {
 
       <Can I={staffActionAbility.VIEW} a={Staff.magicWord()}>
         <Box>
-          <CustomPageTitle title={t("title")} />
+          <CustomPageTitle
+            title={t("title")}
+            right={
+              isMobile && (
+                <Button
+                  onClick={() => {
+                    setOpenFilterMobile((prev) => !prev);
+                  }}
+                >
+                  {openFilterMobile ? tBtn("hideFilterCollapse") : tBtn("showFilterCollapse")}
+                </Button>
+              )
+            }
+          />
 
-          {isMobile && (
-            <Button
-              onClick={() => {
-                setOpenFilterMobile((prev) => !prev);
-              }}
-            >
-              {openFilterMobile ? tBtn("hideFilterCollapse") : tBtn("showFilterCollapse")}
-            </Button>
-          )}
           <Collapse in={!isMobile || openFilterMobile}>
             <FormProvider {...filterForm}>
               <StaffFiltersForm expertisesList={expertisesList} />
             </FormProvider>
           </Collapse>
+
           <Box
             sx={{
               display: "flex",
