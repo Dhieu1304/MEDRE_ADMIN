@@ -9,11 +9,11 @@ function CustomPageTitle({ title, right }) {
         flexDirection: { md: "row", xs: "column" },
         justifyContent: { md: "space-between", xs: "flex-start" },
         alignItems: { md: "center", xs: "flex-start" },
-        mb: 4
+        mb: 2
       }}
     >
       <Box sx={{ display: "flex", justifyContent: "flex-start", alignItems: "center", mr: 4, mb: { md: 0, xs: 1 } }}>
-        <Typography component="h1" variant="h4" fontWeight={600} fontSize={{ sm: 30, xs: 25 }}>
+        <Typography component="h1" variant="h4" fontWeight={600} fontSize={{ sm: 30, xs: 22 }}>
           {title}
         </Typography>
       </Box>

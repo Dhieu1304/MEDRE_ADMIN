@@ -1,22 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 
-import {
-  Box,
-  Typography,
-  useMediaQuery,
-  Collapse,
-  Button,
-  TablePagination,
-  Pagination,
-  MenuItem,
-  Menu,
-  Switch
-} from "@mui/material";
+import { Box, useMediaQuery, Collapse, Button } from "@mui/material";
 import qs from "query-string";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
-import { RestartAlt as RestartAltIcon } from "@mui/icons-material";
 
 import userServices from "../../../services/userServices";
 import { useFetchingStore } from "../../../store/FetchingApiStore/hooks";
@@ -34,9 +22,13 @@ import { columnsIds, createDefaultValues, initialShowCols } from "./utils";
 import { BlockUserModal, UnblockUserModal } from "../components";
 import CustomOverlay from "../../../components/CustomOverlay/CustomOverlay";
 import CustomPageTitle from "../../../components/CustomPageTitle";
+import ListPageAction from "../../../components/ListPageAction/ListPageAction";
+import ListPageTableWrapper from "../../../components/ListPageTableWrapper";
 
 function UserList() {
   const { locale } = useAppConfigStore();
+  const [isFirst, setIsFirst] = useState(true);
+  const [countRender, setCountRender] = useState(1);
 
   const [users, setUsers] = useState([]);
   const [count, setCount] = useState(0);
@@ -144,6 +136,8 @@ function UserList() {
     criteriaMode: "all"
   });
 
+  const [isReset, setIsReset] = useState(false);
+
   const { watch, setValue, reset } = filterForm;
 
   const { email, phoneNumber, name, address, healthInsurance } = watch();
@@ -198,14 +192,26 @@ function UserList() {
   };
 
   useEffect(() => {
-    const page = 1;
+    // console.log("isReset change");
+
+    if (isFirst) {
+      setIsFirst(false);
+      setCountRender((prev) => prev + 1);
+    }
+
+    let page = 1;
+    if (countRender <= 2) {
+      page = watch().page;
+      setCountRender((prev) => prev + 1);
+    }
+
     const params = { ...watch(), page };
 
     const searchParams = qs.stringify(params);
     setValue("page", page);
     navigate(`?${searchParams}`);
     loadData({ page });
-  }, [...Object.values(filterDebounce), ...Object.values(searchDebounce)]);
+  }, [...Object.values(filterDebounce), ...Object.values(searchDebounce), isReset]);
 
   const handleAfterBlockUser = async () => {
     await loadData({ page: watch().page });
@@ -236,160 +242,37 @@ function UserList() {
             <UserFiltersForm />
           </FormProvider>
         </Collapse>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            flexWrap: "wrap"
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-start",
-              alignItems: "center"
-            }}
-          >
-            <Button
-              variant="outlined"
-              onClick={(event) => {
-                setShowTableColsMenu(event.currentTarget);
-              }}
-            >
-              {tBtn("showMenuColumns")}
-            </Button>
-            <Menu
-              anchorEl={showTableColsMenu}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left"
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left"
-              }}
-              open={Boolean(showTableColsMenu)}
-              onClose={() => {
-                setShowTableColsMenu(null);
-              }}
-              sx={{
-                maxHeight: 250
-              }}
-            >
-              {columns
-                .filter((column) => column.id in showCols)
-                .map((column) => {
-                  return (
-                    <MenuItem
-                      key={column.id}
-                      sx={{
-                        px: 2,
-                        py: 0
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          width: "100%"
-                        }}
-                      >
-                        <Typography fontSize={10}>{column.label}</Typography>
-
-                        <Switch
-                          size="small"
-                          checked={showCols[column.id] === true}
-                          onChange={() => {
-                            setShowCols((prev) => ({
-                              ...prev,
-                              [column.id]: !prev[column.id]
-                            }));
-                          }}
-                        />
-                      </Box>
-                    </MenuItem>
-                  );
-                })}
-            </Menu>
-          </Box>
-
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              alignItems: "center"
-            }}
-          >
-            <Button
-              color="inherit"
-              onClick={() => {
-                reset(createDefaultValues());
-              }}
-              sx={{
-                transform: "translateY(-25%)"
-              }}
-            >
-              {tBtn("reset")}
-              <RestartAltIcon />
-            </Button>
-
-            <TablePagination
-              component="div"
-              count={count}
-              page={count === 0 ? 0 : watch().page - 1}
-              onPageChange={(e, page) => {
-                const newPage = page + 1;
-                setValue("page", newPage);
-                const params = { ...watch(), page: newPage };
-                const searchParams = qs.stringify(params);
-                navigate(`?${searchParams}`);
-                loadData({ page: newPage });
-              }}
-              rowsPerPageOptions={[1, 10, 20, 50, 100]}
-              rowsPerPage={watch().limit}
-              onRowsPerPageChange={(e) => {
-                const newLimit = parseInt(e.target.value, 10);
-                setValue("limit", newLimit);
-              }}
-              sx={{
-                mb: 2
-              }}
-            />
-          </Box>
-        </Box>
-
-        <UserTable
-          users={users}
-          notHaveAccessModal={notHaveAccessModal}
-          blockUserModal={blockUserModal}
-          unblockUserModal={unblockUserModal}
-          columns={columns}
+        <ListPageAction
           showCols={showCols}
+          setShowCols={setShowCols}
+          showTableColsMenu={showTableColsMenu}
+          setShowTableColsMenu={setShowTableColsMenu}
+          reset={reset}
+          setIsReset={setIsReset}
+          createDefaultValues={createDefaultValues}
+          columns={columns}
+          setValue={setValue}
+          loadData={loadData}
+          watch={watch}
+          count={count}
         />
 
-        {!!count && (
-          <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-end", alignItems: "flex-end" }}>
-            <Pagination
-              count={Math.ceil(count / watch().limit)}
-              color="primary"
-              page={watch().page}
-              sx={{
-                display: "flex",
-                justifyContent: "flex-end"
-              }}
-              onChange={(event, newPage) => {
-                setValue("page", newPage);
-                const params = { ...watch(), page: newPage };
-                const searchParams = qs.stringify(params);
-                navigate(`?${searchParams}`);
-                loadData({ page: newPage });
-              }}
+        <ListPageTableWrapper
+          table={
+            <UserTable
+              users={users}
+              notHaveAccessModal={notHaveAccessModal}
+              blockUserModal={blockUserModal}
+              unblockUserModal={unblockUserModal}
+              columns={columns}
+              showCols={showCols}
             />
-          </Box>
-        )}
+          }
+          count={count}
+          watch={watch}
+          loadData={loadData}
+          setValue={setValue}
+        />
       </Box>
 
       {blockUserModal.show && (

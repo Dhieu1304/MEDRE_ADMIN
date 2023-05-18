@@ -13,5 +13,12 @@
 
   "NoDataBox": {
     "title": "No relevant data available"
+  },
+
+  "ListPageAction": {
+    "button": {
+      "showMenuColumns": "Show",
+      "reset": "Reset"
+    }
   }
 }

@@ -1,23 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 
-import {
-  Box,
-  Typography,
-  useMediaQuery,
-  Collapse,
-  Button,
-  TablePagination,
-  Pagination,
-  MenuItem,
-  Menu,
-  Switch
-} from "@mui/material";
+import { Box, useMediaQuery, Collapse, Button } from "@mui/material";
 import qs from "query-string";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
-import { RestartAlt as RestartAltIcon } from "@mui/icons-material";
 
 import staffServices from "../../../services/staffServices";
 import { useFetchingStore } from "../../../store/FetchingApiStore/hooks";
@@ -38,8 +26,9 @@ import UnblockStaffModal from "../components/UnblockStaffModal";
 import { Can } from "../../../store/AbilityStore";
 import { staffActionAbility } from "../../../entities/Staff";
 import Staff from "../../../entities/Staff/Staff";
-import NoDataBox from "../../../components/NoDataBox";
 import CustomPageTitle from "../../../components/CustomPageTitle";
+import ListPageAction from "../../../components/ListPageAction/ListPageAction";
+import ListPageTableWrapper from "../../../components/ListPageTableWrapper";
 
 function StaffList({ expertisesList }) {
   const [isFirst, setIsFirst] = useState(true);
@@ -189,6 +178,7 @@ function StaffList({ expertisesList }) {
     criteriaMode: "all"
   });
 
+  const [isReset, setIsReset] = useState(false);
   const { watch, setValue, reset } = filterForm;
 
   const { email, phoneNumber, username, name, address, healthInsurance, description, education, certificate } = watch();
@@ -253,6 +243,8 @@ function StaffList({ expertisesList }) {
   };
 
   useEffect(() => {
+    // console.log("isReset change");
+
     if (isFirst) {
       setIsFirst(false);
       setCountRender((prev) => prev + 1);
@@ -272,7 +264,7 @@ function StaffList({ expertisesList }) {
     setValue("page", page);
     navigate(`?${searchParams}`);
     loadData({ page });
-  }, [...Object.values(filterDebounce), ...Object.values(searchDebounce)]);
+  }, [...Object.values(filterDebounce), ...Object.values(searchDebounce), isReset]);
 
   const handleAfterEditStaffRole = async () => {
     await loadData({ page: watch().page });
@@ -313,41 +305,8 @@ function StaffList({ expertisesList }) {
             </FormProvider>
           </Collapse>
 
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: { md: "row", xs: "column" },
-              justifyContent: "space-between",
-              alignItems: { md: "center", xs: "flex-start" }
-            }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "flex-start",
-                alignItems: "center"
-              }}
-            >
-              <Button
-                variant="outlined"
-                onClick={(event) => {
-                  setShowTableColsMenu(event.currentTarget);
-                }}
-              >
-                {tBtn("showMenuColumns")}
-              </Button>
-              <Button
-                color="inherit"
-                onClick={() => {
-                  reset(createDefaultValues());
-                }}
-                sx={{
-                  display: { md: "none", xs: "flex" }
-                }}
-              >
-                {tBtn("reset")}
-                <RestartAltIcon />
-              </Button>
+          <ListPageAction
+            leftAction={
               <Can I={staffActionAbility.ADD} a={Staff.magicWord()}>
                 <Button
                   variant="contained"
@@ -359,95 +318,23 @@ function StaffList({ expertisesList }) {
                   {tBtn("add")}
                 </Button>
               </Can>
-              <Menu
-                anchorEl={showTableColsMenu}
-                anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-                keepMounted
-                transformOrigin={{ vertical: "top", horizontal: "left" }}
-                open={Boolean(showTableColsMenu)}
-                onClose={() => {
-                  setShowTableColsMenu(null);
-                }}
-                sx={{
-                  maxHeight: 250
-                }}
-              >
-                {columns
-                  .filter((column) => column.id in showCols)
-                  .map((column) => {
-                    return (
-                      <MenuItem
-                        key={column.id}
-                        sx={{
-                          px: 2,
-                          py: 0
-                        }}
-                      >
-                        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
-                          <Typography fontSize={10}>{column.label}</Typography>
+            }
+            showCols={showCols}
+            setShowCols={setShowCols}
+            showTableColsMenu={showTableColsMenu}
+            setShowTableColsMenu={setShowTableColsMenu}
+            reset={reset}
+            setIsReset={setIsReset}
+            createDefaultValues={createDefaultValues}
+            columns={columns}
+            setValue={setValue}
+            loadData={loadData}
+            watch={watch}
+            count={count}
+          />
 
-                          <Switch
-                            size="small"
-                            checked={showCols[column.id] === true}
-                            onChange={() => {
-                              setShowCols((prev) => ({
-                                ...prev,
-                                [column.id]: !prev[column.id]
-                              }));
-                            }}
-                          />
-                        </Box>
-                      </MenuItem>
-                    );
-                  })}
-              </Menu>
-            </Box>
-
-            <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
-              <Button
-                color="inherit"
-                onClick={() => {
-                  reset(createDefaultValues());
-                }}
-                sx={{
-                  display: {
-                    md: "flex",
-                    xs: "none"
-                  }
-                }}
-              >
-                {tBtn("reset")}
-                <RestartAltIcon />
-              </Button>
-
-              <TablePagination
-                component="div"
-                count={count}
-                page={count === 0 ? 0 : watch().page - 1}
-                onPageChange={(e, page) => {
-                  const newPage = page + 1;
-                  setValue("page", newPage);
-                  const params = { ...watch(), page: newPage };
-                  const searchParams = qs.stringify(params);
-                  navigate(`?${searchParams}`);
-                  loadData({ page: newPage });
-                }}
-                rowsPerPageOptions={[1, 10, 20, 50, 100]}
-                rowsPerPage={watch().limit}
-                onRowsPerPageChange={(e) => {
-                  const newLimit = parseInt(e.target.value, 10);
-                  setValue("limit", newLimit);
-                }}
-                sx={{
-                  p: 0,
-                  mb: 0
-                }}
-              />
-            </Box>
-          </Box>
-
-          {count ? (
-            <>
+          <ListPageTableWrapper
+            table={
               <StaffTable
                 staffs={staffs}
                 notHaveAccessModal={notHaveAccessModal}
@@ -457,29 +344,12 @@ function StaffList({ expertisesList }) {
                 columns={columns}
                 showCols={showCols}
               />
-
-              <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-end", alignItems: "flex-end" }}>
-                <Pagination
-                  count={Math.ceil(count / watch().limit)}
-                  color="primary"
-                  page={watch().page}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "flex-end"
-                  }}
-                  onChange={(event, newPage) => {
-                    setValue("page", newPage);
-                    const params = { ...watch(), page: newPage };
-                    const searchParams = qs.stringify(params);
-                    navigate(`?${searchParams}`);
-                    loadData({ page: newPage });
-                  }}
-                />
-              </Box>
-            </>
-          ) : (
-            <NoDataBox />
-          )}
+            }
+            count={count}
+            watch={watch}
+            loadData={loadData}
+            setValue={setValue}
+          />
         </Box>
 
         {addStaffModal.show && <AddStaffModal show={addStaffModal.show} setShow={addStaffModal.setShow} />}

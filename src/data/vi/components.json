@@ -12,5 +12,12 @@
   },
   "NoDataBox": {
     "title": "Không có dữ liệu phù hợp"
+  },
+
+  "ListPageAction": {
+    "button": {
+      "showMenuColumns": "Hiện",
+      "reset": "Đặt lại"
+    }
   }
 }
