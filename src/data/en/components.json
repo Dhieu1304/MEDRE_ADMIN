@@ -20,5 +20,12 @@
       "showMenuColumns": "Show",
       "reset": "Reset"
     }
+  },
+
+  "ListPageTop": {
+    "button": {
+      "hideFilterCollapse": "Hide filter",
+      "showFilterCollapse": "Show Filter"
+    }
   }
 }

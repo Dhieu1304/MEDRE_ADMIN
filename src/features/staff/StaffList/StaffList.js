@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 
-import { Box, useMediaQuery, Collapse, Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import qs from "query-string";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -26,9 +26,9 @@ import UnblockStaffModal from "../components/UnblockStaffModal";
 import { Can } from "../../../store/AbilityStore";
 import { staffActionAbility } from "../../../entities/Staff";
 import Staff from "../../../entities/Staff/Staff";
-import CustomPageTitle from "../../../components/CustomPageTitle";
 import ListPageAction from "../../../components/ListPageAction/ListPageAction";
 import ListPageTableWrapper from "../../../components/ListPageTableWrapper";
+import ListPageTop from "../../../components/ListPageTop";
 
 function StaffList({ expertisesList }) {
   const [isFirst, setIsFirst] = useState(true);
@@ -37,9 +37,6 @@ function StaffList({ expertisesList }) {
 
   const [staffs, setStaffs] = useState([]);
   const [count, setCount] = useState(0);
-
-  const [openFilterMobile, setOpenFilterMobile] = useState(false);
-  const isMobile = useMediaQuery("(max-width:600px)");
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -284,26 +281,14 @@ function StaffList({ expertisesList }) {
 
       <Can I={staffActionAbility.VIEW} a={Staff.magicWord()}>
         <Box>
-          <CustomPageTitle
+          <ListPageTop
             title={t("title")}
-            right={
-              isMobile && (
-                <Button
-                  onClick={() => {
-                    setOpenFilterMobile((prev) => !prev);
-                  }}
-                >
-                  {openFilterMobile ? tBtn("hideFilterCollapse") : tBtn("showFilterCollapse")}
-                </Button>
-              )
+            filterFormNode={
+              <FormProvider {...filterForm}>
+                <StaffFiltersForm expertisesList={expertisesList} />
+              </FormProvider>
             }
           />
-
-          <Collapse in={!isMobile || openFilterMobile}>
-            <FormProvider {...filterForm}>
-              <StaffFiltersForm expertisesList={expertisesList} />
-            </FormProvider>
-          </Collapse>
 
           <ListPageAction
             leftAction={

@@ -19,5 +19,12 @@
       "showMenuColumns": "Hiện",
       "reset": "Đặt lại"
     }
+  },
+
+  "ListPageTop": {
+    "button": {
+      "hideFilterCollapse": "Ẩn bộ lọc",
+      "showFilterCollapse": "Hiện bộ lọc"
+    }
   }
 }

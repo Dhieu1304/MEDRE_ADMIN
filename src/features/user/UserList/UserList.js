@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 
-import { Box, useMediaQuery, Collapse, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import qs from "query-string";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -21,9 +21,9 @@ import UserTable from "./UserTable";
 import { columnsIds, createDefaultValues, initialShowCols } from "./utils";
 import { BlockUserModal, UnblockUserModal } from "../components";
 import CustomOverlay from "../../../components/CustomOverlay/CustomOverlay";
-import CustomPageTitle from "../../../components/CustomPageTitle";
 import ListPageAction from "../../../components/ListPageAction/ListPageAction";
 import ListPageTableWrapper from "../../../components/ListPageTableWrapper";
+import ListPageTop from "../../../components/ListPageTop";
 
 function UserList() {
   const { locale } = useAppConfigStore();
@@ -32,9 +32,6 @@ function UserList() {
 
   const [users, setUsers] = useState([]);
   const [count, setCount] = useState(0);
-
-  const [openFilterMobile, setOpenFilterMobile] = useState(false);
-  const isMobile = useMediaQuery("(max-width:600px)");
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -47,7 +44,6 @@ function UserList() {
   // functions for multilingual use
 
   const { t } = useTranslation("userFeature", { keyPrefix: "UserList" });
-  const { t: tBtn } = useTranslation("userFeature", { keyPrefix: "UserList.button" });
   const { t: tUser } = useTranslation("userEntity", { keyPrefix: "properties" });
 
   // state is used to represent the visibility of the Menu
@@ -227,21 +223,16 @@ function UserList() {
     <>
       <Box>
         <CustomOverlay open={isLoading} />
-        <CustomPageTitle title={t("title")} />
-        {isMobile && (
-          <Button
-            onClick={() => {
-              setOpenFilterMobile(!openFilterMobile);
-            }}
-          >
-            {openFilterMobile ? tBtn("hideFilterCollapse") : tBtn("showFilterCollapse")}
-          </Button>
-        )}
-        <Collapse in={!isMobile || openFilterMobile}>
-          <FormProvider {...filterForm}>
-            <UserFiltersForm />
-          </FormProvider>
-        </Collapse>
+
+        <ListPageTop
+          title={t("title")}
+          filterFormNode={
+            <FormProvider {...filterForm}>
+              <UserFiltersForm />
+            </FormProvider>
+          }
+        />
+
         <ListPageAction
           showCols={showCols}
           setShowCols={setShowCols}
