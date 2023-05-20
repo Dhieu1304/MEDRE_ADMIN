@@ -17,6 +17,7 @@ import {
 
 import { Link, useNavigate } from "react-router-dom";
 import { CalendarMonth as CalendarMonthIcon, Search as SearchIcon } from "@mui/icons-material";
+import formatDate from "date-and-time";
 
 import { useTranslation } from "react-i18next";
 import UserStatusButton from "../components/UserStatusButton";
@@ -25,6 +26,8 @@ import { Can } from "../../../store/AbilityStore";
 import { userActionAbility, userGenders, userStatuses } from "../../../entities/User";
 import User from "../../../entities/User/User";
 import { useAppConfigStore } from "../../../store/AppConfigStore";
+import CustomTableCell, { customTableCellVariant } from "../../../components/CustomTable/CustomTableCell";
+import { columnsIds } from "./utils";
 
 function UserTable({ users, columns, showCols, notHaveAccessModal, blockUserModal, unblockUserModal }) {
   const theme = useTheme();
@@ -44,23 +47,25 @@ function UserTable({ users, columns, showCols, notHaveAccessModal, blockUserModa
   const navigate = useNavigate();
 
   return (
-    <TableContainer component={Paper} sx={{ mb: 4 }}>
-      <Table>
+    <TableContainer component={Paper} sx={{ mb: 4, height: 600 }}>
+      <Table stickyHeader>
         <TableHead>
           <TableRow>
             {columns?.map((column) => {
-              return (
-                <TableCell
-                  key={column.id}
-                  align="left"
-                  style={{ minWidth: column.minWidth }}
-                  sx={{
-                    fontWeight: 600,
-                    display: column.display
-                  }}
+              const minWidth = column?.minWidth;
+              return column?.id === columnsIds.name ? (
+                <CustomTableCell sx={{ minWidth }} key={column?.id} variant={customTableCellVariant.FIRST_HEAD_CELL}>
+                  {column.label}
+                </CustomTableCell>
+              ) : (
+                <CustomTableCell
+                  sx={{ minWidth }}
+                  hide={column?.hide}
+                  key={column?.id}
+                  variant={customTableCellVariant.HEAD_CELL}
                 >
                   {column.label}
-                </TableCell>
+                </CustomTableCell>
               );
             })}
           </TableRow>
@@ -70,80 +75,37 @@ function UserTable({ users, columns, showCols, notHaveAccessModal, blockUserModa
             const user = new User(currentUser);
             return (
               <TableRow key={user?.id}>
-                <TableCell
-                  align="left"
-                  sx={{
-                    display: showCols?.phoneNumber ? "table-cell" : "none"
-                  }}
-                >
+                <CustomTableCell variant={customTableCellVariant.FIRST_BODY_CELL}>{user?.name}</CustomTableCell>
+
+                <CustomTableCell hide={!showCols?.phoneNumber}>
                   <Typography variant="inherit">{user?.phoneNumber}</Typography>
                   {!user.phoneVerified && (
                     <Typography variant="caption" color={theme.palette.error.light}>
                       {tUserMessage("phoneVerifiedFailed")}
                     </Typography>
                   )}
-                </TableCell>
-                <TableCell
-                  align="left"
-                  sx={{
-                    display: showCols?.email ? "table-cell" : "none"
-                  }}
-                >
+                </CustomTableCell>
+
+                <CustomTableCell hide={!showCols?.email}>
                   <Typography variant="inherit">{user?.email}</Typography>
                   {!user.emailVerified && (
                     <Typography variant="caption" color={theme.palette.error.light}>
                       {tUserMessage("emailVerifiedFailed")}
                     </Typography>
                   )}
-                </TableCell>
-                <TableCell
-                  align="left"
-                  sx={{
-                    display: showCols?.name ? "table-cell" : "none"
-                  }}
-                >
-                  {user?.name}
-                </TableCell>
-                <TableCell
-                  align="left"
-                  sx={{
-                    display: showCols?.address ? "table-cell" : "none"
-                  }}
-                >
-                  {user?.address}
-                </TableCell>
-                <TableCell
-                  align="left"
-                  sx={{
-                    display: showCols?.gender ? "table-cell" : "none"
-                  }}
-                >
-                  {userGendersObj?.[user?.gender]}
-                </TableCell>
-                <TableCell
-                  align="left"
-                  sx={{
-                    display: showCols?.dob ? "table-cell" : "none"
-                  }}
-                >
-                  {user?.dob}
-                </TableCell>
+                </CustomTableCell>
 
-                <TableCell
-                  align="left"
-                  sx={{
-                    display: showCols?.healthInsurance ? "table-cell" : "none"
-                  }}
-                >
-                  {user?.healthInsurance}
-                </TableCell>
+                <CustomTableCell hide={!showCols?.address}>{user?.address}</CustomTableCell>
 
-                <TableCell
-                  align="left"
-                  sx={{
-                    display: showCols?.status ? "table-cell" : "none"
-                  }}
-                >
+                <CustomTableCell hide={!showCols?.gender}>{userGendersObj?.[user?.gender]}</CustomTableCell>
+
+                <CustomTableCell hide={!showCols?.dob}>
+                  {user?.dob && formatDate.format(new Date(user?.dob), "DD/MM/YYYY")}
+                </CustomTableCell>
+
+                <CustomTableCell hide={!showCols?.healthInsurance}>{user?.healthInsurance}</CustomTableCell>
+
+                <CustomTableCell hide={!showCols?.status}>
                   <Can I={userActionAbility.BLOCK} a={user}>
                     {user?.blocked ? (
                       <UserStatusButton
@@ -171,32 +133,25 @@ function UserTable({ users, columns, showCols, notHaveAccessModal, blockUserModa
                       }}
                     />
                   </Can>
-                </TableCell>
-                <TableCell align="left">
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      alignItems: "center"
+                </CustomTableCell>
+
+                <CustomTableCell variant={customTableCellVariant.ACTION_BODY_CELL}>
+                  <Link
+                    to={`${user?.id}/booking`}
+                    // onClick={() => {
+                    //   navigate(`${user?.id}/schedule`, { relative: true });
+                    // }}
+                  >
+                    <CalendarMonthIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
+                  </Link>
+                  <IconButton
+                    onClick={() => {
+                      navigate(user?.id, { relative: true });
                     }}
                   >
-                    <Link
-                      to={`${user?.id}/booking`}
-                      // onClick={() => {
-                      //   navigate(`${user?.id}/schedule`, { relative: true });
-                      // }}
-                    >
-                      <CalendarMonthIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
-                    </Link>
-                    <IconButton
-                      onClick={() => {
-                        navigate(user?.id, { relative: true });
-                      }}
-                    >
-                      <SearchIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
-                    </IconButton>
-                  </Box>
-                </TableCell>
+                    <SearchIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
+                  </IconButton>
+                </CustomTableCell>
               </TableRow>
             );
           })}

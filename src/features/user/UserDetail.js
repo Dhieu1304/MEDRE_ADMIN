@@ -139,7 +139,7 @@ function UserDetail() {
     <>
       {user && (
         <PersonDetailWrapper
-          person="user"
+          person={user}
           canUpdate={canUpdateUser}
           handleReset={() => {
             reset(defaultValues);

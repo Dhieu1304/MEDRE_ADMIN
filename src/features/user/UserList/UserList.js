@@ -63,58 +63,56 @@ function UserList() {
   const columns = useMemo(
     () => [
       {
+        id: columnsIds.name,
+        label: tUser(columnsIds.name),
+        minWidth: 100
+      },
+      {
         id: columnsIds.phoneNumber,
         label: tUser(columnsIds.phoneNumber),
         minWidth: 100,
-        display: showCols[columnsIds.phoneNumber] ? "table-cell" : "none"
+        hide: !showCols[columnsIds.phoneNumber]
       },
       {
         id: columnsIds.email,
         label: tUser(columnsIds.email),
         minWidth: 100,
-        display: showCols[columnsIds.email] ? "table-cell" : "none"
-      },
-      {
-        id: columnsIds.name,
-        label: tUser(columnsIds.name),
-        minWidth: 100,
-        display: showCols[columnsIds.name] ? "table-cell" : "none"
+        hide: !showCols[columnsIds.email]
       },
       {
         id: columnsIds.address,
         label: tUser(columnsIds.address),
         minWidth: 100,
-        display: showCols[columnsIds.address] ? "table-cell" : "none"
+        hide: !showCols[columnsIds.address]
       },
       {
         id: columnsIds.gender,
         label: tUser(columnsIds.gender),
         minWidth: 100,
-        display: showCols[columnsIds.gender] ? "table-cell" : "none"
+        hide: !showCols[columnsIds.gender]
       },
       {
         id: columnsIds.dob,
         label: tUser(columnsIds.dob),
         minWidth: 100,
-        display: showCols[columnsIds.dob] ? "table-cell" : "none"
+        hide: !showCols[columnsIds.dob]
       },
       {
         id: columnsIds.healthInsurance,
         label: tUser(columnsIds.healthInsurance),
         minWidth: 200,
-        display: showCols[columnsIds.healthInsurance] ? "table-cell" : "none"
+        hide: !showCols[columnsIds.healthInsurance]
       },
       {
         id: columnsIds.status,
         label: tUser(columnsIds.status),
         minWidth: 200,
-        display: showCols[columnsIds.status] ? "table-cell" : "none"
+        hide: !showCols[columnsIds.status]
       },
       {
         id: columnsIds.action,
         label: "",
-        minWidth: 100,
-        display: showCols[columnsIds.action] ? "table-cell" : "none"
+        minWidth: 100
       }
     ],
     [locale, showCols]

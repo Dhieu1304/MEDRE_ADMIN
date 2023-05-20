@@ -25,7 +25,7 @@ export const columnsIds = {
 */
 
 export const initialShowCols = Object.keys(columnsIds).reduce((obj, key) => {
-  if (key === columnsIds.action) {
+  if (key === columnsIds.action || key === columnsIds.name) {
     return { ...obj };
   }
   return { ...obj, [key]: true };
