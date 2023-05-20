@@ -1,10 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 
-import { Grid, Button, Box, Select, MenuItem, ListItemText, InputAdornment, useTheme } from "@mui/material";
+import { Grid, Select, MenuItem, ListItemText, InputAdornment, useTheme } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import { RestartAlt as RestartAltIcon, Save as SaveIcon } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import { useAbility } from "@casl/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -28,7 +27,6 @@ function UserDetail() {
   const [user, setUser] = useState(new User());
 
   const { t } = useTranslation("userFeature", { keyPrefix: "UserDetail" });
-  const { t: tBtn } = useTranslation("userFeature", { keyPrefix: "UserDetail.button" });
 
   const { t: tUser } = useTranslation("userEntity", { keyPrefix: "properties" });
   const { t: tUserMessage } = useTranslation("userEntity", { keyPrefix: "messages" });
@@ -374,41 +372,6 @@ function UserDetail() {
               </Grid>
             </Grid>
           </SectionContent>
-
-          {canUpdateUser && (
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "flex-end"
-              }}
-            >
-              <Button
-                variant="contained"
-                onClick={() => {
-                  reset(defaultValues);
-                }}
-                sx={{
-                  ml: 2,
-                  bgcolor: theme.palette.warning.light
-                }}
-                startIcon={<RestartAltIcon color={theme.palette.warning.contrastText} />}
-              >
-                {tBtn("reset")}
-              </Button>
-
-              <Button
-                variant="contained"
-                onClick={handleSubmit(handleSaveDetail)}
-                sx={{
-                  ml: 2,
-                  bgcolor: theme.palette.success.light
-                }}
-                startIcon={<SaveIcon color={theme.palette.success.contrastText} />}
-              >
-                {tBtn("save")}
-              </Button>
-            </Box>
-          )}
         </PersonDetailWrapper>
       )}
 

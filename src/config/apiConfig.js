@@ -47,7 +47,8 @@ const bookingApi = {
 
 const patientApi = {
   createPatient: () => "/patient/create-for-staff",
-  patientList: () => "/patient/list-for-staff"
+  patientList: () => "/patient/list-for-staff",
+  patientDetail: (id) => `/patient/detail-for-staff/${id}`
 };
 
 export { authApi, userApi, staffApi, scheduleApi, expertiseApi, timeOffApi, bookingApi, patientApi };

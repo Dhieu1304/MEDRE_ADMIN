@@ -82,7 +82,38 @@ const getPatients = async ({ phoneNumber, name, page, limit, gender, address, he
   }
 };
 
+const getPatientDetail = async (id) => {
+  try {
+    // console.log("id: ", id);
+
+    const res = await axiosClient.get(patientApi.patientDetail(id));
+
+    // console.log("res: ", res);
+
+    if (res?.status) {
+      const patient = camelcaseKeys(res?.data, { deep: true });
+
+      return {
+        success: true,
+        patient,
+        message: res?.message
+      };
+    }
+    return {
+      success: false,
+      message: res?.message || `Status is ${res.status}`
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
 export default {
   createPatient,
-  getPatients
+  getPatients,
+  getPatientDetail
 };
