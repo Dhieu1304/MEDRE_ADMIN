@@ -289,8 +289,8 @@
 
 // export default SettingList;
 
-const SettingList = () => {
+function SettingList() {
   return <div>SettingList</div>;
-};
+}
 
 export default SettingList;
