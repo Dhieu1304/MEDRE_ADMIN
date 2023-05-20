@@ -7,6 +7,7 @@ import StaffPage from "../pages/StaffPage/StaffPage";
 import SchedulePage from "../pages/SchedulePage";
 import MeetingPage from "../pages/MeetingPage";
 import UserPage from "../pages/UserPage/UserPage";
+import PatientPage from "../pages/PatientPage/PatientPage";
 
 // Public routes
 const publicRoutes = [
@@ -18,6 +19,7 @@ const privateRoutes = [
   { path: routeConfig.home, component: HomePage },
   { path: `${routeConfig.staff}/*`, component: StaffPage },
   { path: `${routeConfig.user}/*`, component: UserPage },
+  { path: `${routeConfig.patient}/*`, component: PatientPage },
   { path: `${routeConfig.schedule}/*`, component: SchedulePage },
   { path: `${routeConfig.payment}/*`, component: PaymentPage },
   { path: `${routeConfig.meeting}/*`, component: MeetingPage, layout: null },

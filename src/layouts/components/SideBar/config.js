@@ -14,7 +14,7 @@ export const sideBarItems = [
     icon: <FontAwesomeIcon icon={faUsers} width={20} />
   },
   {
-    to: routeConfig.home,
+    to: routeConfig.patient,
     label: "patient_label",
     icon: <FontAwesomeIcon icon={faHospitalUser} width={20} />
   },

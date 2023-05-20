@@ -4,6 +4,7 @@ const routeConfig = {
   payment: "/payment",
   staff: "/staff",
   user: "/user",
+  patient: "/patient",
   schedule: "/schedule",
   meeting: "/meeting",
   default: "/*"
