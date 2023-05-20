@@ -82,7 +82,7 @@ export const useStaffRolesContantTranslation = () => {
 export const useStaffStatusesContantTranslation = () => {
   const { locale } = useAppConfigStore();
 
-  const { t: tStaffStatus } = useTranslation("staffEntity", { keyPrefix: "constants.statues" });
+  const { t: tStaffStatus } = useTranslation("staffEntity", { keyPrefix: "constants.statuses" });
 
   const [staffStatusContantList, staffStatusContantListObj] = useMemo(() => {
     const list = [

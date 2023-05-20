@@ -164,8 +164,6 @@ function StaffFiltersForm({ expertisesList }) {
 
               return (
                 <MenuItem key={item?.value} value={item?.value}>
-                  {/* role không lấy theo ID nên để
-                          checked={watch("role")?.indexOf(item?.value) > -1}   */}
                   <Checkbox checked={watch().gender === item?.value} />
                   <ListItemText primary={item?.label} />
                 </MenuItem>

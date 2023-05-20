@@ -3,12 +3,10 @@ import PropTypes from "prop-types";
 import {
   Table,
   TableBody,
-  TableCell,
   TableContainer,
   TableHead,
   TableRow,
   Paper,
-  Box,
   Typography,
   IconButton,
   useTheme
@@ -16,8 +14,9 @@ import {
 
 import { Link, useNavigate } from "react-router-dom";
 import { CalendarMonth as CalendarMonthIcon, Search as SearchIcon } from "@mui/icons-material";
-
 import { useTranslation } from "react-i18next";
+import formatDate from "date-and-time";
+
 import StaffRoleStatusButton from "../components/StaffRoleStatusButton";
 
 import { Can } from "../../../store/AbilityStore";
@@ -25,6 +24,7 @@ import { staffActionAbility, staffStatuses } from "../../../entities/Staff";
 import Staff from "../../../entities/Staff/Staff";
 import { columnsIds } from "./utils";
 import { useStaffGendersContantTranslation } from "../hooks/useStaffConstantsTranslation";
+import CustomTableCell, { customTableCellVariant } from "../../../components/CustomTable/CustomTableCell";
 
 function StaffTable({
   staffs,
@@ -49,29 +49,20 @@ function StaffTable({
         <TableHead>
           <TableRow>
             {columns?.map((column) => {
-              const firstColSx =
-                column?.id === columnsIds.name
-                  ? {
-                      position: "sticky",
-                      left: 0,
-                      zIndex: 4
-                    }
-                  : {};
-
-              return (
-                <TableCell
-                  key={column.id}
-                  align="left"
-                  style={{ minWidth: column.minWidth }}
-                  sx={{
-                    fontWeight: 600,
-                    display: column.display,
-                    zIndex: 1,
-                    ...firstColSx
-                  }}
+              const minWidth = column?.minWidth;
+              return column?.id === columnsIds.name ? (
+                <CustomTableCell sx={{ minWidth }} key={column?.id} variant={customTableCellVariant.FIRST_HEAD_CELL}>
+                  {column.label}
+                </CustomTableCell>
+              ) : (
+                <CustomTableCell
+                  sx={{ minWidth }}
+                  hide={column?.hide}
+                  key={column?.id}
+                  variant={customTableCellVariant.HEAD_CELL}
                 >
                   {column.label}
-                </TableCell>
+                </CustomTableCell>
               );
             })}
           </TableRow>
@@ -81,129 +72,42 @@ function StaffTable({
             const staff = new Staff(currentStaff);
             return (
               <TableRow key={staff?.id}>
-                <TableCell
-                  align="left"
-                  sx={{
-                    display: "table-cell",
-                    position: "sticky",
-                    left: 0,
-                    zIndex: 2,
-                    minWidth: 120,
-                    backgroundColor: "white"
-                  }}
-                >
-                  {staff?.name}
-                </TableCell>
-                <TableCell
-                  component="th"
-                  scope="row"
-                  sx={{
-                    display: showCols?.username ? "table-cell" : "none",
-                    zIndex: 1
-                  }}
-                >
-                  {staff?.username}
-                </TableCell>
-                <TableCell
-                  align="left"
-                  sx={{
-                    display: showCols?.phoneNumber ? "table-cell" : "none",
-                    zIndex: 1
-                  }}
-                >
+                <CustomTableCell variant={customTableCellVariant.FIRST_BODY_CELL}>{staff?.name}</CustomTableCell>
+                <CustomTableCell hide={!showCols?.username}>{staff?.username}</CustomTableCell>
+
+                <CustomTableCell hide={!showCols?.phoneNumber}>
                   <Typography variant="inherit">{staff?.phoneNumber}</Typography>
                   {!staff.phoneVerified && (
                     <Typography variant="caption" color={theme.palette.error.light}>
                       {tStaffMessage("phoneVerifiedFailed")}
                     </Typography>
                   )}
-                </TableCell>
-                <TableCell
-                  align="left"
-                  sx={{
-                    display: showCols?.email ? "table-cell" : "none",
-                    zIndex: 1
-                  }}
-                >
+                </CustomTableCell>
+
+                <CustomTableCell hide={!showCols?.email}>
                   <Typography variant="inherit">{staff?.email}</Typography>
                   {!staff.emailVerified && (
                     <Typography variant="caption" color={theme.palette.error.light}>
                       {tStaffMessage("emailVerifiedFailed")}
                     </Typography>
                   )}
-                </TableCell>
-                <TableCell
-                  align="left"
-                  sx={{
-                    display: showCols?.address ? "table-cell" : "none",
-                    zIndex: 1
-                  }}
-                >
-                  {staff?.address}
-                </TableCell>
-                <TableCell
-                  align="left"
-                  sx={{
-                    display: showCols?.gender ? "table-cell" : "none",
-                    zIndex: 1
-                  }}
-                >
+                </CustomTableCell>
+
+                <CustomTableCell hide={!showCols?.address}>{staff?.address}</CustomTableCell>
+
+                <CustomTableCell hide={!showCols?.gender}>
                   {staffGenderContantListObj?.[staff?.gender]?.label}
-                </TableCell>
-                <TableCell
-                  align="left"
-                  sx={{
-                    display: showCols?.dob ? "table-cell" : "none",
-                    zIndex: 1
-                  }}
-                >
-                  {staff?.dob}
-                </TableCell>
+                </CustomTableCell>
 
-                <TableCell
-                  align="left"
-                  sx={{
-                    display: showCols?.healthInsurance ? "table-cell" : "none",
-                    zIndex: 1
-                  }}
-                >
-                  {staff?.healthInsurance}
-                </TableCell>
-                <TableCell
-                  align="left"
-                  sx={{
-                    display: showCols?.description ? "table-cell" : "none",
-                    zIndex: 1
-                  }}
-                >
-                  {staff?.description}
-                </TableCell>
-                <TableCell
-                  align="left"
-                  sx={{
-                    display: showCols?.education ? "table-cell" : "none",
-                    zIndex: 1
-                  }}
-                >
-                  {staff?.education}
-                </TableCell>
-                <TableCell
-                  align="left"
-                  sx={{
-                    display: showCols?.certificate ? "table-cell" : "none",
-                    zIndex: 1
-                  }}
-                >
-                  {staff?.certificate}
-                </TableCell>
+                <CustomTableCell hide={!showCols?.dob}>
+                  {staff?.dob && formatDate.format(new Date(staff?.dob), "DD/MM/YYYY")}
+                </CustomTableCell>
+                <CustomTableCell hide={!showCols?.healthInsurance}>{staff?.healthInsurance}</CustomTableCell>
+                <CustomTableCell hide={!showCols?.description}>{staff?.description}</CustomTableCell>
+                <CustomTableCell hide={!showCols?.education}>{staff?.education}</CustomTableCell>
+                <CustomTableCell hide={!showCols?.certificate}>{staff?.certificate}</CustomTableCell>
 
-                <TableCell
-                  align="left"
-                  sx={{
-                    display: showCols?.role ? "table-cell" : "none",
-                    zIndex: 1
-                  }}
-                >
+                <CustomTableCell>
                   <Can I={staffActionAbility.UPDATE_ROLE} a={staff}>
                     <StaffRoleStatusButton
                       variant={staff?.role}
@@ -221,14 +125,9 @@ function StaffTable({
                       }}
                     />
                   </Can>
-                </TableCell>
-                <TableCell
-                  align="left"
-                  sx={{
-                    display: showCols?.status ? "table-cell" : "none",
-                    zIndex: 1
-                  }}
-                >
+                </CustomTableCell>
+
+                <CustomTableCell>
                   <Can I={staffActionAbility.BLOCK} a={staff}>
                     {staff?.blocked ? (
                       <StaffRoleStatusButton
@@ -256,32 +155,25 @@ function StaffTable({
                       }}
                     />
                   </Can>
-                </TableCell>
-                <TableCell align="left">
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      alignItems: "center"
+                </CustomTableCell>
+
+                <CustomTableCell variant={customTableCellVariant.ACTION_BODY_CELL}>
+                  <Link
+                    to={`${staff?.id}/schedule`}
+                    // onClick={() => {
+                    //   navigate(`${staff?.id}/schedule`, { relative: true });
+                    // }}
+                  >
+                    <CalendarMonthIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
+                  </Link>
+                  <IconButton
+                    onClick={() => {
+                      navigate(staff?.id, { relative: true });
                     }}
                   >
-                    <Link
-                      to={`${staff?.id}/schedule`}
-                      // onClick={() => {
-                      //   navigate(`${staff?.id}/schedule`, { relative: true });
-                      // }}
-                    >
-                      <CalendarMonthIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
-                    </Link>
-                    <IconButton
-                      onClick={() => {
-                        navigate(staff?.id, { relative: true });
-                      }}
-                    >
-                      <SearchIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
-                    </IconButton>
-                  </Box>
-                </TableCell>
+                    <SearchIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
+                  </IconButton>
+                </CustomTableCell>
               </TableRow>
             );
           })}

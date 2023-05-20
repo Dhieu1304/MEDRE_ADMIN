@@ -77,87 +77,85 @@ function StaffList({ expertisesList }) {
       {
         id: columnsIds.name,
         label: tStaff(columnsIds.name),
-        minWidth: 200,
-        display: "table-cell"
+        minWidth: 200
       },
       {
         id: columnsIds.username,
         label: tStaff(columnsIds.username),
         minWidth: 150,
-        display: showCols[columnsIds.username] ? "table-cell" : "none"
+        hide: !showCols[columnsIds.username]
       },
       {
         id: columnsIds.phoneNumber,
         label: tStaff(columnsIds.phoneNumber),
         minWidth: 150,
-        display: showCols[columnsIds.phoneNumber] ? "table-cell" : "none"
+        hide: !showCols[columnsIds.phoneNumber]
       },
       {
         id: columnsIds.email,
         label: tStaff(columnsIds.email),
         minWidth: 150,
-        display: showCols[columnsIds.email] ? "table-cell" : "none"
+        hide: !showCols[columnsIds.email]
       },
       {
         id: columnsIds.address,
         label: tStaff(columnsIds.address),
         minWidth: 150,
-        display: showCols[columnsIds.address] ? "table-cell" : "none"
+        hide: !showCols[columnsIds.address]
       },
       {
         id: columnsIds.gender,
         label: tStaff(columnsIds.gender),
         minWidth: 100,
-        display: showCols[columnsIds.gender] ? "table-cell" : "none"
+        hide: !showCols[columnsIds.gender]
       },
       {
         id: columnsIds.dob,
         label: tStaff(columnsIds.dob),
         minWidth: 150,
-        display: showCols[columnsIds.dob] ? "table-cell" : "none"
+        hide: !showCols[columnsIds.dob]
       },
       {
         id: columnsIds.healthInsurance,
         label: tStaff(columnsIds.healthInsurance),
         minWidth: 200,
-        display: showCols[columnsIds.healthInsurance] ? "table-cell" : "none"
+        hide: !showCols[columnsIds.healthInsurance]
       },
       {
         id: columnsIds.description,
         label: tStaff(columnsIds.description),
         minWidth: 400,
-        display: showCols[columnsIds.description] ? "table-cell" : "none"
+        hide: !showCols[columnsIds.description]
       },
       {
         id: columnsIds.education,
         label: tStaff(columnsIds.education),
         minWidth: 150,
-        display: showCols[columnsIds.education] ? "table-cell" : "none"
+        hide: !showCols[columnsIds.education]
       },
       {
         id: columnsIds.certificate,
         label: tStaff(columnsIds.certificate),
         minWidth: 150,
-        display: showCols[columnsIds.certificate] ? "table-cell" : "none"
+        hide: !showCols[columnsIds.certificate]
       },
 
       {
         id: columnsIds.role,
         label: tStaff(columnsIds.role),
         minWidth: 120,
-        display: showCols[columnsIds.role] ? "table-cell" : "none"
+        hide: !showCols[columnsIds.role]
       },
       {
         id: columnsIds.status,
         label: tStaff(columnsIds.status),
         minWidth: 200,
-        display: showCols[columnsIds.status] ? "table-cell" : "none"
+        hide: !showCols[columnsIds.status]
       },
       {
         id: columnsIds.action,
         label: "",
-        minWidth: 80,
-        display: "table-cell"
+        minWidth: 80
       }
     ],
     [locale, showCols]

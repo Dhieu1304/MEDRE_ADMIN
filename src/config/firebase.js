@@ -24,12 +24,12 @@ export const requestPermission = () => {
       getToken(messaging, {
         vapidKey: process.env.REACT_APP_FIREBASE_VAPID_KEY
       }).then((currentToken) => {
-        return currentToken;
         // if (currentToken) {
         //   console.log("currentToken: ", currentToken);
         // } else {
         //   console.log("Can not get token");
         // }
+        return currentToken;
       });
     } else {
       // console.log("Do not have permission!");
