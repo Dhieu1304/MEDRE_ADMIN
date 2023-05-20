@@ -5,6 +5,8 @@
     "patient_label": "Patient",
     "payment_label": "Payment",
     "schedule_label": "Schedule",
+    "setting_label": "Setting",
+    "meeting_label": "Metting",
     "booking_label": "Booking"
   },
   "header": {

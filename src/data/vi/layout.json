@@ -5,6 +5,8 @@
     "patient_label": "Bệnh nhân",
     "payment_label": "Thanh toán",
     "schedule_label": "Lịch trình",
+    "setting_label": "Cài đặt",
+    "meeting_label": "Cuộc hẹn",
     "booking_label": "Đặt hẹn"
   },
   "header": {
