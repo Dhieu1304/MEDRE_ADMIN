@@ -1,15 +1,12 @@
-import React, { useMemo } from "react";
 import PropTypes from "prop-types";
 
 import {
   Table,
   TableBody,
-  TableCell,
   TableContainer,
   TableHead,
   TableRow,
   Paper,
-  Box,
   Typography,
   IconButton,
   useTheme
@@ -23,26 +20,18 @@ import { useTranslation } from "react-i18next";
 import UserStatusButton from "../components/UserStatusButton";
 
 import { Can } from "../../../store/AbilityStore";
-import { userActionAbility, userGenders, userStatuses } from "../../../entities/User";
+import { userActionAbility, userStatuses } from "../../../entities/User";
 import User from "../../../entities/User/User";
-import { useAppConfigStore } from "../../../store/AppConfigStore";
 import CustomTableCell, { customTableCellVariant } from "../../../components/CustomTable/CustomTableCell";
 import { columnsIds } from "./utils";
+import { useUserGendersContantTranslation } from "../hooks/useUserConstantsTranslation";
 
 function UserTable({ users, columns, showCols, notHaveAccessModal, blockUserModal, unblockUserModal }) {
   const theme = useTheme();
-  const { locale } = useAppConfigStore();
 
   const { t: tUserMessage } = useTranslation("userEntity", { keyPrefix: "messages" });
-  const { t: tUserGender } = useTranslation("userEntity", { keyPrefix: "constants.genders" });
 
-  const userGendersObj = useMemo(() => {
-    return {
-      [userGenders.MALE]: tUserGender("male"),
-      [userGenders.FEMALE]: tUserGender("female"),
-      [userGenders.OTHER]: tUserGender("other")
-    };
-  }, [locale]);
+  const [, userGenderContantListObj] = useUserGendersContantTranslation();
 
   const navigate = useNavigate();
 
@@ -97,7 +86,7 @@ function UserTable({ users, columns, showCols, notHaveAccessModal, blockUserModa
 
                 <CustomTableCell hide={!showCols?.address}>{user?.address}</CustomTableCell>
 
-                <CustomTableCell hide={!showCols?.gender}>{userGendersObj?.[user?.gender]}</CustomTableCell>
+                <CustomTableCell hide={!showCols?.gender}>{userGenderContantListObj[user?.gender]?.label}</CustomTableCell>
 
                 <CustomTableCell hide={!showCols?.dob}>
                   {user?.dob && formatDate.format(new Date(user?.dob), "DD/MM/YYYY")}
