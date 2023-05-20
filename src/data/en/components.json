@@ -27,5 +27,14 @@
       "hideFilterCollapse": "Hide filter",
       "showFilterCollapse": "Show Filter"
     }
+  },
+
+  "PersonDetailWrapper": {
+    "PersonDetailAction": {
+      "button": {
+        "reset": "Reset",
+        "save": "Save"
+      }
+    }
   }
 }

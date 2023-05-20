@@ -2,9 +2,9 @@ import PropTypes from "prop-types";
 import { Box, Button, useTheme } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { Lock as LockIcon, LockOpen as LockOpenIcon } from "@mui/icons-material";
-import { userStatus } from "../../../entities/User";
+import { userStatuses } from "../../../entities/User";
 
-const { STATUS_BLOCK, STATUS_UNBLOCK } = userStatus;
+const { STATUS_BLOCK, STATUS_UNBLOCK } = userStatuses;
 
 const UserStatusButton = ({ variant, onClick }) => {
   const { t: tStatus } = useTranslation("userEntity", { keyPrefix: "constants.statuses" });

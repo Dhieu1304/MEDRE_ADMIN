@@ -16,7 +16,7 @@ export const userGenders = {
   OTHER: "Other"
 };
 
-export const userStatus = {
+export const userStatuses = {
   STATUS_BLOCK: "Block",
   STATUS_UNBLOCK: "Unblock"
 };

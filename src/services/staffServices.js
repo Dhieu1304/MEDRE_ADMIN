@@ -293,7 +293,7 @@ const editStaffInfo = async ({
       dob,
       description,
       education,
-      healthInsurance,
+      health_insurance: healthInsurance,
       certificate
       // expertises
     });
@@ -333,18 +333,23 @@ const editMyProfile = async ({
   certificate
   // expertises
 }) => {
+  const dataBody = cleanUndefinedAndEmptyStrValueObject({
+    name,
+    address,
+    gender,
+    dob,
+    description,
+    education,
+    health_insurance: healthInsurance,
+    certificate
+    // expertises
+  });
+  // console.log("dataBody: ", dataBody);
+
   try {
-    const res = await axiosClient.post(staffApi.editMyProfile(), {
-      name,
-      address,
-      gender,
-      dob,
-      description,
-      education,
-      healthInsurance,
-      certificate
-      // expertises
-    });
+    const res = await axiosClient.post(staffApi.editMyProfile(), dataBody);
+
+    // console.log("res: ", res);
 
     if (res?.status) {
       const staff = camelcaseKeys(res?.data?.staff, { deep: true });

@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { Box, Typography } from "@mui/material";
 
-const SectionContent = ({ title, children }) => {
+function SectionContent({ title, children }) {
   return (
     <Box sx={{ mb: 4 }}>
       <Typography variant="h4" sx={{ mb: 4 }}>
@@ -10,7 +10,7 @@ const SectionContent = ({ title, children }) => {
       {children}
     </Box>
   );
-};
+}
 
 SectionContent.propTypes = {
   title: PropTypes.string.isRequired,

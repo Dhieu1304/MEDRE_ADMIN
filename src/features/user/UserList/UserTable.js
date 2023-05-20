@@ -22,7 +22,7 @@ import { useTranslation } from "react-i18next";
 import UserStatusButton from "../components/UserStatusButton";
 
 import { Can } from "../../../store/AbilityStore";
-import { userActionAbility, userGenders, userStatus } from "../../../entities/User";
+import { userActionAbility, userGenders, userStatuses } from "../../../entities/User";
 import User from "../../../entities/User/User";
 import { useAppConfigStore } from "../../../store/AppConfigStore";
 
@@ -147,7 +147,7 @@ function UserTable({ users, columns, showCols, notHaveAccessModal, blockUserModa
                   <Can I={userActionAbility.BLOCK} a={user}>
                     {user?.blocked ? (
                       <UserStatusButton
-                        variant={userStatus.STATUS_BLOCK}
+                        variant={userStatuses.STATUS_BLOCK}
                         onClick={() => {
                           unblockUserModal.setShow(true);
                           unblockUserModal.setData(user);
@@ -155,7 +155,7 @@ function UserTable({ users, columns, showCols, notHaveAccessModal, blockUserModa
                       />
                     ) : (
                       <UserStatusButton
-                        variant={userStatus.STATUS_UNBLOCK}
+                        variant={userStatuses.STATUS_UNBLOCK}
                         onClick={() => {
                           blockUserModal.setShow(true);
                           blockUserModal.setData(user);
@@ -165,7 +165,7 @@ function UserTable({ users, columns, showCols, notHaveAccessModal, blockUserModa
                   </Can>
                   <Can not I={userActionAbility.BLOCK} a={user}>
                     <UserStatusButton
-                      variant={user?.blocked ? userStatus.STATUS_BLOCK : userStatus.STATUS_UNBLOCK}
+                      variant={user?.blocked ? userStatuses.STATUS_BLOCK : userStatuses.STATUS_UNBLOCK}
                       onClick={() => {
                         notHaveAccessModal.setShow(true);
                       }}

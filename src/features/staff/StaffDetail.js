@@ -1,25 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 
-import {
-  Grid,
-  Button,
-  Box,
-  Avatar,
-  Card,
-  CardHeader,
-  Select,
-  MenuItem,
-  Checkbox,
-  ListItemText,
-  IconButton,
-  InputAdornment,
-  useTheme
-} from "@mui/material";
+import { Grid, Select, MenuItem, Checkbox, ListItemText, IconButton, InputAdornment, useTheme } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-import { Add as AddIcon, RestartAlt as RestartAltIcon, Save as SaveIcon } from "@mui/icons-material";
+import { Add as AddIcon } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import { useAbility } from "@casl/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -43,12 +29,12 @@ import { BlockStaffModal } from "./components";
 import { WithExpertisesLoaderWrapper } from "./hocs";
 import UnblockStaffModal from "./components/UnblockStaffModal";
 import SectionContent from "../../components/SectionContent";
+import PersonDetailWrapper from "../../components/PersonDetailWrapper/PersonDetailWrapper";
 
 function StaffDetail({ staffId, expertisesList, loadExpertisesList }) {
   const [staff, setStaff] = useState();
 
   const { t } = useTranslation("staffFeature", { keyPrefix: "StaffDetail" });
-  const { t: tBtn } = useTranslation("staffFeature", { keyPrefix: "StaffDetail.button" });
 
   const { t: tStaff } = useTranslation("staffEntity", { keyPrefix: "properties" });
   const { t: tStaffMessage } = useTranslation("staffEntity", { keyPrefix: "messages" });
@@ -236,531 +222,443 @@ function StaffDetail({ staffId, expertisesList, loadExpertisesList }) {
 
   return (
     <>
-      <Box
-        sx={{
-          border: "1px solid rgba(0,0,0,0.1)",
-          borderRadius: 4,
-          px: {
-            xl: 8,
-            lg: 6,
-            md: 0
-          },
-          pt: 5,
-          pb: 10,
-          position: "relative"
-        }}
-      >
-        <CustomOverlay open={isLoading} />
-
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center"
+      {staff && (
+        <PersonDetailWrapper
+          person={staff}
+          canUpdate={canUpdateStaff}
+          handleReset={() => {
+            reset(defaultValues);
           }}
+          handleSave={handleSubmit(handleSaveDetail)}
         >
-          <Card
-            sx={{
-              boxShadow: "none"
-            }}
-          >
-            <CardHeader
-              avatar={
-                <Avatar
-                  onClick={() => {
-                    changeAvatarModal.setShow(true);
-                    changeAvatarModal.setData(staff);
+          <CustomOverlay open={isLoading} />
+          <SectionContent title={t("title.identify")}>
+            <Grid container spacing={3}>
+              <Grid item xs={12} sm={12} md={4} lg={4}>
+                <CustomInput
+                  disabled={!canUpdateStaff}
+                  showCanEditIcon
+                  control={control}
+                  rules={{
+                    required: tInputValidation("required"),
+                    pattern: {
+                      value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+                      message: tInputValidation("format")
+                    },
+                    maxLength: {
+                      value: staffInputValidate.EMAIL_MAX_LENGTH,
+                      message: tInputValidation("maxLength", {
+                        maxLength: staffInputValidate.EMAIL_MAX_LENGTH
+                      })
+                    }
                   }}
-                  sx={{ width: 150, height: 150, cursor: "pointer" }}
-                  alt={staff?.name}
-                  src={staff?.image}
+                  label={tStaff("email")}
+                  trigger={trigger}
+                  name="email"
+                  type="email"
+                  message={
+                    staff?.emailVerified && staff?.email === watch().email
+                      ? {
+                          type: "success",
+                          text: tStaffMessage("emailVerifiedSuccess")
+                        }
+                      : {
+                          type: "error",
+                          text: tStaffMessage("emailVerifiedFailed")
+                        }
+                  }
                 />
-              }
-              title={staff?.name}
-              subheader={staff?.id}
-            />
-          </Card>
-        </Box>
+              </Grid>
+              <Grid item xs={12} sm={12} md={4} lg={4}>
+                <CustomInput
+                  disabled={!canUpdateStaff}
+                  showCanEditIcon
+                  control={control}
+                  rules={{
+                    required: tInputValidation("required"),
+                    maxLength: {
+                      value: staffInputValidate.USERNAME_MAX_LENGTH,
+                      message: tInputValidation("maxLength", {
+                        maxLength: staffInputValidate.USERNAME_MAX_LENGTH
+                      })
+                    }
+                  }}
+                  label={tStaff("username")}
+                  trigger={trigger}
+                  name="username"
+                  type="text"
+                />
+              </Grid>
+              <Grid item xs={12} sm={12} md={4} lg={4}>
+                <CustomInput
+                  disabled={!canUpdateStaff}
+                  showCanEditIcon
+                  control={control}
+                  rules={{
+                    required: tInputValidation("required"),
+                    pattern: {
+                      value: /(84|0[3|5|7|8|9])+([0-9]{8})\b/,
+                      message: tInputValidation("format")
+                    }
+                  }}
+                  label={tStaff("phoneNumber")}
+                  trigger={trigger}
+                  name="phoneNumber"
+                  type="phone"
+                  message={
+                    staff?.phoneVerified && staff?.phoneNumber === watch().phoneNumber
+                      ? {
+                          type: "success",
+                          text: tStaffMessage("phoneVerifiedSuccess")
+                        }
+                      : {
+                          type: "error",
+                          text: tStaffMessage("phoneVerifiedFailed")
+                        }
+                  }
+                />
+              </Grid>
+            </Grid>
+          </SectionContent>
 
-        <SectionContent title={t("title.identify")}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} sm={12} md={4} lg={4}>
-              <CustomInput
-                disabled={!canUpdateStaff}
-                showCanEditIcon
-                control={control}
-                rules={{
-                  required: tInputValidation("required"),
-                  pattern: {
-                    value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-                    message: tInputValidation("format")
-                  },
-                  maxLength: {
-                    value: staffInputValidate.EMAIL_MAX_LENGTH,
-                    message: tInputValidation("maxLength", {
-                      maxLength: staffInputValidate.EMAIL_MAX_LENGTH
-                    })
-                  }
-                }}
-                label={tStaff("email")}
-                trigger={trigger}
-                name="email"
-                type="email"
-                message={
-                  staff?.emailVerified && staff?.email === watch().email
-                    ? {
-                        type: "success",
-                        text: tStaffMessage("emailVerifiedSuccess")
-                      }
-                    : {
-                        type: "error",
-                        text: tStaffMessage("emailVerifiedFailed")
-                      }
-                }
-              />
-            </Grid>
-            <Grid item xs={12} sm={12} md={4} lg={4}>
-              <CustomInput
-                disabled={!canUpdateStaff}
-                showCanEditIcon
-                control={control}
-                rules={{
-                  required: tInputValidation("required"),
-                  maxLength: {
-                    value: staffInputValidate.USERNAME_MAX_LENGTH,
-                    message: tInputValidation("maxLength", {
-                      maxLength: staffInputValidate.USERNAME_MAX_LENGTH
-                    })
-                  }
-                }}
-                label={tStaff("username")}
-                trigger={trigger}
-                name="username"
-                type="text"
-              />
-            </Grid>
-            <Grid item xs={12} sm={12} md={4} lg={4}>
-              <CustomInput
-                disabled={!canUpdateStaff}
-                showCanEditIcon
-                control={control}
-                rules={{
-                  required: tInputValidation("required"),
-                  pattern: {
-                    value: /(84|0[3|5|7|8|9])+([0-9]{8})\b/,
-                    message: tInputValidation("format")
-                  }
-                }}
-                label={tStaff("phoneNumber")}
-                trigger={trigger}
-                name="phoneNumber"
-                type="phone"
-                message={
-                  staff?.phoneVerified && staff?.phoneNumber === watch().phoneNumber
-                    ? {
-                        type: "success",
-                        text: tStaffMessage("phoneVerifiedSuccess")
-                      }
-                    : {
-                        type: "error",
-                        text: tStaffMessage("phoneVerifiedFailed")
-                      }
-                }
-              />
-            </Grid>
-          </Grid>
-        </SectionContent>
-
-        <SectionContent title={t("title.account")}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} sm={12} md={6} lg={6}>
-              <CustomInput
-                disabled
-                showCanEditIcon
-                control={control}
-                label={tStaff("role")}
-                trigger={trigger}
-                name="role"
-                type="text"
-                InputProps={
-                  canUpdateStaffRole && {
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <FontAwesomeIcon
-                          size="1x"
-                          icon={faGearIcon}
-                          onClick={() => {
-                            editStaffRoleModal.setShow(true);
-                            editStaffRoleModal.setData(staff);
-                          }}
-                          cursor="pointer"
-                          color={theme.palette.success.light}
-                        />
-                      </InputAdornment>
-                    )
-                  }
-                }
-              />
-            </Grid>
-            <Grid item xs={12} sm={12} md={6} lg={6}>
-              <CustomInput
-                disabled
-                showCanEditIcon
-                control={control}
-                label={tStaff("status")}
-                trigger={trigger}
-                name="status"
-                type="text"
-                InputProps={
-                  canBlockStaff && {
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        {staff?.blocked ? (
+          <SectionContent title={t("title.account")}>
+            <Grid container spacing={3}>
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <CustomInput
+                  disabled
+                  showCanEditIcon
+                  control={control}
+                  label={tStaff("role")}
+                  trigger={trigger}
+                  name="role"
+                  type="text"
+                  InputProps={
+                    canUpdateStaffRole && {
+                      endAdornment: (
+                        <InputAdornment position="end">
                           <FontAwesomeIcon
                             size="1x"
                             icon={faGearIcon}
                             onClick={() => {
-                              unblockStaffModal.setShow(true);
-                              unblockStaffModal.setData(staff);
-                            }}
-                            cursor="pointer"
-                            color={theme.palette.error.light}
-                          />
-                        ) : (
-                          <FontAwesomeIcon
-                            size="1x"
-                            icon={faGearIcon}
-                            onClick={() => {
-                              blockStaffModal.setShow(true);
-                              blockStaffModal.setData(staff);
+                              editStaffRoleModal.setShow(true);
+                              editStaffRoleModal.setData(staff);
                             }}
                             cursor="pointer"
                             color={theme.palette.success.light}
                           />
-                        )}
-                      </InputAdornment>
-                    )
-                  }
-                }
-              />
-            </Grid>
-          </Grid>
-        </SectionContent>
-
-        <SectionContent title={t("title.personality")}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} sm={12} md={12} lg={6}>
-              <CustomInput
-                disabled={!canUpdateStaff}
-                showCanEditIcon
-                control={control}
-                rules={{
-                  required: tInputValidation("required"),
-                  maxLength: {
-                    value: staffInputValidate.NAME_MAX_LENGTH,
-                    message: tInputValidation("maxLength", {
-                      maxLength: staffInputValidate.NAME_MAX_LENGTH
-                    })
-                  }
-                }}
-                label={tStaff("name")}
-                trigger={trigger}
-                name="name"
-                type="text"
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={12} md={12} lg={6}>
-              <CustomInput
-                disabled={!canUpdateStaff}
-                showCanEditIcon
-                control={control}
-                rules={{
-                  maxLength: {
-                    value: staffInputValidate.HEALTH_INSURANCE_MAX_LENGTH,
-                    message: tInputValidation("maxLength", {
-                      maxLength: staffInputValidate.HEALTH_INSURANCE_MAX_LENGTH
-                    })
-                  }
-                }}
-                label={tStaff("healthInsurance")}
-                trigger={trigger}
-                name="healthInsurance"
-                type="text"
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={12} md={6} lg={6}>
-              <CustomInput
-                disabled={!canUpdateStaff}
-                showCanEditIcon
-                control={control}
-                rules={{
-                  required: tInputValidation("required")
-                }}
-                label={tStaff("dob")}
-                trigger={trigger}
-                name="dob"
-                type="date"
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={12} md={6} lg={6}>
-              <CustomInput
-                disabled={!canUpdateStaff}
-                showCanEditIcon
-                control={control}
-                rules={{
-                  required: tInputValidation("required"),
-                  maxLength: {
-                    value: staffInputValidate.GENDER_MAX_LENGTH,
-                    message: tInputValidation("maxLength", {
-                      maxLength: staffInputValidate.GENDER_MAX_LENGTH
-                    })
-                  }
-                }}
-                label={tStaff("gender")}
-                trigger={trigger}
-                name="gender"
-                childrenType="select"
-              >
-                <Select
-                  renderValue={(selected) => {
-                    return tStaffGender(staffGendersListObj[selected]?.label);
-                  }}
-                >
-                  {staffGendersList.map((item) => {
-                    return (
-                      <MenuItem key={item?.value} value={item?.value}>
-                        <ListItemText primary={tStaffGender(item?.label)} />
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </CustomInput>
-            </Grid>
-
-            <Grid item xs={12} sm={12} md={12} lg={12}>
-              <CustomInput
-                disabled={!canUpdateStaff}
-                showCanEditIcon
-                control={control}
-                rules={{
-                  maxLength: {
-                    value: staffInputValidate.ADDRESS_MAX_LENGTH,
-                    message: tInputValidation("maxLength", {
-                      maxLength: staffInputValidate.ADDRESS_MAX_LENGTH
-                    })
-                  }
-                }}
-                label={tStaff("address")}
-                trigger={trigger}
-                name="address"
-                type="text"
-                multiline
-                rows={6}
-              />
-            </Grid>
-          </Grid>
-        </SectionContent>
-
-        <SectionContent title={t("title.doctor")}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} sm={12} md={6} lg={6}>
-              <CustomInput
-                disabled={!canUpdateStaff}
-                showCanEditIcon
-                control={control}
-                rules={{
-                  maxLength: {
-                    value: staffInputValidate.EDUCATION_MAX_LENGTH,
-                    message: tInputValidation("maxLength", {
-                      maxLength: staffInputValidate.EDUCATION_MAX_LENGTH
-                    })
-                  }
-                }}
-                label={tStaff("education")}
-                trigger={trigger}
-                name="education"
-                type="text"
-                multiline
-                rows={2}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={12} md={6} lg={6}>
-              <CustomInput
-                disabled={!canUpdateStaff}
-                showCanEditIcon
-                control={control}
-                rules={{
-                  maxLength: {
-                    value: staffInputValidate.CERTIFICATE_MAX_LENGTH,
-                    message: tInputValidation("maxLength", {
-                      maxLength: staffInputValidate.CERTIFICATE_MAX_LENGTH
-                    })
-                  }
-                }}
-                label={tStaff("certificate")}
-                trigger={trigger}
-                name="certificate"
-                type="text"
-                multiline
-                rows={2}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={12} md={12} lg={12}>
-              <CustomInput
-                disabled={!canUpdateStaff}
-                showCanEditIcon
-                control={control}
-                rules={{
-                  maxLength: {
-                    value: staffInputValidate.DESCRIPTION_MAX_LENGTH,
-                    message: tInputValidation("maxLength", {
-                      maxLength: staffInputValidate.DESCRIPTION_MAX_LENGTH
-                    })
-                  }
-                }}
-                label={tStaff("description")}
-                trigger={trigger}
-                name="description"
-                type="text"
-                multiline
-                rows={6}
-              />
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              sm={12}
-              md={12}
-              lg={12}
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "flex-start"
-              }}
-            >
-              <CustomInput
-                disabled={!canUpdateStaff}
-                showCanEditIcon
-                control={control}
-                rules={{}}
-                label={tStaff("expertises")}
-                trigger={trigger}
-                name="expertises"
-                childrenType="select"
-              >
-                <Select
-                  multiple
-                  renderValue={(selected) => {
-                    // if (Array.isArray(selected)) {
-                    //   const selectedValues = selected.map((key) => expertiseListObj[key]?.name);
-
-                    //   return (
-                    //     < >
-                    //       <List dense disablePadding>
-                    //         {selectedValues.map((value) => (
-                    //           <ListItem key={value}>
-                    //             <ListItemText primary={<Typography>{value}</Typography>} />
-                    //           </ListItem>
-                    //         ))}
-                    //       </List>
-                    //     </>
-                    //   );
-                    // }
-                    // return selected;
-
-                    if (Array.isArray(selected)) {
-                      const selectedValue = selected
-                        ?.map((cur) => {
-                          return expertiseListObj[cur]?.name;
-                        })
-                        ?.join(", ");
-                      return (
-                        <div
-                          style={{
-                            overflow: "auto",
-                            whiteSpace: "pre-wrap"
-                          }}
-                        >
-                          {selectedValue}
-                        </div>
-                      );
+                        </InputAdornment>
+                      )
                     }
-
-                    return selected;
-
-                    // if (Array.isArray(selected))
-                    //   return selected?.map((cur) => {
-                    //     return <p>{expertiseListObj[cur]?.name}</p>;
-                    //   });
-                  }}
-                >
-                  {expertisesList.map((item) => {
-                    return (
-                      <MenuItem key={item?.id} value={item?.id}>
-                        <Checkbox checked={watch().expertises?.indexOf(item?.id) > -1} />
-                        <ListItemText primary={item?.name} />
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </CustomInput>
-
-              <IconButton
-                onClick={() => {
-                  if (canAddExpertise) {
-                    addExpertiseModal.setShow(true);
-                  } else {
-                    notHaveAccessModal.setShow(true);
                   }
+                />
+              </Grid>
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <CustomInput
+                  disabled
+                  showCanEditIcon
+                  control={control}
+                  label={tStaff("status")}
+                  trigger={trigger}
+                  name="status"
+                  type="text"
+                  InputProps={
+                    canBlockStaff && {
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          {staff?.blocked ? (
+                            <FontAwesomeIcon
+                              size="1x"
+                              icon={faGearIcon}
+                              onClick={() => {
+                                unblockStaffModal.setShow(true);
+                                unblockStaffModal.setData(staff);
+                              }}
+                              cursor="pointer"
+                              color={theme.palette.error.light}
+                            />
+                          ) : (
+                            <FontAwesomeIcon
+                              size="1x"
+                              icon={faGearIcon}
+                              onClick={() => {
+                                blockStaffModal.setShow(true);
+                                blockStaffModal.setData(staff);
+                              }}
+                              cursor="pointer"
+                              color={theme.palette.success.light}
+                            />
+                          )}
+                        </InputAdornment>
+                      )
+                    }
+                  }
+                />
+              </Grid>
+            </Grid>
+          </SectionContent>
+
+          <SectionContent title={t("title.personality")}>
+            <Grid container spacing={3}>
+              <Grid item xs={12} sm={12} md={12} lg={6}>
+                <CustomInput
+                  disabled={!canUpdateStaff}
+                  showCanEditIcon
+                  control={control}
+                  rules={{
+                    required: tInputValidation("required"),
+                    maxLength: {
+                      value: staffInputValidate.NAME_MAX_LENGTH,
+                      message: tInputValidation("maxLength", {
+                        maxLength: staffInputValidate.NAME_MAX_LENGTH
+                      })
+                    }
+                  }}
+                  label={tStaff("name")}
+                  trigger={trigger}
+                  name="name"
+                  type="text"
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={12} md={12} lg={6}>
+                <CustomInput
+                  disabled={!canUpdateStaff}
+                  showCanEditIcon
+                  control={control}
+                  rules={{
+                    maxLength: {
+                      value: staffInputValidate.HEALTH_INSURANCE_MAX_LENGTH,
+                      message: tInputValidation("maxLength", {
+                        maxLength: staffInputValidate.HEALTH_INSURANCE_MAX_LENGTH
+                      })
+                    }
+                  }}
+                  label={tStaff("healthInsurance")}
+                  trigger={trigger}
+                  name="healthInsurance"
+                  type="text"
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <CustomInput
+                  disabled={!canUpdateStaff}
+                  showCanEditIcon
+                  control={control}
+                  rules={{
+                    required: tInputValidation("required")
+                  }}
+                  label={tStaff("dob")}
+                  trigger={trigger}
+                  name="dob"
+                  type="date"
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <CustomInput
+                  disabled={!canUpdateStaff}
+                  showCanEditIcon
+                  control={control}
+                  rules={{
+                    required: tInputValidation("required"),
+                    maxLength: {
+                      value: staffInputValidate.GENDER_MAX_LENGTH,
+                      message: tInputValidation("maxLength", {
+                        maxLength: staffInputValidate.GENDER_MAX_LENGTH
+                      })
+                    }
+                  }}
+                  label={tStaff("gender")}
+                  trigger={trigger}
+                  name="gender"
+                  childrenType="select"
+                >
+                  <Select
+                    renderValue={(selected) => {
+                      return tStaffGender(staffGendersListObj[selected]?.label);
+                    }}
+                  >
+                    {staffGendersList.map((item) => {
+                      return (
+                        <MenuItem key={item?.value} value={item?.value}>
+                          <ListItemText primary={tStaffGender(item?.label)} />
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </CustomInput>
+              </Grid>
+
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                <CustomInput
+                  disabled={!canUpdateStaff}
+                  showCanEditIcon
+                  control={control}
+                  rules={{
+                    maxLength: {
+                      value: staffInputValidate.ADDRESS_MAX_LENGTH,
+                      message: tInputValidation("maxLength", {
+                        maxLength: staffInputValidate.ADDRESS_MAX_LENGTH
+                      })
+                    }
+                  }}
+                  label={tStaff("address")}
+                  trigger={trigger}
+                  name="address"
+                  type="text"
+                  multiline
+                  rows={6}
+                />
+              </Grid>
+            </Grid>
+          </SectionContent>
+
+          <SectionContent title={t("title.doctor")}>
+            <Grid container spacing={3}>
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <CustomInput
+                  disabled={!canUpdateStaff}
+                  showCanEditIcon
+                  control={control}
+                  rules={{
+                    maxLength: {
+                      value: staffInputValidate.EDUCATION_MAX_LENGTH,
+                      message: tInputValidation("maxLength", {
+                        maxLength: staffInputValidate.EDUCATION_MAX_LENGTH
+                      })
+                    }
+                  }}
+                  label={tStaff("education")}
+                  trigger={trigger}
+                  name="education"
+                  type="text"
+                  multiline
+                  rows={2}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <CustomInput
+                  disabled={!canUpdateStaff}
+                  showCanEditIcon
+                  control={control}
+                  rules={{
+                    maxLength: {
+                      value: staffInputValidate.CERTIFICATE_MAX_LENGTH,
+                      message: tInputValidation("maxLength", {
+                        maxLength: staffInputValidate.CERTIFICATE_MAX_LENGTH
+                      })
+                    }
+                  }}
+                  label={tStaff("certificate")}
+                  trigger={trigger}
+                  name="certificate"
+                  type="text"
+                  multiline
+                  rows={2}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                <CustomInput
+                  disabled={!canUpdateStaff}
+                  showCanEditIcon
+                  control={control}
+                  rules={{
+                    maxLength: {
+                      value: staffInputValidate.DESCRIPTION_MAX_LENGTH,
+                      message: tInputValidation("maxLength", {
+                        maxLength: staffInputValidate.DESCRIPTION_MAX_LENGTH
+                      })
+                    }
+                  }}
+                  label={tStaff("description")}
+                  trigger={trigger}
+                  name="description"
+                  type="text"
+                  multiline
+                  rows={6}
+                />
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                sm={12}
+                md={12}
+                lg={12}
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "flex-start"
                 }}
               >
-                <AddIcon />
-              </IconButton>
+                <CustomInput
+                  disabled={!canUpdateStaff}
+                  showCanEditIcon
+                  control={control}
+                  rules={{}}
+                  label={tStaff("expertises")}
+                  trigger={trigger}
+                  name="expertises"
+                  childrenType="select"
+                >
+                  <Select
+                    multiple
+                    renderValue={(selected) => {
+                      if (Array.isArray(selected)) {
+                        const selectedValue = selected
+                          ?.map((cur) => {
+                            return expertiseListObj[cur]?.name;
+                          })
+                          ?.join(", ");
+                        return (
+                          <div
+                            style={{
+                              overflow: "auto",
+                              whiteSpace: "pre-wrap"
+                            }}
+                          >
+                            {selectedValue}
+                          </div>
+                        );
+                      }
+
+                      return selected;
+
+                      // if (Array.isArray(selected))
+                      //   return selected?.map((cur) => {
+                      //     return <p>{expertiseListObj[cur]?.name}</p>;
+                      //   });
+                    }}
+                  >
+                    {expertisesList.map((item) => {
+                      return (
+                        <MenuItem key={item?.id} value={item?.id}>
+                          <Checkbox checked={watch().expertises?.indexOf(item?.id) > -1} />
+                          <ListItemText primary={item?.name} />
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </CustomInput>
+
+                <IconButton
+                  onClick={() => {
+                    if (canAddExpertise) {
+                      addExpertiseModal.setShow(true);
+                    } else {
+                      notHaveAccessModal.setShow(true);
+                    }
+                  }}
+                >
+                  <AddIcon />
+                </IconButton>
+              </Grid>
             </Grid>
-          </Grid>
-        </SectionContent>
-
-        {canUpdateStaff && (
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end"
-            }}
-          >
-            <Button
-              variant="contained"
-              onClick={() => {
-                reset(defaultValues);
-              }}
-              sx={{
-                ml: 2,
-                bgcolor: theme.palette.warning.light
-              }}
-              startIcon={<RestartAltIcon color={theme.palette.warning.contrastText} />}
-            >
-              {tBtn("reset")}
-            </Button>
-
-            <Button
-              variant="contained"
-              onClick={handleSubmit(handleSaveDetail)}
-              sx={{
-                ml: 2,
-                bgcolor: theme.palette.success.light
-              }}
-              startIcon={<SaveIcon color={theme.palette.success.contrastText} />}
-            >
-              {tBtn("save")}
-            </Button>
-          </Box>
-        )}
-      </Box>
-
+          </SectionContent>
+        </PersonDetailWrapper>
+      )}
       {editStaffRoleModal.show && (
         <EditStaffRoleModal
           show={editStaffRoleModal.show}

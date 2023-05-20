@@ -26,5 +26,14 @@
       "hideFilterCollapse": "Ẩn bộ lọc",
       "showFilterCollapse": "Hiện bộ lọc"
     }
+  },
+
+  "PersonDetailWrapper": {
+    "PersonDetailAction": {
+      "button": {
+        "reset": "Đặt lại",
+        "save": "Lưu"
+      }
+    }
   }
 }

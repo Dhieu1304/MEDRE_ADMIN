@@ -1,19 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 
-import {
-  Grid,
-  Button,
-  Box,
-  Typography,
-  Avatar,
-  Card,
-  CardHeader,
-  Select,
-  MenuItem,
-  ListItemText,
-  InputAdornment,
-  useTheme
-} from "@mui/material";
+import { Grid, Button, Box, Select, MenuItem, ListItemText, InputAdornment, useTheme } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
@@ -28,11 +15,14 @@ import userServices from "../../services/userServices";
 import { useFetchingStore } from "../../store/FetchingApiStore/hooks";
 import CustomOverlay from "../../components/CustomOverlay";
 import { useCustomModal } from "../../components/CustomModal";
-import User, { userActionAbility, userGenders, userInputValidate, userStatus } from "../../entities/User";
+import User, { userActionAbility, userInputValidate, userStatuses } from "../../entities/User";
 import { AbilityContext } from "../../store/AbilityStore";
 import { NotHaveAccessModal } from "../auth";
 import { mergeObjectsWithoutNullAndUndefined } from "../../utils/objectUtil";
 import { BlockUserModal, UnblockUserModal } from "./components";
+import { useUserGendersContantTranslation } from "./hooks/useUserConstantsTranslation";
+import SectionContent from "../../components/SectionContent";
+import PersonDetailWrapper from "../../components/PersonDetailWrapper/PersonDetailWrapper";
 
 function UserDetail() {
   const [user, setUser] = useState(new User());
@@ -43,7 +33,6 @@ function UserDetail() {
   const { t: tUser } = useTranslation("userEntity", { keyPrefix: "properties" });
   const { t: tUserMessage } = useTranslation("userEntity", { keyPrefix: "messages" });
   const { t: tInputValidation } = useTranslation("input", { keyPrefix: "validation" });
-  const { t: tUserGender } = useTranslation("userEntity", { keyPrefix: "constants.genders" });
 
   const [defaultValues, setDefaultValues] = useState({
     phoneNumber: "",
@@ -67,32 +56,7 @@ function UserDetail() {
 
   const { isLoading, fetchApi } = useFetchingStore();
 
-  const userGendersList = useMemo(
-    () => [
-      {
-        value: userGenders.MALE,
-        label: "male"
-      },
-      {
-        value: userGenders.FEMALE,
-        label: "female"
-      },
-      {
-        value: userGenders.OTHER,
-        label: "other"
-      }
-    ],
-    []
-  );
-
-  const userGendersListObj = useMemo(() => {
-    return userGendersList.reduce((obj, cur) => {
-      return {
-        ...obj,
-        [cur?.value]: cur
-      };
-    }, {});
-  }, [userGendersList]);
+  const [userGenderContantList, userGenderContantListObj] = useUserGendersContantTranslation();
 
   const { control, trigger, watch, reset, handleSubmit } = useForm({
     mode: "onChange",
@@ -110,7 +74,7 @@ function UserDetail() {
 
         const newDefaultValues = {
           ...mergeObjectsWithoutNullAndUndefined(defaultValues, userData),
-          status: userData?.blocked ? userStatus.STATUS_BLOCK : userStatus.STATUS_UNBLOCK
+          status: userData?.blocked ? userStatuses.STATUS_BLOCK : userStatuses.STATUS_UNBLOCK
           // gender: ""
         };
 
@@ -173,311 +137,280 @@ function UserDetail() {
 
   return (
     <>
-      <Box
-        sx={{
-          border: "1px solid rgba(0,0,0,0.1)",
-          borderRadius: 4,
-          px: {
-            xl: 8,
-            lg: 6,
-            md: 0
-          },
-          pt: 5,
-          pb: 10,
-          position: "relative"
-        }}
-      >
-        <CustomOverlay open={isLoading} />
-
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center"
+      {user && (
+        <PersonDetailWrapper
+          person="user"
+          canUpdate={canUpdateUser}
+          handleReset={() => {
+            reset(defaultValues);
           }}
+          handleSave={handleSubmit(handleSaveDetail)}
         >
-          <Card
-            sx={{
-              boxShadow: "none"
-            }}
-          >
-            <CardHeader
-              avatar={<Avatar sx={{ width: 150, height: 150, cursor: "pointer" }} alt={user?.name} src={user?.image} />}
-              title={user?.name}
-              subheader={user?.id}
-            />
-          </Card>
-        </Box>
-
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h4" sx={{ mb: 4 }}>
-            {t("title.account")}
-          </Typography>
-          <Grid container spacing={3}>
-            <Grid item xs={12} sm={12} md={4} lg={4}>
-              <CustomInput
-                disabled={!canUpdateUser}
-                showCanEditIcon
-                control={control}
-                rules={{
-                  required: tInputValidation("required"),
-                  pattern: {
-                    value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-                    message: tInputValidation("format")
-                  },
-                  maxLength: {
-                    value: userInputValidate.EMAIL_MAX_LENGTH,
-                    message: tInputValidation("maxLength", {
-                      maxLength: userInputValidate.EMAIL_MAX_LENGTH
-                    })
-                  }
-                }}
-                label={tUser("email")}
-                trigger={trigger}
-                name="email"
-                type="email"
-                message={
-                  user?.emailVerified && user?.email === watch().email
-                    ? {
-                        type: "success",
-                        text: tUserMessage("emailVerifiedSuccess")
-                      }
-                    : {
-                        type: "error",
-                        text: tUserMessage("emailVerifiedFailed")
-                      }
-                }
-              />
-            </Grid>
-            <Grid item xs={12} sm={12} md={4} lg={4}>
-              <CustomInput
-                disabled={!canUpdateUser}
-                showCanEditIcon
-                control={control}
-                rules={{
-                  required: tInputValidation("required"),
-                  pattern: {
-                    value: /(84|0[3|5|7|8|9])+([0-9]{8})\b/,
-                    message: tInputValidation("format")
-                  }
-                }}
-                label={tUser("phoneNumber")}
-                trigger={trigger}
-                name="phoneNumber"
-                type="phone"
-                message={
-                  user?.phoneVerified && user?.phoneNumber === watch().phoneNumber
-                    ? {
-                        type: "success",
-                        text: tUserMessage("phoneVerifiedSuccess")
-                      }
-                    : {
-                        type: "error",
-                        text: tUserMessage("phoneVerifiedFailed")
-                      }
-                }
-              />
-            </Grid>
-            <Grid item xs={12} sm={12} md={4} lg={4}>
-              <CustomInput
-                disabled
-                showCanEditIcon
-                control={control}
-                label={tUser("status")}
-                trigger={trigger}
-                name="status"
-                type="text"
-                InputProps={
-                  canBlockUser && {
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        {user.blocked ? (
-                          <FontAwesomeIcon
-                            size="1x"
-                            icon={faGearIcon}
-                            onClick={() => {
-                              unblockUserModal.setShow(true);
-                              unblockUserModal.setData(user);
-                            }}
-                            cursor="pointer"
-                            color={theme.palette.error.light}
-                          />
-                        ) : (
-                          <FontAwesomeIcon
-                            size="1x"
-                            icon={faGearIcon}
-                            onClick={() => {
-                              blockUserModal.setShow(true);
-                              blockUserModal.setData(user);
-                            }}
-                            cursor="pointer"
-                            color={theme.palette.success.light}
-                          />
-                        )}
-                      </InputAdornment>
-                    )
-                  }
-                }
-              />
-            </Grid>
-          </Grid>
-        </Box>
-
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h4" sx={{ mb: 4 }}>
-            {t("title.personality")}
-          </Typography>
-          <Grid container spacing={3}>
-            <Grid item xs={12} sm={12} md={12} lg={6}>
-              <CustomInput
-                disabled={!canUpdateUser}
-                showCanEditIcon
-                control={control}
-                rules={{
-                  required: tInputValidation("required"),
-                  maxLength: {
-                    value: userInputValidate.NAME_MAX_LENGTH,
-                    message: tInputValidation("maxLength", {
-                      maxLength: userInputValidate.NAME_MAX_LENGTH
-                    })
-                  }
-                }}
-                label={tUser("name")}
-                trigger={trigger}
-                name="name"
-                type="text"
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={12} md={12} lg={6}>
-              <CustomInput
-                disabled={!canUpdateUser}
-                showCanEditIcon
-                control={control}
-                rules={{
-                  maxLength: {
-                    value: userInputValidate.HEALTH_INSURANCE_MAX_LENGTH,
-                    message: tInputValidation("maxLength", {
-                      maxLength: userInputValidate.HEALTH_INSURANCE_MAX_LENGTH
-                    })
-                  }
-                }}
-                label={tUser("healthInsurance")}
-                trigger={trigger}
-                name="healthInsurance"
-                type="text"
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={12} md={6} lg={6}>
-              <CustomInput
-                disabled={!canUpdateUser}
-                showCanEditIcon
-                control={control}
-                rules={{
-                  required: tInputValidation("required")
-                }}
-                label={tUser("dob")}
-                trigger={trigger}
-                name="dob"
-                type="date"
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={12} md={6} lg={6}>
-              <CustomInput
-                disabled={!canUpdateUser}
-                showCanEditIcon
-                control={control}
-                rules={{
-                  required: tInputValidation("required"),
-                  maxLength: {
-                    value: userInputValidate.GENDER_MAX_LENGTH,
-                    message: tInputValidation("maxLength", {
-                      maxLength: userInputValidate.GENDER_MAX_LENGTH
-                    })
-                  }
-                }}
-                label={tUser("gender")}
-                trigger={trigger}
-                name="gender"
-                childrenType="select"
-              >
-                <Select
-                  renderValue={(selected) => {
-                    return tUserGender(userGendersListObj[selected]?.label);
+          <CustomOverlay open={isLoading} />
+          <SectionContent title={t("title.account")}>
+            <Grid container spacing={3}>
+              <Grid item xs={12} sm={12} md={4} lg={4}>
+                <CustomInput
+                  disabled={!canUpdateUser}
+                  showCanEditIcon
+                  control={control}
+                  rules={{
+                    required: tInputValidation("required"),
+                    pattern: {
+                      value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+                      message: tInputValidation("format")
+                    },
+                    maxLength: {
+                      value: userInputValidate.EMAIL_MAX_LENGTH,
+                      message: tInputValidation("maxLength", {
+                        maxLength: userInputValidate.EMAIL_MAX_LENGTH
+                      })
+                    }
                   }}
-                >
-                  {userGendersList.map((item) => {
-                    return (
-                      <MenuItem key={item?.value} value={item?.value}>
-                        <ListItemText primary={tUserGender(item?.label)} />
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </CustomInput>
-            </Grid>
-
-            <Grid item xs={12} sm={12} md={12} lg={12}>
-              <CustomInput
-                disabled={!canUpdateUser}
-                showCanEditIcon
-                control={control}
-                rules={{
-                  maxLength: {
-                    value: userInputValidate.ADDRESS_MAX_LENGTH,
-                    message: tInputValidation("maxLength", {
-                      maxLength: userInputValidate.ADDRESS_MAX_LENGTH
-                    })
+                  label={tUser("email")}
+                  trigger={trigger}
+                  name="email"
+                  type="email"
+                  message={
+                    user?.emailVerified && user?.email === watch().email
+                      ? {
+                          type: "success",
+                          text: tUserMessage("emailVerifiedSuccess")
+                        }
+                      : {
+                          type: "error",
+                          text: tUserMessage("emailVerifiedFailed")
+                        }
                   }
-                }}
-                label={tUser("address")}
-                trigger={trigger}
-                name="address"
-                type="text"
-                multiline
-                rows={6}
-              />
+                />
+              </Grid>
+              <Grid item xs={12} sm={12} md={4} lg={4}>
+                <CustomInput
+                  disabled={!canUpdateUser}
+                  showCanEditIcon
+                  control={control}
+                  rules={{
+                    required: tInputValidation("required"),
+                    pattern: {
+                      value: /(84|0[3|5|7|8|9])+([0-9]{8})\b/,
+                      message: tInputValidation("format")
+                    }
+                  }}
+                  label={tUser("phoneNumber")}
+                  trigger={trigger}
+                  name="phoneNumber"
+                  type="phone"
+                  message={
+                    user?.phoneVerified && user?.phoneNumber === watch().phoneNumber
+                      ? {
+                          type: "success",
+                          text: tUserMessage("phoneVerifiedSuccess")
+                        }
+                      : {
+                          type: "error",
+                          text: tUserMessage("phoneVerifiedFailed")
+                        }
+                  }
+                />
+              </Grid>
+              <Grid item xs={12} sm={12} md={4} lg={4}>
+                <CustomInput
+                  disabled
+                  showCanEditIcon
+                  control={control}
+                  label={tUser("status")}
+                  trigger={trigger}
+                  name="status"
+                  type="text"
+                  InputProps={
+                    canBlockUser && {
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          {user.blocked ? (
+                            <FontAwesomeIcon
+                              size="1x"
+                              icon={faGearIcon}
+                              onClick={() => {
+                                unblockUserModal.setShow(true);
+                                unblockUserModal.setData(user);
+                              }}
+                              cursor="pointer"
+                              color={theme.palette.error.light}
+                            />
+                          ) : (
+                            <FontAwesomeIcon
+                              size="1x"
+                              icon={faGearIcon}
+                              onClick={() => {
+                                blockUserModal.setShow(true);
+                                blockUserModal.setData(user);
+                              }}
+                              cursor="pointer"
+                              color={theme.palette.success.light}
+                            />
+                          )}
+                        </InputAdornment>
+                      )
+                    }
+                  }
+                />
+              </Grid>
             </Grid>
-          </Grid>
-        </Box>
+          </SectionContent>
 
-        {canUpdateUser && (
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end"
-            }}
-          >
-            <Button
-              variant="contained"
-              onClick={() => {
-                reset(defaultValues);
-              }}
-              sx={{
-                ml: 2,
-                bgcolor: theme.palette.warning.light
-              }}
-              startIcon={<RestartAltIcon color={theme.palette.warning.contrastText} />}
-            >
-              {tBtn("reset")}
-            </Button>
+          <SectionContent title={t("title.personality")}>
+            <Grid container spacing={3}>
+              <Grid item xs={12} sm={12} md={12} lg={6}>
+                <CustomInput
+                  disabled={!canUpdateUser}
+                  showCanEditIcon
+                  control={control}
+                  rules={{
+                    required: tInputValidation("required"),
+                    maxLength: {
+                      value: userInputValidate.NAME_MAX_LENGTH,
+                      message: tInputValidation("maxLength", {
+                        maxLength: userInputValidate.NAME_MAX_LENGTH
+                      })
+                    }
+                  }}
+                  label={tUser("name")}
+                  trigger={trigger}
+                  name="name"
+                  type="text"
+                />
+              </Grid>
 
-            <Button
-              variant="contained"
-              onClick={handleSubmit(handleSaveDetail)}
+              <Grid item xs={12} sm={12} md={12} lg={6}>
+                <CustomInput
+                  disabled={!canUpdateUser}
+                  showCanEditIcon
+                  control={control}
+                  rules={{
+                    maxLength: {
+                      value: userInputValidate.HEALTH_INSURANCE_MAX_LENGTH,
+                      message: tInputValidation("maxLength", {
+                        maxLength: userInputValidate.HEALTH_INSURANCE_MAX_LENGTH
+                      })
+                    }
+                  }}
+                  label={tUser("healthInsurance")}
+                  trigger={trigger}
+                  name="healthInsurance"
+                  type="text"
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <CustomInput
+                  disabled={!canUpdateUser}
+                  showCanEditIcon
+                  control={control}
+                  rules={{
+                    required: tInputValidation("required")
+                  }}
+                  label={tUser("dob")}
+                  trigger={trigger}
+                  name="dob"
+                  type="date"
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={12} md={6} lg={6}>
+                <CustomInput
+                  disabled={!canUpdateUser}
+                  showCanEditIcon
+                  control={control}
+                  rules={{
+                    required: tInputValidation("required"),
+                    maxLength: {
+                      value: userInputValidate.GENDER_MAX_LENGTH,
+                      message: tInputValidation("maxLength", {
+                        maxLength: userInputValidate.GENDER_MAX_LENGTH
+                      })
+                    }
+                  }}
+                  label={tUser("gender")}
+                  trigger={trigger}
+                  name="gender"
+                  childrenType="select"
+                >
+                  <Select
+                    renderValue={(selected) => {
+                      return userGenderContantListObj[selected]?.label;
+                    }}
+                  >
+                    {userGenderContantList.map((item) => {
+                      return (
+                        <MenuItem key={item?.value} value={item?.value}>
+                          <ListItemText primary={item?.label} />
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </CustomInput>
+              </Grid>
+
+              <Grid item xs={12} sm={12} md={12} lg={12}>
+                <CustomInput
+                  disabled={!canUpdateUser}
+                  showCanEditIcon
+                  control={control}
+                  rules={{
+                    maxLength: {
+                      value: userInputValidate.ADDRESS_MAX_LENGTH,
+                      message: tInputValidation("maxLength", {
+                        maxLength: userInputValidate.ADDRESS_MAX_LENGTH
+                      })
+                    }
+                  }}
+                  label={tUser("address")}
+                  trigger={trigger}
+                  name="address"
+                  type="text"
+                  multiline
+                  rows={6}
+                />
+              </Grid>
+            </Grid>
+          </SectionContent>
+
+          {canUpdateUser && (
+            <Box
               sx={{
-                ml: 2,
-                bgcolor: theme.palette.success.light
+                display: "flex",
+                justifyContent: "flex-end"
               }}
-              startIcon={<SaveIcon color={theme.palette.success.contrastText} />}
             >
-              {tBtn("save")}
-            </Button>
-          </Box>
-        )}
-      </Box>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  reset(defaultValues);
+                }}
+                sx={{
+                  ml: 2,
+                  bgcolor: theme.palette.warning.light
+                }}
+                startIcon={<RestartAltIcon color={theme.palette.warning.contrastText} />}
+              >
+                {tBtn("reset")}
+              </Button>
+
+              <Button
+                variant="contained"
+                onClick={handleSubmit(handleSaveDetail)}
+                sx={{
+                  ml: 2,
+                  bgcolor: theme.palette.success.light
+                }}
+                startIcon={<SaveIcon color={theme.palette.success.contrastText} />}
+              >
+                {tBtn("save")}
+              </Button>
+            </Box>
+          )}
+        </PersonDetailWrapper>
+      )}
 
       {blockUserModal.show && (
         <BlockUserModal
