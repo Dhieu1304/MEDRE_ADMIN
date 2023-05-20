@@ -8,13 +8,11 @@ import { normalizeStrToInt, normalizeStrToStr } from "../../../utils/standardize
  */
 export const columnsIds = {
   phoneNumber: "phoneNumber",
-  email: "email",
   name: "name",
   address: "address",
   gender: "gender",
   dob: "dob",
   healthInsurance: "healthInsurance",
-  status: "status",
   action: "action"
 };
 
@@ -34,24 +32,12 @@ export const initialShowCols = Object.keys(columnsIds).reduce((obj, key) => {
     - From the object's keys in the parameter
     - we will reformat the correct format to be the value for the input in the filter form
 */
-export const createDefaultValues = ({
-  email,
-  phoneNumber,
-  name,
-  address,
-  healthInsurance,
-  status,
-  gender,
-  page,
-  limit
-} = {}) => {
+export const createDefaultValues = ({ phoneNumber, name, address, healthInsurance, gender, page, limit } = {}) => {
   const result = {
-    email: normalizeStrToStr(email),
     phoneNumber: normalizeStrToStr(phoneNumber),
     name: normalizeStrToStr(name),
     address: normalizeStrToStr(address),
     healthInsurance: normalizeStrToStr(healthInsurance),
-    status: normalizeStrToStr(status),
     gender: normalizeStrToStr(gender),
 
     page: normalizeStrToInt(page, 1),

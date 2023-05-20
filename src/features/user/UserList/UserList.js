@@ -215,8 +215,6 @@ function UserList() {
     await loadData({ page: watch().page });
   };
 
-  users.forEach(() => {});
-
   return (
     <>
       <Box>

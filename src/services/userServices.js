@@ -44,7 +44,6 @@ const getUserList = async ({ email, phoneNumber, name, page, limit, blocked, gen
         success: true,
         users,
         count,
-
         message: res?.message
       };
     }

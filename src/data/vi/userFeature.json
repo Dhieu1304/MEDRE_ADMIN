@@ -4,7 +4,7 @@
     "filter": {
       "name": "Tìm kiếm theo tên",
       "email": "Email",
-      "phone": "Số điện thoại",
+      "phoneNumber": "Số điện thoại",
       "gender": "Giới tính",
       "status": "Tình trạng",
       "healthInsurance": "Bảo hiểm y tế",

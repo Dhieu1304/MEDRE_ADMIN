@@ -38,22 +38,34 @@ const createPatient = async ({ phoneNumber, name, gender, address, dob, healthIn
   }
 };
 
-const getPatients = async ({ phoneNumber }) => {
+const getPatients = async ({ phoneNumber, name, page, limit, gender, address, healthInsurance }) => {
+  // console.log("getUserList: ", { page, limit, name });
+
   const params = cleanUndefinedAndEmptyStrValueObject({
-    phoneNumber
+    phone_number: phoneNumber,
+    name,
+    page,
+    limit,
+    gender,
+    address,
+    healthInsurance
   });
 
+  // console.log("params: ", params);
   try {
     const res = await axiosClient.get(patientApi.patientList(), {
       params
     });
 
+    // console.log("res: ", res);
     if (res?.status) {
       const patients = camelcaseKeys(res?.data?.results, { deep: true });
+      const count = res?.data?.totalResults;
 
       return {
         success: true,
         patients,
+        count,
         message: res?.message
       };
     }

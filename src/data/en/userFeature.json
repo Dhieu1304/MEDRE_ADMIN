@@ -4,7 +4,7 @@
     "filter": {
       "name": "Search by name",
       "email": "Email",
-      "phone": "Phone",
+      "phoneNumber": "Phone",
       "gender": "Gender",
       "status": "Status",
       "healthInsurance": "Health Insurance",
