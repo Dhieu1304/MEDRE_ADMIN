@@ -17,6 +17,8 @@ import { useFetchingStore } from "./store/FetchingApiStore";
 import staffServices from "./services/staffServices";
 import images from "./assets/images";
 import CustomOverlay from "./components/CustomOverlay/CustomOverlay";
+// import "./config/firebase";
+import { requestPermission } from "./config/firebase";
 
 function App() {
   /*
@@ -48,6 +50,13 @@ function App() {
     };
     loadData();
   }, []);
+
+  useEffect(() => {
+    // console.log("authStore.isLogin: ", authStore.isLogin);
+    if (authStore.isLogin) {
+      requestPermission();
+    }
+  }, [authStore.isLogin]);
 
   const ability = defineAbilityFor(authStore.staff);
 
