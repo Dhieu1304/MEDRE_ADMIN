@@ -2,12 +2,14 @@ import PropTypes from "prop-types";
 import { Box, Typography } from "@mui/material";
 
 const SectionContent = ({ title, children }) => {
-  <Box sx={{ mb: 4 }}>
-    <Typography variant="h4" sx={{ mb: 4 }}>
-      {title}
-    </Typography>
-    {children}
-  </Box>;
+  return (
+    <Box sx={{ mb: 4 }}>
+      <Typography variant="h4" sx={{ mb: 4 }}>
+        {title}
+      </Typography>
+      {children}
+    </Box>
+  );
 };
 
 SectionContent.propTypes = {
