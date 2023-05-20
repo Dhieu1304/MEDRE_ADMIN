@@ -5,7 +5,6 @@ import {
   Grid,
   Button,
   Box,
-  Typography,
   Avatar,
   Card,
   CardHeader,
@@ -43,6 +42,7 @@ import { useAuthStore } from "../../store/AuthStore";
 import { BlockStaffModal } from "./components";
 import { WithExpertisesLoaderWrapper } from "./hocs";
 import UnblockStaffModal from "./components/UnblockStaffModal";
+import SectionContent from "../../components/SectionContent";
 
 function StaffDetail({ staffId, expertisesList, loadExpertisesList }) {
   const [staff, setStaff] = useState();
@@ -282,10 +282,7 @@ function StaffDetail({ staffId, expertisesList, loadExpertisesList }) {
           </Card>
         </Box>
 
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h4" sx={{ mb: 4 }}>
-            {t("title.identify")}
-          </Typography>
+        <SectionContent title={t("title.identify")}>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={12} md={4} lg={4}>
               <CustomInput
@@ -372,12 +369,9 @@ function StaffDetail({ staffId, expertisesList, loadExpertisesList }) {
               />
             </Grid>
           </Grid>
-        </Box>
+        </SectionContent>
 
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h4" sx={{ mb: 4 }}>
-            {t("title.account")}
-          </Typography>
+        <SectionContent title={t("title.account")}>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={12} md={6} lg={6}>
               <CustomInput
@@ -451,12 +445,9 @@ function StaffDetail({ staffId, expertisesList, loadExpertisesList }) {
               />
             </Grid>
           </Grid>
-        </Box>
+        </SectionContent>
 
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h4" sx={{ mb: 4 }}>
-            {t("title.personality")}
-          </Typography>
+        <SectionContent title={t("title.personality")}>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={12} md={12} lg={6}>
               <CustomInput
@@ -571,12 +562,9 @@ function StaffDetail({ staffId, expertisesList, loadExpertisesList }) {
               />
             </Grid>
           </Grid>
-        </Box>
+        </SectionContent>
 
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h4" sx={{ mb: 4 }}>
-            {t("title.doctor")}
-          </Typography>
+        <SectionContent title={t("title.doctor")}>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={12} md={6} lg={6}>
               <CustomInput
@@ -735,7 +723,7 @@ function StaffDetail({ staffId, expertisesList, loadExpertisesList }) {
               </IconButton>
             </Grid>
           </Grid>
-        </Box>
+        </SectionContent>
 
         {canUpdateStaff && (
           <Box
