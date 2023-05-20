@@ -45,7 +45,7 @@ import { WithExpertisesLoaderWrapper } from "./hocs";
 import UnblockStaffModal from "./components/UnblockStaffModal";
 
 function StaffDetail({ staffId, expertisesList, loadExpertisesList }) {
-  const [staff, setStaff] = useState(new Staff());
+  const [staff, setStaff] = useState();
 
   const { t } = useTranslation("staffFeature", { keyPrefix: "StaffDetail" });
   const { t: tBtn } = useTranslation("staffFeature", { keyPrefix: "StaffDetail.button" });
@@ -133,6 +133,7 @@ function StaffDetail({ staffId, expertisesList, loadExpertisesList }) {
 
       if (res.success) {
         const staffData = new Staff(res.staff);
+
         setStaff(staffData);
 
         const expertiseIds = staffData?.expertises?.map((expertise) => expertise?.id) || [];
@@ -160,6 +161,7 @@ function StaffDetail({ staffId, expertisesList, loadExpertisesList }) {
   const ability = useAbility(AbilityContext);
 
   const canUpdateStaff = ability.can(staffActionAbility.UPDATE, staff);
+
   const canUpdateStaffRole = ability.can(staffActionAbility.UPDATE_ROLE, staff);
   const canBlockStaff = ability.can(staffActionAbility.BLOCK, staff);
   const canAddExpertise = ability.can(expertiseActionAbility.ADD, Expertise.magicWord());
@@ -198,7 +200,7 @@ function StaffDetail({ staffId, expertisesList, loadExpertisesList }) {
         let res = {
           message: ""
         };
-        if (authStore.staff?.id === staff.id) {
+        if (authStore.staff?.id === staff?.id) {
           res = await staffServices.editMyProfile(data);
         } else {
           res = await staffServices.editStaffInfo(data);
@@ -419,7 +421,7 @@ function StaffDetail({ staffId, expertisesList, loadExpertisesList }) {
                   canBlockStaff && {
                     endAdornment: (
                       <InputAdornment position="end">
-                        {staff.blocked ? (
+                        {staff?.blocked ? (
                           <FontAwesomeIcon
                             size="1x"
                             icon={faGearIcon}

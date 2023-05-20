@@ -41,10 +41,15 @@ import BookingInfoModal from "../../booking/components/BookingInfoModal";
 import { useAppConfigStore } from "../../../store/AppConfigStore";
 import { useScheduleTypesContantTranslation } from "../hooks/useScheduleConstantsTranslation";
 import CustomPageTitle from "../../../components/CustomPageTitle";
+import { Can } from "../../../store/AbilityStore";
+import { staffActionAbility } from "../../../entities/Staff";
+import Staff from "../../../entities/Staff/Staff";
 
 function DoctorScheduleCalendar({ timesList, doctor }) {
   const location = useLocation();
   const navigate = useNavigate();
+
+  const staff = new Staff(doctor);
 
   const [schedules, setSchedules] = useState([]);
   const [timeOffs, setTimeOffs] = useState([]);
@@ -324,19 +329,21 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
           </Card>
 
           <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
-            <Button
-              variant="contained"
-              onClick={() => {
-                addTimeOffModal.setShow(true);
-                addTimeOffModal.setData(doctor);
-              }}
-              endIcon={<AddIcon fontSize="large" />}
-              sx={{
-                bgcolor: theme.palette.success.light
-              }}
-            >
-              {t("button.addTimeOff")}
-            </Button>
+            <Can I={staffActionAbility.ADD_DOCTOR_TIMEOFF} a={staff}>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  addTimeOffModal.setShow(true);
+                  addTimeOffModal.setData(doctor);
+                }}
+                endIcon={<AddIcon fontSize="large" />}
+                sx={{
+                  bgcolor: theme.palette.success.light
+                }}
+              >
+                {t("button.addTimeOff")}
+              </Button>
+            </Can>
 
             <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center", mx: 2 }}>
               {formatDate.format(heads[0], "DD/MM/YYYY")} - {formatDate.format(heads[6], "DD/MM/YYYY")}

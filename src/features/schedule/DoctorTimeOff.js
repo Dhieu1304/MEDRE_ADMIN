@@ -30,10 +30,15 @@ import AddNewTimeOffModal from "./components/AddNewTimeOffModal";
 import { useCustomModal } from "../../components/CustomModal";
 import { useTimeOffSessionsContantTranslation } from "./hooks/useTimeOffConstantsTranslation";
 import CustomPageTitle from "../../components/CustomPageTitle";
+import { staffActionAbility } from "../../entities/Staff";
+import Staff from "../../entities/Staff/Staff";
+import { Can } from "../../store/AbilityStore";
 
 function DoctorTimeOff({ doctor, doctorId }) {
   const [timeOffs, setTimeOffs] = useState([]);
   const [count, setCount] = useState(0);
+
+  const staff = new Staff(doctor);
 
   const theme = useTheme();
 
@@ -131,19 +136,21 @@ function DoctorTimeOff({ doctor, doctorId }) {
         <CustomPageTitle
           title={t("title")}
           right={
-            <Button
-              variant="contained"
-              onClick={() => {
-                addTimeOffModal.setShow(true);
-                addTimeOffModal.setData(doctor);
-              }}
-              endIcon={<AddIcon fontSize="large" />}
-              sx={{
-                bgcolor: theme.palette.success.light
-              }}
-            >
-              {t("button.addTimeOff")}
-            </Button>
+            <Can I={staffActionAbility.ADD_DOCTOR_TIMEOFF} a={staff}>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  addTimeOffModal.setShow(true);
+                  addTimeOffModal.setData(doctor);
+                }}
+                endIcon={<AddIcon fontSize="large" />}
+                sx={{
+                  bgcolor: theme.palette.success.light
+                }}
+              >
+                {t("button.addTimeOff")}
+              </Button>
+            </Can>
           }
         />
 
