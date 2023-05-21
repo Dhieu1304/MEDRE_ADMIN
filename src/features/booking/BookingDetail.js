@@ -24,7 +24,8 @@ function createData(component, information) {
 export default function BookingDetail() {
   const { control, trigger, handleSubmit } = useForm({
     defaultValues: {
-      note: ""
+      note: "",
+      conclusion: ""
     }
   });
   const [booking, setBooking] = React.useState();
@@ -82,9 +83,10 @@ export default function BookingDetail() {
   const handleSaveNote = async (data) => {
     const data2 = {
       id: "51c5c8e7-2529-4e77-b896-0c7e9bdeda7a",
-      note: data.note
+      note: data.note,
+      conclusion: data.conclusion
     };
-    console.log("2:", data2);
+    alert(data2);
     await fetchApi(async () => {
       const res = await bookingServices.updateBooking(note);
       console.log(res);
@@ -196,6 +198,28 @@ export default function BookingDetail() {
         </TableContainer>
       </Paper>
       <Box>
+        <CustomInput
+          control={control}
+          trigger={trigger}
+          rules={{
+            required: "Bắt buộc"
+          }}
+          name="note"
+          label="Ghi chú của bác sĩ"
+          multiline
+          rows={5}
+        />
+        <CustomInput
+          control={control}
+          trigger={trigger}
+          rules={{
+            required: "Bắt buộc"
+          }}
+          name="conclusion"
+          label="Kết luận của bác sĩ"
+          multiline
+          rows={5}
+        />
         <CustomInput
           control={control}
           trigger={trigger}
