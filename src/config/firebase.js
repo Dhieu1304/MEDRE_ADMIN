@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getMessaging, getToken } from "firebase/messaging";
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -30,6 +30,10 @@ export const requestPermission = () => {
           console.log("Can not get token");
         }
         return currentToken;
+      });
+
+      onMessage(messaging, (payload) => {
+        console.log("Message received. ", payload);
       });
     } else {
       console.log("Do not have permission!");
