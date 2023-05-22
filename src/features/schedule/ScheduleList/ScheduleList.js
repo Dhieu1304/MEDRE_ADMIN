@@ -16,7 +16,8 @@ import {
   // Avatar,
   Typography,
   TableBody,
-  useTheme
+  useTheme,
+  TextField
   // Card
 } from "@mui/material";
 
@@ -293,16 +294,58 @@ function ScheduleList({ timesList }) {
     loadData();
   };
 
+  // console.log("currentDate: ", currentDate);
+
   return (
     <>
       <CustomOverlay open={isLoading} />
       <Box>
         <CustomPageTitle title={t("title")} />
-        <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center", mb: 4 }}>
-          <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
-            <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
-              {formatDate.format(currentDate, "DD/MM/YYYY")}
-            </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: {
+              md: "row",
+              xs: "column"
+            },
+            justifyContent: {
+              md: "flex-end",
+              xs: "center"
+            },
+            alignItems: "center",
+            mb: 4
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: {
+                md: "flex-end",
+                xs: "center"
+              },
+              alignItems: "center"
+            }}
+          >
+            <TextField
+              value={formatDate.format(currentDate, "YYYY-MM-DD")}
+              onChange={(e) => {
+                // console.log("e.target.value: ", e.target.value);
+                setCurrentDate(() => new Date(e.target.value));
+              }}
+              type="date"
+            />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: {
+                md: "flex-end",
+                xs: "center"
+              },
+              alignItems: "center"
+            }}
+          >
             <IconButton
               onClick={() => {
                 const newCurrentDate = new Date(currentDate);
@@ -332,6 +375,7 @@ function ScheduleList({ timesList }) {
             </IconButton>
           </Box>
         </Box>
+
         <TableContainer
           component={Paper}
           sx={{
