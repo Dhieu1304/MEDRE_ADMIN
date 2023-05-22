@@ -1,7 +1,7 @@
 import camelcaseKeys from "camelcase-keys";
 import { settingApi } from "../config/apiConfig";
 import axiosClient from "../config/axiosClient";
-// import { cleanUndefinedAndEmptyStrValueObject } from "../utils/objectUtil";
+import { cleanUndefinedAndEmptyStrValueObject } from "../utils/objectUtil";
 
 const getSettingList = async () => {
   // console.log("params: ", params);
@@ -31,36 +31,35 @@ const getSettingList = async () => {
   }
 };
 
-// const getPatientDetail = async (id) => {
-//   try {
-//     // console.log("id: ", id);
+const editSetting = async ({ id, value }) => {
+  try {
+    const dataBody = cleanUndefinedAndEmptyStrValueObject({ id, value });
+    // console.log("dataBody: ", dataBody);
 
-//     const res = await axiosClient.get(settingApi.patientDetail(id));
+    const res = await axiosClient.post(settingApi.editSetting(), dataBody);
 
-//     // console.log("res: ", res);
+    // console.log("res: ", res);
 
-//     if (res?.status) {
-//       const patient = camelcaseKeys(res?.data, { deep: true });
-
-//       return {
-//         success: true,
-//         patient,
-//         message: res?.message
-//       };
-//     }
-//     return {
-//       success: false,
-//       message: res?.message || `Status is ${res.status}`
-//     };
-//   } catch (e) {
-//     // console.error(e.message);
-//     return {
-//       success: false,
-//       message: e.message
-//     };
-//   }
-// };
+    if (res?.status) {
+      return {
+        success: true,
+        message: res?.message
+      };
+    }
+    return {
+      success: false,
+      message: res?.message || `Status is ${res.status}`
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
 
 export default {
-  getSettingList
+  getSettingList,
+  editSetting
 };

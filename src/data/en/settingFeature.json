@@ -4,5 +4,12 @@
     "button": {
       "edit": "Edit"
     }
+  },
+
+  "ChangeSettingModal": {
+    "title": "Change setting",
+    "button": {
+      "save": "Save"
+    }
   }
 }

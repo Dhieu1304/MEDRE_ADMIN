@@ -1,28 +1,22 @@
 import React, { useEffect, useMemo, useState } from "react";
 
-import {
-  Box,
-  Button,
-  Paper,
-  Table,
-  TableBody,
-  TableContainer,
-  TableHead,
-  TableRow,
-  useTheme
-} from "@mui/material";
+import { Box, Button, Paper, Table, TableBody, TableContainer, TableHead, TableRow, useTheme } from "@mui/material";
 import formatDate from "date-and-time";
 import { useTranslation } from "react-i18next";
 import { Edit as EditIcon } from "@mui/icons-material";
 
-import settingServices from "../../../services/settingServices";
-import { useFetchingStore } from "../../../store/FetchingApiStore/hooks";
-import { useAppConfigStore } from "../../../store/AppConfigStore/hooks";
-// import { useCustomModal } from "../../../components/CustomModal/hooks";
+import settingServices from "../../services/settingServices";
+import { useFetchingStore } from "../../store/FetchingApiStore/hooks";
+import { useAppConfigStore } from "../../store/AppConfigStore/hooks";
 
-import CustomOverlay from "../../../components/CustomOverlay/CustomOverlay";
-import CustomPageTitle from "../../../components/CustomPageTitle";
-import CustomTableCell, { customTableCellVariant } from "../../../components/CustomTable/CustomTableCell";
+import CustomOverlay from "../../components/CustomOverlay/CustomOverlay";
+import CustomPageTitle from "../../components/CustomPageTitle";
+import CustomTableCell, { customTableCellVariant } from "../../components/CustomTable/CustomTableCell";
+import { useCustomModal } from "../../components/CustomModal";
+import ChangeSettingModal from "./components/ChangeSettingModal";
+import { Can } from "../../store/AbilityStore";
+import Setting from "../../entities/Setting/Setting";
+import { settingActionAbility } from "../../entities/Setting";
 
 function SettingList() {
   const [settings, setSettings] = useState([]);
@@ -33,6 +27,7 @@ function SettingList() {
 
   const { t } = useTranslation("settingFeature", { keyPrefix: "SettingList" });
   const { t: tSetting } = useTranslation("settingEntity", { keyPrefix: "properties" });
+  const changeSettingModal = useCustomModal();
 
   const columns = useMemo(
     () => [
@@ -79,6 +74,10 @@ function SettingList() {
     loadData();
   }, []);
 
+  const handleAfterEditSetting = async () => {
+    await loadData();
+  };
+
   return (
     <>
       <CustomOverlay open={isLoading} />
@@ -93,9 +92,9 @@ function SettingList() {
                   const align = column.id === "value" ? "center" : undefined;
                   return (
                     <CustomTableCell
+                      key={column?.id}
                       align={align}
                       sx={{ minWidth }}
-                      key={column?.id}
                       variant={customTableCellVariant.HEAD_CELL}
                     >
                       {column.label}
@@ -107,17 +106,25 @@ function SettingList() {
             <TableBody>
               {settings?.map((setting) => {
                 return (
-                  <TableRow>
+                  <TableRow key={setting?.id}>
                     <CustomTableCell>{setting?.descName}</CustomTableCell>
                     <CustomTableCell>{formatDate.format(new Date(setting?.createdAt), "DD/MM/YYYY")}</CustomTableCell>
                     <CustomTableCell>{formatDate.format(new Date(setting?.updatedAt), "DD/MM/YYYY")}</CustomTableCell>
                     <CustomTableCell align="center">
-                      <Button
-                        onClick={() => {}}
-                        endIcon={<EditIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />}
-                      >
+                      <Can I={settingActionAbility.UPDATE} a={Setting.magicWord()}>
+                        <Button
+                          onClick={() => {
+                            changeSettingModal.setShow(true);
+                            changeSettingModal.setData(setting);
+                          }}
+                          endIcon={<EditIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />}
+                        >
+                          {setting?.value}
+                        </Button>
+                      </Can>
+                      <Can not I={settingActionAbility.UPDATE} a={Setting.magicWord()}>
                         {setting?.value}
-                      </Button>
+                      </Can>
                     </CustomTableCell>
                   </TableRow>
                 );
@@ -126,6 +133,15 @@ function SettingList() {
           </Table>
         </TableContainer>
       </Box>
+      {changeSettingModal.show && (
+        <ChangeSettingModal
+          show={changeSettingModal.show}
+          setShow={changeSettingModal.setShow}
+          data={changeSettingModal.data}
+          setData={changeSettingModal.setData}
+          handleAfterEditSetting={handleAfterEditSetting}
+        />
+      )}
     </>
   );
 }
