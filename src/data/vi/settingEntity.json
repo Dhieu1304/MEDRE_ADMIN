@@ -1,0 +1,11 @@
+{
+  "properties": {
+    "id": "ID",
+    "name": "Tên",
+    "descName": "Mô tả",
+    "value": "Giá trị",
+    "createdAt": "Ngày tạo",
+    "updatedAt": "Ngày cập nhập",
+    "deletedAt": "Ngày xóa"
+  }
+}

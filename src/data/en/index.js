@@ -15,6 +15,8 @@ import bookingFeature from "./bookingFeature.json";
 import bookingEntity from "./bookingEntity.json";
 import patientEntity from "./patientEntity.json";
 import patientFeature from "./patientFeature.json";
+import settingFeature from "./settingFeature.json";
+import settingEntity from "./settingEntity.json";
 
 const en = {
   authFeature,
@@ -33,7 +35,9 @@ const en = {
   bookingFeature,
   bookingEntity,
   patientEntity,
-  patientFeature
+  patientFeature,
+  settingFeature,
+  settingEntity
 };
 
 export default en;

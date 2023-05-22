@@ -1,0 +1,11 @@
+{
+  "properties": {
+    "id": "ID",
+    "name": "Name",
+    "descName": "Desc name",
+    "value": "Value",
+    "createdAt": "Created at",
+    "updatedAt": "Updated at",
+    "deletedAt": "Deleted at"
+  }
+}

@@ -51,4 +51,9 @@ const patientApi = {
   patientDetail: (id) => `/patient/detail-for-staff/${id}`
 };
 
-export { authApi, userApi, staffApi, scheduleApi, expertiseApi, timeOffApi, bookingApi, patientApi };
+const settingApi = {
+  settingList: () => "/setting/list",
+  editSetting: () => `/setting/edit`
+};
+
+export { authApi, userApi, staffApi, scheduleApi, expertiseApi, timeOffApi, bookingApi, patientApi, settingApi };
