@@ -2,16 +2,17 @@ import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
 const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
-  projectId: process.env.REACT_APP_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_APP_ID,
-  measurementId: process.env.REACT_APP_MEASUREMENT_ID
+  apiKey: "AIzaSyBz4AtlcejRF_9d_XUjqDCkYRghF69smyM",
+  authDomain: "medre-9f7f5.firebaseapp.com",
+  projectId: "medre-9f7f5",
+  storageBucket: "medre-9f7f5.appspot.com",
+  messagingSenderId: "925660490794",
+  appId: "1:925660490794:web:ba688e05dd4344bafd6753",
+  measurementId: "G-K1F3D4895N"
 };
 
 // console.log("firebaseConfig: ", firebaseConfig);
+// console.log("process.env: ", process.env);
 
 export const requestPermission = () => {
   // console.log("Requesting permission...");
@@ -23,20 +24,25 @@ export const requestPermission = () => {
       const messaging = getMessaging(app);
       getToken(messaging, {
         vapidKey: process.env.REACT_APP_FIREBASE_VAPID_KEY
+        // validKey: "BIM1c0Hf6ZJdZCnFjkdx9Judg_y4y5CEe3VsPTTib4udEvzbCoMj5HH-mxWSwXDR_Ft7t_IB9t9HrsuIsGY-XsQ"
       }).then((currentToken) => {
-        if (currentToken) {
-          console.log("currentToken: ", currentToken);
-        } else {
-          console.log("Can not get token");
-        }
+        // if (currentToken) {
+        //   console.log("currentToken: ", currentToken);
+        // } else {
+        //   console.log("Can not get token");
+        // }
         return currentToken;
       });
 
-      onMessage(messaging, (payload) => {
-        console.log("Message received. ", payload);
+      // onMessage(messaging, (payload) => {
+      //   // console.log("Message received. ", payload);
+      //   return payload;
+      // });
+      onMessage(messaging, () => {
+        // console.log("Message received. ", payload);
       });
     } else {
-      console.log("Do not have permission!");
+      // console.log("Do not have permission!");
     }
   });
 };
