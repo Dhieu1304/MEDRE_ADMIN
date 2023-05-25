@@ -11,9 +11,6 @@ const firebaseConfig = {
   measurementId: "G-K1F3D4895N"
 };
 
-// console.log("firebaseConfig: ", firebaseConfig);
-// console.log("process.env: ", process.env);
-
 export const requestPermission = () => {
   // console.log("Requesting permission...");
   Notification.requestPermission().then((permission) => {
@@ -38,9 +35,7 @@ export const requestPermission = () => {
       //   // console.log("Message received. ", payload);
       //   return payload;
       // });
-      onMessage(messaging, () => {
-        // console.log("Message received. ", payload);
-      });
+      onMessage(messaging, () => {});
     } else {
       // console.log("Do not have permission!");
     }

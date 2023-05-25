@@ -19,6 +19,7 @@ import images from "./assets/images";
 import CustomOverlay from "./components/CustomOverlay/CustomOverlay";
 // import "./config/firebase";
 import { requestPermission } from "./config/firebase";
+import { socket } from "./config/socketConfig";
 
 function App() {
   /*
@@ -49,6 +50,42 @@ function App() {
       setIsFirstVisit(false);
     };
     loadData();
+  }, []);
+
+  // const [isConnected, setIsConnected] = useState(socket.connected);
+  // const [fooEvents, setFooEvents] = useState([]);
+
+  useEffect(() => {
+    // console.log("Socket useEffect");
+
+    function onConnect() {
+      // console.log("Connect");
+      // setIsConnected(true);
+    }
+
+    function onDisconnect() {
+      // console.log("Diconnect");
+      // setIsConnected(false);
+    }
+
+    function onFooEvent() {
+      // console.log("onFooEvent");
+      // setFooEvents((previous) => [...previous, value]);
+    }
+
+    socket.on("connect", onConnect);
+    socket.on("disconnect", onDisconnect);
+    socket.on("foo", onFooEvent);
+
+    socket.on("connect_error", () => {
+      // console.log("Eror", error.message);
+    });
+
+    return () => {
+      socket.off("connect", onConnect);
+      socket.off("disconnect", onDisconnect);
+      socket.off("foo", onFooEvent);
+    };
   }, []);
 
   useEffect(() => {
