@@ -20,6 +20,7 @@ import CustomOverlay from "./components/CustomOverlay/CustomOverlay";
 // import "./config/firebase";
 import { requestPermission } from "./config/firebase";
 import { socket } from "./config/socketConfig";
+import localStorageUtil from "./utils/localStorageUtil";
 
 function App() {
   /*
@@ -57,17 +58,14 @@ function App() {
 
   useEffect(() => {
     // console.log("Socket useEffect");
-
     function onConnect() {
       // console.log("Connect");
       // setIsConnected(true);
     }
-
     function onDisconnect() {
       // console.log("Diconnect");
       // setIsConnected(false);
     }
-
     function onFooEvent() {
       // console.log("onFooEvent");
       // setFooEvents((previous) => [...previous, value]);
@@ -91,6 +89,7 @@ function App() {
   useEffect(() => {
     // console.log("authStore.isLogin: ", authStore.isLogin);
     if (authStore.isLogin) {
+      socket.emit("accessToken", localStorageUtil.getItem(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN));
       requestPermission();
     }
   }, [authStore.isLogin]);
