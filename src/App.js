@@ -74,6 +74,12 @@ function App() {
     socket.on("connect", onConnect);
     socket.on("disconnect", onDisconnect);
     socket.on("foo", onFooEvent);
+    socket.on("Success", (message) => {console.log(message)});
+    socket.on("Error", (message) => {console.log(message)});
+    socket.on("Notification", (payload) => {
+      console.log(payload);
+      // todo: show notification here
+    });
 
     socket.on("connect_error", () => {
       // console.log("Eror", error.message);
@@ -89,7 +95,7 @@ function App() {
   useEffect(() => {
     // console.log("authStore.isLogin: ", authStore.isLogin);
     if (authStore.isLogin) {
-      socket.emit("accessToken", localStorageUtil.getItem(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN));
+      socket.emit("JoinRoom", localStorageUtil.getItem(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN));
       requestPermission();
     }
   }, [authStore.isLogin]);
