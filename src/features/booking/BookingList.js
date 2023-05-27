@@ -1,5 +1,6 @@
 import * as React from "react";
 import SearchIcon from "@mui/icons-material/Search";
+import { FormProvider, useForm } from "react-hook-form";
 import {
   Paper,
   Table,
@@ -13,6 +14,7 @@ import {
   Typography,
   IconButton
 } from "@mui/material";
+import BookingFiltersForm from "./BookingFiltersForm";
 const columns = [
   { id: "idbooking", label: "ID", minWidth: 170 },
   { id: "date", label: "Date", minWidth: 100 },
@@ -60,6 +62,7 @@ const rows = [
   createData(5, "14/01/2023", "9:44", "Andie Gretham", "Tedmund Billitteri", "User", ""),
   createData(6, "29/08/2022", "12:28", "Cullan Fenemore", "Marigold Bedome", "User", "")
 ];
+
 export default function BookingList() {
   console.log("Boolis");
   const [page, setPage] = React.useState(0);
@@ -73,11 +76,17 @@ export default function BookingList() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-
+  const filterForm = useForm({
+    mode: "onChange",
+    criteriaMode: "all"
+  });
   return (
     <>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         <Typography variant="h4">Danh sách đặt lịch</Typography>
+        <FormProvider {...filterForm}>
+          <BookingFiltersForm />
+        </FormProvider>
         <TablePagination
           rowsPerPageOptions={[5, 7, 10]}
           component="div"

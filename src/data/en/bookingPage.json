@@ -1,5 +1,12 @@
 {
-  "bookingList": {},
+  "bookingList": {
+    "filter": {
+      "patient": "Patient name",
+      "doctor": "Doctor name",
+      "date": "Date"
+    },
+    "select": {}
+  },
 
   "bookingDetail": {
     "bookingDate": "Date",

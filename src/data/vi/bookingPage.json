@@ -1,5 +1,12 @@
 {
-  "bookingList": {},
+  "bookingList": {
+    "filter": {
+      "patient": "Tên bệnh nhân",
+      "doctor": "Tên bác sĩ",
+      "date": "Ngày"
+    },
+    "select": {}
+  },
 
   "bookingDetail": {
     "bookingDate": "Ngày khám",
