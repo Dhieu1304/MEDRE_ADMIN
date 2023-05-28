@@ -1,5 +1,6 @@
 import authFeature from "./authFeature.json";
 import authPage from "./authPage.json";
+import bookingPage from "./bookingPage.json";
 import layout from "./layout.json";
 import components from "./components.json";
 import input from "./input.json";
@@ -21,6 +22,7 @@ import settingEntity from "./settingEntity.json";
 const vi = {
   authFeature,
   authPage,
+  bookingPage,
   layout,
   components,
   input,

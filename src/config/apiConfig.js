@@ -12,7 +12,6 @@ const userApi = {
   unblockUser: () => `/staff/confirm-unblocking`
 };
 const staffApi = {
-  createStaff: () => "/staff/create",
   staffInfo: () => "/staff/my-profile",
   staffList: () => "/staff/all",
   staffListWithSchedules: () => "/staff/list-staff-schedule",
@@ -41,8 +40,9 @@ const timeOffApi = {
 };
 
 const bookingApi = {
-  book: () => "/booking/new-booking",
-  bookingDetail: (id) => `/booking/detail-for-staff/${id}`
+  bookingList: () => "/booking/list-for-staff",
+  bookingDetail: (id) => `/booking/detail-for-staff/${id}`,
+  updateBooking: () => `/booking/update`
 };
 
 const patientApi = {

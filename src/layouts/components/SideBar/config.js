@@ -21,6 +21,11 @@ export const sideBarItems = [
     icon: <FontAwesomeIcon icon={faUsers} width={20} />
   },
   {
+    to: routeConfig.booking,
+    label: "patient_label",
+    icon: <FontAwesomeIcon icon={faHospitalUser} width={20} />
+  },
+  {
     to: routeConfig.patient,
     label: "patient_label",
     icon: <FontAwesomeIcon icon={faHospitalUser} width={20} />
