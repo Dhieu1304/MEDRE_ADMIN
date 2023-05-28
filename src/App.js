@@ -74,10 +74,14 @@ function App() {
     socket.on("connect", onConnect);
     socket.on("disconnect", onDisconnect);
     socket.on("foo", onFooEvent);
-    socket.on("Success", (message) => {console.log(message)});
-    socket.on("Error", (message) => {console.log(message)});
-    socket.on("Notification", (payload) => {
-      console.log(payload);
+    socket.on("Success", () => {
+      // console.log(message);
+    });
+    socket.on("Error", () => {
+      // console.log(message);
+    });
+    socket.on("Notification", () => {
+      // console.log(payload);
       // todo: show notification here
     });
 
