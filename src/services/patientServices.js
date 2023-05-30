@@ -20,14 +20,18 @@ const createPatient = async ({ phoneNumber, name, gender, address, dob, healthIn
       const patient = camelcaseKeys(res?.data, { deep: true });
 
       return {
-        success: true,
         patient,
-        message: res?.message
+        success: true,
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
       };
     }
     return {
       success: false,
-      message: res?.message || `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
     };
   } catch (e) {
     // console.error(e.message);
@@ -63,15 +67,19 @@ const getPatients = async ({ phoneNumber, name, page, limit, gender, address, he
       const count = res?.data?.totalResults;
 
       return {
-        success: true,
         patients,
         count,
-        message: res?.message
+        success: true,
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
       };
     }
     return {
       success: false,
-      message: res?.message || `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
     };
   } catch (e) {
     // console.error(e.message);
@@ -94,14 +102,18 @@ const getPatientDetail = async (id) => {
       const patient = camelcaseKeys(res?.data, { deep: true });
 
       return {
-        success: true,
         patient,
-        message: res?.message
+        success: true,
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
       };
     }
     return {
       success: false,
-      message: res?.message || `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
     };
   } catch (e) {
     // console.error(e.message);

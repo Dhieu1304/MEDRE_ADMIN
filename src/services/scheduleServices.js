@@ -25,14 +25,18 @@ const getScheduleListByDoctorId = async (doctorId, from, to) => {
       const schedules = camelcaseKeys(res?.data, { deep: true });
 
       return {
-        success: true,
         schedules,
-        message: res?.message
+        success: true,
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
       };
     }
     return {
       success: false,
-      message: res?.message || `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
     };
   } catch (e) {
     // console.error(e.message);
@@ -52,14 +56,18 @@ const getTimeList = async () => {
       const times = camelcaseKeys(res?.data, { deep: true });
 
       return {
-        success: true,
         times,
-        message: res?.message
+        success: true,
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
       };
     }
     return {
       success: false,
-      message: res?.message || `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
     };
   } catch (e) {
     // console.error(e.message);
@@ -87,14 +95,18 @@ const changeApplyToScheduleByScheduleIds = async ({ scheduleIds, applyTo }) => {
       const schedules = camelcaseKeys(res?.data, { deep: true });
 
       return {
-        success: true,
         schedules,
-        message: res?.message
+        success: true,
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
       };
     }
     return {
       success: false,
-      message: res?.message || `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
     };
   } catch (e) {
     // console.error(e.message);
@@ -131,14 +143,18 @@ const createSchedulesByDoctorId = async ({ doctorId, applyFrom, applyTo, data })
       const schedules = camelcaseKeys(res?.data, { deep: true });
 
       return {
-        success: true,
         schedules,
-        message: res?.message
+        success: true,
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
       };
     }
     return {
       success: false,
-      message: res?.message || `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
     };
   } catch (e) {
     // console.error(e.message);

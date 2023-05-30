@@ -36,14 +36,18 @@ const login = async (emailOrUsernameOrPhoneNumber, password) => {
       saveToken(tokens);
 
       return {
-        success: true,
         staff,
-        message: res?.message
+        success: true,
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
       };
     }
     return {
       success: false,
-      message: res?.message || `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
     };
   } catch (e) {
     // console.error(e.message);

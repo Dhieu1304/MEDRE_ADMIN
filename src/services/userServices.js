@@ -41,15 +41,19 @@ const getUserList = async ({ email, phoneNumber, name, page, limit, blocked, gen
       const count = res?.data?.totalResults;
 
       return {
-        success: true,
         users,
         count,
-        message: res?.message
+        success: true,
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
       };
     }
     return {
       success: false,
-      message: res?.message || `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
     };
   } catch (e) {
     // console.error(e.message);
@@ -79,14 +83,18 @@ const getUserDetail = async (id) => {
       const user = camelcaseKeys(res?.data, { deep: true });
 
       return {
-        success: true,
         user,
-        message: res?.message
+        success: true,
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
       };
     }
     return {
       success: false,
-      message: res?.message || `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
     };
   } catch (e) {
     // console.error(e.message);
@@ -112,14 +120,18 @@ const editUserInfo = async ({ name, address, gender, dob }) => {
       const user = camelcaseKeys(res?.data?.user, { deep: true });
 
       return {
-        success: true,
         user,
-        message: res?.message
+        success: true,
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
       };
     }
     return {
       success: false,
-      message: res?.message || `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
     };
   } catch (e) {
     // console.error(e.message);
@@ -144,14 +156,18 @@ const blockUser = async (id, reason) => {
       const user = camelcaseKeys(res?.data?.user, { deep: true });
 
       return {
-        success: true,
         user,
-        message: res?.message
+        success: true,
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
       };
     }
     return {
       success: false,
-      message: res?.message || `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
     };
   } catch (e) {
     // console.error(e.message);
@@ -176,14 +192,18 @@ const unblockUser = async (id, reason) => {
       const user = camelcaseKeys(res?.data?.user, { deep: true });
 
       return {
-        success: true,
         user,
-        message: res?.message
+        success: true,
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
       };
     }
     return {
       success: false,
-      message: res?.message || `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
     };
   } catch (e) {
     // console.error(e.message);

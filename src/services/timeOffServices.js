@@ -31,15 +31,19 @@ const getTimeOffByDoctorId = async (doctorId, { from, to, page, limit }) => {
       // console.log("timeOffs in res: ", timeOffs);
 
       return {
-        success: true,
         timeOffs,
         count,
-        message: res?.message
+        success: true,
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
       };
     }
     return {
       success: false,
-      message: res?.message || `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
     };
   } catch (e) {
     // console.error(e.message);
@@ -72,15 +76,19 @@ const addNewTimeOff = async ({ from, to, session }) => {
       // console.log("timeOffs in res: ", timeOffs);
 
       return {
-        success: true,
         timeOffs,
         count,
-        message: res?.message
+        success: true,
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
       };
     }
     return {
       success: false,
-      message: res?.message || `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
     };
   } catch (e) {
     // console.error(e.message);
