@@ -63,10 +63,10 @@ function SettingList() {
         const settingsData = res?.settings || [];
         setSettings(settingsData);
 
-        return { success: true };
+        return { ...res };
       }
       setSettings([]);
-      return { error: res.message };
+      return { ...res };
     });
   };
 

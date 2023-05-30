@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { toast } from "react-toastify";
 import CustomModal from "../../../components/CustomModal";
 import CustomInput from "../../../components/CustomInput";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
@@ -29,10 +28,9 @@ function AddExpertiseModal({ show, setShow, handleAfterAddExpertise }) {
       if (res.success) {
         setShow(false);
         if (handleAfterAddExpertise) await handleAfterAddExpertise();
-        return { success: true };
+        return { ...res };
       }
-      toast(res.message);
-      return { error: res.message };
+      return { ...res };
     });
   };
 

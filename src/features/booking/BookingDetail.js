@@ -40,16 +40,10 @@ export default function BookingDetail() {
         const res = await bookingServices.getBookingDetail("51c5c8e7-2529-4e77-b896-0c7e9bdeda7a");
         if (res.success) {
           setBooking(res.booking);
-          return {
-            success: true,
-            error: ""
-          };
+          return { ...res };
         }
         setBooking({});
-        return {
-          success: false,
-          error: res.message
-        };
+        return { ...res };
       });
     };
 
@@ -90,6 +84,7 @@ export default function BookingDetail() {
       // await bookingServices.updateBooking(note);
       // const res = await bookingServices.updateBooking(note);
       // console.log(res);
+      // return { ...res};
     });
   };
   return (

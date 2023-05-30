@@ -15,10 +15,10 @@ const WithExpertisesLoaderWrapper = (WrappedComponent) => {
         if (res.success) {
           const expertisesData = res?.expertises;
           setExpertisesList(expertisesData);
-          return { success: true };
+          return { ...res };
         }
         setExpertisesList([]);
-        return { error: res.message };
+        return { ...res };
       });
     };
 

@@ -155,11 +155,11 @@ function PatientList() {
         setPatients(patientsData);
         setCount(countData);
 
-        return { success: true };
+        return { ...res };
       }
       setPatients([]);
       setCount(0);
-      return { error: res.message };
+      return { ...res };
     });
   };
 

@@ -41,10 +41,10 @@ function BookingInfoModal({ show, setShow, data, setData }) {
         if (res.success) {
           const bookingData = res.booking;
           setBooking(bookingData);
-          return { success: true, error: "" };
+          return { ...res };
         }
         setBooking({});
-        return { success: false, error: res.message };
+        return { ...res };
       });
     };
 

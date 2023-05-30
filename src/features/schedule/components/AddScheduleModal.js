@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useMemo } from "react";
 import { Box, Button, Checkbox, Grid, IconButton, ListItemText, MenuItem, Select, useTheme } from "@mui/material";
-import { toast } from "react-toastify";
 import { Add as AddIcon, RemoveCircle as RemoveCircleIcon } from "@mui/icons-material";
 import CustomModal from "../../../components/CustomModal";
 
@@ -134,12 +133,10 @@ function AddScheduleModal({ show, setShow, data, setData, handleAfterAddSchedule
       if (res?.success) {
         setShow(false);
         setData({});
-        toast(res.message);
         if (handleAfterAddSchedule) await handleAfterAddSchedule();
-        return { success: true };
+        return { ...res };
       }
-      toast(res.message);
-      return { error: res.message };
+      return { ...res };
     });
   };
 

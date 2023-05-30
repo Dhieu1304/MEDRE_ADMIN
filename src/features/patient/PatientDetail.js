@@ -61,10 +61,10 @@ function PatientDetail() {
         setDefaultValues(newDefaultValues);
         reset(newDefaultValues);
 
-        return { success: true };
+        return { ...res };
       }
       setPatient({});
-      return { error: res.message };
+      return { ...res };
     });
   };
   useEffect(() => {
@@ -90,7 +90,7 @@ function PatientDetail() {
   //         return { success: true };
   //       }
 
-  //       toast(res.message);
+  //
   //       return { error: res.message };
   //     });
   //   }

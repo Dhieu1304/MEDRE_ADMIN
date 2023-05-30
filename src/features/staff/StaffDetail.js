@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import { Add as AddIcon } from "@mui/icons-material";
-import { toast } from "react-toastify";
 import { useAbility } from "@casl/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear as faGearIcon } from "@fortawesome/free-solid-svg-icons";
@@ -134,10 +133,10 @@ function StaffDetail({ staffId, expertisesList, loadExpertisesList }) {
         setDefaultValues(newDefaultValues);
         reset(newDefaultValues);
 
-        return { success: true };
+        return { ...res };
       }
       setStaff({});
-      return { error: res.message };
+      return { ...res };
     });
   };
   useEffect(() => {
@@ -194,12 +193,11 @@ function StaffDetail({ staffId, expertisesList, loadExpertisesList }) {
 
         if (res?.success) {
           // await authStore.loadStaffInfo();
-          return { success: true };
+          return { ...res };
         }
         // setExpertisesList([]);
         // setIsFetchConfigSuccess(true);
-        toast(res.message);
-        return { error: res.message };
+        return { ...res };
       });
     }
   };

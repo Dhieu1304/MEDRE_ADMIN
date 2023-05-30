@@ -2,7 +2,6 @@ import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Checkbox, Grid, ListItemText, MenuItem, Select } from "@mui/material";
-import { toast } from "react-toastify";
 import CustomModal from "../../../components/CustomModal";
 
 import { useFetchingStore } from "../../../store/FetchingApiStore";
@@ -36,12 +35,10 @@ function AddNewTimeOffModal({ show, setShow, data, setData, handleAfterAddTimeOf
       if (res?.success) {
         setShow(false);
         setData({});
-        toast(res.message);
         if (handleAfterAddTimeOff) await handleAfterAddTimeOff();
-        return { success: true };
+        return { ...res };
       }
-      toast(res.message);
-      return { error: res.message };
+      return { ...res };
     });
   };
 

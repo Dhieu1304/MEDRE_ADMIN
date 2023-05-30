@@ -2,7 +2,6 @@ import { Box, Checkbox, Grid, ListItemText, MenuItem, Select, Typography } from 
 import formatDate from "date-and-time";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
-import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import CustomInput from "../../../components/CustomInput/CustomInput";
 import CustomModal from "../../../components/CustomModal";
@@ -54,10 +53,9 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
         setShow(false);
         setData({});
         if (handleAfterBooking) await handleAfterBooking(booking);
-        return { success: true };
+        return { ...res };
       }
-      toast(res.message);
-      return { error: res.message };
+      return { ...res };
     });
   };
 
@@ -67,10 +65,9 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
       const res = await patientServices.createPatient({ phoneNumber, name, gender, address, dob, healthInsurance });
       if (res?.success) {
         newPatient = res?.patient;
-        return { success: true };
+        return { ...res };
       }
-      toast(res.message);
-      return { error: res.message };
+      return { ...res };
     });
     return newPatient;
   };

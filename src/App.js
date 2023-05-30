@@ -44,9 +44,8 @@ function App() {
         if (res.success) {
           const staff = res?.staff;
           authStore.autoLogin(staff);
-          return { success: true };
         }
-        return { error: res.message };
+        return { ...res };
       });
       setIsFirstVisit(false);
     };

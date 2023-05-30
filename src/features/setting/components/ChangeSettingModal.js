@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { toast } from "react-toastify";
 import CustomModal from "../../../components/CustomModal";
 
 import { useFetchingStore } from "../../../store/FetchingApiStore";
@@ -32,11 +31,9 @@ function ChangeSettingModal({ show, setShow, data, setData, handleAfterEditSetti
         setShow(false);
         setData({});
         if (handleAfterEditSetting) await handleAfterEditSetting();
-        toast(res.message);
-        return { success: true };
+        return { ...res };
       }
-      toast(res.message);
-      return { error: res.message };
+      return { ...res };
     });
   };
 

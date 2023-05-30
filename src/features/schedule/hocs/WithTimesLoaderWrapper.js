@@ -15,10 +15,10 @@ const WithTimesLoaderWrapper = (WrappedComponent) => {
         if (res.success) {
           const timesData = res?.times;
           setTimesList(timesData);
-          return { success: true };
+          return { ...res };
         }
         setTimesList([]);
-        return { error: res.message };
+        return { ...res };
       });
     };
 

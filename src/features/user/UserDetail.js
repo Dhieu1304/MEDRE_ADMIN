@@ -4,7 +4,6 @@ import { Grid, Select, MenuItem, ListItemText, InputAdornment, useTheme } from "
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import { toast } from "react-toastify";
 import { useAbility } from "@casl/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear as faGearIcon } from "@fortawesome/free-solid-svg-icons";
@@ -79,10 +78,10 @@ function UserDetail() {
         setDefaultValues(newDefaultValues);
         reset(newDefaultValues);
 
-        return { success: true };
+        return { ...res };
       }
       setUser({});
-      return { error: res.message };
+      return { ...res };
     });
   };
   useEffect(() => {
@@ -116,11 +115,10 @@ function UserDetail() {
       await fetchApi(async () => {
         const res = await userServices.editUserInfo(data);
         if (res?.success) {
-          return { success: true };
+          return { ...res };
         }
 
-        toast(res.message);
-        return { error: res.message };
+        return { ...res };
       });
     }
   };

@@ -2,7 +2,6 @@ import { Box, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
 import CustomModal from "../../../components/CustomModal";
 import Staff from "../../../entities/Staff/Staff";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
@@ -30,10 +29,10 @@ function UnblockStaffModal({ show, setShow, data, setData, handleAfterUnblockSta
         setShow(false);
         setData({});
         if (handleAfterUnblockStaff) await handleAfterUnblockStaff();
-        return { success: true };
+        return { ...res };
       }
-      toast(res.message);
-      return { error: res.message };
+
+      return { ...res };
     });
   };
 

@@ -18,7 +18,6 @@ import formatDate from "date-and-time";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { Add as AddIcon } from "@mui/icons-material";
-import { toast } from "react-toastify";
 import WithDoctorLoaderWrapper from "../staff/hocs/WithDoctorLoaderWrapper";
 import { useFetchingStore } from "../../store/FetchingApiStore";
 import { normalizeStrToDateStr } from "../../utils/standardizedForForm";
@@ -162,10 +161,10 @@ function DoctorScheduleList({ doctor, doctorId }) {
         schedulesData = res?.schedules || [];
         resetChangeApplyTimeForm(schedulesData);
         setSchedules(schedulesData);
-        return { success: true };
+        return { ...res };
       }
       setSchedules([]);
-      return { error: res.message };
+      return { ...res };
     });
   };
 
@@ -183,14 +182,14 @@ function DoctorScheduleList({ doctor, doctorId }) {
       if (res?.success) {
         changeApplyToModal.setShow(false);
         changeApplyToModal.setData({});
-        toast(res.message);
+
         await loadData();
-        return { success: true };
+        return { ...res };
       }
-      toast(res.message);
+
       changeApplyToModal.setShow(false);
       changeApplyToModal.setData({});
-      return { error: res.message };
+      return { ...res };
     });
   };
 

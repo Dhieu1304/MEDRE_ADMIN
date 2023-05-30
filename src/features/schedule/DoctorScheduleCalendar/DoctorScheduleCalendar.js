@@ -89,14 +89,15 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
         formatDate.format(heads[0], "YYYY-MM-DD"),
         formatDate.format(heads[6], "YYYY-MM-DD")
       );
+
       if (res.success) {
         const schedulesData = res.schedules;
         // console.log("res: ", res);
         setSchedules(schedulesData);
-        return { success: true, error: "" };
+        return { ...res };
       }
       setSchedules([]);
-      return { success: false, error: res.message };
+      return { ...res };
     });
   };
 
@@ -113,10 +114,10 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
       if (res.success) {
         const timeOffsData = res.timeOffs;
         setTimeOffs(timeOffsData);
-        return { success: true, error: "" };
+        return { ...res };
       }
       setTimeOffs([]);
-      return { success: false, error: res.message };
+      return { ...res };
     });
   };
 

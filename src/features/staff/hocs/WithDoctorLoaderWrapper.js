@@ -17,9 +17,9 @@ const WithDoctorLoaderWrapper = (WrappedComponent) => {
 
         if (res.success) {
           setDoctor(res.staff);
-          return { success: true, error: "" };
+          return { ...res };
         }
-        return { success: false, error: res.message };
+        return { ...res };
       });
     };
 

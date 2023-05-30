@@ -177,11 +177,11 @@ function UserList() {
         setUsers(usersData);
         setCount(countData);
 
-        return { success: true };
+        return { ...res };
       }
       setUsers([]);
       setCount(0);
-      return { error: res.message };
+      return { ...res };
     });
   };
 

@@ -20,7 +20,6 @@ import {
   Typography
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
-import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { WithDoctorLoaderWrapper } from "../staff/hocs";
 import WithTimesLoaderWrapper from "./hocs/WithTimesLoaderWrapper";
@@ -112,14 +111,11 @@ function AddDoctorSchedule({ timesList, doctor }) {
       const res = await scheduleServices.createSchedulesByDoctorId({ doctorId, applyFrom, applyTo, data });
 
       if (res.success) {
-        toast(res.message);
         const path = `${routeConfig.staff}/${doctorId}${staffDetailRoutes.calendar}?date=${applyFrom}`;
         navigate(path);
-
-        return { success: true, error: "" };
+        return { ...res };
       }
-      toast(res.message);
-      return { success: false, error: res.message };
+      return { ...res };
     });
 
     // console.log("schedules: ", schedules);

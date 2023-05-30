@@ -108,11 +108,11 @@ function DoctorTimeOff({ doctor, doctorId }) {
         countData = res?.count;
         setTimeOffs(timeOffsData);
         setCount(countData);
-        return { success: true };
+        return { ...res };
       }
       setTimeOffs([]);
       setCount(0);
-      return { error: res.message };
+      return { ...res };
     });
   };
 

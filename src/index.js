@@ -12,11 +12,11 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   // <React.StrictMode>
   <AppConfigProvider>
-    <FetchingApiProvider>
-      <AuthProvider>
+    <AuthProvider>
+      <FetchingApiProvider>
         <App />
-      </AuthProvider>
-    </FetchingApiProvider>
+      </FetchingApiProvider>
+    </AuthProvider>
   </AppConfigProvider>
   // </React.StrictMode>
 );

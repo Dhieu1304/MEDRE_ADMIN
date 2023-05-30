@@ -2,7 +2,6 @@ import { Box, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
 import CustomModal from "../../../components/CustomModal";
 import User from "../../../entities/User/User";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
@@ -31,10 +30,10 @@ function UnblockUserModal({ show, setShow, data, setData, handleAfterUnblockUser
         setShow(false);
         setData({});
         if (handleAfterUnblockUser) await handleAfterUnblockUser();
-        return { success: true };
+        return { ...res };
       }
-      toast(res.message);
-      return { error: res.message };
+
+      return { ...res };
     });
   };
 

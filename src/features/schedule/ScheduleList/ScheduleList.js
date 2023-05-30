@@ -71,10 +71,10 @@ function ScheduleList({ timesList }) {
 
         setTimeOffsGroupByDoctorId({ ...timeOffsObjData });
         // timeOffsOfDoctor.push(timeOffsData);
-        return { success: true, error: "" };
+        return { ...res };
       }
       setTimeOffsGroupByDoctorId([]);
-      return { success: false, error: res.message };
+      return { ...res };
     });
   };
 
@@ -100,10 +100,10 @@ function ScheduleList({ timesList }) {
       if (res.success) {
         const doctorsData = res.staffs;
         setDoctors(doctorsData);
-        return { success: true, error: "" };
+        return { ...res };
       }
       setDoctors([]);
-      return { success: false, error: res.message };
+      return { ...res };
     });
   };
 

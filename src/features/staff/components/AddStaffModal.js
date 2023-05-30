@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Box, Checkbox, Grid, ListItemText, MenuItem, Select } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import CustomModal from "../../../components/CustomModal";
 import CustomInput from "../../../components/CustomInput";
 import { staffInputValidate } from "../../../entities/Staff";
@@ -49,10 +48,10 @@ function AddStaffModal({ show, setShow }) {
         const staffId = res?.staff?.id;
         if (staffId) navigate(`${routeConfig.staff}/${staffId}`);
 
-        return { success: true };
+        return { ...res };
       }
-      toast(res.message);
-      return { error: res.message };
+
+      return { ...res };
     });
   };
 
