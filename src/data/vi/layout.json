@@ -7,7 +7,8 @@
     "schedule_label": "Lịch trình",
     "setting_label": "Cài đặt",
     "meeting_label": "Cuộc hẹn",
-    "booking_label": "Đặt hẹn"
+    "booking_label": "Đặt hẹn",
+    "notification_label": "Thông báo"
   },
   "header": {
     "profile_label": "Thông tin cá nhân",

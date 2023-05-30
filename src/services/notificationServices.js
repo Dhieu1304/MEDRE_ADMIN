@@ -182,10 +182,48 @@ const unSubscribeTopic = async (registrationToken) => {
   }
 };
 
+const createNotification = async ({ title, content, description }) => {
+  const dataBody = cleanUndefinedAndEmptyStrValueObject({
+    title,
+    content,
+    description,
+    type: "Advertisement",
+    notification_for: "AllSystem"
+  });
+
+  // console.log("dataBody: ", dataBody);
+  try {
+    const res = await axiosClient.post(notificationApi.createNotification(), dataBody);
+    // console.log("res: ", res);
+
+    if (res?.status) {
+      return {
+        success: true,
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
+      };
+    }
+    return {
+      success: false,
+      message: res?.message || `Status is ${res.status}`,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
+    };
+  } catch (e) {
+    // console.error("e: ", e);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
 export default {
   getNotificationList,
   markRead,
   countUnread,
   subscribeTopic,
-  unSubscribeTopic
+  unSubscribeTopic,
+  createNotification
 };

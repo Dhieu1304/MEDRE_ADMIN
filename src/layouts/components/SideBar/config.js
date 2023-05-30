@@ -1,4 +1,5 @@
 import {
+  faBell,
   faCalendarDays,
   faCalendarPlus,
   faCreditCard,
@@ -49,5 +50,10 @@ export const sideBarItems = [
     to: routeConfig.meeting,
     label: "meeting_label",
     icon: <FontAwesomeIcon icon={faCalendarPlus} width={20} />
+  },
+  {
+    to: routeConfig.notification,
+    label: "notification_label",
+    icon: <FontAwesomeIcon icon={faBell} width={20} />
   }
 ];

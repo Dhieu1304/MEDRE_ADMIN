@@ -62,7 +62,8 @@ const notificationApi = {
   markRead: () => "/notification/mark-read",
   countUnread: () => "/notification/count-unread",
   subscribeTopic: () => "/notification/subscribe-topic",
-  unSubscribeTopic: () => "/notification/un-subscribe-topic"
+  unSubscribeTopic: () => "/notification/un-subscribe-topic",
+  createNotification: () => "/notification/create"
 };
 
 export {
