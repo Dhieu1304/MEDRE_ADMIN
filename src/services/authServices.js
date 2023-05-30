@@ -1,7 +1,8 @@
 import { authApi } from "../config/apiConfig";
 import axiosClient from "../config/axiosClient";
 import patternConfig from "../config/patternConfig";
-import localStorageUtil from "../utils/localStorageUtil";
+// import localStorageUtil from "../utils/localStorageUtil";
+import { clearToken, saveToken } from "../utils/tokenUtils";
 
 const login = async (emailOrUsernameOrPhoneNumber, password) => {
   try {
@@ -26,11 +27,13 @@ const login = async (emailOrUsernameOrPhoneNumber, password) => {
       const staff = res?.data?.staff;
       const tokens = res?.data?.tokens;
 
-      localStorageUtil.setItem(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN, tokens?.access?.token);
-      localStorageUtil.setItem(localStorageUtil.LOCAL_STORAGE.REFRESH_TOKEN, tokens?.refresh?.token);
+      // localStorageUtil.setItem(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN, tokens?.access?.token);
+      // localStorageUtil.setItem(localStorageUtil.LOCAL_STORAGE.REFRESH_TOKEN, tokens?.refresh?.token);
 
-      localStorageUtil.setItem(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN_EXPIRE_TIME, tokens?.access?.expires);
-      localStorageUtil.setItem(localStorageUtil.LOCAL_STORAGE.REFRESH_TOKEN_EXPIRE_TIME, tokens?.refresh?.expires);
+      // localStorageUtil.setItem(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN_EXPIRE_TIME, tokens?.access?.expires);
+      // localStorageUtil.setItem(localStorageUtil.LOCAL_STORAGE.REFRESH_TOKEN_EXPIRE_TIME, tokens?.refresh?.expires);
+
+      saveToken(tokens);
 
       return {
         success: true,
@@ -52,10 +55,12 @@ const login = async (emailOrUsernameOrPhoneNumber, password) => {
 };
 
 const logout = async () => {
-  localStorageUtil.removeItem(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN);
-  localStorageUtil.removeItem(localStorageUtil.LOCAL_STORAGE.REFRESH_TOKEN);
-  localStorageUtil.removeItem(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN_EXPIRE_TIME);
-  localStorageUtil.removeItem(localStorageUtil.LOCAL_STORAGE.REFRESH_TOKEN_EXPIRE_TIME);
+  // localStorageUtil.removeItem(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN);
+  // localStorageUtil.removeItem(localStorageUtil.LOCAL_STORAGE.REFRESH_TOKEN);
+  // localStorageUtil.removeItem(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN_EXPIRE_TIME);
+  // localStorageUtil.removeItem(localStorageUtil.LOCAL_STORAGE.REFRESH_TOKEN_EXPIRE_TIME);
+
+  clearToken();
 
   return {
     success: true,

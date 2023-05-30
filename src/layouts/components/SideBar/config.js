@@ -22,7 +22,7 @@ export const sideBarItems = [
   },
   {
     to: routeConfig.booking,
-    label: "patient_label",
+    label: "booking_label",
     icon: <FontAwesomeIcon icon={faHospitalUser} width={20} />
   },
   {
@@ -44,11 +44,6 @@ export const sideBarItems = [
     to: routeConfig.setting,
     label: "setting_label",
     icon: <FontAwesomeIcon icon={faGear} width={20} />
-  },
-  {
-    to: routeConfig.home,
-    label: "booking_label",
-    icon: <FontAwesomeIcon icon={faCalendarPlus} width={20} />
   },
   {
     to: routeConfig.meeting,
