@@ -1,9 +1,9 @@
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
-// import { toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { useAppConfigStore } from "../../../store/AppConfigStore";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
-// import CustomNotificatioToast from "../../../components/CustomNotificatioToast";
+import CustomNotificatioToast from "../../../components/CustomNotificatioToast";
 import { SOCKET, socket } from "../../../config/socketConfig";
 import { useAuthStore } from "../../../store/AuthStore/hooks";
 import cookiesUtil from "../../../utils/cookiesUtil";
@@ -62,16 +62,16 @@ const useNotificationBackground = () => {
     setIsSocketConnected(false);
   };
 
-  const handleNotifications = async () => {
-    // toast(<CustomNotificatioToast title={payload?.notification?.title} body={payload?.notification?.body} />, {
-    //   position: toast.POSITION.BOTTOM_RIGHT,
-    //   autoClose: 3000,
-    //   hideProgressBar: true,
-    //   closeOnClick: true,
-    //   pauseOnHover: true,
-    //   draggable: true,
-    //   progress: undefined
-    // });
+  const handleNotifications = async (payload) => {
+    toast(<CustomNotificatioToast title={payload?.notification?.title} body={payload?.notification?.body} />, {
+      position: toast.POSITION.BOTTOM_RIGHT,
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined
+    });
 
     await loadNotifications((notifications?.length || 0) + 1);
   };

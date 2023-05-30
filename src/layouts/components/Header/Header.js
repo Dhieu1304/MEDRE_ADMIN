@@ -30,6 +30,7 @@ import { useAppConfigStore } from "../../../store/AppConfigStore/hooks";
 import { DARK, LIGHT } from "../../../config/themeConfig";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
 import localStorageUtil from "../../../utils/localStorageUtil";
+import CustomNotification from "../../../components/CustomNotification";
 
 function Header({ open, handleDrawerOpen }) {
   const authStore = useAuthStore();
@@ -42,7 +43,7 @@ function Header({ open, handleDrawerOpen }) {
 
   const [anchorElUser, setAnchorElUser] = useState(null);
 
-  const { mode, setMode, locale, setLocale } = useAppConfigStore();
+  const { mode, setMode, locale, setLocale, notifications, unreadNotificationCount } = useAppConfigStore();
 
   const { t, i18n } = useTranslation("layout", { keyPrefix: "header" });
 
@@ -114,6 +115,8 @@ function Header({ open, handleDrawerOpen }) {
               }}
             />
           )}
+
+          <CustomNotification notifications={notifications} unreadNotificationCount={unreadNotificationCount} />
 
           <Tooltip title="Open settings">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
