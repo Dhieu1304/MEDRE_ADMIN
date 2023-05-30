@@ -8,6 +8,7 @@ const routeConfig = {
   schedule: "/schedule",
   setting: "/setting",
   meeting: "/meeting",
+  notification: "/notification",
   booking: "/booking",
   default: "/*"
 };

@@ -10,6 +10,7 @@ import UserPage from "../pages/UserPage/UserPage";
 import PatientPage from "../pages/PatientPage/PatientPage";
 import SettingPage from "../pages/SettingPage/SettingPage";
 import BookingPage from "../pages/BookingPage/BookingPage";
+import NotificationPage from "../pages/NotificationPage";
 
 // Public routes
 const publicRoutes = [
@@ -26,6 +27,7 @@ const privateRoutes = [
   { path: `${routeConfig.setting}/*`, component: SettingPage },
   { path: `${routeConfig.booking}/*`, component: BookingPage },
   { path: `${routeConfig.payment}/*`, component: PaymentPage },
+  { path: `${routeConfig.notification}/*`, component: NotificationPage },
   { path: `${routeConfig.meeting}/*`, component: MeetingPage, layout: null },
   { path: routeConfig.default, component: Navigate, props: { replace: true, to: routeConfig.home }, layout: null }
 ];
