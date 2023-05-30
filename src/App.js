@@ -18,9 +18,7 @@ import staffServices from "./services/staffServices";
 import images from "./assets/images";
 import CustomOverlay from "./components/CustomOverlay/CustomOverlay";
 // import "./config/firebase";
-import { requestPermission } from "./config/firebase";
-import { socket } from "./config/socketConfig";
-import localStorageUtil from "./utils/localStorageUtil";
+import useNotificationBackground from "./features/notification/hooks/useNotificationBackground";
 
 function App() {
   /*
@@ -35,6 +33,8 @@ function App() {
   const { mode, locale } = useAppConfigStore();
   const theme = useMemo(() => createTheme(getTheme(mode), locales[locale]), [mode, locale]);
   const { fetchApi } = useFetchingStore();
+
+  useNotificationBackground();
 
   useEffect(() => {
     const loadData = async () => {
@@ -51,57 +51,6 @@ function App() {
     };
     loadData();
   }, []);
-
-  // const [isConnected, setIsConnected] = useState(socket.connected);
-  // const [fooEvents, setFooEvents] = useState([]);
-
-  useEffect(() => {
-    // console.log("Socket useEffect");
-    function onConnect() {
-      // console.log("Connect");
-      // setIsConnected(true);
-    }
-    function onDisconnect() {
-      // console.log("Diconnect");
-      // setIsConnected(false);
-    }
-    function onFooEvent() {
-      // console.log("onFooEvent");
-      // setFooEvents((previous) => [...previous, value]);
-    }
-
-    socket.on("connect", onConnect);
-    socket.on("disconnect", onDisconnect);
-    socket.on("foo", onFooEvent);
-    socket.on("Success", () => {
-      // console.log(message);
-    });
-    socket.on("Error", () => {
-      // console.log(message);
-    });
-    socket.on("Notification", () => {
-      // console.log(payload);
-      // todo: show notification here
-    });
-
-    socket.on("connect_error", () => {
-      // console.log("Eror", error.message);
-    });
-
-    return () => {
-      socket.off("connect", onConnect);
-      socket.off("disconnect", onDisconnect);
-      socket.off("foo", onFooEvent);
-    };
-  }, []);
-
-  useEffect(() => {
-    // console.log("authStore.isLogin: ", authStore.isLogin);
-    if (authStore.isLogin) {
-      socket.emit("JoinRoom", localStorageUtil.getItem(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN));
-      requestPermission();
-    }
-  }, [authStore.isLogin]);
 
   const ability = defineAbilityFor(authStore.staff);
 

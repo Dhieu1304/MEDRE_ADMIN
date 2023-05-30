@@ -57,4 +57,23 @@ const settingApi = {
   editSetting: () => `/setting/edit`
 };
 
-export { authApi, userApi, staffApi, scheduleApi, expertiseApi, timeOffApi, bookingApi, patientApi, settingApi };
+const notificationApi = {
+  notificationList: () => "/notification/list",
+  markRead: () => "/notification/mark-read",
+  countUnread: () => "/notification/count-unread",
+  subscribeTopic: () => "/notification/subscribe-topic",
+  unSubscribeTopic: () => "/notification/un-subscribe-topic"
+};
+
+export {
+  authApi,
+  userApi,
+  staffApi,
+  scheduleApi,
+  expertiseApi,
+  timeOffApi,
+  bookingApi,
+  patientApi,
+  settingApi,
+  notificationApi
+};

@@ -11,35 +11,32 @@ const firebaseConfig = {
   measurementId: "G-K1F3D4895N"
 };
 
-export const requestPermission = () => {
-  // console.log("Requesting permission...");
-  Notification.requestPermission().then((permission) => {
+export const requestPermission = async () => {
+  try {
+    let resultToken;
+    const permission = await Notification.requestPermission();
     if (permission === "granted") {
-      // console.log("Notification permission granted.");
       const app = initializeApp(firebaseConfig);
-
       const messaging = getMessaging(app);
-      getToken(messaging, {
+      const currentToken = await getToken(messaging, {
         vapidKey: process.env.REACT_APP_FIREBASE_VAPID_KEY
-        // validKey: "BIM1c0Hf6ZJdZCnFjkdx9Judg_y4y5CEe3VsPTTib4udEvzbCoMj5HH-mxWSwXDR_Ft7t_IB9t9HrsuIsGY-XsQ"
-      }).then((currentToken) => {
-        // if (currentToken) {
-        //   console.log("currentToken: ", currentToken);
-        // } else {
-        //   console.log("Can not get token");
-        // }
-        return currentToken;
       });
-
-      // onMessage(messaging, (payload) => {
-      //   // console.log("Message received. ", payload);
-      //   return payload;
-      // });
+      if (currentToken) {
+        // console.log("currentToken: ", currentToken);
+        resultToken = currentToken;
+      }
+      // else {
+      //   console.log("Can not get token");
+      // }
       onMessage(messaging, () => {});
     } else {
       // console.log("Do not have permission!");
+      return resultToken;
     }
-  });
+    return resultToken;
+  } catch (error) {
+    return null;
+  }
 };
 
 // requestPermission();
