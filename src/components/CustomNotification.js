@@ -3,14 +3,17 @@ import React, { useState } from "react";
 import { IconButton, Badge, Menu, MenuItem, Box, Typography, Button } from "@mui/material";
 import { Notifications as NotificationsIcon } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAppConfigStore } from "../store/AppConfigStore";
 import { useFetchingStore } from "../store/FetchingApiStore";
 import notificationServices from "../services/notificationServices";
+import { notificationTypes } from "../entities/Notification/constant";
+import routeConfig from "../config/routeConfig";
 
 function CustomNotification({ notifications, unreadNotificationCount }) {
   const [anchorEl, setAnchorEl] = useState(null);
 
+  const navigate = useNavigate();
   const { t } = useTranslation("components", { keyPrefix: "CustomNotification" });
   const { fetchApi } = useFetchingStore();
   const { notificationLimit, notificationPage, notificationTotalPages, updateNotifications, markReadNotification } =
@@ -49,19 +52,36 @@ function CustomNotification({ notifications, unreadNotificationCount }) {
     });
   };
 
-  const handleToNotificationDetail = async (id, index) => {
-    await fetchApi(
-      async () => {
-        // console.log("notificationLimit: ", notificationLimit);
-        const res = await notificationServices.markRead(id);
-        if (res.success) {
-          markReadNotification(index);
+  const handleToNotificationDetail = async (notification, index) => {
+    // console.log("notification: ", notification);
+    const id = notification?.id;
+    let to = `/notification/${notification?.id}`;
+    const notificationType = notification?.notificationsParent?.type;
+    const idRedirect = notification?.notificationsParent?.idRedirect;
+
+    if (notificationType === notificationTypes.BOOKING && idRedirect) {
+      // console.log("Type: ", notificationType);
+      to = `${routeConfig.booking}/${idRedirect}`;
+    }
+    // console.log("to: ", to);
+
+    navigate(to);
+
+    if (!notification?.read) {
+      await fetchApi(
+        async () => {
+          // console.log("notificationLimit: ", notificationLimit);
+          // console.log("markRead");
+          const res = await notificationServices.markRead(id);
+          if (res.success) {
+            markReadNotification(index);
+            return { ...res };
+          }
           return { ...res };
-        }
-        return { ...res };
-      },
-      { hideErrorToast: true, hideSuccessToast: true }
-    );
+        },
+        { hideErrorToast: true, hideSuccessToast: true }
+      );
+    }
   };
 
   return (
@@ -98,15 +118,15 @@ function CustomNotification({ notifications, unreadNotificationCount }) {
               }}
             >
               <Box
-                component={Link}
-                to={`/notification/${notification?.id}`}
+                // component={Link}
+                // to={`/notification/${notification?.id}`}
                 sx={{
                   textDecoration: "none"
                 }}
                 state={{
                   notification
                 }}
-                onClick={async () => handleToNotificationDetail(notification?.id, index)}
+                onClick={async () => handleToNotificationDetail(notification, index)}
               >
                 <Typography variant="h5" fontSize={16} fontWeight={600} color="black">
                   {notification?.notificationsParent?.title?.slice(0, 50)}

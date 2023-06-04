@@ -1,4 +1,5 @@
 const routes = {
+  create: "/create",
   detail: "/:notificationId"
 };
 

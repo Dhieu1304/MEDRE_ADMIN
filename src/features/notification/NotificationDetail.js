@@ -1,40 +1,71 @@
 import { Box, Typography } from "@mui/material";
-import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+
+import { useParams } from "react-router-dom";
+import CustomOverlay from "../../components/CustomOverlay/CustomOverlay";
+import notificationServices from "../../services/notificationServices";
+import { useFetchingStore } from "../../store/FetchingApiStore";
 
 function NotificationDetail() {
-  const location = useLocation();
-  const notification = location.state?.notification;
+  const [notification, setNotification] = useState();
 
-  // console.log("notification: ", notification);
-  return (
-    <Box
-      sx={{
-        width: "100%",
-        px: {
-          xs: 4,
-          md: 10,
-          lg: 20
+  const params = useParams();
+  const notificationId = params?.notificationId;
+
+  const { isLoading, fetchApi } = useFetchingStore();
+  useEffect(() => {
+    const loadData = async () => {
+      await fetchApi(
+        async () => {
+          const res = await notificationServices.getNotificationDetail(notificationId);
+
+          if (res.success) {
+            const notificationData = res.notification;
+            setNotification(notificationData);
+
+            return { ...res };
+          }
+          setNotification({});
+          return { ...res };
         },
-        position: "relative"
-      }}
-    >
-      <Typography
-        variant="h2"
-        textAlign="center"
+        { hideSuccessToast: true }
+      );
+    };
+    loadData();
+  }, []);
+
+  return (
+    <>
+      <CustomOverlay open={isLoading} />
+      <Box
         sx={{
-          fontSize: {
-            xs: 16,
-            md: 25,
-            lg: 40
+          width: "100%",
+          px: {
+            xs: 4,
+            md: 10,
+            lg: 20
           },
-          fontWeight: 600
+          position: "relative"
         }}
       >
-        {notification?.notificationsParent?.title}
-      </Typography>
-      <Box component="p">{notification?.notificationsParent?.content}</Box>
-      <Box component="p">{notification?.notificationsParent?.description}</Box>
-    </Box>
+        <Typography
+          variant="h2"
+          textAlign="center"
+          sx={{
+            fontSize: {
+              xs: 16,
+              md: 25,
+              lg: 40
+            },
+            fontWeight: 600
+          }}
+        >
+          {notification?.notificationsParent?.title}
+        </Typography>
+        <Box component="p">{notification?.notificationsParent?.content}</Box>
+        <Box component="p">{notification?.notificationsParent?.description}</Box>
+      </Box>
+    </>
   );
 }
 

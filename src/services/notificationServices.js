@@ -53,6 +53,38 @@ const getNotificationList = async ({ type, read, page, limit } = {}) => {
   }
 };
 
+const getNotificationDetail = async (id) => {
+  // console.log("params: ", params);
+  try {
+    const res = await axiosClient.get(notificationApi.notificationDetail(id));
+    // console.log("res: ", res);
+
+    if (res?.status) {
+      const notification = camelcaseKeys(res?.data, { deep: true });
+
+      return {
+        notification,
+        success: true,
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
+      };
+    }
+    return {
+      success: false,
+      message: res?.message || `Status is ${res.status}`,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
+    };
+  } catch (e) {
+    // console.error("e: ", e);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
 const markRead = async (id) => {
   const dataBody = cleanUndefinedAndEmptyStrValueObject({
     id
@@ -221,6 +253,7 @@ const createNotification = async ({ title, content, description }) => {
 
 export default {
   getNotificationList,
+  getNotificationDetail,
   markRead,
   countUnread,
   subscribeTopic,
