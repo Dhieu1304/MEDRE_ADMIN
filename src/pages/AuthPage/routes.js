@@ -1,5 +1,6 @@
 const authRoutes = {
   login: "/login",
+  forgetPassword: "/forget-password",
   default: "/*"
 };
 

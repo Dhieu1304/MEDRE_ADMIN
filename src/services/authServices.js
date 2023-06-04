@@ -76,7 +76,7 @@ const logout = async () => {
 const sendVerificationToEmail = async (email) => {
   const dataBody = cleanUndefinedAndEmptyStrValueObject({
     email,
-    type: 1
+    type: 2
   });
 
   // console.log("dataBody: ", dataBody);
@@ -112,7 +112,7 @@ const sendVerificationToEmail = async (email) => {
 const sendResetPasswordToEmail = async (email) => {
   const dataBody = cleanUndefinedAndEmptyStrValueObject({
     email,
-    type: 1
+    type: 2
   });
 
   // console.log("dataBody: ", dataBody);

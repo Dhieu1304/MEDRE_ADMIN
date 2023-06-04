@@ -18,5 +18,16 @@
 
   "NotHaveAccess": {
     "errorMessage": "You don't have access"
+  },
+
+  "ForgotPassword": {
+    "title": "Reset password"
+  },
+
+  "ChangePassword": {
+    "title": "Change password",
+    "button": {
+      "save": "Save"
+    }
   }
 }
