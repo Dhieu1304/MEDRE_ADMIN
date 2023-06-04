@@ -13,6 +13,7 @@ import BookingPage from "../pages/BookingPage/BookingPage";
 import NotificationPage from "../pages/NotificationPage";
 import VerificationPage from "../pages/VerificationPage";
 import AuthLayout from "../layouts/AuthLayout";
+import ChangePasswordPage from "../pages/ChangePasswordPage";
 
 // Public routes
 const publicRoutes = [
@@ -31,6 +32,7 @@ const privateRoutes = [
   { path: `${routeConfig.booking}/*`, component: BookingPage },
   { path: `${routeConfig.payment}/*`, component: PaymentPage },
   { path: `${routeConfig.notification}/*`, component: NotificationPage },
+  { path: `${routeConfig.changePassword}/*`, component: ChangePasswordPage, layout: AuthLayout },
   { path: `${routeConfig.verification}/*`, component: VerificationPage, layout: AuthLayout },
   { path: `${routeConfig.meeting}/*`, component: MeetingPage, layout: null },
   { path: routeConfig.default, component: Navigate, props: { replace: true, to: routeConfig.home }, layout: null }

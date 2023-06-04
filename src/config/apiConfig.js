@@ -28,7 +28,8 @@ const staffApi = {
   editStaff: (id) => `/staff/edit/${id}`,
   editMyProfile: () => `/staff/my-profile/edit`,
   blockStaff: () => `/staff/confirm-blocking`,
-  unblockStaff: () => `/staff/confirm-unblocking`
+  unblockStaff: () => `/staff/confirm-unblocking`,
+  changePassword: () => "/staff/my-profile/change-password"
 };
 
 const expertiseApi = {

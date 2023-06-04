@@ -509,6 +509,43 @@ const unblockStaff = async (id, reason) => {
   }
 };
 
+const changePassword = async ({ oldPassword, newPassword, confirmPassword }) => {
+  const dataBody = cleanUndefinedAndEmptyStrValueObject({
+    old_password: oldPassword,
+    new_password: newPassword,
+    confirm_password: confirmPassword
+  });
+
+  // console.log("dataBody: ", dataBody);
+
+  try {
+    const res = await axiosClient.post(staffApi.changePassword(), dataBody);
+
+    // console.log("changePassword res: ", res);
+
+    if (res?.status) {
+      return {
+        success: true,
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
+      };
+    }
+    return {
+      success: false,
+      message: res?.message,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
 export default {
   createStaff,
   getStaffList,
@@ -521,5 +558,6 @@ export default {
   editMyProfile,
   editStaffRole,
   blockStaff,
-  unblockStaff
+  unblockStaff,
+  changePassword
 };

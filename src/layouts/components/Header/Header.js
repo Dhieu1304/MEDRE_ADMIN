@@ -141,9 +141,18 @@ function Header({ open, handleDrawerOpen }) {
             onClose={handleCloseUserMenu}
           >
             {headerDropdownMenu.map((item) => (
-              <MenuItem key={item.label} onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">{t(item.label)}</Typography>
-              </MenuItem>
+              <Box
+                component={Link}
+                to={item.to}
+                sx={{
+                  textDecoration: "none",
+                  color: "inherit"
+                }}
+              >
+                <MenuItem key={item.label} onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">{t(item.label)}</Typography>
+                </MenuItem>
+              </Box>
             ))}
             <Box
               component={Link}
