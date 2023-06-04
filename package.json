@@ -27,6 +27,7 @@
     "i18next-browser-languagedetector": "^7.0.1",
     "i18next-http-backend": "^2.1.1",
     "js-cookie": "^3.0.5",
+    "mui-one-time-password-input": "^1.1.1",
     "npm": "^9.6.2",
     "prop-types": "^15.8.1",
     "query-string": "^8.1.0",

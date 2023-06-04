@@ -18,6 +18,7 @@ import patientEntity from "./patientEntity.json";
 import patientFeature from "./patientFeature.json";
 import settingFeature from "./settingFeature.json";
 import settingEntity from "./settingEntity.json";
+import verificationFeature from "./verificationFeature.json";
 
 const en = {
   authFeature,
@@ -39,7 +40,8 @@ const en = {
   patientEntity,
   patientFeature,
   settingFeature,
-  settingEntity
+  settingEntity,
+  verificationFeature
 };
 
 export default en;

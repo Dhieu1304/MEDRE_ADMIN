@@ -5,6 +5,7 @@
     "phoneNumber": "Phone Number",
     "email": "Email",
     "emailOrUsernameOrPhoneNumber": "Email, username or phone number",
+    "phoneNumberOrEmail": "Email or phone number",
     "password": "Password",
     "name": "Name",
     "image": "Image",

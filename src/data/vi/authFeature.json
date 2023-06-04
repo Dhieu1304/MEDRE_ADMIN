@@ -3,6 +3,10 @@
     "title": "Đăng nhập",
     "button": {
       "login": "Đăng nhập"
+    },
+    "link": {
+      "verification": "Xác thực tài khoản",
+      "forgotPassword": "Quên mật khẩu"
     }
   },
 

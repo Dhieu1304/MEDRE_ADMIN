@@ -3,6 +3,11 @@
     "title": "Sign in",
     "button": {
       "login": "Login"
+    },
+
+    "link": {
+      "verification": "Verification account",
+      "forgotPassword": "Forgot password"
     }
   },
 
