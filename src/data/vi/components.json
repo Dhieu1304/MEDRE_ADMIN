@@ -35,5 +35,11 @@
         "save": "Lưu"
       }
     }
+  },
+  "CustomNotification": {
+    "title": "Thông báo",
+    "button": {
+      "seeMore": "Xem thêm"
+    }
   }
 }

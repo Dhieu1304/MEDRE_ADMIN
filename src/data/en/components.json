@@ -36,5 +36,12 @@
         "save": "Save"
       }
     }
+  },
+
+  "CustomNotification": {
+    "title": "Notifications",
+    "button": {
+      "seeMore": "See more"
+    }
   }
 }

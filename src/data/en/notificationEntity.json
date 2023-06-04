@@ -1,0 +1,38 @@
+{
+  "properties": {
+    "id": "ID",
+    "title": "Title",
+    "content": "Content",
+    "description": "Description",
+    "type": "Type",
+    "notification_for": "Notification for",
+    "created_by": "Created by",
+    "createdAt": "Created at",
+    "updatedAt": "Updated at",
+    "deletedAt": "Deleted at"
+  },
+
+  "constants": {
+    "genders": {
+      "male": "Male",
+      "female": "Female",
+      "other": "Other"
+    },
+    "roles": {
+      "admin": "Admin",
+      "doctor": "Doctor",
+      "nurse": "Nurse",
+      "customerService": "Customer Service"
+    },
+    "statuses": {
+      "block": "Blocked",
+      "unblock": "Unblocked"
+    }
+  },
+  "messages": {
+    "emailVerifiedSuccess": "Email verification successfully",
+    "emailVerifiedFailed": "Email verification failed",
+    "phoneVerifiedSuccess": "Phone number verification successfully",
+    "phoneVerifiedFailed": "Phone number verification failed"
+  }
+}
