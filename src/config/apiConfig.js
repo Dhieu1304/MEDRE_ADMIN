@@ -1,7 +1,15 @@
 const authApi = {
   loginByEmail: () => "/auth/staff/login-by-email",
   loginByPhoneNumber: () => "/auth/staff/login-by-phone-number",
-  loginByUsername: () => "/auth/staff/login-by-username"
+  loginByUsername: () => "/auth/staff/login-by-username",
+
+  sendVerificationToEmail: () => "/auth/verify/resend-mail",
+  sendResetPasswordToEmail: () => "/auth/reset-password/send-mail",
+  sendVerificationOtpToPhone: () => "",
+  sendResetPasswordOtpToPhone: () => "",
+
+  verifyOtpToVerfifyPhoneNumber: () => "",
+  verifyOtpToResetPasswordPhoneNumber: () => ""
 };
 
 const userApi = {

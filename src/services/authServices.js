@@ -1,6 +1,7 @@
 import { authApi } from "../config/apiConfig";
 import axiosClient from "../config/axiosClient";
 import patternConfig from "../config/patternConfig";
+import { cleanUndefinedAndEmptyStrValueObject } from "../utils/objectUtil";
 // import localStorageUtil from "../utils/localStorageUtil";
 import { clearToken, saveToken } from "../utils/tokenUtils";
 
@@ -72,7 +73,221 @@ const logout = async () => {
   };
 };
 
+const sendVerificationToEmail = async (email) => {
+  const dataBody = cleanUndefinedAndEmptyStrValueObject({
+    email,
+    type: 1
+  });
+
+  // console.log("dataBody: ", dataBody);
+
+  try {
+    const res = await axiosClient.post(authApi.sendVerificationToEmail(), dataBody);
+
+    // console.log("res: ", res);
+
+    if (res?.status) {
+      return {
+        success: true,
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
+      };
+    }
+    return {
+      success: false,
+      message: res?.message,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
+const sendResetPasswordToEmail = async (email) => {
+  const dataBody = cleanUndefinedAndEmptyStrValueObject({
+    email,
+    type: 1
+  });
+
+  // console.log("dataBody: ", dataBody);
+
+  try {
+    const res = await axiosClient.post(authApi.sendResetPasswordToEmail(), dataBody);
+
+    // console.log("res: ", res);
+
+    if (res?.status) {
+      return {
+        success: true,
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
+      };
+    }
+    return {
+      success: false,
+      message: res?.message,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
+const sendVerificationOtpToPhone = async (phoneNumber) => {
+  // const dataBody = cleanUndefinedAndEmptyStrValueObject({
+  //   phone_number: phoneNumber
+  // });
+  // console.log("dataBody: ", dataBody);
+  // try {
+  //   const res = await axiosClient.post(authApi.sendVerificationOtpToPhone(), dataBody);
+  //   console.log("res: ", res);
+  //   if (res?.status) {
+  //     return {
+  //       success: true,
+  //       message: res?.message,
+  //       ...res
+  //     };
+  //   }
+  //   return {
+  //     success: false,
+  //     message: res?.message,
+  //       ...res
+  //   };
+  // } catch (e) {
+  //   // console.error(e.message);
+  //   return {
+  //     success: false,
+  //     message: e.message
+  //   };
+  // }
+
+  return {
+    success: true,
+    message: phoneNumber
+  };
+};
+
+const sendResetPasswordOtpToPhone = async (phoneNumber) => {
+  // const dataBody = cleanUndefinedAndEmptyStrValueObject({
+  //   phone_number: phoneNumber
+  // });
+  // console.log("dataBody: ", dataBody);
+  // try {
+  //   const res = await axiosClient.post(authApi.sendResetPasswordOtpToPhone(), dataBody);
+  //   console.log("res: ", res);
+  //   if (res?.status) {
+  //     return {
+  //       success: true,
+  //       message: res?.message,
+  //       ...res
+  //     };
+  //   }
+  //   return {
+  //     success: false,
+  //     message: res?.message,
+  //       ...res
+  //   };
+  // } catch (e) {
+  //   // console.error(e.message);
+  //   return {
+  //     success: false,
+  //     message: e.message
+  //   };
+  // }
+
+  return {
+    success: true,
+    message: phoneNumber
+  };
+};
+
+const verifyOtpToVerfifyPhoneNumber = async (otp) => {
+  // const dataBody = cleanUndefinedAndEmptyStrValueObject({
+  //   otp
+  // });
+  // console.log("dataBody: ", dataBody);
+  // try {
+  //   const res = await axiosClient.post(authApi.verifyOtpToVerfifyPhoneNumber(), dataBody);
+  //   console.log("res: ", res);
+  //   if (res?.status) {
+  //     return {
+  //       success: true,
+  //       message: res?.message,
+  //       ...res
+  //     };
+  //   }
+  //   return {
+  //     success: false,
+  //     message: res?.message,
+  //       ...res
+  //   };
+  // } catch (e) {
+  //   // console.error(e.message);
+  //   return {
+  //     success: false,
+  //     message: e.message
+  //   };
+  // }
+
+  return {
+    success: true,
+    message: otp
+  };
+};
+
+const verifyOtpToResetPasswordPhoneNumber = async (otp) => {
+  // const dataBody = cleanUndefinedAndEmptyStrValueObject({
+  //   otp
+  // });
+  // console.log("dataBody: ", dataBody);
+  // try {
+  //   const res = await axiosClient.post(authApi.verifyOtpToResetPasswordPhoneNumber(), dataBody);
+  //   console.log("res: ", res);
+  //   if (res?.status) {
+  //     return {
+  //       success: true,
+  //       message: res?.message,
+  //       ...res
+  //     };
+  //   }
+  //   return {
+  //     success: false,
+  //     message: res?.message,
+  //       ...res
+  //   };
+  // } catch (e) {
+  //   // console.error(e.message);
+  //   return {
+  //     success: false,
+  //     message: e.message
+  //   };
+  // }
+
+  return {
+    success: true,
+    message: otp
+  };
+};
+
 export default {
   login,
-  logout
+  logout,
+  sendVerificationToEmail,
+  sendVerificationOtpToPhone,
+  verifyOtpToVerfifyPhoneNumber,
+  sendResetPasswordToEmail,
+  sendResetPasswordOtpToPhone,
+  verifyOtpToResetPasswordPhoneNumber
 };
