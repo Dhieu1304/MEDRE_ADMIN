@@ -22,6 +22,7 @@ const userApi = {
 const staffApi = {
   staffInfo: () => "/staff/my-profile",
   staffList: () => "/staff/all",
+  createStaff: () => "staff/create",
   staffListWithSchedules: () => "/staff/list-staff-schedule",
   staffDetail: (id) => `/staff/detail/${id}`,
   editStaff: (id) => `/staff/edit/${id}`,
