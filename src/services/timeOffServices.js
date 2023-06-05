@@ -99,4 +99,79 @@ const addNewTimeOff = async ({ from, to, session }) => {
   }
 };
 
-export default { getTimeOffByDoctorId, addNewTimeOff };
+const editNewTimeOff = async ({ id, from, to, session }) => {
+  const dataBody = cleanUndefinedAndEmptyStrValueObject({
+    id,
+    from,
+    to,
+    session
+  });
+
+  // console.log("dataBody: ", dataBody);
+  try {
+    const res = await axiosClient.post(timeOffApi.editTimeOff(), dataBody);
+    // const res = camelcaseKeys(scheduleMockData.list(), { deep: true });
+
+    // console.log("res: ", res);
+
+    if (res?.status) {
+      return {
+        success: true,
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
+      };
+    }
+    return {
+      success: false,
+      message: res?.message || `Status is ${res.status}`,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
+const deleteNewTimeOff = async (id) => {
+  const dataBody = cleanUndefinedAndEmptyStrValueObject({
+    id
+  });
+
+  // console.log("dataBody: ", dataBody);
+  try {
+    const res = await axiosClient.post(timeOffApi.deleteTimeOff(), dataBody);
+    // const res = camelcaseKeys(scheduleMockData.list(), { deep: true });
+
+    // console.log("res: ", res);
+
+    if (res?.status) {
+      // console.log("timeOffs in res: ", timeOffs);
+
+      return {
+        success: true,
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
+      };
+    }
+    return {
+      success: false,
+      message: res?.message || `Status is ${res.status}`,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
+export default { getTimeOffByDoctorId, addNewTimeOff, editNewTimeOff, deleteNewTimeOff };

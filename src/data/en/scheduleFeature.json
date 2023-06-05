@@ -24,6 +24,22 @@
     }
   },
 
+  "EditTimeOffModal": {
+    "title": "Edit time off",
+    "question": "Are you sure to edit this time off",
+    "button": {
+      "save": "Save"
+    }
+  },
+
+  "DeleteTimeOffModal": {
+    "title": "Delete time off",
+    "question": "Are you sure to delete this time off",
+    "button": {
+      "save": "Save"
+    }
+  },
+
   "DoctorTimeOff": {
     "title": "Doctor time off",
     "filter": {

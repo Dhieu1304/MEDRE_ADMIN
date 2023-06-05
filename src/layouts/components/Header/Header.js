@@ -142,6 +142,8 @@ function Header({ open, handleDrawerOpen }) {
           >
             {headerDropdownMenu.map((item) => (
               <Box
+                m
+                key={item.label}
                 component={Link}
                 to={item.to}
                 sx={{
@@ -149,7 +151,7 @@ function Header({ open, handleDrawerOpen }) {
                   color: "inherit"
                 }}
               >
-                <MenuItem key={item.label} onClick={handleCloseUserMenu}>
+                <MenuItem onClick={handleCloseUserMenu}>
                   <Typography textAlign="center">{t(item.label)}</Typography>
                 </MenuItem>
               </Box>

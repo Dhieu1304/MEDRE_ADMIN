@@ -46,7 +46,9 @@ const scheduleApi = {
 
 const timeOffApi = {
   timeOffList: () => "/doctor-time-off/time-off",
-  createTimeOff: () => "/doctor-time-off/create-time-off"
+  createTimeOff: () => "/doctor-time-off/create-time-off",
+  editTimeOff: () => "/doctor-time-off/edit-time-off",
+  deleteTimeOff: () => "/doctor-time-off/delete-time-off"
 };
 
 const bookingApi = {

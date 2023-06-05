@@ -24,6 +24,21 @@
     }
   },
 
+  "EditTimeOffModal": {
+    "title": "Chỉnh sửa lịch nghỉ",
+    "button": {
+      "save": "Lưu"
+    }
+  },
+
+  "DeleteTimeOffModal": {
+    "title": "Xóa lịch nghỉ",
+    "question": "Bạn có chắn chắn xóa lịch nghỉ này",
+    "button": {
+      "save": "Lưu"
+    }
+  },
+
   "DoctorTimeOff": {
     "title": "Danh sách lịch nghỉ",
     "filter": {

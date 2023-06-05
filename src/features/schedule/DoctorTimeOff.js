@@ -12,12 +12,13 @@ import {
   TableContainer,
   TableHead,
   TablePagination,
-  TableRow
+  TableRow,
+  useTheme
 } from "@mui/material";
 import formatDate from "date-and-time";
 import { useTranslation } from "react-i18next";
-import { Add as AddIcon } from "@mui/icons-material";
-import { useTheme } from "@emotion/react";
+import { Add as AddIcon, Edit as EditIcon, RemoveCircle } from "@mui/icons-material";
+
 import PropTypes from "prop-types";
 import WithDoctorLoaderWrapper from "../staff/hocs/WithDoctorLoaderWrapper";
 import { useFetchingStore } from "../../store/FetchingApiStore";
@@ -33,6 +34,8 @@ import CustomPageTitle from "../../components/CustomPageTitle";
 import { staffActionAbility } from "../../entities/Staff";
 import Staff from "../../entities/Staff/Staff";
 import { Can } from "../../store/AbilityStore";
+import EditTimeOffModal from "./components/EditTimeOffModal";
+import DeleteTimeOffModal from "./components/DeleteTimeOffModal";
 
 function DoctorTimeOff({ doctor, doctorId }) {
   const [timeOffs, setTimeOffs] = useState([]);
@@ -65,6 +68,8 @@ function DoctorTimeOff({ doctor, doctorId }) {
   const [, timeOffSessionContantListObj] = useTimeOffSessionsContantTranslation();
 
   const addTimeOffModal = useCustomModal();
+  const editTimeOffModal = useCustomModal();
+  const deleteTimeOffModal = useCustomModal();
 
   const columns = useMemo(
     () => [
@@ -86,6 +91,11 @@ function DoctorTimeOff({ doctor, doctorId }) {
       {
         id: "updatedAt",
         label: tTimeOff("updatedAt"),
+        minWidth: 100
+      },
+      {
+        id: "action",
+        label: "",
         minWidth: 100
       }
     ],
@@ -127,6 +137,14 @@ function DoctorTimeOff({ doctor, doctorId }) {
   }, [locale]);
 
   const handleAfterAddTimeOff = async () => {
+    await loadData({ page: 1 });
+  };
+
+  const handleAfterEditTimeOff = async () => {
+    await loadData({ page: 1 });
+  };
+
+  const handleAfterDeleteTimeOff = async () => {
     await loadData({ page: 1 });
   };
 
@@ -229,6 +247,33 @@ function DoctorTimeOff({ doctor, doctorId }) {
                     <TableCell align="left" sx={{ display: "table-cell" }}>
                       {formatDate.format(new Date(timeOff?.updatedAt), "DD/MM/YYYY hh:mm:ss")}
                     </TableCell>
+                    <TableCell align="left" sx={{ display: "table-cell" }}>
+                      <Box
+                        sx={{
+                          display: "flex-end",
+                          alignItems: "center"
+                        }}
+                      >
+                        <Can I={staffActionAbility.EDIT_DOCTOR_TIMEOFF} a={staff}>
+                          <EditIcon
+                            sx={{ mx: 1, color: theme.palette.success.light, cursor: "pointer" }}
+                            onClick={() => {
+                              editTimeOffModal.setShow(true);
+                              editTimeOffModal.setData(timeOff);
+                            }}
+                          />
+                        </Can>
+                        <Can I={staffActionAbility.DELETE_DOCTOR_TIMEOFF} a={staff}>
+                          <RemoveCircle
+                            sx={{ mx: 1, color: theme.palette.error.light, cursor: "pointer" }}
+                            onClick={() => {
+                              deleteTimeOffModal.setShow(true);
+                              deleteTimeOffModal.setData(timeOff);
+                            }}
+                          />
+                        </Can>
+                      </Box>
+                    </TableCell>
                   </TableRow>
                 );
               })}
@@ -254,6 +299,7 @@ function DoctorTimeOff({ doctor, doctorId }) {
           </Box>
         )}
       </Box>
+
       {addTimeOffModal.show && (
         <AddNewTimeOffModal
           show={addTimeOffModal.show}
@@ -261,6 +307,26 @@ function DoctorTimeOff({ doctor, doctorId }) {
           data={addTimeOffModal.data}
           setData={addTimeOffModal.setData}
           handleAfterAddTimeOff={handleAfterAddTimeOff}
+        />
+      )}
+
+      {editTimeOffModal.show && (
+        <EditTimeOffModal
+          show={editTimeOffModal.show}
+          setShow={editTimeOffModal.setShow}
+          data={editTimeOffModal.data}
+          setData={editTimeOffModal.setData}
+          handleAfterEditTimeOff={handleAfterEditTimeOff}
+        />
+      )}
+
+      {deleteTimeOffModal.show && (
+        <DeleteTimeOffModal
+          show={deleteTimeOffModal.show}
+          setShow={deleteTimeOffModal.setShow}
+          data={deleteTimeOffModal.data}
+          setData={deleteTimeOffModal.setData}
+          handleAfterDeleteTimeOff={handleAfterDeleteTimeOff}
         />
       )}
     </>
