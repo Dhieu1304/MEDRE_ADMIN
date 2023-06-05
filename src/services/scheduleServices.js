@@ -165,9 +165,46 @@ const createSchedulesByDoctorId = async ({ doctorId, applyFrom, applyTo, data })
   }
 };
 
+const deleteSchedulesByScheduleIds = async ({ scheduleIds }) => {
+  // console.log("changeApplyToScheduleByScheduleIds: ", { doctorId, scheduleIds,  });
+
+  const dataBody = cleanUndefinedAndEmptyStrValueObject({ id: scheduleIds });
+
+  // console.log("dataBody: ", dataBody);
+
+  try {
+    const res = await axiosClient.post(scheduleApi.deleteSchedules(), dataBody);
+    // const res = camelcaseKeys(scheduleMockData.list(), { deep: true });
+
+    // console.log("res: ", res);
+
+    if (res?.status) {
+      return {
+        success: true,
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
+      };
+    }
+    return {
+      success: false,
+      message: res?.message || `Status is ${res.status}`,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
 export default {
   getScheduleListByDoctorId,
   getTimeList,
   changeApplyToScheduleByScheduleIds,
-  createSchedulesByDoctorId
+  createSchedulesByDoctorId,
+  deleteSchedulesByScheduleIds
 };

@@ -22,5 +22,6 @@ export const scheduleDayOfWeeks = {
 export const scheduleActionAbility = {
   VIEW: "VIEW",
   UPDATE: "UPDATE",
+  DELETE: "DELETE",
   ADD: "ADD"
 };

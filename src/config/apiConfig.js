@@ -41,7 +41,8 @@ const scheduleApi = {
   scheduleList: () => "/schedule/list-all",
   timeList: () => "/time-schedule/time",
   createSchedule: () => "/schedule/create-schedule",
-  changeApplyTo: () => "/schedule/change-apply-to-id"
+  changeApplyTo: () => "/schedule/change-apply-to-id",
+  deleteSchedules: () => "/schedule/delete-schedule"
 };
 
 const timeOffApi = {

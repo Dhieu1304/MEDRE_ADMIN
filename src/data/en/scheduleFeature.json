@@ -59,13 +59,22 @@
     },
     "button": {
       "addSchedule": "Add schedule",
-      "editAll": "Chỉnh sửa"
+      "editAll": "Edit",
+      "delete": "Delete"
     },
     "changeApplyTimeModal": {
       "title": "Change Apply Time",
       "dateRange": "Date range",
       "applyFrom": "Apply from",
       "applyTo": "To",
+      "button": {
+        "save": "Save"
+      }
+    },
+
+    "deleteScheduleModal": {
+      "title": "Delete Schedules",
+      "question": "Are you sure to delete those schedules",
       "button": {
         "save": "Save"
       }

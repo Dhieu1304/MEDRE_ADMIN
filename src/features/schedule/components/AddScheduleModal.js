@@ -68,6 +68,10 @@ function AddScheduleModal({ show, setShow, data, setData, handleAfterAddSchedule
       {
         label: tScheduleConstants("sessions.afternoon"),
         value: scheduleSessions.AFFTERNOON
+      },
+      {
+        label: tScheduleConstants("sessions.wholeDay"),
+        value: scheduleSessions.WHOLE_DAY
       }
     ].reduce((obj, cur) => {
       return {

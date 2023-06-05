@@ -12,12 +12,13 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
   useTheme
 } from "@mui/material";
 import formatDate from "date-and-time";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
-import { Add as AddIcon } from "@mui/icons-material";
+import { Add as AddIcon, RemoveCircle as RemoveCircleIcon } from "@mui/icons-material";
 import WithDoctorLoaderWrapper from "../staff/hocs/WithDoctorLoaderWrapper";
 import { useFetchingStore } from "../../store/FetchingApiStore";
 import { normalizeStrToDateStr } from "../../utils/standardizedForForm";
@@ -58,7 +59,7 @@ function DoctorScheduleList({ doctor, doctorId }) {
     criteriaMode: "all"
   });
 
-  const changeApplyTimeForm = useForm({
+  const selectScheduleForm = useForm({
     mode: "onChange",
     defaultValues: {
       scheduleIdsObj: {},
@@ -79,6 +80,7 @@ function DoctorScheduleList({ doctor, doctorId }) {
   const { t: tInputValidate } = useTranslation("input", { keyPrefix: "validation" });
 
   const changeApplyToModal = useCustomModal();
+  const deleteScheduleModal = useCustomModal();
   const addScheduleModal = useCustomModal();
 
   const daysOfWeek = useMemo(
@@ -129,7 +131,7 @@ function DoctorScheduleList({ doctor, doctorId }) {
 
   const [, scheduleSessionContantListObj] = useScheduleSessionsContantTranslation();
 
-  const resetChangeApplyTimeForm = (schedulesData, value = false) => {
+  const resetSelectScheduleForm = (schedulesData, value = false) => {
     const scheduleIdsObj = schedulesData.reduce((result, schedule) => {
       return {
         ...result,
@@ -138,7 +140,7 @@ function DoctorScheduleList({ doctor, doctorId }) {
     }, {});
 
     //
-    changeApplyTimeForm.reset({
+    selectScheduleForm.reset({
       scheduleIdsObj,
       applyTo: ""
     });
@@ -159,7 +161,7 @@ function DoctorScheduleList({ doctor, doctorId }) {
       //
       if (res.success) {
         schedulesData = res?.schedules || [];
-        resetChangeApplyTimeForm(schedulesData);
+        resetSelectScheduleForm(schedulesData);
         setSchedules(schedulesData);
         return { ...res };
       }
@@ -189,6 +191,27 @@ function DoctorScheduleList({ doctor, doctorId }) {
 
       changeApplyToModal.setShow(false);
       changeApplyToModal.setData({});
+      return { ...res };
+    });
+  };
+
+  const handleDeleteSchedule = async ({ scheduleIdsObj }) => {
+    // console.log({ scheduleIdsObj });
+    const scheduleIds = Object.keys(scheduleIdsObj).filter((key) => scheduleIdsObj[key] && key);
+
+    await fetchApi(async () => {
+      const res = await scheduleServices.deleteSchedulesByScheduleIds({ scheduleIds });
+
+      if (res?.success) {
+        deleteScheduleModal.setShow(false);
+        deleteScheduleModal.setData({});
+
+        await loadData();
+        return { ...res };
+      }
+
+      deleteScheduleModal.setShow(false);
+      deleteScheduleModal.setData({});
       return { ...res };
     });
   };
@@ -248,20 +271,42 @@ function DoctorScheduleList({ doctor, doctorId }) {
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
-                alignItems: "center"
+                alignItems: "center",
+                mt: {
+                  xs: 2,
+                  md: 0
+                }
               }}
             >
-              <Button
-                variant="contained"
-                sx={{
-                  ml: 2
-                }}
-                onClick={() => {
-                  changeApplyToModal.setShow(true);
-                }}
-              >
-                {t("button.editAll")}
-              </Button>
+              <Can I={scheduleActionAbility.UPDATE} a={Schedule.magicWord()}>
+                <Button
+                  variant="contained"
+                  sx={{
+                    ml: 2
+                  }}
+                  onClick={() => {
+                    changeApplyToModal.setShow(true);
+                  }}
+                >
+                  {t("button.editAll")}
+                </Button>
+              </Can>
+
+              <Can I={scheduleActionAbility.DELETE} a={Schedule.magicWord()}>
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    deleteScheduleModal.setShow(true);
+                  }}
+                  endIcon={<RemoveCircleIcon fontSize="large" />}
+                  sx={{
+                    bgcolor: theme.palette.error.light,
+                    ml: 2
+                  }}
+                >
+                  {t("button.delete")}
+                </Button>
+              </Can>
             </Box>
           )}
         </Grid>
@@ -283,7 +328,7 @@ function DoctorScheduleList({ doctor, doctorId }) {
                       onChange={(e) => {
                         const { checked } = e.target;
 
-                        resetChangeApplyTimeForm(schedules, checked);
+                        resetSelectScheduleForm(schedules, checked);
                       }}
                     />
                   </TableCell>
@@ -319,7 +364,7 @@ function DoctorScheduleList({ doctor, doctorId }) {
                       >
                         <Controller
                           name={`scheduleIdsObj.${schedule?.id}`}
-                          control={changeApplyTimeForm.control}
+                          control={selectScheduleForm.control}
                           render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
                             <Checkbox
                               onBlur={onBlur}
@@ -375,18 +420,32 @@ function DoctorScheduleList({ doctor, doctorId }) {
           submitBtnLabel={t("changeApplyTimeModal.button.save")}
           show={changeApplyToModal.show}
           setShow={changeApplyToModal.setShow}
-          onSubmit={changeApplyTimeForm.handleSubmit(handleChangeApplyEnd)}
+          onSubmit={selectScheduleForm.handleSubmit(handleChangeApplyEnd)}
         >
           <CustomInput
-            control={changeApplyTimeForm.control}
+            control={selectScheduleForm.control}
             rules={{
               required: tInputValidate("required")
             }}
             label={tSchedule("applyTo")}
-            trigger={changeApplyTimeForm.trigger}
+            trigger={selectScheduleForm.trigger}
             name="applyTo"
             type="date"
           />
+        </CustomModal>
+      )}
+
+      {deleteScheduleModal && (
+        <CustomModal
+          title={t("deleteScheduleModal.title")}
+          submitBtnLabel={t("deleteScheduleModal.button.save")}
+          show={deleteScheduleModal.show}
+          setShow={deleteScheduleModal.setShow}
+          onSubmit={selectScheduleForm.handleSubmit(handleDeleteSchedule)}
+        >
+          <Box>
+            <Typography>{t("deleteScheduleModal.question")}</Typography>
+          </Box>
         </CustomModal>
       )}
 

@@ -59,7 +59,8 @@
 
     "button": {
       "addSchedule": "Thêm lịch khám",
-      "editAll": "Chỉnh sửa"
+      "editAll": "Chỉnh sửa",
+      "delete": "Xóa"
     },
 
     "changeApplyTimeModal": {
@@ -67,6 +68,14 @@
       "dateRange": "Khoảng ngày",
       "applyFrom": "Áp dụng từ",
       "applyTo": "Đến",
+      "button": {
+        "save": "Lưu"
+      }
+    },
+
+    "deleteScheduleModal": {
+      "title": "Xóa lịch khám",
+      "question": "Bạn có chắn chắn xóa các lịch khám này",
       "button": {
         "save": "Lưu"
       }
