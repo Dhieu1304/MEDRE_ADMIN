@@ -12,6 +12,7 @@ const routeConfig = {
   notification: "/notification",
   booking: "/booking",
   changePassword: "/change-password",
+  reExamination: "/re-examination",
   default: "/*"
 };
 

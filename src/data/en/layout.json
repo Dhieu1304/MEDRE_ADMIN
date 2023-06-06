@@ -8,7 +8,8 @@
     "setting_label": "Setting",
     "meeting_label": "Metting",
     "booking_label": "Booking",
-    "notification_label": "Notification"
+    "notification_label": "Notification",
+    "re_examination_label": "Re-examination"
   },
   "header": {
     "profile_label": "Profile",

@@ -14,6 +14,7 @@ import NotificationPage from "../pages/NotificationPage";
 import VerificationPage from "../pages/VerificationPage";
 import AuthLayout from "../layouts/AuthLayout";
 import ChangePasswordPage from "../pages/ChangePasswordPage";
+import ReExaminationListPage from "../pages/ReExaminationPage";
 
 // Public routes
 const publicRoutes = [
@@ -32,6 +33,7 @@ const privateRoutes = [
   { path: `${routeConfig.booking}/*`, component: BookingPage },
   { path: `${routeConfig.payment}/*`, component: PaymentPage },
   { path: `${routeConfig.notification}/*`, component: NotificationPage },
+  { path: `${routeConfig.reExamination}/*`, component: ReExaminationListPage },
   { path: `${routeConfig.changePassword}/*`, component: ChangePasswordPage, layout: AuthLayout },
   { path: `${routeConfig.verification}/*`, component: VerificationPage, layout: AuthLayout },
   { path: `${routeConfig.meeting}/*`, component: MeetingPage, layout: null },
