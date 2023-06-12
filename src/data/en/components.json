@@ -43,5 +43,13 @@
     "button": {
       "seeMore": "See more"
     }
+  },
+
+  "CopyButton": {
+    "label": "Copy",
+    "message": {
+      "success": "Copied {{content}} successfully",
+      "error": "Failed to copy to clipboard"
+    }
   }
 }

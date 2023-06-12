@@ -65,6 +65,7 @@ function StaffList({ expertisesList }) {
   const [showCols, setShowCols] = useState({
     ...initialShowCols,
     [columnsIds.username]: false,
+    [columnsIds.dob]: false,
     [columnsIds.description]: false,
     [columnsIds.education]: false,
     [columnsIds.certificate]: false,

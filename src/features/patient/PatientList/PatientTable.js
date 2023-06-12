@@ -9,6 +9,7 @@ import formatDate from "date-and-time";
 import CustomTableCell, { customTableCellVariant } from "../../../components/CustomTable/CustomTableCell";
 import { columnsIds } from "./utils";
 import { usePatientGendersContantTranslation } from "../hooks/usePatientConstantsTranslation";
+import CopyButton from "../../../components/CopyButton";
 
 function PatientTable({ patients, columns, showCols }) {
   const theme = useTheme();
@@ -69,6 +70,7 @@ function PatientTable({ patients, columns, showCols }) {
                   >
                     <SearchIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
                   </IconButton>
+                  <CopyButton content={patient?.id} />
                 </CustomTableCell>
               </TableRow>
             );

@@ -25,6 +25,7 @@ import User from "../../../entities/User/User";
 import CustomTableCell, { customTableCellVariant } from "../../../components/CustomTable/CustomTableCell";
 import { columnsIds } from "./utils";
 import { useUserGendersContantTranslation } from "../hooks/useUserConstantsTranslation";
+import CopyButton from "../../../components/CopyButton";
 
 function UserTable({ users, columns, showCols, notHaveAccessModal, blockUserModal, unblockUserModal }) {
   const theme = useTheme();
@@ -140,6 +141,7 @@ function UserTable({ users, columns, showCols, notHaveAccessModal, blockUserModa
                   >
                     <SearchIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
                   </IconButton>
+                  <CopyButton content={user?.id} />
                 </CustomTableCell>
               </TableRow>
             );

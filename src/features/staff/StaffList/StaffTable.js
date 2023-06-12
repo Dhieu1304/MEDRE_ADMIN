@@ -25,6 +25,7 @@ import Staff from "../../../entities/Staff/Staff";
 import { columnsIds } from "./utils";
 import { useStaffGendersContantTranslation } from "../hooks/useStaffConstantsTranslation";
 import CustomTableCell, { customTableCellVariant } from "../../../components/CustomTable/CustomTableCell";
+import CopyButton from "../../../components/CopyButton";
 
 function StaffTable({
   staffs,
@@ -44,7 +45,7 @@ function StaffTable({
   const navigate = useNavigate();
 
   return (
-    <TableContainer component={Paper} sx={{ mb: 4, height: 600 }}>
+    <TableContainer component={Paper} sx={{ mb: 4, height: 500, width: "100%" }}>
       <Table stickyHeader>
         <TableHead>
           <TableRow>
@@ -173,6 +174,7 @@ function StaffTable({
                   >
                     <SearchIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
                   </IconButton>
+                  <CopyButton content={staff?.id} />
                 </CustomTableCell>
               </TableRow>
             );

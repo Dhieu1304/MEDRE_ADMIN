@@ -41,5 +41,13 @@
     "button": {
       "seeMore": "Xem thêm"
     }
+  },
+
+  "CopyButton": {
+    "label": "Sao chép",
+    "message": {
+      "success": "Sap chép {{content}} thành công",
+      "error": "Sao chép thất bại"
+    }
   }
 }
