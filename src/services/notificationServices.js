@@ -214,13 +214,15 @@ const unSubscribeTopic = async (registrationToken) => {
   }
 };
 
-const createNotification = async ({ title, content, description }) => {
+const createNotification = async ({ title, content, description, notificationFor, type, staffId, userId }) => {
   const dataBody = cleanUndefinedAndEmptyStrValueObject({
     title,
     content,
     description,
-    type: "Advertisement",
-    notification_for: "AllSystem"
+    type,
+    notification_for: notificationFor,
+    id_user: userId,
+    id_staff: staffId
   });
 
   // console.log("dataBody: ", dataBody);

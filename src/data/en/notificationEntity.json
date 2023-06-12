@@ -5,34 +5,32 @@
     "content": "Content",
     "description": "Description",
     "type": "Type",
-    "notification_for": "Notification for",
-    "created_by": "Created by",
+    "notificationFor": "Notification for",
+    "createdBy": "Created by",
     "createdAt": "Created at",
     "updatedAt": "Updated at",
-    "deletedAt": "Deleted at"
+    "deletedAt": "Deleted at",
+    "userId": "User ID",
+    "staffId": "Staff ID",
+    "userOrStaffId": "Received Id",
+    "personalType": "Personal type"
   },
 
   "constants": {
-    "genders": {
-      "male": "Male",
-      "female": "Female",
-      "other": "Other"
+    "types": {
+      "booking": "Booking",
+      "event": "Event",
+      "avertisement": "Avertisement"
     },
-    "roles": {
+    "notificationFor": {
+      "allSystem": "AllSystem",
+      "personal": "Personal",
+      "user": "User",
+      "staff": "Staff",
       "admin": "Admin",
       "doctor": "Doctor",
       "nurse": "Nurse",
       "customerService": "Customer Service"
-    },
-    "statuses": {
-      "block": "Blocked",
-      "unblock": "Unblocked"
     }
-  },
-  "messages": {
-    "emailVerifiedSuccess": "Email verification successfully",
-    "emailVerifiedFailed": "Email verification failed",
-    "phoneVerifiedSuccess": "Phone number verification successfully",
-    "phoneVerifiedFailed": "Phone number verification failed"
   }
 }

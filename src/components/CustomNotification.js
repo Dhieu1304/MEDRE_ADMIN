@@ -51,6 +51,7 @@ function CustomNotification({ notifications, unreadNotificationCount }) {
       return { ...res };
     });
   };
+  // console.log("notifications: ", notifications);
 
   const handleToNotificationDetail = async (notification, index) => {
     // console.log("notification: ", notification);
@@ -63,7 +64,6 @@ function CustomNotification({ notifications, unreadNotificationCount }) {
       // console.log("Type: ", notificationType);
       to = `${routeConfig.booking}/${idRedirect}`;
     }
-    // console.log("to: ", to);
 
     navigate(to);
 
@@ -85,7 +85,11 @@ function CustomNotification({ notifications, unreadNotificationCount }) {
   };
 
   return (
-    <Box>
+    <Box
+      sx={{
+        overflow: "hidden"
+      }}
+    >
       <IconButton color="inherit" onClick={handleClick} size="large" sx={{ mr: 2 }}>
         {unreadNotificationCount > 0 ? (
           <Badge badgeContent={unreadNotificationCount} color="secondary">
@@ -112,7 +116,10 @@ function CustomNotification({ notifications, unreadNotificationCount }) {
           {notifications.map((notification, index) => (
             <MenuItem
               key={notification?.id}
-              onClick={handleClose}
+              onClick={async () => {
+                handleClose();
+                await handleToNotificationDetail(notification, index);
+              }}
               sx={{
                 position: "relative"
               }}
@@ -126,7 +133,6 @@ function CustomNotification({ notifications, unreadNotificationCount }) {
                 state={{
                   notification
                 }}
-                onClick={async () => handleToNotificationDetail(notification, index)}
               >
                 <Typography variant="h5" fontSize={16} fontWeight={600} color="black">
                   {notification?.notificationsParent?.title?.slice(0, 50)}

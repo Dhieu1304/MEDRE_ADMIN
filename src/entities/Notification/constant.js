@@ -4,7 +4,7 @@ export const notificationTypes = {
   ADVERTISEMENT: "Advertisement"
 };
 
-export const notificationFor = {
+export const notificationFors = {
   ALL_SYSTEM: "AllSystem",
   PERSONAL: "Personal",
   USER: "User",
@@ -13,4 +13,9 @@ export const notificationFor = {
   DOCTOR: "Doctor",
   NURSE: "Nurse",
   CUSTOMER_SERVICE: "Customer_Service"
+};
+
+export const notificationPersonalTypes = {
+  STAFF: "Staff",
+  USER: "User"
 };

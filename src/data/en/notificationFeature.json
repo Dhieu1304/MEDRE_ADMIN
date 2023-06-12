@@ -1,0 +1,16 @@
+{
+  "CreateNotification": {
+    "title": "Create notification",
+
+    "select": {
+      "accountTypes": {
+        "user": "User",
+        "staff": "Staff"
+      }
+    },
+
+    "button": {
+      "save": "Save"
+    }
+  }
+}

@@ -21,6 +21,8 @@ import settingEntity from "./settingEntity.json";
 import verificationFeature from "./verificationFeature.json";
 import reExaminationFeature from "./reExaminationFeature.json";
 import reExaminationEntity from "./reExaminationEntity.json";
+import notificationFeature from "./notificationFeature.json";
+import notificationEntity from "./notificationEntity.json";
 
 const vi = {
   authFeature,
@@ -45,7 +47,9 @@ const vi = {
   settingEntity,
   verificationFeature,
   reExaminationFeature,
-  reExaminationEntity
+  reExaminationEntity,
+  notificationFeature,
+  notificationEntity
 };
 
 export default vi;

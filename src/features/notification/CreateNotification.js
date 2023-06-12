@@ -1,27 +1,156 @@
-import { Box, Button, useTheme } from "@mui/material";
+import { Box, Button, Checkbox, Grid, ListItemText, MenuItem, Select, useTheme } from "@mui/material";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { useMemo } from "react";
 import CustomPageTitle from "../../components/CustomPageTitle";
 import CustomInput from "../../components/CustomInput/CustomInput";
 import { useFetchingStore } from "../../store/FetchingApiStore";
 import notificationServices from "../../services/notificationServices";
+import { useAppConfigStore } from "../../store/AppConfigStore";
+import { notificationFors, notificationPersonalTypes, notificationTypes } from "../../entities/Notification/constant";
 
 function CreateNotification() {
-  const { control, trigger, reset, handleSubmit } = useForm({
+  const { control, trigger, watch, reset, handleSubmit } = useForm({
     mode: "onChange",
     defaultValues: {
-      title: "",
-      description: "",
-      content: ""
+      title: "Đây là title",
+      description: "Đây là description",
+      content: "Đây là content",
+      notificationFor: "",
+      type: "",
+      userOrStaffId: "",
+      personalType: notificationPersonalTypes.USER
     },
     criteriaMode: "all"
   });
 
+  const { locale } = useAppConfigStore();
+
+  const { t } = useTranslation("notificationFeature", { keyPrefix: "CreateNotification" });
+  const { t: tNotification } = useTranslation("notificationEntity", { keyPrefix: "properties" });
+  const { t: tNotificationFors } = useTranslation("notificationEntity", { keyPrefix: "constants.notificationFor" });
+  const { t: tNotificationTypes } = useTranslation("notificationEntity", { keyPrefix: "constants.types" });
+  const { t: tNotificationPersonalTypes } = useTranslation("notificationEntity", { keyPrefix: "constants.personalTypes" });
+  const { t: tInputValidation } = useTranslation("input", { keyPrefix: "validation" });
   const { fetchApi } = useFetchingStore();
   const theme = useTheme();
 
-  const handleCreateNotification = async ({ title, content, description }) => {
+  const [notificationForList, notificationForListObj] = useMemo(() => {
+    const list = [
+      {
+        label: tNotificationFors("allSystem"),
+        value: notificationFors.ALL_SYSTEM
+      },
+      {
+        label: tNotificationFors("personal"),
+        value: notificationFors.PERSONAL
+      },
+      {
+        label: tNotificationFors("user"),
+        value: notificationFors.USER
+      },
+      {
+        label: tNotificationFors("staff"),
+        value: notificationFors.STAFF
+      },
+      {
+        label: tNotificationFors("admin"),
+        value: notificationFors.ADMIN
+      },
+      {
+        label: tNotificationFors("doctor"),
+        value: notificationFors.DOCTOR
+      },
+      {
+        label: tNotificationFors("nurse"),
+        value: notificationFors.NURSE
+      },
+      {
+        label: tNotificationFors("customerService"),
+        value: notificationFors.CUSTOMER_SERVICE
+      }
+    ];
+
+    const listObj = list.reduce((obj, cur) => {
+      return {
+        ...obj,
+        [cur?.value]: cur
+      };
+    }, {});
+
+    return [list, listObj];
+  }, [locale]);
+
+  const [notificationTypeList, notificationTypeListObj] = useMemo(() => {
+    const list = [
+      {
+        label: tNotificationTypes("avertisement"),
+        value: notificationTypes.ADVERTISEMENT
+      },
+      {
+        label: tNotificationTypes("event"),
+        value: notificationTypes.EVENT
+      }
+    ];
+
+    const listObj = list.reduce((obj, cur) => {
+      return {
+        ...obj,
+        [cur?.value]: cur
+      };
+    }, {});
+
+    return [list, listObj];
+  }, [locale]);
+
+  const [notificationPersonalTypeList, notificationPersonalTypeListObj] = useMemo(() => {
+    const list = [
+      {
+        label: tNotificationPersonalTypes("staff"),
+        value: notificationPersonalTypes.STAFF
+      },
+      {
+        label: tNotificationPersonalTypes("user"),
+        value: notificationPersonalTypes.USER
+      }
+    ];
+
+    const listObj = list.reduce((obj, cur) => {
+      return {
+        ...obj,
+        [cur?.value]: cur
+      };
+    }, {});
+
+    return [list, listObj];
+  }, [locale]);
+
+  const handleCreateNotification = async ({
+    title,
+    content,
+    description,
+    notificationFor,
+    type,
+    userOrStaffId,
+    personalType
+  }) => {
+    const data = {
+      title,
+      content,
+      description,
+      notificationFor,
+      type
+    };
+
+    if (notificationFor === notificationFors.PERSONAL) {
+      if (personalType === notificationPersonalTypes.STAFF) {
+        data.staffId = userOrStaffId;
+      } else {
+        data.userId = userOrStaffId;
+      }
+    }
     await fetchApi(async () => {
-      const res = await notificationServices.createNotification({ title, content, description });
+      const res = await notificationServices.createNotification(data);
       if (res?.success) {
         reset();
       }
@@ -30,10 +159,23 @@ function CreateNotification() {
   };
 
   // console.log("notification: ", notification);
+
+  const gridItemProps = {
+    xs: 12,
+    sm: 6,
+    md: 4,
+    lg: 3,
+    sx: {
+      p: 0,
+      m: 0
+    }
+  };
+
+  // console.log("watch(): ", watch());
   return (
     <Box>
       <CustomPageTitle
-        title="Tạo thông báo"
+        title={t("title")}
         right={
           <Button
             variant="contained"
@@ -43,7 +185,7 @@ function CreateNotification() {
             }}
             onClick={handleSubmit(handleCreateNotification)}
           >
-            Lưu
+            {t("button.save")}
           </Button>
         }
       />
@@ -52,10 +194,116 @@ function CreateNotification() {
           mb: 2
         }}
       >
+        <Grid container spacing={{ xs: 2, md: 2 }} flexWrap="wrap" mb={4}>
+          <Grid item {...gridItemProps}>
+            <CustomInput
+              control={control}
+              rules={{
+                required: tInputValidation("required")
+              }}
+              label={tNotification("notificationFor")}
+              trigger={trigger}
+              name="notificationFor"
+              type="select"
+            >
+              <Select
+                renderValue={(selected) => {
+                  return notificationForListObj[selected]?.label;
+                }}
+              >
+                {notificationForList?.map((item) => {
+                  return (
+                    <MenuItem key={item?.value} value={item?.value}>
+                      <Checkbox checked={watch().notificationFor === item?.value} />
+                      <ListItemText primary={item?.label} />
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </CustomInput>
+          </Grid>
+
+          <Grid item {...gridItemProps}>
+            <CustomInput
+              control={control}
+              rules={{
+                required: tInputValidation("required")
+              }}
+              label={tNotification("type")}
+              trigger={trigger}
+              name="type"
+              type="select"
+            >
+              <Select
+                renderValue={(selected) => {
+                  return notificationTypeListObj[selected]?.label;
+                }}
+              >
+                {notificationTypeList?.map((item) => {
+                  return (
+                    <MenuItem key={item?.value} value={item?.value}>
+                      <Checkbox checked={watch().type === item?.value} />
+                      <ListItemText primary={item?.label} />
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </CustomInput>
+          </Grid>
+          {watch().notificationFor === notificationFors.PERSONAL && (
+            <>
+              <Grid item {...gridItemProps}>
+                <CustomInput
+                  control={control}
+                  rules={{
+                    required: watch().notificationFor === notificationFors.PERSONAL ? tInputValidation("required") : false
+                  }}
+                  label={tNotification("userOrStaffId")}
+                  trigger={trigger}
+                  name="userOrStaffId"
+                />
+              </Grid>
+
+              <Grid item {...gridItemProps}>
+                <CustomInput
+                  control={control}
+                  rules={{
+                    required: watch().notificationFor === notificationFors.PERSONAL ? tInputValidation("required") : false
+                  }}
+                  label={tNotification("personalType")}
+                  trigger={trigger}
+                  name="personalType"
+                  type="select"
+                >
+                  <Select
+                    renderValue={(selected) => {
+                      return notificationPersonalTypeListObj[selected]?.label;
+                    }}
+                  >
+                    {notificationPersonalTypeList?.map((item) => {
+                      return (
+                        <MenuItem key={item?.value} value={item?.value}>
+                          <Checkbox checked={watch().personalType === item?.value} />
+                          <ListItemText primary={item?.label} />
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </CustomInput>
+              </Grid>
+            </>
+          )}
+        </Grid>
+      </Box>
+      <Box
+        sx={{
+          mb: 2
+        }}
+      >
         <CustomInput
           control={control}
           rules={{
-            required: "Bắt buộc",
+            required: tInputValidation("required"),
             maxLength: {
               // value: staffInputValidate.ADDRESS_MAX_LENGTH,
               // message: tInputValidation("maxLength", {
@@ -63,7 +311,7 @@ function CreateNotification() {
               // })
             }
           }}
-          label="Tiêu đề"
+          label={tNotification("title")}
           trigger={trigger}
           name="title"
           type="text"
@@ -79,7 +327,7 @@ function CreateNotification() {
         <CustomInput
           control={control}
           rules={{
-            required: "Bắt buộc",
+            required: tInputValidation("required"),
             maxLength: {
               // value: staffInputValidate.ADDRESS_MAX_LENGTH,
               // message: tInputValidation("maxLength", {
@@ -87,7 +335,7 @@ function CreateNotification() {
               // })
             }
           }}
-          label="Mô tả"
+          label={tNotification("description")}
           trigger={trigger}
           name="description"
           type="text"
@@ -103,7 +351,7 @@ function CreateNotification() {
         <CustomInput
           control={control}
           rules={{
-            required: "Bắt buộc",
+            required: tInputValidation("required"),
             maxLength: {
               // value: staffInputValidate.ADDRESS_MAX_LENGTH,
               // message: tInputValidation("maxLength", {
@@ -111,7 +359,7 @@ function CreateNotification() {
               // })
             }
           }}
-          label="Nội dung"
+          label={tNotification("content")}
           trigger={trigger}
           name="content"
           type="text"

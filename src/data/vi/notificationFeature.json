@@ -1,0 +1,16 @@
+{
+  "CreateNotification": {
+    "title": "Tạo thông báo",
+
+    "select": {
+      "accountTypes": {
+        "user": "Người dùng",
+        "staff": "Nhân viên"
+      }
+    },
+
+    "button": {
+      "save": "Lưu"
+    }
+  }
+}
