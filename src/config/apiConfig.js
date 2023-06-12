@@ -80,6 +80,12 @@ const notificationApi = {
   createNotification: () => "/notification/create"
 };
 
+const reExaminationApi = {
+  reExaminationList: () => "/re-examination/list-for-staff",
+  createReExamination: () => `/re-examination/create`,
+  updateReExamination: () => `/re-examination/update`
+};
+
 export {
   authApi,
   userApi,
@@ -90,5 +96,6 @@ export {
   bookingApi,
   patientApi,
   settingApi,
-  notificationApi
+  notificationApi,
+  reExaminationApi
 };
