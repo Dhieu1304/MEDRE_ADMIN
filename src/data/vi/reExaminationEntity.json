@@ -1,0 +1,32 @@
+{
+  "properties": {
+    "id": "ID",
+    "isApply": "Áp dụng",
+    "isRemind": "Nhắc lịch",
+    "dateRemind": "Ngày nhắc lịch",
+
+    "createdAt": "Ngày tạo",
+    "updatedAt": "Ngày cập nhập",
+    "deletedAt": "Ngày xóa",
+
+    "booking": {
+      "date": "Ngày khám"
+    },
+    "bookingUser": {
+      "phoneNumber": "Số điện thoại",
+      "email": "Email",
+      "name": "Họ tên"
+    }
+  },
+
+  "constants": {
+    "isApply": {
+      "true": "Đã áp dụng",
+      "false": "Không áp dụng"
+    },
+    "isRemind": {
+      "true": "Đã nhắc lịch",
+      "false": "Chưa nhắc lịch"
+    }
+  }
+}

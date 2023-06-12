@@ -19,6 +19,8 @@ import patientFeature from "./patientFeature.json";
 import settingFeature from "./settingFeature.json";
 import settingEntity from "./settingEntity.json";
 import verificationFeature from "./verificationFeature.json";
+import reExaminationFeature from "./reExaminationFeature.json";
+import reExaminationEntity from "./reExaminationEntity.json";
 
 const vi = {
   authFeature,
@@ -41,7 +43,9 @@ const vi = {
   patientFeature,
   settingFeature,
   settingEntity,
-  verificationFeature
+  verificationFeature,
+  reExaminationFeature,
+  reExaminationEntity
 };
 
 export default vi;

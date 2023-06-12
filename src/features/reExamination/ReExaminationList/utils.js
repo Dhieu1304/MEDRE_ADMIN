@@ -1,4 +1,4 @@
-import { normalizeStrToInt, normalizeStrToStr } from "../../../utils/standardizedForForm";
+import { normalizeStrToDateStr, normalizeStrToInt, normalizeStrToStr } from "../../../utils/standardizedForForm";
 
 /*
  * columnsIds is used to generate IDs for the columns of the table (columns) and showCols
@@ -32,13 +32,13 @@ export const initialShowCols = Object.keys(columnsIds).reduce((obj, key) => {
     - From the object's keys in the parameter
     - we will reformat the correct format to be the value for the input in the filter form
 */
-export const createDefaultValues = ({ phoneNumber, name, address, healthInsurance, gender, page, limit } = {}) => {
+export const createDefaultValues = ({ isApply, isRemind, idStaffRemind, dateRemind, dateReExam, page, limit } = {}) => {
   const result = {
-    phoneNumber: normalizeStrToStr(phoneNumber),
-    name: normalizeStrToStr(name),
-    address: normalizeStrToStr(address),
-    healthInsurance: normalizeStrToStr(healthInsurance),
-    gender: normalizeStrToStr(gender),
+    isApply: normalizeStrToStr(isApply),
+    isRemind: normalizeStrToStr(isRemind),
+    idStaffRemind: normalizeStrToStr(idStaffRemind),
+    dateRemind: normalizeStrToDateStr(dateRemind),
+    dateReExam: normalizeStrToDateStr(dateReExam),
 
     page: normalizeStrToInt(page, 1),
     limit: normalizeStrToInt(limit, 10)

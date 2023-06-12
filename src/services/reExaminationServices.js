@@ -3,7 +3,7 @@ import { reExaminationApi } from "../config/apiConfig";
 import axiosClient from "../config/axiosClient";
 import { cleanUndefinedAndEmptyStrValueObject } from "../utils/objectUtil";
 
-const getBookingList = async ({
+const getReExaminationList = async ({
   isApply,
   isRemind,
   dateReExam,
@@ -60,5 +60,5 @@ const getBookingList = async ({
 };
 
 export default {
-  getBookingList
+  getReExaminationList
 };

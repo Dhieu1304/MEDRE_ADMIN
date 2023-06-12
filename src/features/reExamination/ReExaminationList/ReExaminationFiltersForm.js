@@ -1,35 +1,57 @@
-import { Checkbox, Grid, ListItemText, MenuItem, Select } from "@mui/material";
+import { Button, Checkbox, Grid, InputAdornment, ListItemText, MenuItem, Select, useTheme } from "@mui/material";
 
 import { useFormContext } from "react-hook-form";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { CheckBox as CheckBoxIcon, CheckBoxOutlineBlank as CheckBoxOutlineBlankIcon } from "@mui/icons-material";
 import { useAppConfigStore } from "../../../store/AppConfigStore";
 import CustomInput from "../../../components/CustomInput";
-import { patientGenders } from "../../../entities/Patient";
+import { useAuthStore } from "../../../store/AuthStore";
 
-function PatientFiltersForm() {
+function ReExaminationFiltersForm() {
   const { locale } = useAppConfigStore();
-  const { control, trigger, watch } = useFormContext();
+  const { control, trigger, watch, setValue } = useFormContext();
+  const theme = useTheme();
 
-  const { t: tFilter } = useTranslation("patientFeature", { keyPrefix: "PatientList.filter" });
-  const { t: tSelect } = useTranslation("patientFeature", { keyPrefix: "PatientList.select" });
+  const authStore = useAuthStore();
+  const { t } = useTranslation("reExaminationFeature", { keyPrefix: "ReExaminationList" });
+  const { t: tFilter } = useTranslation("reExaminationFeature", { keyPrefix: "ReExaminationList.filter" });
+  const { t: tSelect } = useTranslation("reExaminationFeature", { keyPrefix: "ReExaminationList.select" });
 
-  const patientGenderListObj = useMemo(() => {
+  const isApplyListObj = useMemo(() => {
     return [
       {
-        label: tSelect("genders.male"),
-        value: patientGenders.MALE
+        label: tSelect("isApply.true"),
+        value: true
       },
       {
-        label: tSelect("genders.female"),
-        value: patientGenders.FEMALE
+        label: tSelect("isApply.false"),
+        value: false
       },
       {
-        label: tSelect("genders.other"),
-        value: patientGenders.OTHER
+        label: tSelect("isApply.all"),
+        value: ""
+      }
+    ].reduce((obj, cur) => {
+      return {
+        ...obj,
+        [cur?.value]: cur
+      };
+    }, {});
+  }, [locale]);
+
+  const isRemindListObj = useMemo(() => {
+    return [
+      {
+        label: tSelect("isRemind.true"),
+        value: true
       },
       {
-        label: tSelect("genders.all"),
+        label: tSelect("isRemind.false"),
+        value: false
+      },
+      {
+        label: tSelect("isRemind.all"),
         value: ""
       }
     ].reduce((obj, cur) => {
@@ -44,7 +66,7 @@ function PatientFiltersForm() {
     xs: 12,
     sm: 6,
     md: 4,
-    lg: 3,
+    lg: 4,
     sx: {
       p: 0,
       m: 0
@@ -54,24 +76,18 @@ function PatientFiltersForm() {
   return (
     <Grid container spacing={{ xs: 2, md: 2 }} flexWrap="wrap" mb={4}>
       <Grid item {...gridItemProps}>
-        <CustomInput control={control} rules={{}} label={tFilter("name")} trigger={trigger} name="name" type="text" />
-      </Grid>
-      <Grid item {...gridItemProps}>
-        <CustomInput control={control} rules={{}} label={tFilter("phoneNumber")} trigger={trigger} name="phoneNumber" />
-      </Grid>
-      <Grid item {...gridItemProps}>
-        <CustomInput control={control} rules={{}} label={tFilter("gender")} trigger={trigger} name="gender">
+        <CustomInput control={control} rules={{}} label={tFilter("isApply")} trigger={trigger} name="isApply">
           <Select
             renderValue={(selected) => {
-              return patientGenderListObj[selected].label;
+              return isApplyListObj[selected].label;
             }}
           >
-            {Object.keys(patientGenderListObj).map((key) => {
-              const item = patientGenderListObj[key];
+            {Object.keys(isApplyListObj).map((key) => {
+              const item = isApplyListObj[key];
 
               return (
                 <MenuItem key={item?.value} value={item?.value}>
-                  <Checkbox checked={watch().gender === item?.value} />
+                  <Checkbox checked={watch().isApply === item?.value} />
                   <ListItemText primary={item?.label} />
                 </MenuItem>
               );
@@ -81,21 +97,64 @@ function PatientFiltersForm() {
       </Grid>
 
       <Grid item {...gridItemProps}>
-        <CustomInput control={control} rules={{}} label={tFilter("address")} trigger={trigger} name="address" type="text" />
+        <CustomInput control={control} rules={{}} label={tFilter("isRemind")} trigger={trigger} name="isRemind">
+          <Select
+            renderValue={(selected) => {
+              return isRemindListObj[selected].label;
+            }}
+          >
+            {Object.keys(isRemindListObj).map((key) => {
+              const item = isRemindListObj[key];
+
+              return (
+                <MenuItem key={item?.value} value={item?.value}>
+                  <Checkbox checked={watch().isRemind === item?.value} />
+                  <ListItemText primary={item?.label} />
+                </MenuItem>
+              );
+            })}
+          </Select>
+        </CustomInput>
       </Grid>
 
       <Grid item {...gridItemProps}>
         <CustomInput
           control={control}
-          rules={{}}
-          label={tFilter("healthInsurance")}
+          label={tFilter("idStaffRemind")}
           trigger={trigger}
-          name="healthInsurance"
-          type="text"
+          name="idStaffRemind"
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <Button
+                  variant="contained"
+                  sx={{
+                    bgcolor: theme.palette.success.light,
+                    color: theme.palette.success.contrastText
+                  }}
+                  onClick={() => {
+                    if (watch().idStaffRemind === authStore.staff?.id) setValue("idStaffRemind", "");
+                    else setValue("idStaffRemind", authStore.staff?.id);
+                  }}
+                  startIcon={watch().idStaffRemind === authStore.staff?.id ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
+                >
+                  {t("button.me")}
+                </Button>
+              </InputAdornment>
+            )
+          }}
         />
+      </Grid>
+
+      <Grid item {...gridItemProps}>
+        <CustomInput control={control} label={tFilter("dateRemind")} trigger={trigger} name="dateRemind" type="date" />
+      </Grid>
+
+      <Grid item {...gridItemProps}>
+        <CustomInput control={control} label={tFilter("dateReExam")} trigger={trigger} name="dateReExam" type="date" />
       </Grid>
     </Grid>
   );
 }
 
-export default PatientFiltersForm;
+export default ReExaminationFiltersForm;

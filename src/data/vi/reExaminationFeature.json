@@ -1,0 +1,34 @@
+{
+  "ReExaminationList": {
+    "title": "Lịch tái khám",
+    "filter": {
+      "isApply": "Áp dụng",
+      "isRemind": "Nhắc hẹn",
+      "dateRemind": "Ngày nhắc hẹn",
+      "dateReExam": "Ngày tái khám",
+      "idStaffRemind": "ID nhân viên nhắc lịch"
+    },
+
+    "select": {
+      "isApply": {
+        "true": "Có",
+        "false": "Không",
+        "all": "Tất cả"
+      },
+      "isRemind": {
+        "true": "Rồi",
+        "false": "Chưa",
+        "all": "Tất cả"
+      }
+    },
+
+    "button": {
+      "reset": "Đặt lại",
+      "hideFilterCollapse": "Ẩn bộ lọc",
+      "showFilterCollapse": "Hiện bộ lọc",
+      "showMenuColumns": "Hiện",
+      "add": "Thêm",
+      "me": "Bản thân"
+    }
+  }
+}

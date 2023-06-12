@@ -1,0 +1,32 @@
+{
+  "properties": {
+    "id": "ID",
+    "isApply": "Apply",
+    "isRemind": "Remind",
+    "dateRemind": "Date remind",
+
+    "createdAt": "Created at",
+    "updatedAt": "Updated at",
+    "deletedAt": "Deleted at",
+
+    "booking": {
+      "date": "Date"
+    },
+    "bookingUser": {
+      "phoneNumber": "Phone Number",
+      "email": "Email",
+      "name": "Name"
+    }
+  },
+
+  "constants": {
+    "isApply": {
+      "true": "Applied",
+      "false": "Not Applied"
+    },
+    "isRemind": {
+      "true": "Reminded",
+      "false": "Not Reminded"
+    }
+  }
+}
