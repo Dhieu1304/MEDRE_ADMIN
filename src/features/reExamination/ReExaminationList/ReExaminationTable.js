@@ -24,7 +24,6 @@ function ReExaminationTable({ reExaminations, columns, showCols }) {
           <TableRow>
             {columns?.map((column) => {
               const minWidth = column?.minWidth;
-              console.log("column: ", column);
               return column?.id === columnsIds.dateRemind ? (
                 <CustomTableCell sx={{ minWidth }} key={column?.id} variant={customTableCellVariant.FIRST_HEAD_CELL}>
                   {column.label}

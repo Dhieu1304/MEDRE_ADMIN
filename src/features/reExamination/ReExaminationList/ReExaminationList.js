@@ -51,7 +51,7 @@ function ReExaminationList() {
         hide: !showCols[columnsIds.bookingDate]
       },
       {
-        id: columnsIds.bookingDate,
+        id: columnsIds.dateReExam,
         label: tReExamination(columnsIds.dateReExam),
         minWidth: 100,
         hide: !showCols[columnsIds.dateReExam]
@@ -94,9 +94,6 @@ function ReExaminationList() {
     ],
     [locale, showCols]
   );
-
-  console.log("showCols: ", showCols);
-  console.log("columns: ", columns);
 
   const defaultValues = useMemo(() => {
     const defaultSearchParams = qs.parse(location.search);
