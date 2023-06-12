@@ -15,6 +15,7 @@ import { columnsIds, createDefaultValues, initialShowCols } from "./utils";
 import useObjDebounce from "../../../hooks/useObjDebounce";
 import ListPageAction from "../../../components/ListPageAction/ListPageAction";
 import ReExaminationTable from "./ReExaminationTable";
+import { normalizeStrToDateStr } from "../../../utils/standardizedForForm";
 
 function ReExaminationList() {
   const { locale } = useAppConfigStore();
@@ -33,7 +34,8 @@ function ReExaminationList() {
 
   const [showTableColsMenu, setShowTableColsMenu] = useState(null);
   const [showCols, setShowCols] = useState({
-    ...initialShowCols
+    ...initialShowCols,
+    bookingUserEmail: false
   });
 
   const columns = useMemo(
@@ -107,6 +109,14 @@ function ReExaminationList() {
     criteriaMode: "all"
   });
 
+  const updateReExaminationForm = useForm({
+    defaultValues: {
+      reExaminations
+    },
+    mode: "onChange",
+    criteriaMode: "all"
+  });
+
   const [isReset, setIsReset] = useState(false);
 
   const { watch, setValue, reset } = filterForm;
@@ -143,6 +153,17 @@ function ReExaminationList() {
         setReExaminations(reExaminationsData);
         setCount(countData);
 
+        const newUpdateReExaminationFormExaminations = reExaminationsData?.map((reExamination) => {
+          return {
+            isApply: reExamination?.isApply,
+            isRemind: reExamination?.isRemind,
+            dateReExam: normalizeStrToDateStr(reExamination?.dateReExam)
+          };
+        });
+        updateReExaminationForm.reset({
+          reExaminations: newUpdateReExaminationFormExaminations
+        });
+
         return { ...res };
       }
       setReExaminations([]);
@@ -175,6 +196,10 @@ function ReExaminationList() {
 
   // console.log("reExaminations: ", reExaminations);
 
+  const handleAfterSaveReExamination = async () => {
+    await loadData({ page: watch().page });
+  };
+
   return (
     <Box>
       <CustomOverlay open={isLoading} />
@@ -203,10 +228,17 @@ function ReExaminationList() {
         setIsReset={setIsReset}
       />
 
-      {reExaminations.forEach(() => {})}
-
       <ListPageTableWrapper
-        table={<ReExaminationTable reExaminations={reExaminations} columns={columns} showCols={showCols} />}
+        table={
+          <FormProvider {...updateReExaminationForm}>
+            <ReExaminationTable
+              reExaminations={reExaminations}
+              columns={columns}
+              showCols={showCols}
+              handleAfterSaveReExamination={handleAfterSaveReExamination}
+            />
+          </FormProvider>
+        }
         count={count}
         watch={watch}
         loadData={loadData}
