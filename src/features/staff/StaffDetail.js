@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 
-import { Grid, Select, MenuItem, Checkbox, ListItemText, IconButton, InputAdornment, useTheme } from "@mui/material";
+import { Grid, Select, MenuItem, Checkbox, ListItemText, IconButton, InputAdornment, useTheme, Button } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -9,6 +9,7 @@ import { Add as AddIcon } from "@mui/icons-material";
 import { useAbility } from "@casl/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear as faGearIcon } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 import CustomInput from "../../components/CustomInput";
 
 import staffServices from "../../services/staffServices";
@@ -29,6 +30,7 @@ import { WithExpertisesLoaderWrapper } from "./hocs";
 import UnblockStaffModal from "./components/UnblockStaffModal";
 import SectionContent from "../../components/SectionContent";
 import PersonDetailWrapper from "../../components/PersonDetailWrapper/PersonDetailWrapper";
+import routeConfig from "../../config/routeConfig";
 
 function StaffDetail({ staffId, expertisesList, loadExpertisesList }) {
   const [staff, setStaff] = useState();
@@ -57,6 +59,7 @@ function StaffDetail({ staffId, expertisesList, loadExpertisesList }) {
     expertises: []
   });
 
+  const navigate = useNavigate();
   const theme = useTheme();
 
   const changeAvatarModal = useCustomModal();
@@ -152,9 +155,9 @@ function StaffDetail({ staffId, expertisesList, loadExpertisesList }) {
   const canAddExpertise = ability.can(expertiseActionAbility.ADD, Expertise.magicWord());
 
   const handleSaveDetail = async ({
-    // username,
+    username,
     phoneNumber,
-    // email,
+    email,
     name,
     address,
     gender,
@@ -167,7 +170,9 @@ function StaffDetail({ staffId, expertisesList, loadExpertisesList }) {
     expertises
   }) => {
     const data = {
+      username,
       phoneNumber,
+      email,
       name,
       address,
       gender,
@@ -188,7 +193,7 @@ function StaffDetail({ staffId, expertisesList, loadExpertisesList }) {
         if (authStore.staff?.id === staff?.id) {
           res = await staffServices.editMyProfile(data);
         } else {
-          res = await staffServices.editStaffInfo(data);
+          res = await staffServices.editStaffInfo(staff?.id, data);
         }
 
         if (res?.success) {
@@ -218,6 +223,10 @@ function StaffDetail({ staffId, expertisesList, loadExpertisesList }) {
     await loadData();
   };
 
+  const handleAfterChangeAvatar = async () => {
+    await loadData();
+  };
+
   return (
     <>
       {staff && (
@@ -228,13 +237,14 @@ function StaffDetail({ staffId, expertisesList, loadExpertisesList }) {
             reset(defaultValues);
           }}
           handleSave={handleSubmit(handleSaveDetail)}
+          changeAvatarModal={changeAvatarModal}
         >
           <CustomOverlay open={isLoading} />
           <SectionContent title={t("title.identify")}>
             <Grid container spacing={3}>
               <Grid item xs={12} sm={12} md={4} lg={4}>
                 <CustomInput
-                  disabled={!canUpdateStaff}
+                  disabled={!canUpdateStaff || staff?.phoneVerified}
                   showCanEditIcon
                   control={control}
                   rules={{
@@ -265,6 +275,30 @@ function StaffDetail({ staffId, expertisesList, loadExpertisesList }) {
                           text: tStaffMessage("emailVerifiedFailed")
                         }
                   }
+                  InputProps={
+                    staff?.emailVerified
+                      ? {}
+                      : {
+                          endAdornment: authStore.staff?.id === staff?.id && (
+                            <InputAdornment position="end">
+                              <Button
+                                variant="contained"
+                                sx={{
+                                  bgcolor: theme.palette.warning.light,
+                                  color: theme.palette.warning.contrastText
+                                }}
+                                onClick={() => {
+                                  navigate(routeConfig.verification, {
+                                    state: { phoneNumberOrEmail: staff?.email, isFinishSendInfoStep: false }
+                                  });
+                                }}
+                              >
+                                {t("button.verify")}
+                              </Button>
+                            </InputAdornment>
+                          )
+                        }
+                  }
                 />
               </Grid>
               <Grid item xs={12} sm={12} md={4} lg={4}>
@@ -289,7 +323,7 @@ function StaffDetail({ staffId, expertisesList, loadExpertisesList }) {
               </Grid>
               <Grid item xs={12} sm={12} md={4} lg={4}>
                 <CustomInput
-                  disabled={!canUpdateStaff}
+                  disabled={!canUpdateStaff || staff?.phoneVerified}
                   showCanEditIcon
                   control={control}
                   rules={{
@@ -312,6 +346,30 @@ function StaffDetail({ staffId, expertisesList, loadExpertisesList }) {
                       : {
                           type: "error",
                           text: tStaffMessage("phoneVerifiedFailed")
+                        }
+                  }
+                  InputProps={
+                    authStore.staff?.id === staff?.id && staff?.phoneVerified
+                      ? {}
+                      : {
+                          endAdornment: authStore.staff?.id === staff?.id && (
+                            <InputAdornment position="end">
+                              <Button
+                                variant="contained"
+                                sx={{
+                                  bgcolor: theme.palette.warning.light,
+                                  color: theme.palette.warning.contrastText
+                                }}
+                                onClick={() => {
+                                  navigate(routeConfig.verification, {
+                                    state: { phoneNumberOrEmail: staff?.phoneNumber, isFinishSendInfoStep: false }
+                                  });
+                                }}
+                              >
+                                {t("button.verify")}
+                              </Button>
+                            </InputAdornment>
+                          )
                         }
                   }
                 />
@@ -702,10 +760,9 @@ function StaffDetail({ staffId, expertisesList, loadExpertisesList }) {
           setShow={changeAvatarModal.setShow}
           data={changeAvatarModal.data}
           setData={changeAvatarModal.setData}
-          disbled={!canUpdateStaff}
+          handleAfterChangeAvatar={handleAfterChangeAvatar}
         />
       )}
-
       {addExpertiseModal.show && (
         <AddExpertiseModal
           show={addExpertiseModal.show}

@@ -70,6 +70,10 @@ function ReExaminationTable({ reExaminations, columns, showCols, handleAfterSave
                 </CustomTableCell>
 
                 <CustomTableCell hide={!showCols?.bookingDate}>
+                  {reExamination?.reExamOfBooking?.date &&
+                    formatDate.format(new Date(reExamination?.reExamOfBooking?.date), "DD/MM/YYYY")}
+                </CustomTableCell>
+                <CustomTableCell hide={!showCols?.dateReExam}>
                   <CustomInput
                     control={control}
                     label=""
@@ -77,9 +81,6 @@ function ReExaminationTable({ reExaminations, columns, showCols, handleAfterSave
                     name={`reExaminations[${index}].dateReExam`}
                     type="date"
                   />
-                </CustomTableCell>
-                <CustomTableCell hide={!showCols?.dateReExam}>
-                  {reExamination?.dateReExam && formatDate.format(new Date(reExamination?.dateReExam), "DD/MM/YYYY")}
                 </CustomTableCell>
 
                 <CustomTableCell hide={!showCols?.bookingUserPhoneNumber}>

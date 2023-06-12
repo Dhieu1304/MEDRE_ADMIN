@@ -1,7 +1,10 @@
 import PropTypes from "prop-types";
 import { Avatar, Box, Card, CardHeader } from "@mui/material";
+import { useAuthStore } from "../../store/AuthStore";
 
-function PersonHeadInfo({ person }) {
+function PersonHeadInfo({ person, changeAvatarModal }) {
+  const authStore = useAuthStore();
+
   return (
     <Box
       sx={{
@@ -19,14 +22,25 @@ function PersonHeadInfo({ person }) {
           avatar={<Avatar sx={{ width: 150, height: 150, cursor: "pointer" }} alt={person?.name} src={person?.image} />}
           title={person?.name}
           subheader={person?.id}
+          onClick={() => {
+            if (authStore.staff?.id === person?.id) {
+              changeAvatarModal?.setShow(true);
+              changeAvatarModal?.setData(person);
+            }
+          }}
         />
       </Card>
     </Box>
   );
 }
 
+PersonHeadInfo.defaultProps = {
+  changeAvatarModal: undefined
+};
+
 PersonHeadInfo.propTypes = {
-  person: PropTypes.object.isRequired
+  person: PropTypes.object.isRequired,
+  changeAvatarModal: PropTypes.object
 };
 
 export default PersonHeadInfo;

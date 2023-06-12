@@ -300,29 +300,41 @@ const createExpertise = async (name) => {
   }
 };
 
-const editStaffInfo = async ({
-  name,
-  address,
-  gender,
-  dob,
-  description,
-  education,
-  healthInsurance,
-  certificate
-  // expertises
-}) => {
+const editStaffInfo = async (
+  id,
+  {
+    username,
+    phoneNumber,
+    email,
+    name,
+    address,
+    gender,
+    dob,
+    description,
+    education,
+    healthInsurance,
+    certificate,
+    expertises
+  }
+) => {
+  const dataBody = cleanUndefinedAndEmptyStrValueObject({
+    username,
+    phone_number: phoneNumber,
+    email,
+    name,
+    address,
+    gender,
+    dob,
+    description,
+    education,
+    health_insurance: healthInsurance,
+    certificate,
+    expertise: expertises
+  });
+
+  // console.log("dataBody: ", dataBody);
   try {
-    const res = await axiosClient.get(staffApi.editStaff(), {
-      name,
-      address,
-      gender,
-      dob,
-      description,
-      education,
-      health_insurance: healthInsurance,
-      certificate
-      // expertises
-    });
+    const res = await axiosClient.post(staffApi.editStaff(id), dataBody);
 
     // console.log("editStaffInfo res: ", res);
 
@@ -353,6 +365,8 @@ const editStaffInfo = async ({
 };
 
 const editMyProfile = async ({
+  // email,
+  // phoneNumber,
   name,
   address,
   gender,
@@ -360,10 +374,13 @@ const editMyProfile = async ({
   description,
   education,
   healthInsurance,
-  certificate
+  certificate,
+  image
   // expertises
 }) => {
   const dataBody = cleanUndefinedAndEmptyStrValueObject({
+    // email,
+    // phone_number: phoneNumber,
     name,
     address,
     gender,
@@ -371,7 +388,8 @@ const editMyProfile = async ({
     description,
     education,
     health_insurance: healthInsurance,
-    certificate
+    certificate,
+    image
     // expertises
   });
   // console.log("dataBody: ", dataBody);
@@ -546,6 +564,59 @@ const changePassword = async ({ oldPassword, newPassword, confirmPassword }) => 
   }
 };
 
+const uploadAvatar = async (file) => {
+  // console.log("file: ", file);
+  const formData = new FormData();
+  formData.append("image", file);
+
+  try {
+    const res = await axiosClient.post("/upload/avatar", formData, {
+      headers: { "Content-Type": "multipart/form-data" }
+    });
+
+    // console.log("res: ", res);
+
+    if (res?.status) {
+      const image = res?.data;
+      return {
+        image,
+        success: true,
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
+      };
+    }
+    return {
+      success: false,
+      message: res?.message,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
+const changeAvatar = async (file) => {
+  const uploadAvatarResult = await uploadAvatar(file);
+
+  // console.log("uploadAvatarResult: ", uploadAvatarResult);
+  if (uploadAvatarResult?.success) {
+    const image = uploadAvatarResult?.image;
+    // console.log("image: ", image);
+    const changeAvatarResult = await editMyProfile({ image });
+
+    // console.log("changeAvatarResult: ", changeAvatarResult);
+    return changeAvatarResult;
+  }
+
+  return uploadAvatarResult;
+};
+
 export default {
   createStaff,
   getStaffList,
@@ -559,5 +630,6 @@ export default {
   editStaffRole,
   blockStaff,
   unblockStaff,
-  changePassword
+  changePassword,
+  changeAvatar
 };

@@ -3,80 +3,96 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import CustomModal from "../../../components/CustomModal";
+import { useFetchingStore } from "../../../store/FetchingApiStore";
+import CustomOverlay from "../../../components/CustomOverlay/CustomOverlay";
+import staffServices from "../../../services/staffServices";
 
-function ChangeAvatarModal({ show, setShow, data, setData, disbled }) {
-  const handleChangeAvatar = async () => {
-    // if (!disbled) {
-    // }
-  };
-
+function ChangeAvatarModal({ show, setShow, data, setData, handleAfterChangeAvatar }) {
   const [image, setImage] = useState(data?.image);
 
+  const [file, setFile] = useState(null);
+
+  const { isLoading, fetchApi } = useFetchingStore();
+
   const handleImageChange = (e) => {
-    if (!disbled) {
-      if (e.target.files && e.target.files[0]) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          setImage(event.target.result);
-        };
-        reader.readAsDataURL(e.target.files[0]);
-      }
+    if (e.target.files && e.target.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setImage(event.target.result);
+      };
+      setFile(e.target.files[0]);
+      reader.readAsDataURL(e.target.files[0]);
     }
   };
 
-  const { t } = useTranslation("staffFeature", { keyPrefix: "change_avatar_modal" });
+  const handleChangeAvatar = async () => {
+    return fetchApi(async () => {
+      const res = await staffServices.changeAvatar(file);
+      if (res.success) {
+        setData({});
+        setShow(false);
+        if (handleAfterChangeAvatar) {
+          await handleAfterChangeAvatar();
+        }
+        return { ...res };
+      }
+      return { ...res };
+    });
+  };
+
+  const { t } = useTranslation("userFeature", { keyPrefix: "ChangeAvatarModal" });
 
   return (
-    <CustomModal
-      show={show}
-      setShow={setShow}
-      data={data}
-      setData={setData}
-      title={!disbled && t("title")}
-      submitBtnLabel={!disbled && t("btn_label")}
-      onSubmit={!disbled && handleChangeAvatar}
-    >
-      <Box
-        sx={{
-          width: 500,
-          height: 500,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          justifySelf: "center"
-        }}
+    <>
+      <CustomOverlay open={isLoading} />
+      <CustomModal
+        show={show}
+        setShow={setShow}
+        data={data}
+        setData={setData}
+        title={t("title")}
+        submitBtnLabel={t("button.save")}
+        onSubmit={handleChangeAvatar}
       >
-        <Avatar
+        <Box
           sx={{
-            width: "80%",
-            height: "80%"
+            width: 500,
+            height: 500,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            justifySelf: "center"
           }}
-          imgProps={{
-            width: "100%",
-            height: "100%",
-            objectFit: "contain"
-          }}
-          variant="square"
-          src={image}
-        />
+        >
+          <Avatar
+            sx={{
+              width: "80%",
+              height: "80%"
+            }}
+            imgProps={{
+              width: "100%",
+              height: "100%",
+              objectfit: "contain"
+            }}
+            variant="square"
+            src={image}
+          />
 
-        {!disbled && <TextField type="file" onChange={handleImageChange} />}
-      </Box>
-    </CustomModal>
+          <TextField type="file" onChange={handleImageChange} />
+          {/* <input type="file" onChange={handleImageChange} multiple /> */}
+        </Box>
+      </CustomModal>
+    </>
   );
 }
-
-ChangeAvatarModal.defaultProps = {
-  disbled: undefined
-};
 
 ChangeAvatarModal.propTypes = {
   show: PropTypes.bool.isRequired,
   setShow: PropTypes.func.isRequired,
   data: PropTypes.object.isRequired,
   setData: PropTypes.func.isRequired,
-  disbled: PropTypes.bool
+  handleAfterChangeAvatar: PropTypes.func.isRequired
 };
 
 export default ChangeAvatarModal;

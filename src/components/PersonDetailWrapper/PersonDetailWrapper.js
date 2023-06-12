@@ -4,7 +4,7 @@ import { Box } from "@mui/material";
 import PersonHeadInfo from "./PersonDetailHeadInfo";
 import PersonDetailAction from "./PersonDetailAction";
 
-function PersonDetailWrapper({ person, children, canUpdate, handleReset, handleSave }) {
+function PersonDetailWrapper({ person, children, canUpdate, handleReset, handleSave, changeAvatarModal }) {
   return (
     <Box
       sx={{
@@ -20,7 +20,7 @@ function PersonDetailWrapper({ person, children, canUpdate, handleReset, handleS
         position: "relative"
       }}
     >
-      <PersonHeadInfo person={person} />
+      <PersonHeadInfo person={person} changeAvatarModal={changeAvatarModal} />
       {children}
       {canUpdate && <PersonDetailAction handleReset={handleReset} handleSave={handleSave} />}
     </Box>
@@ -30,7 +30,8 @@ function PersonDetailWrapper({ person, children, canUpdate, handleReset, handleS
 PersonDetailWrapper.defaultProps = {
   canUpdate: false,
   handleReset: undefined,
-  handleSave: undefined
+  handleSave: undefined,
+  changeAvatarModal: undefined
 };
 
 PersonDetailWrapper.propTypes = {
@@ -38,7 +39,8 @@ PersonDetailWrapper.propTypes = {
   children: PropTypes.node.isRequired,
   canUpdate: PropTypes.bool,
   handleReset: PropTypes.func,
-  handleSave: PropTypes.func
+  handleSave: PropTypes.func,
+  changeAvatarModal: PropTypes.object
 };
 
 export default PersonDetailWrapper;
