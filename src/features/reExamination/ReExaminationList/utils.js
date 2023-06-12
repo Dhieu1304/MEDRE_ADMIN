@@ -7,12 +7,14 @@ import { normalizeStrToDateStr, normalizeStrToInt, normalizeStrToStr } from "../
  *  then the keys of showCols are also changed.
  */
 export const columnsIds = {
-  phoneNumber: "phoneNumber",
-  name: "name",
-  address: "address",
-  gender: "gender",
-  dob: "dob",
-  healthInsurance: "healthInsurance",
+  dateRemind: "dateRemind",
+  dateReExam: "dateReExam",
+  isRemind: "isRemind",
+  isApply: "isApply",
+  bookingDate: "bookingDate",
+  bookingUserPhoneNumber: "bookingUserPhoneNumber",
+  bookingUserEmail: "bookingUserEmail",
+  bookingUserName: "bookingUserName",
   action: "action"
 };
 
@@ -22,7 +24,7 @@ export const columnsIds = {
 */
 
 export const initialShowCols = Object.keys(columnsIds).reduce((obj, key) => {
-  if (key === columnsIds.action || key === columnsIds.name) {
+  if (key === columnsIds.action || key === columnsIds.dateRemind) {
     return { ...obj };
   }
   return { ...obj, [key]: true };

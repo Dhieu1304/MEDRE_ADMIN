@@ -7,13 +7,14 @@ import { FormProvider, useForm } from "react-hook-form";
 import reExaminationServices from "../../../services/reExaminationServices";
 import { useAppConfigStore } from "../../../store/AppConfigStore";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
-// import ListPageTableWrapper from "../../../components/ListPageTableWrapper";
+import ListPageTableWrapper from "../../../components/ListPageTableWrapper";
 import ListPageTop from "../../../components/ListPageTop";
 import CustomOverlay from "../../../components/CustomOverlay/CustomOverlay";
 import ReExaminationFiltersForm from "./ReExaminationFiltersForm";
 import { columnsIds, createDefaultValues, initialShowCols } from "./utils";
 import useObjDebounce from "../../../hooks/useObjDebounce";
 import ListPageAction from "../../../components/ListPageAction/ListPageAction";
+import ReExaminationTable from "./ReExaminationTable";
 
 function ReExaminationList() {
   const { locale } = useAppConfigStore();
@@ -32,47 +33,58 @@ function ReExaminationList() {
 
   const [showTableColsMenu, setShowTableColsMenu] = useState(null);
   const [showCols, setShowCols] = useState({
-    ...initialShowCols,
-    [columnsIds.healthInsurance]: false,
-    [columnsIds.address]: false
+    ...initialShowCols
   });
 
   const columns = useMemo(
     () => [
       {
-        id: columnsIds.name,
-        label: tReExamination(columnsIds.name),
+        id: columnsIds.dateRemind,
+        label: tReExamination(columnsIds.dateRemind),
         minWidth: 100
+        // hide: !showCols[columnsIds.phoneNumber]
       },
       {
-        id: columnsIds.phoneNumber,
-        label: tReExamination(columnsIds.phoneNumber),
+        id: columnsIds.bookingDate,
+        label: tReExamination("booking.date"),
         minWidth: 100,
-        hide: !showCols[columnsIds.phoneNumber]
+        hide: !showCols[columnsIds.bookingDate]
       },
       {
-        id: columnsIds.address,
-        label: tReExamination(columnsIds.address),
+        id: columnsIds.bookingDate,
+        label: tReExamination(columnsIds.dateReExam),
         minWidth: 100,
-        hide: !showCols[columnsIds.address]
+        hide: !showCols[columnsIds.dateReExam]
       },
       {
-        id: columnsIds.gender,
-        label: tReExamination(columnsIds.gender),
+        id: columnsIds.bookingUserPhoneNumber,
+        label: tReExamination("bookingUser.phoneNumber"),
         minWidth: 100,
-        hide: !showCols[columnsIds.gender]
+        hide: !showCols[columnsIds.bookingUserPhoneNumber]
       },
       {
-        id: columnsIds.dob,
-        label: tReExamination(columnsIds.dob),
+        id: columnsIds.bookingUserEmail,
+        label: tReExamination("bookingUser.email"),
         minWidth: 100,
-        hide: !showCols[columnsIds.dob]
+        hide: !showCols[columnsIds.bookingUserEmail]
       },
       {
-        id: columnsIds.healthInsurance,
-        label: tReExamination(columnsIds.healthInsurance),
+        id: columnsIds.bookingUserName,
+        label: tReExamination("bookingUser.name"),
         minWidth: 200,
-        hide: !showCols[columnsIds.healthInsurance]
+        hide: !showCols[columnsIds.bookingUserName]
+      },
+      {
+        id: columnsIds.isApply,
+        label: tReExamination(columnsIds.isApply),
+        minWidth: 100,
+        hide: !showCols[columnsIds.isApply]
+      },
+      {
+        id: columnsIds.isRemind,
+        label: tReExamination(columnsIds.isRemind),
+        minWidth: 100,
+        hide: !showCols[columnsIds.isRemind]
       },
       {
         id: columnsIds.action,
@@ -82,6 +94,9 @@ function ReExaminationList() {
     ],
     [locale, showCols]
   );
+
+  console.log("showCols: ", showCols);
+  console.log("columns: ", columns);
 
   const defaultValues = useMemo(() => {
     const defaultSearchParams = qs.parse(location.search);
@@ -193,13 +208,13 @@ function ReExaminationList() {
 
       {reExaminations.forEach(() => {})}
 
-      {/* <ListPageTableWrapper
-        table={<PatientTable patients={patients} columns={columns} showCols={showCols} />}
+      <ListPageTableWrapper
+        table={<ReExaminationTable reExaminations={reExaminations} columns={columns} showCols={showCols} />}
         count={count}
         watch={watch}
         loadData={loadData}
         setValue={setValue}
-      /> */}
+      />
     </Box>
   );
 }
