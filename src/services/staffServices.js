@@ -366,6 +366,7 @@ const editStaffInfo = async (
 
 const editMyProfile = async ({
   email,
+  username,
   phoneNumber,
   name,
   address,
@@ -381,6 +382,7 @@ const editMyProfile = async ({
   const dataBody = cleanUndefinedAndEmptyStrValueObject({
     email,
     phone_number: phoneNumber,
+    username,
     name,
     address,
     gender,
