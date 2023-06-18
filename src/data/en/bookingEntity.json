@@ -7,6 +7,8 @@
     "paymentStatus": "Payment status",
     "reason": "Reason",
     "note": "Note",
-    "conclusion": "Doctor's Conclusion"
+    "conclusion": "Doctor's Conclusion",
+    "userId": "User ID",
+    "patientId": "Patient ID"
   }
 }

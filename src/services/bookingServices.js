@@ -3,7 +3,7 @@ import { bookingApi } from "../config/apiConfig";
 import axiosClient from "../config/axiosClient";
 import { cleanUndefinedAndEmptyStrValueObject } from "../utils/objectUtil";
 
-const book = async ({ scheduleId, timeId, date, reason, patientId }) => {
+const book = async ({ scheduleId, timeId, date, reason, patientId, userId }) => {
   // console.log({ from, to });
 
   const dataBody = cleanUndefinedAndEmptyStrValueObject({
@@ -11,7 +11,8 @@ const book = async ({ scheduleId, timeId, date, reason, patientId }) => {
     id_time: timeId,
     date,
     reason,
-    id_patient: patientId
+    id_patient: patientId,
+    id_user: userId
   });
 
   // console.log("dataBody: ", dataBody);

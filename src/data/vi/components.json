@@ -46,8 +46,16 @@
   "CopyButton": {
     "label": "Sao chép",
     "message": {
-      "success": "Sap chép {{content}} thành công",
+      "success": "Sao chép {{content}} thành công",
       "error": "Sao chép thất bại"
+    }
+  },
+
+  "ClipboardButton": {
+    "label": "Dán",
+    "message": {
+      "success": "Dán {{content}} thành công",
+      "error": "Dán thất bại"
     }
   }
 }

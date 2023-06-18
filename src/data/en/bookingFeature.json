@@ -12,6 +12,11 @@
     "subTitle": {
       "patientInfo": "Patient information"
     },
+    "tabLabels": {
+      "user": "User",
+      "patient": "Patient",
+      "newPatient": "New patient"
+    },
     "form": {
       "bookingFor": "Booking for",
       "self": "Self",

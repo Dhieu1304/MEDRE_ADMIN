@@ -7,6 +7,8 @@
     "paymentStatus": "Tình trạng thanh đoán",
     "reason": "Lý do khám",
     "note": "Ghi chú",
-    "conclusion": "Kết luận bác sĩ"
+    "conclusion": "Kết luận bác sĩ",
+    "userId": "ID người dùng",
+    "patientId": "ID bệnh nhân"
   }
 }

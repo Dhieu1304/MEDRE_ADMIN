@@ -12,6 +12,11 @@
     "subTitle": {
       "patientInfo": "Thông tin bệnh nhân"
     },
+    "tabLabels": {
+      "user": "Người dùng",
+      "patient": "Bệnh nhân",
+      "newPatient": "Bệnh nhân mới"
+    },
     "form": {
       "bookingFor": "Đặt lịch cho",
       "self": "Bản thân",
