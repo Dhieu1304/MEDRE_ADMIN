@@ -96,13 +96,13 @@ function BookingTable({ bookings, columns, showCols }) {
   };
 
   const renderCells = (cells) => {
-      return cells?.map((cell) => {
-        return (
-          <CustomTableCell key={cell?.id} hide={!showCols?.[cell?.id]}>
-            {cell?.render()}
-          </CustomTableCell>
-        );
-      });
+    return cells?.map((cell) => {
+      return (
+        <CustomTableCell key={cell?.id} hide={!showCols?.[cell?.id]}>
+          {cell?.render()}
+        </CustomTableCell>
+      );
+    });
   };
 
   return (
