@@ -79,16 +79,37 @@ const getBookingDetailById = async (id) => {
   }
 };
 
-const getBookingList = async ({ type, bookingStatus, from, to, isPayment, order, page, limit } = {}) => {
+const getBookingList = async ({
+  patientPhoneNumber,
+  userId,
+  patientId,
+  doctorId,
+  staffBookingId,
+  staffCancelId,
+  type,
+  isPayment,
+  from,
+  to,
+  bookingStatuses,
+  page,
+  limit,
+  order
+} = {}) => {
   const params = cleanUndefinedAndEmptyStrValueObject({
+    patient_phone_number: patientPhoneNumber,
+    id_user: userId,
+    id_patient: patientId,
+    id_staff_booking: doctorId,
+    id_staff_cancel: staffBookingId,
+    id_doctor: staffCancelId,
     type,
-    booking_status: bookingStatus,
+    is_payment: isPayment,
     from,
     to,
-    is_payment: isPayment,
-    order,
+    booking_status: bookingStatuses,
     page,
-    limit
+    limit,
+    order
   });
 
   // console.log("params: ", params);

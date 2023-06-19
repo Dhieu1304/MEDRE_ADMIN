@@ -1,4 +1,40 @@
 {
+  "BookingList": {
+    "title": "Tìm kiếm lịch hẹn",
+    "filter": {
+      "patientPhoneNumber": "SĐT bệnh nhân",
+      "userId": "ID người dùng",
+      "patientId": "ID bệnh nhân",
+      "doctorId": "ID bác sĩ",
+      "staffBookingId": "ID nhân viên đặt lịch",
+      "staffCancelId": "ID nhân viên hủy lịch",
+      "type": "Loại khám",
+      "isPayment": "Tình trạng thanh toán",
+      "from": "Từ ngày",
+      "to": "Đến ngày",
+      "bookingStatuses": "Tình trạng lịch",
+      "bookingRange": "Khoảng ngày",
+      "bookingRangePreview": "Xem trước"
+    },
+    "select": {
+      "types": {
+        "offline": "Trực tiếp",
+        "online": "Trực tuyến",
+        "all": "Tất cả"
+      },
+      "isPayment": {
+        "paid": "Đã thanh toán",
+        "unpaid": "Chưa thanh toán",
+        "all": "Tất cả"
+      },
+      "statuses": {
+        "cancel": "Hủy lịch",
+        "booked": "Đã đặt",
+        "waiting": "Chờ thanh toán"
+      }
+    }
+  },
+
   "BookingInfoModal": {
     "title": "Thông tin lịch đặt",
     "button": {

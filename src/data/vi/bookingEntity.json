@@ -4,11 +4,46 @@
     "time": "Thời gian",
     "status": "Tình trạng",
     "code": "Code",
-    "paymentStatus": "Tình trạng thanh đoán",
+    "paymentStatus": "Thanh toán",
     "reason": "Lý do khám",
     "note": "Ghi chú",
+    "ordinalNumber": "Số thứ tự",
     "conclusion": "Kết luận bác sĩ",
     "userId": "ID người dùng",
-    "patientId": "ID bệnh nhân"
+    "patientId": "ID bệnh nhân",
+
+    "patientName": "Họ tên bệnh nhân",
+    "patientPhoneNumber": "SĐT bệnh nhân",
+    "doctorName": "Tên bác sĩ",
+    "type": "Loại khám",
+    "expertise": "Chuyên khoa",
+
+    "schedule": {
+      "expertise": "Chuyên khoa"
+    },
+
+    "patient": {
+      "phoneNumber": "Số điện thoại",
+      "name": "Họ tên",
+      "address": "Địa chỉ",
+      "gender": "Giới tính",
+      "dob": "Ngày sinh",
+      "healthInsurance": "Bảo hiểm y tế"
+    },
+    "doctor": {
+      "name": "Họ tên",
+      "expertises": "Chuyên khoa"
+    }
+  },
+  "constants": {
+    "statuses": {
+      "booked": "Đã đặt",
+      "cancel": "Hủy lịch",
+      "waiting": "Chờ thanh toán"
+    },
+    "paymentStatuses": {
+      "paid": "Đã thanh toán",
+      "unpaid": "Chưa thanh toán"
+    }
   }
 }

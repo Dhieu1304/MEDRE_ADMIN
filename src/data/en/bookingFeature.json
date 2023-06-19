@@ -1,4 +1,39 @@
 {
+  "BookingList": {
+    "title": "Find Booking",
+    "filter": {
+      "patientPhoneNumber": "Patient phone number",
+      "userId": "User ID",
+      "patientId": "Patient ID",
+      "doctorId": "Doctor ID",
+      "staffBookingId": "Staff Booking ID",
+      "staffCancelId": "Staff cancel ID",
+      "type": "Type",
+      "isPayment": "Is payment",
+      "from": "From",
+      "to": "To",
+      "bookingStatuses": "Booking status",
+      "bookingRange": "Range",
+      "bookingRangePreview": "Preview"
+    },
+    "select": {
+      "types": {
+        "offline": "Offline",
+        "online": "Online",
+        "all": "All"
+      },
+      "isPayment": {
+        "paid": "Paid",
+        "unpaid": "Unpaid",
+        "all": "All"
+      },
+      "statuses": {
+        "cancel": "Cancel",
+        "booked": "Booked",
+        "waiting": "Waiting for payment"
+      }
+    }
+  },
   "BookingInfoModal": {
     "title": "Booking detail",
     "button": {
