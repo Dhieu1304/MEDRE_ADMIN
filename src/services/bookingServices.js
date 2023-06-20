@@ -177,12 +177,17 @@ const getBookingDetail = async (id) => {
   }
 };
 
-const updateBooking = async (note) => {
+const updateBooking = async ({ id, isPayment, bookingStatus }) => {
+  const dataBody = cleanUndefinedAndEmptyStrValueObject({
+    id,
+    is_payment: isPayment,
+    booking_status: bookingStatus
+  });
+  // console.log("dataBody: ", dataBody);
   try {
-    const res = await axiosClient.post(bookingApi.updateBooking, { note });
-    // console.log("Update");
+    const res = await axiosClient.post(bookingApi.updateBooking(), dataBody);
+    // console.log("res: ", res);
     if (res?.status) {
-      // const booking = camelcaseKeys(res?.data, { deep: true });
       const booking = res?.data;
 
       return {

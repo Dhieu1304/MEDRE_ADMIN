@@ -83,31 +83,31 @@ function BookingDetail() {
     }, {});
   }, [locale]);
 
-  useEffect(() => {
-    const loadData = async () => {
-      await fetchApi(
-        async () => {
-          const res = await bookingServices.getBookingDetail(bookingId);
+  const loadData = async () => {
+    await fetchApi(
+      async () => {
+        const res = await bookingServices.getBookingDetail(bookingId);
 
-          if (res.success) {
-            const bookingData = res.booking;
-            setBooking(bookingData);
+        if (res.success) {
+          const bookingData = res.booking;
+          setBooking(bookingData);
 
-            const newDefaultValues = {
-              ...mergeObjectsWithoutNullAndUndefined(defaultValues, bookingData)
-            };
+          const newDefaultValues = {
+            ...mergeObjectsWithoutNullAndUndefined(defaultValues, bookingData)
+          };
 
-            setDefaultValues(newDefaultValues);
-            reset(newDefaultValues);
+          setDefaultValues(newDefaultValues);
+          reset(newDefaultValues);
 
-            return { ...res };
-          }
-          setBooking({});
           return { ...res };
-        },
-        { hideSuccessToast: true }
-      );
-    };
+        }
+        setBooking({});
+        return { ...res };
+      },
+      { hideSuccessToast: true }
+    );
+  };
+  useEffect(() => {
     loadData();
   }, []);
   const tableFirstCellProps = {
@@ -156,7 +156,21 @@ function BookingDetail() {
     });
   };
 
-  const handleSave = async ({ note, conclusion, prescription }) => {
+  const handleUpdateBooking = async ({ isPayment, bookingStatus }) => {
+    const id = booking?.id;
+    // console.log({ id, isPayment, bookingStatus });
+
+    await fetchApi(async () => {
+      const res = await bookingServices.updateBooking({ id, isPayment, bookingStatus });
+      if (res?.success) {
+        await loadData();
+        return { ...res };
+      }
+      return { ...res };
+    });
+  };
+
+  const handleSaveUpdateBookingByDoctor = async ({ note, conclusion, prescription }) => {
     const id = booking?.id;
 
     await fetchApi(async () => {
@@ -171,6 +185,30 @@ function BookingDetail() {
     }
   }, [file]);
 
+  const disabledBtnSx = {
+    width: { sm: "inherit", xs: "100%" },
+    mb: { sm: 0, xs: 1 },
+    ml: { sm: 1, xs: 0 },
+    backgroundColor: "rgb(235, 235, 228)",
+    color: "rgb(154, 153, 153)",
+    ":hover": {
+      backgroundColor: theme.palette.success.dark,
+      color: theme.palette.success.contrastText
+    }
+  };
+
+  const activeBtnSx = {
+    width: { sm: "inherit", xs: "100%" },
+    mb: { sm: 0, xs: 1 },
+    ml: { sm: 1, xs: 0 },
+    backgroundColor: theme.palette.success.light,
+    color: theme.palette.success.contrastText,
+    ":hover": {
+      backgroundColor: theme.palette.success.dark,
+      color: theme.palette.success.contrastText
+    }
+  };
+
   return (
     <>
       <CustomOverlay open={isLoading} />
@@ -178,29 +216,53 @@ function BookingDetail() {
         <CustomPageTitle
           title={t("title")}
           right={
-            <Box>
-              {!booking?.isPayment &&
-                booking?.bookingStatus !== bookingStatuses.CANCELED &&
-                formatDate.subtract(new Date(booking?.date), new Date()).toDays() > 0 && (
-                  <Button
-                    variant="contained"
-                    size="small"
-                    sx={{
-                      width: { sm: "inherit", xs: "100%" },
-                      mb: { sm: 0, xs: 1 },
-                      ml: { sm: 1, xs: 0 },
-                      backgroundColor: theme.palette.success.light,
-                      color: theme.palette.success.contrastText,
-                      ":hover": {
-                        backgroundColor: theme.palette.success.dark,
-                        color: theme.palette.success.contrastText
-                      }
-                    }}
-                    // onClick={handlePayment}
-                  >
-                    {t("button.payment")}
-                  </Button>
-                )}
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center"
+              }}
+            >
+              <Button
+                variant="contained"
+                size="small"
+                sx={booking?.isPayment ? activeBtnSx : disabledBtnSx}
+                onClick={async () => handleUpdateBooking({ isPayment: true })}
+              >
+                {t("button.paid")}
+              </Button>
+              <Button
+                variant="contained"
+                size="small"
+                sx={!booking?.isPayment ? activeBtnSx : disabledBtnSx}
+                onClick={async () => handleUpdateBooking({ isPayment: false })}
+              >
+                {t("button.unpaid")}
+              </Button>
+              <Button
+                variant="contained"
+                size="small"
+                sx={booking?.bookingStatus === bookingStatuses.BOOKED ? activeBtnSx : disabledBtnSx}
+                onClick={async () => handleUpdateBooking({ bookingStatus: bookingStatuses.BOOKED })}
+              >
+                {t("button.booked")}
+              </Button>
+              <Button
+                variant="contained"
+                size="small"
+                sx={booking?.bookingStatus === bookingStatuses.WAITING ? activeBtnSx : disabledBtnSx}
+                onClick={async () => handleUpdateBooking({ bookingStatus: bookingStatuses.WAITING })}
+              >
+                {t("button.waiting")}
+              </Button>
+              <Button
+                variant="contained"
+                size="small"
+                sx={booking?.bookingStatus === bookingStatuses.CANCELED ? activeBtnSx : disabledBtnSx}
+                onClick={async () => handleUpdateBooking({ bookingStatus: bookingStatuses.CANCELED })}
+              >
+                {t("button.cancel")}
+              </Button>
+
               {booking?.bookingSchedule?.type === scheduleTypes.TYPE_ONLINE && booking?.isPayment && booking?.code && (
                 <Box
                   component={Link}
@@ -210,8 +272,9 @@ function BookingDetail() {
                     alignItems: "center",
                     px: 2,
                     py: 1,
-                    background: theme.palette.success.light,
-                    color: theme.palette.success.contrastText,
+                    ml: 4,
+                    background: theme.palette.info.light,
+                    color: theme.palette.info.contrastText,
                     borderRadius: 10,
                     textDecoration: "none"
                   }}
@@ -478,7 +541,7 @@ function BookingDetail() {
 
             <Button
               variant="contained"
-              onClick={handleSubmit(handleSave)}
+              onClick={handleSubmit(handleSaveUpdateBookingByDoctor)}
               sx={{
                 ml: 2,
                 bgcolor: theme.palette.success.light

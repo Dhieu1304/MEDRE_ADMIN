@@ -48,9 +48,15 @@
       "exportFile": "Export file",
       "meet": "Meet",
       "payment": "Payment",
-      "cancel": "Cancel",
+
       "save": "Save",
-      "reset": "Reset"
+      "reset": "Reset",
+
+      "paid": "Paid",
+      "unpaid": "Unpaid",
+      "booked": "Booked",
+      "cancel": "Cancel",
+      "waiting": "Waiting"
     }
   },
 

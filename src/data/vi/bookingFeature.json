@@ -47,9 +47,14 @@
     "button": {
       "exportFile": "Xuất file",
       "payment": "Thanh toán",
-      "cancel": "Hủy lịch",
       "meet": "Khám",
-      "save": "Lưu"
+      "save": "Lưu",
+
+      "paid": "Đã thanh toán",
+      "unpaid": "Chưa thanh toán",
+      "cancel": "Hủy lịch",
+      "booked": "Đã đặt",
+      "waiting": "Đang đợi"
     }
   },
 
