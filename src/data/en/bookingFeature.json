@@ -34,6 +34,26 @@
       }
     }
   },
+
+  "BookingDetail": {
+    "title": "Booking detail",
+    "subTitle": {
+      "scheduleInfo": "Schedule information",
+      "doctorInfo": "Doctor information",
+      "patientInfo": "Patient information",
+      "doctorConclusion": "Doctor conclusion",
+      "doctorPrescription": "Prescription"
+    },
+    "button": {
+      "exportFile": "Export file",
+      "meet": "Meet",
+      "payment": "Payment",
+      "cancel": "Cancel",
+      "save": "Save",
+      "reset": "Reset"
+    }
+  },
+
   "BookingInfoModal": {
     "title": "Booking detail",
     "button": {

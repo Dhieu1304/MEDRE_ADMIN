@@ -35,11 +35,30 @@
     }
   },
 
+  "BookingDetail": {
+    "title": "Chi tiết lịch khám",
+    "subTitle": {
+      "scheduleInfo": "Thông tin lịch khám",
+      "doctorInfo": "Thông tin bác sĩ",
+      "patientInfo": "Thông tin bệnh nhân",
+      "doctorConclusion": "Kết luận của bác sĩ",
+      "doctorPrescription": "Đơn thuốc"
+    },
+    "button": {
+      "exportFile": "Xuất file",
+      "payment": "Thanh toán",
+      "cancel": "Hủy lịch",
+      "meet": "Khám",
+      "save": "Lưu"
+    }
+  },
+
   "BookingInfoModal": {
     "title": "Thông tin lịch đặt",
     "button": {
       "save": "Lưu",
-      "detail": "Chi tiết"
+      "detail": "Chi tiết",
+      "reset": "Đặt lại"
     }
   },
 

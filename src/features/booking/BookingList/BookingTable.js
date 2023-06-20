@@ -76,7 +76,7 @@ function BookingTable({ bookings, columns, showCols }) {
         render: () => {
           switch (booking?.status) {
             case bookingStatuses.BOOKED:
-              return tBookingStatuses("bobookedoked");
+              return tBookingStatuses("booked");
             case bookingStatuses.CANCELED:
               return tBookingStatuses("cancel");
             case bookingStatuses.WAITING:

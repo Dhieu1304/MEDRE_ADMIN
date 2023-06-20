@@ -152,8 +152,7 @@ const getBookingDetail = async (id) => {
     const res = await axiosClient.get(bookingApi.bookingDetail(id));
 
     if (res?.status) {
-      // const booking = camelcaseKeys(res?.data, { deep: true });
-      const booking = res?.data;
+      const booking = camelcaseKeys(res?.data, { deep: true });
 
       return {
         booking,
@@ -209,10 +208,50 @@ const updateBooking = async (note) => {
   }
 };
 
+const updateBookingByDoctor = async ({ id, prescription, conclusion, note }) => {
+  const dataBody = cleanUndefinedAndEmptyStrValueObject({
+    id,
+    prescription,
+    conclusion,
+    note
+  });
+
+  // console.log("dataBody: ", dataBody);
+  try {
+    const res = await axiosClient.post(bookingApi.updateBookingByDoctor(), dataBody);
+    // console.log("res: ", res);
+    if (res?.status) {
+      // const booking = camelcaseKeys(res?.data, { deep: true });
+      const booking = res?.data;
+
+      return {
+        booking,
+        success: true,
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
+      };
+    }
+    return {
+      success: false,
+      message: res?.message || `Status is ${res.status}`,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
 export default {
   book,
   getBookingDetailById,
   getBookingList,
   getBookingDetail,
-  updateBooking
+  updateBooking,
+  updateBookingByDoctor
 };

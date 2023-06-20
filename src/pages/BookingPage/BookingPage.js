@@ -5,7 +5,7 @@ function BookingPage() {
   return (
     <Routes>
       <Route path="/" element={<BookingList />} />
-      <Route path="/id" element={<BookingDetail />} />
+      <Route path="/:bookingId" element={<BookingDetail />} />
     </Routes>
   );
 }

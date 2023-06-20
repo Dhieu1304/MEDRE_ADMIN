@@ -56,7 +56,8 @@ const bookingApi = {
   book: () => "/booking/create-booking-for-staff",
   bookingList: () => "/booking/list-for-staff",
   bookingDetail: (id) => `/booking/detail-for-staff/${id}`,
-  updateBooking: () => `/booking/update`
+  updateBooking: () => `/booking/update`,
+  updateBookingByDoctor: () => "/booking/update-for-doctor"
 };
 
 const patientApi = {
@@ -86,6 +87,10 @@ const reExaminationApi = {
   updateReExamination: () => `/re-examination/update`
 };
 
+const uploadApi = {
+  upload: () => "/upload/avatar"
+};
+
 export {
   authApi,
   userApi,
@@ -97,5 +102,6 @@ export {
   patientApi,
   settingApi,
   notificationApi,
-  reExaminationApi
+  reExaminationApi,
+  uploadApi
 };
