@@ -19,6 +19,7 @@
     "sessions": {
       "morning": "Morning",
       "afternoon": "Afternoon",
+      "evening": "Evening",
       "wholeDay": "Whole day"
     }
   }

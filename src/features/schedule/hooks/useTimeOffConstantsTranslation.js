@@ -19,6 +19,10 @@ export const useTimeOffSessionsContantTranslation = () => {
         value: timeOffSessions.AFFTERNOON
       },
       {
+        label: tTimeOffSession("evening"),
+        value: timeOffSessions.EVENING
+      },
+      {
         label: tTimeOffSession("wholeDay"),
         value: timeOffSessions.WHOLE_DAY
       }

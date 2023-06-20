@@ -15,7 +15,7 @@ export const findBookingsByDate = (bookings, date, time) => {
 };
 
 export const groupSchedulesBySession = (schedules, currentDate) => {
-  const schedulesGroupBySession = { morning: null, afternoon: null, wholeDay: null };
+  const schedulesGroupBySession = { morning: null, afternoon: null, evening: null, wholeDay: null };
 
   schedules.forEach((schedule) => {
     const repeatOn = schedule?.repeatOn?.split(",").map(Number);
@@ -26,6 +26,8 @@ export const groupSchedulesBySession = (schedules, currentDate) => {
         schedulesGroupBySession.morning = schedule;
       } else if (schedule?.session === scheduleSessions.AFFTERNOON) {
         schedulesGroupBySession.afternoon = schedule;
+      } else if (schedule?.session === scheduleSessions.EVENING) {
+        schedulesGroupBySession.evening = schedule;
       } else if (schedule?.session === scheduleSessions.WHOLE_DAY) {
         schedulesGroupBySession.wholeDay = schedule;
       }

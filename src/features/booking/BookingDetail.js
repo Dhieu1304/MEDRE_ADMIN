@@ -210,7 +210,6 @@ function BookingDetail() {
     }
   };
 
-
   return (
     <>
       <CustomOverlay open={isLoading} />

@@ -21,7 +21,7 @@ const getTimeOffByDoctorId = async (doctorId, { from, to, page, limit }) => {
     });
     // const res = camelcaseKeys(scheduleMockData.list(), { deep: true });
 
-    // console.log("res    xxx: ", res);
+    // console.log("res: ", res);
 
     if (res?.status) {
       const data = camelcaseKeys(res?.data, { deep: true });

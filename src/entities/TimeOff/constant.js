@@ -1,6 +1,7 @@
 export const timeOffSessions = {
   MORNING: "Morning",
   AFFTERNOON: "Afternoon",
+  EVENING: "Evening",
   WHOLE_DAY: "WholeDay"
 };
 

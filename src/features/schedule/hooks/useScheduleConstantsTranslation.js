@@ -49,6 +49,10 @@ export const useScheduleSessionsContantTranslation = () => {
         value: scheduleSessions.AFFTERNOON
       },
       {
+        label: tScheduleSession("evening"),
+        value: scheduleSessions.EVENING
+      },
+      {
         label: tScheduleSession("wholeDay"),
         value: scheduleSessions.WHOLE_DAY
       }

@@ -20,6 +20,7 @@
     "sessions": {
       "morning": "Buổi sáng",
       "afternoon": "Buổi chiều",
+      "evening": "Buổi tối",
       "wholeDay": "Cả ngày"
     }
   }

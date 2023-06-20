@@ -289,6 +289,10 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
           schedule = schedulesBySession.afternoon || schedulesBySession.wholeDay;
           break;
 
+        case scheduleSessions.EVENING:
+          schedule = schedulesBySession.evening || schedulesBySession.wholeDay;
+          break;
+
         default:
           break;
       }

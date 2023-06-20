@@ -70,6 +70,10 @@ function AddScheduleModal({ show, setShow, data, setData, handleAfterAddSchedule
         value: scheduleSessions.AFFTERNOON
       },
       {
+        label: tScheduleConstants("sessions.evening"),
+        value: scheduleSessions.EVENING
+      },
+      {
         label: tScheduleConstants("sessions.wholeDay"),
         value: scheduleSessions.WHOLE_DAY
       }

@@ -108,6 +108,8 @@ function DoctorTimeOff({ doctor, doctorId }) {
       page
     };
 
+    // console.log("loadData ");
+
     await fetchApi(async () => {
       const res = await timeOffServices.getTimeOffByDoctorId(doctorId, paramsObj);
       let countData = 0;
@@ -116,6 +118,7 @@ function DoctorTimeOff({ doctor, doctorId }) {
       if (res.success) {
         timeOffsData = res?.timeOffs || [];
         countData = res?.count;
+        // console.log("timeOffsData ", timeOffsData);
         setTimeOffs(timeOffsData);
         setCount(countData);
         return { ...res };

@@ -178,6 +178,10 @@ function ScheduleList({ timesList }) {
           schedule = schedulesGroupBySession.afternoon || schedulesGroupBySession.wholeDay;
           break;
 
+        case scheduleSessions.EVENING:
+          schedule = schedulesGroupBySession.evening || schedulesGroupBySession.wholeDay;
+          break;
+
         default:
           break;
       }

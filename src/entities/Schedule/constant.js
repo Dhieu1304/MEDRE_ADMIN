@@ -6,6 +6,7 @@ export const scheduleTypes = {
 export const scheduleSessions = {
   MORNING: "Morning",
   AFFTERNOON: "Afternoon",
+  EVENING: "Evening",
   WHOLE_DAY: "WholeDay"
 };
 

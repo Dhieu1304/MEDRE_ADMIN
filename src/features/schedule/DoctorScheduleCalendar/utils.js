@@ -27,6 +27,8 @@ export const groupSchedulesDayOfWeekAndSession = (schedules) => {
           schedulesGroupByDayOfWeekAndSession[dayOfWeek].morning = schedule;
         } else if (schedule?.session === scheduleSessions.AFFTERNOON) {
           schedulesGroupByDayOfWeekAndSession[dayOfWeek].afternoon = schedule;
+        } else if (schedule?.session === scheduleSessions.EVENING) {
+          schedulesGroupByDayOfWeekAndSession[dayOfWeek].afternoon = schedule;
         } else if (schedule?.session === scheduleSessions.WHOLE_DAY) {
           schedulesGroupByDayOfWeekAndSession[dayOfWeek].wholeDay = schedule;
         }
