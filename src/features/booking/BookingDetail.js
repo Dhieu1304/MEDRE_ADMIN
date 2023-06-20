@@ -30,6 +30,7 @@ import { scheduleTypes } from "../../entities/Schedule";
 import routeConfig from "../../config/routeConfig";
 import { mergeObjectsWithoutNullAndUndefined } from "../../utils/objectUtil";
 import uploadServices from "../../services/uploadServices";
+import CopyButton from "../../components/CopyButton";
 // import paymentServices from "../../services/paymentServices";
 
 function BookingDetail() {
@@ -209,6 +210,7 @@ function BookingDetail() {
     }
   };
 
+
   return (
     <>
       <CustomOverlay open={isLoading} />
@@ -219,70 +221,91 @@ function BookingDetail() {
             <Box
               sx={{
                 display: "flex",
-                alignItems: "center"
+                flexDirection: "column",
+                alignItems: "flex-end"
               }}
             >
-              <Button
-                variant="contained"
-                size="small"
-                sx={booking?.isPayment ? activeBtnSx : disabledBtnSx}
-                onClick={async () => handleUpdateBooking({ isPayment: true })}
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  mb: 4
+                }}
               >
-                {t("button.paid")}
-              </Button>
-              <Button
-                variant="contained"
-                size="small"
-                sx={!booking?.isPayment ? activeBtnSx : disabledBtnSx}
-                onClick={async () => handleUpdateBooking({ isPayment: false })}
-              >
-                {t("button.unpaid")}
-              </Button>
-              <Button
-                variant="contained"
-                size="small"
-                sx={booking?.bookingStatus === bookingStatuses.BOOKED ? activeBtnSx : disabledBtnSx}
-                onClick={async () => handleUpdateBooking({ bookingStatus: bookingStatuses.BOOKED })}
-              >
-                {t("button.booked")}
-              </Button>
-              <Button
-                variant="contained"
-                size="small"
-                sx={booking?.bookingStatus === bookingStatuses.WAITING ? activeBtnSx : disabledBtnSx}
-                onClick={async () => handleUpdateBooking({ bookingStatus: bookingStatuses.WAITING })}
-              >
-                {t("button.waiting")}
-              </Button>
-              <Button
-                variant="contained"
-                size="small"
-                sx={booking?.bookingStatus === bookingStatuses.CANCELED ? activeBtnSx : disabledBtnSx}
-                onClick={async () => handleUpdateBooking({ bookingStatus: bookingStatuses.CANCELED })}
-              >
-                {t("button.cancel")}
-              </Button>
-
-              {booking?.bookingSchedule?.type === scheduleTypes.TYPE_ONLINE && booking?.isPayment && booking?.code && (
-                <Box
-                  component={Link}
-                  to={`${routeConfig.meeting}/${booking?.id}`}
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    px: 2,
-                    py: 1,
-                    ml: 4,
-                    background: theme.palette.info.light,
-                    color: theme.palette.info.contrastText,
-                    borderRadius: 10,
-                    textDecoration: "none"
-                  }}
+                <Button
+                  variant="contained"
+                  size="small"
+                  sx={booking?.isPayment ? activeBtnSx : disabledBtnSx}
+                  onClick={async () => handleUpdateBooking({ isPayment: true })}
                 >
-                  <VideoCallIcon sx={{ mr: 1 }} />
-                  {t("button.meet")}
-                </Box>
-              )}
+                  {t("button.paid")}
+                </Button>
+                <Button
+                  variant="contained"
+                  size="small"
+                  sx={!booking?.isPayment ? activeBtnSx : disabledBtnSx}
+                  onClick={async () => handleUpdateBooking({ isPayment: false })}
+                >
+                  {t("button.unpaid")}
+                </Button>
+                <Button
+                  variant="contained"
+                  size="small"
+                  sx={booking?.bookingStatus === bookingStatuses.BOOKED ? activeBtnSx : disabledBtnSx}
+                  onClick={async () => handleUpdateBooking({ bookingStatus: bookingStatuses.BOOKED })}
+                >
+                  {t("button.booked")}
+                </Button>
+                <Button
+                  variant="contained"
+                  size="small"
+                  sx={booking?.bookingStatus === bookingStatuses.WAITING ? activeBtnSx : disabledBtnSx}
+                  onClick={async () => handleUpdateBooking({ bookingStatus: bookingStatuses.WAITING })}
+                >
+                  {t("button.waiting")}
+                </Button>
+                <Button
+                  variant="contained"
+                  size="small"
+                  sx={booking?.bookingStatus === bookingStatuses.CANCELED ? activeBtnSx : disabledBtnSx}
+                  onClick={async () => handleUpdateBooking({ bookingStatus: bookingStatuses.CANCELED })}
+                >
+                  {t("button.cancel")}
+                </Button>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center"
+                }}
+              >
+                {booking?.bookingOfUser?.id && (
+                  <CopyButton content={booking?.bookingOfUser?.id} label={t("button.copyUserId")} />
+                )}
+                {booking?.bookingOfPatient?.id && (
+                  <CopyButton content={booking?.bookingOfPatient?.id} label={t("button.copyPatientId")} />
+                )}
+                {booking?.bookingSchedule?.type === scheduleTypes.TYPE_ONLINE && booking?.isPayment && booking?.code && (
+                  <Box
+                    component={Link}
+                    to={`${routeConfig.meeting}/${booking?.id}`}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      px: 2,
+                      py: 1,
+                      ml: 2,
+                      background: theme.palette.info.light,
+                      color: theme.palette.info.contrastText,
+                      borderRadius: 10,
+                      textDecoration: "none"
+                    }}
+                  >
+                    <VideoCallIcon sx={{ mr: 1 }} />
+                    {t("button.meet")}
+                  </Box>
+                )}
+              </Box>
             </Box>
           }
         />

@@ -8,6 +8,7 @@ import CustomModal from "../../../components/CustomModal/CustomModal";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
 import bookingServices from "../../../services/bookingServices";
 import CustomInput from "../../../components/CustomInput/CustomInput";
+import CopyButton from "../../../components/CopyButton";
 
 function BookingInfoModal({ show, setShow, data, setData }) {
   const [booking, setBooking] = useState({});
@@ -73,6 +74,18 @@ function BookingInfoModal({ show, setShow, data, setData }) {
         {/* <Typography variant="h6" sx={{ mb: 2 }}>
           {t("title.booking")}
         </Typography> */}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            mb: 4
+          }}
+        >
+          {booking?.bookingOfUser?.id && <CopyButton content={booking?.bookingOfUser?.id} label={t("button.copyUserId")} />}
+          {booking?.bookingOfPatient?.id && (
+            <CopyButton content={booking?.bookingOfPatient?.id} label={t("button.copyPatientId")} />
+          )}
+        </Box>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={12} md={4} lg={4}>
             <CustomInput noNameValue={booking.date} label={tBooking("date")} />

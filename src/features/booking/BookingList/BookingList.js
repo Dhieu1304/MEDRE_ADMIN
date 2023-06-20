@@ -15,6 +15,8 @@ import BookingFiltersForm from "./BookingFiltersForm";
 import ListPageTableWrapper from "../../../components/ListPageTableWrapper";
 import BookingTable from "./BookingTable";
 import ListPageAction from "../../../components/ListPageAction/ListPageAction";
+import { useCustomModal } from "../../../components/CustomModal";
+import BookingInfoModal from "../components/BookingInfoModal";
 
 function BookingList() {
   const { locale } = useAppConfigStore();
@@ -42,7 +44,9 @@ function BookingList() {
     We will hide address, healthInsurance for the first time
   */
   const [showCols, setShowCols] = useState({
-    ...initialShowCols
+    ...initialShowCols,
+    patientPhoneNumber: false,
+    expertise: false
   });
 
   const columns = useMemo(
@@ -103,7 +107,7 @@ function BookingList() {
       {
         id: columnsIds.paymentStatus,
         label: tBooking(columnsIds.paymentStatus),
-        minWidth: 100,
+        minWidth: 120,
         hide: !showCols[columnsIds.paymentStatus]
       },
 
@@ -160,6 +164,8 @@ function BookingList() {
     1000
   );
 
+  const bookingInfoModal = useCustomModal();
+
   const loadData = async ({ page }) => {
     const paramsObj = {
       ...watch(),
@@ -211,41 +217,53 @@ function BookingList() {
   }, [...Object.values(filterDebounce), ...Object.values(searchDebounce), isReset]);
 
   return (
-    <Box>
+    <>
       <CustomOverlay open={isLoading} />
+      <Box>
+        <ListPageTop
+          title={t("title")}
+          filterFormNode={
+            <FormProvider {...filterForm}>
+              <BookingFiltersForm />
+            </FormProvider>
+          }
+        />
 
-      <ListPageTop
-        title={t("title")}
-        filterFormNode={
-          <FormProvider {...filterForm}>
-            <BookingFiltersForm />
-          </FormProvider>
-        }
-      />
+        <ListPageAction
+          showCols={showCols}
+          setShowCols={setShowCols}
+          showTableColsMenu={showTableColsMenu}
+          setShowTableColsMenu={setShowTableColsMenu}
+          reset={reset}
+          setIsReset={setIsReset}
+          createDefaultValues={createDefaultValues}
+          columns={columns}
+          setValue={setValue}
+          loadData={loadData}
+          watch={watch}
+          count={count}
+        />
 
-      <ListPageAction
-        showCols={showCols}
-        setShowCols={setShowCols}
-        showTableColsMenu={showTableColsMenu}
-        setShowTableColsMenu={setShowTableColsMenu}
-        reset={reset}
-        setIsReset={setIsReset}
-        createDefaultValues={createDefaultValues}
-        columns={columns}
-        setValue={setValue}
-        loadData={loadData}
-        watch={watch}
-        count={count}
-      />
+        <ListPageTableWrapper
+          table={
+            <BookingTable bookings={bookings} columns={columns} showCols={showCols} bookingInfoModal={bookingInfoModal} />
+          }
+          count={count}
+          watch={watch}
+          loadData={loadData}
+          setValue={setValue}
+        />
+      </Box>
 
-      <ListPageTableWrapper
-        table={<BookingTable bookings={bookings} columns={columns} showCols={showCols} />}
-        count={count}
-        watch={watch}
-        loadData={loadData}
-        setValue={setValue}
-      />
-    </Box>
+      {bookingInfoModal.show && (
+        <BookingInfoModal
+          show={bookingInfoModal.show}
+          setShow={bookingInfoModal.setShow}
+          data={bookingInfoModal.data}
+          setData={bookingInfoModal.setData}
+        />
+      )}
+    </>
   );
 }
 

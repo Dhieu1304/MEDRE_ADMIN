@@ -2,8 +2,9 @@ import PropTypes from "prop-types";
 import { CopyAll as CopyAllIcon } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
+import { Button } from "@mui/material";
 
-function CopyButton({ content }) {
+function CopyButton({ content, label }) {
   const { t } = useTranslation("components", { keyPrefix: "CopyButton" });
 
   const copyToClipboard = async () => {
@@ -15,6 +16,23 @@ function CopyButton({ content }) {
     }
   };
 
+  if (label) {
+    return (
+      <Button
+        endIcon={
+          <CopyAllIcon
+            sx={{
+              cursor: "pointer"
+            }}
+            onClick={copyToClipboard}
+          />
+        }
+      >
+        {label}
+      </Button>
+    );
+  }
+
   return (
     <CopyAllIcon
       sx={{
@@ -25,8 +43,13 @@ function CopyButton({ content }) {
   );
 }
 
+CopyButton.defaultProps = {
+  label: undefined
+};
+
 CopyButton.propTypes = {
-  content: PropTypes.string.isRequired
+  content: PropTypes.string.isRequired,
+  label: PropTypes.string
 };
 
 export default CopyButton;

@@ -9,11 +9,12 @@ import {
   Paper,
   IconButton,
   useTheme,
-  Typography
+  Typography,
+  Button
 } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
-import { Search as SearchIcon } from "@mui/icons-material";
+import { Preview as PreviewIcon, Search as SearchIcon } from "@mui/icons-material";
 import formatDate from "date-and-time";
 
 import { useTranslation } from "react-i18next";
@@ -23,7 +24,7 @@ import { columnsIds } from "./utils";
 import CopyButton from "../../../components/CopyButton";
 import { bookingStatuses } from "../../../entities/Booking";
 
-function BookingTable({ bookings, columns, showCols }) {
+function BookingTable({ bookings, columns, showCols, bookingInfoModal }) {
   const theme = useTheme();
 
   const navigate = useNavigate();
@@ -74,22 +75,79 @@ function BookingTable({ bookings, columns, showCols }) {
       {
         id: columnsIds?.status,
         render: () => {
-          switch (booking?.status) {
+          switch (booking?.bookingStatus) {
             case bookingStatuses.BOOKED:
-              return tBookingStatuses("booked");
+              return (
+                <Button
+                  sx={{
+                    width: "100%",
+                    fontSize: 10,
+                    bgcolor: theme.palette.success.light,
+                    color: theme.palette.success.contrastText
+                  }}
+                >
+                  {tBookingStatuses("booked")}
+                </Button>
+              );
             case bookingStatuses.CANCELED:
-              return tBookingStatuses("cancel");
+              return (
+                <Button
+                  sx={{
+                    width: "100%",
+                    fontSize: 10,
+                    bgcolor: theme.palette.error.light,
+                    color: theme.palette.error.contrastText
+                  }}
+                >
+                  {tBookingStatuses("cancel")}
+                </Button>
+              );
             case bookingStatuses.WAITING:
             default:
-              return tBookingStatuses("waiting");
+              return (
+                <Button
+                  sx={{
+                    width: "100%",
+                    fontSize: 10,
+                    bgcolor: theme.palette.warning.light,
+                    color: theme.palette.warning.contrastText
+                  }}
+                >
+                  {tBookingStatuses("waiting")}
+                </Button>
+              );
           }
         }
       },
       {
         id: columnsIds?.paymentStatus,
         render: () => {
-          if (booking?.paymentStatus) return tBookingPaymentStatuses("paid");
-          return tBookingPaymentStatuses("unpaid");
+          if (booking?.isPayment)
+            return (
+              <Button
+                sx={{
+                  width: "100%",
+                  fontSize: 10,
+                  bgcolor: theme.palette.success.light,
+                  color: theme.palette.success.contrastText
+                }}
+              >
+                {tBookingPaymentStatuses("paid")}
+              </Button>
+            );
+
+          return (
+            <Button
+              sx={{
+                width: "100%",
+                fontSize: 10,
+                bgcolor: theme.palette.warning.light,
+                color: theme.palette.warning.contrastText
+              }}
+            >
+              {tBookingPaymentStatuses("unpaid")}
+            </Button>
+          );
         }
       }
     ];
@@ -146,6 +204,17 @@ function BookingTable({ bookings, columns, showCols }) {
                   >
                     <SearchIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
                   </IconButton>
+                  <IconButton
+                    onClick={() => {
+                      if (booking) {
+                        bookingInfoModal.setShow(true);
+                        bookingInfoModal.setData(booking);
+                      }
+                    }}
+                  >
+                    <PreviewIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
+                  </IconButton>
+
                   <CopyButton content={booking?.id} />
                 </CustomTableCell>
               </TableRow>
@@ -161,7 +230,8 @@ function BookingTable({ bookings, columns, showCols }) {
 BookingTable.propTypes = {
   bookings: PropTypes.array.isRequired,
   columns: PropTypes.array.isRequired,
-  showCols: PropTypes.object.isRequired
+  showCols: PropTypes.object.isRequired,
+  bookingInfoModal: PropTypes.object.isRequired
 };
 
 export default BookingTable;

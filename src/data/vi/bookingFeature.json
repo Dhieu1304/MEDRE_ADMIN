@@ -54,7 +54,10 @@
       "unpaid": "Chưa thanh toán",
       "cancel": "Hủy lịch",
       "booked": "Đã đặt",
-      "waiting": "Đang đợi"
+      "waiting": "Đang đợi",
+
+      "copyUserId": "Sao chép ID người dùng",
+      "copyPatientId": "Sao chép ID bệnh nhân"
     }
   },
 
@@ -63,7 +66,9 @@
     "button": {
       "save": "Lưu",
       "detail": "Chi tiết",
-      "reset": "Đặt lại"
+      "reset": "Đặt lại",
+      "copyUserId": "Sao chép ID người dùng",
+      "copyPatientId": "Sao chép ID bệnh nhân"
     }
   },
 

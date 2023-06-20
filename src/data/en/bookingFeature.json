@@ -56,7 +56,10 @@
       "unpaid": "Unpaid",
       "booked": "Booked",
       "cancel": "Cancel",
-      "waiting": "Waiting"
+      "waiting": "Waiting",
+
+      "copyUserId": "Copy user ID",
+      "copyPatientId": "Copy patient ID"
     }
   },
 
@@ -64,7 +67,10 @@
     "title": "Booking detail",
     "button": {
       "save": "Save",
-      "detail": "Detail"
+      "detail": "Detail",
+
+      "copyUserId": "Copy user ID",
+      "copyPatientId": "Copy patient ID"
     }
   },
 
