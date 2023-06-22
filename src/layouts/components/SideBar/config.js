@@ -1,11 +1,4 @@
-import {
-  faBell,
-  faCalendarAlt,
-  faCalendarDays,
-  faGear,
-  faHospitalUser,
-  faUsers
-} from "@fortawesome/free-solid-svg-icons";
+import { faBell, faCalendarAlt, faCalendarDays, faGear, faHospitalUser, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import routeConfig from "../../../config/routeConfig";
 
