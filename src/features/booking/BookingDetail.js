@@ -374,6 +374,10 @@ function BookingDetail() {
                     </TableCell>
                   </TableRow>
                   <TableRow>
+                    <TableCell {...tableFirstCellProps}>{tBooking("ordinalNumber")}</TableCell>
+                    <TableCell {...tableSecondCellProps}>{booking?.ordinalNumber}</TableCell>
+                  </TableRow>
+                  <TableRow>
                     <TableCell {...tableFirstCellProps}>{tBooking("time")}</TableCell>
                     <TableCell {...tableSecondCellProps}>
                       {`${booking?.bookingTimeSchedule?.timeStart?.split(":")[0]}:${

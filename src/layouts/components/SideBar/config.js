@@ -2,7 +2,6 @@ import {
   faBell,
   faCalendarAlt,
   faCalendarDays,
-  faCreditCard,
   faGear,
   faHospitalUser,
   faUsers
@@ -30,11 +29,6 @@ export const sideBarItems = [
     to: routeConfig.patient,
     label: "patient_label",
     icon: <FontAwesomeIcon icon={faHospitalUser} width={20} />
-  },
-  {
-    to: routeConfig.payment,
-    label: "payment_label",
-    icon: <FontAwesomeIcon icon={faCreditCard} width={20} />
   },
   {
     to: routeConfig.schedule,
