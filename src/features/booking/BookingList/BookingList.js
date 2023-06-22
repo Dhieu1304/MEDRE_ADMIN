@@ -16,7 +16,7 @@ import ListPageTableWrapper from "../../../components/ListPageTableWrapper";
 import BookingTable from "./BookingTable";
 import ListPageAction from "../../../components/ListPageAction/ListPageAction";
 import { useCustomModal } from "../../../components/CustomModal";
-import BookingInfoModal from "../components/BookingInfoModal";
+import BookingAnInfoModal from "../components/BookingAnInfoModal";
 
 function BookingList() {
   const { locale } = useAppConfigStore();
@@ -164,7 +164,7 @@ function BookingList() {
     1000
   );
 
-  const bookingInfoModal = useCustomModal();
+  const bookingAnInfoModal = useCustomModal();
 
   const loadData = async ({ page }) => {
     const paramsObj = {
@@ -246,7 +246,12 @@ function BookingList() {
 
         <ListPageTableWrapper
           table={
-            <BookingTable bookings={bookings} columns={columns} showCols={showCols} bookingInfoModal={bookingInfoModal} />
+            <BookingTable
+              bookings={bookings}
+              columns={columns}
+              showCols={showCols}
+              bookingAnInfoModal={bookingAnInfoModal}
+            />
           }
           count={count}
           watch={watch}
@@ -255,12 +260,12 @@ function BookingList() {
         />
       </Box>
 
-      {bookingInfoModal.show && (
-        <BookingInfoModal
-          show={bookingInfoModal.show}
-          setShow={bookingInfoModal.setShow}
-          data={bookingInfoModal.data}
-          setData={bookingInfoModal.setData}
+      {bookingAnInfoModal.show && (
+        <BookingAnInfoModal
+          show={bookingAnInfoModal.show}
+          setShow={bookingAnInfoModal.setShow}
+          data={bookingAnInfoModal.data}
+          setData={bookingAnInfoModal.setData}
         />
       )}
     </>

@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-import { ArrowLeft as ArrowLeftIcon, ArrowRight as ArrowRightIcon } from "@mui/icons-material";
+import { ArrowLeft as ArrowLeftIcon, ArrowRight as ArrowRightIcon, Preview } from "@mui/icons-material";
 import {
   Table,
   TableCell,
@@ -22,7 +22,7 @@ import {
 } from "@mui/material";
 
 import formatDate from "date-and-time";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useFetchingStore } from "../../../store/FetchingApiStore";
@@ -30,17 +30,30 @@ import WithTimesLoaderWrapper from "../hocs/WithTimesLoaderWrapper";
 import staffServices from "../../../services/staffServices";
 import { staffRoles } from "../../../entities/Staff";
 import timeOffServices from "../../../services/timeOffServices";
-import { findBookingsByDate, groupSchedulesBySession, isTimeOffAtThisScheduleTime } from "./utils";
-import { scheduleSessions } from "../../../entities/Schedule";
+import {
+  groupBookingSchedulesByScheduleAndDateAndTime,
+  groupBookingsByScheduleAndDateAndTime,
+  groupSchedulesBySession,
+  isTimeOffAtThisScheduleTime
+} from "./utils";
+import { scheduleSessions, scheduleTypes } from "../../../entities/Schedule";
 import BookingInfoModal from "../../booking/components/BookingInfoModal";
 import { useCustomModal } from "../../../components/CustomModal";
 import CustomOverlay from "../../../components/CustomOverlay/CustomOverlay";
 import BookingModal from "../../booking/components/BookingModal";
 import CustomPageTitle from "../../../components/CustomPageTitle";
+import { useScheduleTypesContantTranslation } from "../hooks/useScheduleConstantsTranslation";
+import bookingServices from "../../../services/bookingServices";
+import { bookingMethods } from "../../../entities/Booking";
+
+const EMPTY_CELL = "EMPTY_CELL";
+const FULL_SLOT = "FULL_SLOT";
+const BOOK = "BOOK";
 
 function ScheduleList({ timesList }) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [doctors, setDoctors] = useState([]);
+  const [bookingSchedules, setBookingSchedules] = useState([]);
   const [timeOffsGroupByDoctorId, setTimeOffsGroupByDoctorId] = useState([]);
 
   const { isLoading, fetchApi } = useFetchingStore();
@@ -48,6 +61,8 @@ function ScheduleList({ timesList }) {
   const theme = useTheme();
   const bookingInfoModal = useCustomModal();
   const bookingModal = useCustomModal();
+
+  const [, scheduleTypeContantListObj] = useScheduleTypesContantTranslation();
 
   // console.log("currentDate: ", currentDate);
 
@@ -86,6 +101,9 @@ function ScheduleList({ timesList }) {
   }, [doctors, currentDate]);
 
   const loadData = async () => {
+    let doctorsData = [];
+    let bookingSchedulesData = [];
+
     await fetchApi(async () => {
       const paramsObj = {
         role: staffRoles.ROLE_DOCTOR,
@@ -98,13 +116,49 @@ function ScheduleList({ timesList }) {
       // let staffsData = [];
 
       if (res.success) {
-        const doctorsData = res.staffs;
-        setDoctors(doctorsData);
+        doctorsData = [...res.staffs];
         return { ...res };
       }
-      setDoctors([]);
       return { ...res };
     });
+
+    const doctorIds = [];
+    const expertiseIds = [];
+
+    // console.log("doctorsData: ", doctorsData);
+
+    doctorsData?.forEach((doctor) => {
+      doctorIds.push(doctor.id);
+
+      doctor?.staffSchedules.forEach((schedule) => {
+        if (!expertiseIds.includes(schedule.idExpertise)) {
+          expertiseIds.push(schedule.idExpertise);
+        }
+      });
+    });
+
+    // console.log("Doctors ID:", doctorIds);
+    // console.log("Expertise IDs:", expertiseIds);
+
+    await fetchApi(async () => {
+      // console.log("expertiseIds: ", expertiseIds);
+      const res = await bookingServices.getCountBookingScheduleByManyStaff({
+        expertiseIds,
+        doctorIds,
+        from: formatDate.format(currentDate, "YYYY-MM-DD"),
+        to: formatDate.format(currentDate, "YYYY-MM-DD"),
+        bookingMethod: bookingMethods.REDIRECT
+      });
+
+      if (res.success) {
+        bookingSchedulesData = [...res.bookingSchedules];
+        return { ...res };
+      }
+      return { ...res };
+    });
+
+    setDoctors([...doctorsData]);
+    setBookingSchedules([...bookingSchedulesData]);
   };
 
   useEffect(() => {
@@ -112,54 +166,164 @@ function ScheduleList({ timesList }) {
   }, [currentDate]);
 
   // console.log("doctors: ", doctors);
+  // console.log("bookingSchedules: ", bookingSchedules);
 
   // const [rows, schedulesTimeOff] = useMemo(() => {
   //   return filterDoctorsByDayOfWeek(doctors, timesList, currentDate, timeOffs);
   // }, [doctors, timeOffs, timesList]);
 
-  const renderButton = (booking, schedule, time) => {
-    if (booking) {
-      return (
-        <Button
-          variant="outlined"
-          onClick={() => {
-            bookingInfoModal.setShow(true);
-            bookingInfoModal.setData(booking);
-          }}
-        >
-          {t("button.booked")}
-        </Button>
-      );
-    }
+  const bookingSchedulesByScheduleAndDateAndTime = useMemo(() => {
+    return groupBookingSchedulesByScheduleAndDateAndTime(bookingSchedules);
+  }, [bookingSchedules]);
 
+  const renderIsTimeOff = (isTimeOff) => {
     return (
-      <Button
-        variant="contained"
-        sx={{
-          backgroundColor: "inherit",
-          color: theme.palette.success.light,
-          ":hover": {
-            background: theme.palette.success.light,
-            color: theme.palette.success.contrastText
-          }
-        }}
-        onClick={() => {
-          bookingModal.setShow(true);
-          bookingModal.setData({
-            schedule,
-            date: currentDate,
-            time
-          });
-        }}
-      >
-        {t("button.book")}
-      </Button>
+      isTimeOff && (
+        <Box
+          sx={{
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            top: 0,
+            left: 0,
+            zIndex: 1,
+            bgcolor: "rgba(255, 246, 143, 0.8)"
+          }}
+        />
+      )
     );
   };
+
+  const renderCellBtn = (variant, isCurrentTime, isTimeOff, bookData = {}) => {
+    switch (variant) {
+      case FULL_SLOT:
+        return (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexGrow: 1,
+              bgcolor: isCurrentTime ? theme.palette.info.light : theme.palette.success.light,
+              position: "relative",
+              cursor: "pointer"
+            }}
+          >
+            <Typography
+              sx={{
+                // marginTop: "20px",
+                textAlign: "center",
+                fontWeight: "bold",
+                py: 1,
+                color: isCurrentTime ? theme.palette.info.contrastText : theme.palette.success.contrastText
+              }}
+            >
+              {t("button.fullSlot")}
+            </Typography>
+
+            {renderIsTimeOff(isTimeOff)}
+          </Box>
+        );
+
+      case BOOK:
+        return (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexGrow: 1,
+              position: "relative",
+              cursor: "pointer"
+            }}
+          >
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "inherit",
+                color: theme.palette.success.light,
+                ":hover": {
+                  background: theme.palette.success.light,
+                  color: theme.palette.success.contrastText
+                }
+              }}
+              onClick={() => {
+                bookingModal.setShow(true);
+                bookingModal.setData({ ...bookData });
+              }}
+            >
+              {t("button.book")}
+            </Button>
+
+            {renderIsTimeOff(isTimeOff)}
+          </Box>
+        );
+
+      case EMPTY_CELL:
+      default:
+        return (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexGrow: 1,
+              position: "relative",
+              cursor: "pointer"
+            }}
+          >
+            {renderIsTimeOff(isTimeOff)}
+          </Box>
+        );
+    }
+  };
+
+  // const renderButton = (booking, schedule, time) => {
+  //   if (booking) {
+  //     return (
+  //       <Button
+  //         variant="outlined"
+  //         onClick={() => {
+  //           bookingInfoModal.setShow(true);
+  //           bookingInfoModal.setData(booking);
+  //         }}
+  //       >
+  //         {t("button.booked")}
+  //       </Button>
+  //     );
+  //   }
+
+  //   return (
+  //     <Button
+  //       variant="contained"
+  //       sx={{
+  //         backgroundColor: "inherit",
+  //         color: theme.palette.success.light,
+  //         ":hover": {
+  //           background: theme.palette.success.light,
+  //           color: theme.palette.success.contrastText
+  //         }
+  //       }}
+  //       onClick={() => {
+  //         bookingModal.setShow(true);
+  //         bookingModal.setData({
+  //           schedule,
+  //           date: currentDate,
+  //           time
+  //         });
+  //       }}
+  //     >
+  //       {t("button.book")}
+  //     </Button>
+  //   );
+  // };
+
+  // console.log("doctorss: ", doctors);
 
   const renderCols = (doctor) => {
     // console.log("doctor?.staffSchedules: ", doctor?.staffSchedules);
     const schedulesGroupBySession = groupSchedulesBySession(doctor?.staffSchedules, currentDate);
+    const bookingsByScheduleAnnDateAndTime = groupBookingsByScheduleAndDateAndTime(doctor?.staffSchedules);
 
     // console.log("schedulesGroupBySession: ", schedulesGroupBySession);
 
@@ -186,18 +350,46 @@ function ScheduleList({ timesList }) {
           break;
       }
 
-      // console.log("schedule: ", schedule);
+      /// /////////////////////////////////////
+
+      const typeLabel = scheduleTypeContantListObj[schedule?.type]?.label;
+      const scheduleStartTime = time.timeStart;
+      const scheduleEndTime = time.timeEnd;
+
+      const currentDateFormat = formatDate.format(currentDate, "YYYY-MM-DD");
+
+      const bookings = bookingsByScheduleAnnDateAndTime[schedule?.id]?.[currentDateFormat]?.[time?.id];
 
       const timeOffs = timeOffsGroupByDoctorId[doctor?.id];
-
       const isTimeOff = isTimeOffAtThisScheduleTime(timeOffs, currentDate, time);
 
-      const booking = findBookingsByDate(schedule?.bookings, currentDate, time);
+      const bookingSchedule = bookingSchedulesByScheduleAndDateAndTime[schedule?.id]?.[time?.id];
 
-      // console.log("isTimeOff: ", isTimeOff);
-      // console.log("booking: ", booking);
+      const isStaffCanBooking = schedule?.type === scheduleTypes.TYPE_OFFLINE;
 
-      // return null;
+      const totalBookingOffline = bookingSchedule?.totalBookingOffline || 0;
+      const totalOffBookOnl = bookingSchedule?.totalOffBookOnl || 0;
+      const amountSfaffCanbooking = totalBookingOffline - totalOffBookOnl || 0;
+
+      const isFullSlot = bookingSchedule?.countBooking >= amountSfaffCanbooking;
+
+      let variant = EMPTY_CELL;
+      let bookData;
+      if (isStaffCanBooking) {
+        if (isFullSlot) variant = FULL_SLOT;
+        else {
+          variant = BOOK;
+          bookData = {
+            schedule,
+            date: currentDate,
+            time
+          };
+        }
+      } else if (bookings && bookings?.length > 0) {
+        variant = FULL_SLOT;
+      } else {
+        variant = EMPTY_CELL;
+      }
 
       return schedule ? (
         <TableCell
@@ -206,7 +398,8 @@ function ScheduleList({ timesList }) {
             border: "1px solid rgba(0,0,0,0.2)",
             p: 0,
             position: "relative",
-            bgcolor: isTimeOff ? "rgba(255, 246, 143, 0.4)" : "inherit"
+            bgcolor: isTimeOff ? "rgba(255, 246, 143, 0.4)" : "inherit",
+            minWidth: 150
           }}
           align="center"
         >
@@ -232,50 +425,20 @@ function ScheduleList({ timesList }) {
                     justifyContent: "center",
                     alignItems: "center"
                   }}
+                  onClick={() => {
+                    if (bookings) {
+                      // console.log("booking: ", booking);
+                      bookingInfoModal.setShow(true);
+                      bookingInfoModal.setData({ bookings, scheduleStartTime, scheduleEndTime, typeLabel });
+                    }
+                  }}
                 >
-                  <Typography sx={{}}>{schedule?.type}</Typography>
+                  <Typography sx={{ mx: 1 }}>{typeLabel}</Typography>
+                  {bookings && bookings?.length > 0 && <Preview sx={{ mx: 1 }} />}
                 </Box>
 
                 {/* Hiển thị trạng thái booking trong schedule */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    // flexGrow: 1,
-                    position: "relative",
-                    py: 2,
-                    px: 2,
-                    minWidth: 150
-                  }}
-                >
-                  {renderButton(booking, schedule, time)}
-                  {/* <Typography
-                    sx={{
-                      // marginTop: "20px",
-                      textAlign: "center",
-                      fontWeight: "bold",
-                      py: 1
-                    }}
-                  >
-                    {booking ? t("button.booked") : ""}
-                  </Typography> */}
-
-                  {isTimeOff && (
-                    <Box
-                      sx={{
-                        position: "absolute",
-                        width: "100%",
-                        height: "100%",
-                        top: 0,
-                        left: 0,
-                        zIndex: 1,
-                        bgcolor: "rgba(255, 246, 143, 0.4)",
-                        pointerEvents: "none"
-                      }}
-                    />
-                  )}
-                </Box>
+                {renderCellBtn(variant, false, isTimeOff, bookData)}
               </>
             )}
           </Box>
@@ -295,7 +458,7 @@ function ScheduleList({ timesList }) {
   };
 
   const handleAfterBooking = async () => {
-    loadData();
+    await loadData();
   };
 
   // console.log("currentDate: ", currentDate);

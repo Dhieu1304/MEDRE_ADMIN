@@ -72,6 +72,17 @@
     }
   },
 
+  "BookingAnInfoModal": {
+    "title": "Thông tin lịch đặt",
+    "button": {
+      "save": "Lưu",
+      "detail": "Chi tiết",
+      "reset": "Đặt lại",
+      "copyUserId": "Sao chép ID người dùng",
+      "copyPatientId": "Sao chép ID bệnh nhân"
+    }
+  },
+
   "BookingModal": {
     "title": "Đặt lịch",
     "subTitle": {

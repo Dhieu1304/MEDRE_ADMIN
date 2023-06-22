@@ -14,8 +14,8 @@
   },
   "constants": {
     "types": {
-      "online": "Trực tiếp",
-      "offline": "Trực tuyến"
+      "online": "Trực tuyến",
+      "offline": "Trực tiếp"
     },
     "sessions": {
       "morning": "Buổi sáng",

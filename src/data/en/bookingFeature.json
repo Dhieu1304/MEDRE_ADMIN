@@ -74,6 +74,17 @@
     }
   },
 
+  "BookingAnInfoModal": {
+    "title": "Booking detail",
+    "button": {
+      "save": "Save",
+      "detail": "Detail",
+
+      "copyUserId": "Copy user ID",
+      "copyPatientId": "Copy patient ID"
+    }
+  },
+
   "BookingModal": {
     "title": "Booking",
     "subTitle": {

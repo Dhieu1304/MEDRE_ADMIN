@@ -24,7 +24,7 @@ import { columnsIds } from "./utils";
 import CopyButton from "../../../components/CopyButton";
 import { bookingStatuses } from "../../../entities/Booking";
 
-function BookingTable({ bookings, columns, showCols, bookingInfoModal }) {
+function BookingTable({ bookings, columns, showCols, bookingAnInfoModal }) {
   const theme = useTheme();
 
   const navigate = useNavigate();
@@ -207,8 +207,8 @@ function BookingTable({ bookings, columns, showCols, bookingInfoModal }) {
                   <IconButton
                     onClick={() => {
                       if (booking) {
-                        bookingInfoModal.setShow(true);
-                        bookingInfoModal.setData(booking);
+                        bookingAnInfoModal.setShow(true);
+                        bookingAnInfoModal.setData(booking);
                       }
                     }}
                   >
@@ -231,7 +231,7 @@ BookingTable.propTypes = {
   bookings: PropTypes.array.isRequired,
   columns: PropTypes.array.isRequired,
   showCols: PropTypes.object.isRequired,
-  bookingInfoModal: PropTypes.object.isRequired
+  bookingAnInfoModal: PropTypes.object.isRequired
 };
 
 export default BookingTable;

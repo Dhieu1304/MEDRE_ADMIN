@@ -4,7 +4,9 @@
     "button": {
       "currentWeek": "Current week",
       "addTimeOff": "Add time off",
-      "booked": "Booked"
+      "booked": "Booked",
+      "book": "Book",
+      "fullSlot": "Full"
     }
   },
 
@@ -13,7 +15,8 @@
     "button": {
       "today": "Today",
       "booked": "Booked",
-      "book": "Book"
+      "book": "Book",
+      "fullSlot": "Full"
     }
   },
 

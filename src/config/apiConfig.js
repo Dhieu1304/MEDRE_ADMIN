@@ -57,7 +57,9 @@ const bookingApi = {
   bookingList: () => "/booking/list-for-staff",
   bookingDetail: (id) => `/booking/detail-for-staff/${id}`,
   updateBooking: () => `/booking/update`,
-  updateBookingByDoctor: () => "/booking/update-for-doctor"
+  updateBookingByDoctor: () => "/booking/update-for-doctor",
+  getCountBookingSchedule: () => "/booking/schedule-booking-count",
+  getCountBookingScheduleByManyStaff: () => "/booking/schedule-booking-count-many-staff"
 };
 
 const patientApi = {
@@ -91,6 +93,10 @@ const uploadApi = {
   upload: () => "/upload/avatar"
 };
 
+const scheduleBookingTimeApi = {
+  scheduleBookingTimeList: () => "/schedule-booking-time/list"
+};
+
 export {
   authApi,
   userApi,
@@ -103,5 +109,6 @@ export {
   settingApi,
   notificationApi,
   reExaminationApi,
-  uploadApi
+  uploadApi,
+  scheduleBookingTimeApi
 };

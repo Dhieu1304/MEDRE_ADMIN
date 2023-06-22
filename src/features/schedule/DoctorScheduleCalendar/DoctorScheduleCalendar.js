@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { Add as AddIcon, ArrowLeft as ArrowLeftIcon, ArrowRight as ArrowRightIcon } from "@mui/icons-material";
+import { Add as AddIcon, ArrowLeft as ArrowLeftIcon, ArrowRight as ArrowRightIcon, Preview } from "@mui/icons-material";
 import {
   Table,
   TableBody,
@@ -34,9 +34,14 @@ import WithDoctorLoaderWrapper from "../../staff/hocs/WithDoctorLoaderWrapper";
 import timeOffServices from "../../../services/timeOffServices";
 import { useCustomModal } from "../../../components/CustomModal";
 import AddNewTimeOffModal from "../components/AddNewTimeOffModal";
-import { findBookingsByDate, groupSchedulesDayOfWeekAndSession, isTimeOffAtThisScheduleTime } from "./utils";
+import {
+  groupBookingSchedulesByScheduleAndDateAndTime,
+  groupBookingsByScheduleAndDateAndTime,
+  groupSchedulesDayOfWeekAndSession,
+  isTimeOffAtThisScheduleTime
+} from "./utils";
 import { normalizeStrToDateStr } from "../../../utils/standardizedForForm";
-import { scheduleSessions } from "../../../entities/Schedule";
+import { scheduleSessions, scheduleTypes } from "../../../entities/Schedule";
 import BookingInfoModal from "../../booking/components/BookingInfoModal";
 import { useAppConfigStore } from "../../../store/AppConfigStore";
 import { useScheduleTypesContantTranslation } from "../hooks/useScheduleConstantsTranslation";
@@ -44,6 +49,13 @@ import CustomPageTitle from "../../../components/CustomPageTitle";
 import { Can } from "../../../store/AbilityStore";
 import { staffActionAbility } from "../../../entities/Staff";
 import Staff from "../../../entities/Staff/Staff";
+import bookingServices from "../../../services/bookingServices";
+import { bookingMethods } from "../../../entities/Booking/constant";
+import BookingModal from "../../booking/components/BookingModal";
+
+const EMPTY_CELL = "EMPTY_CELL";
+const FULL_SLOT = "FULL_SLOT";
+const BOOK = "BOOK";
 
 function DoctorScheduleCalendar({ timesList, doctor }) {
   const location = useLocation();
@@ -53,6 +65,7 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
 
   const [schedules, setSchedules] = useState([]);
   const [timeOffs, setTimeOffs] = useState([]);
+  const [bookingSchedules, setBookingSchedules] = useState([]);
 
   // console.log("schedules: ", schedules);
   // console.log("timeOffs: ", timeOffs);
@@ -72,6 +85,7 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
 
   const addTimeOffModal = useCustomModal();
   const bookingInfoModal = useCustomModal();
+  const bookingModal = useCustomModal();
 
   const { t } = useTranslation("scheduleFeature", { keyPrefix: "DoctorScheduleCalendar" });
   const [, scheduleTypeContantListObj] = useScheduleTypesContantTranslation();
@@ -80,10 +94,10 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
   const heads = useMemo(() => getWeekByDate(currentDate), [currentDate]);
 
   const loadData = async () => {
+    let schedulesData = [];
+    let bookingSchedulesData = [];
+
     await fetchApi(async () => {
-      // console.log("loadData: ");
-      // console.log("heads[0]: ", heads[0]);
-      // console.log("heads[6]: ", heads[6]);
       const res = await scheduleServices.getScheduleListByDoctorId(
         staffId,
         formatDate.format(heads[0], "YYYY-MM-DD"),
@@ -91,18 +105,46 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
       );
 
       if (res.success) {
-        const schedulesData = res.schedules;
+        schedulesData = [...res.schedules];
         // console.log("res: ", res);
-        setSchedules(schedulesData);
+        // setSchedules(schedulesData);
         return { ...res };
       }
-      setSchedules([]);
       return { ...res };
     });
+
+    await fetchApi(async () => {
+      // Sử dụng phương thức map() để trích xuất các idExpertise
+      const expertiseIdsFull = schedulesData.map((schedule) => schedule.idExpertise);
+
+      // Sử dụng phương thức filter() và indexOf() để lọc ra các idExpertise duy nhất
+      const expertiseIds = expertiseIdsFull.filter((id, index, self) => self.indexOf(id) === index);
+
+      // console.log("expertiseIds: ", expertiseIds);
+      const res = await bookingServices.getCountBookingSchedule({
+        expertiseIds,
+        doctorId: staffId,
+        from: formatDate.format(heads[0], "YYYY-MM-DD"),
+        to: formatDate.format(heads[6], "YYYY-MM-DD"),
+        bookingMethod: bookingMethods.REDIRECT
+      });
+
+      if (res.success) {
+        bookingSchedulesData = [...res.bookingSchedules];
+        return { ...res };
+      }
+      return { ...res };
+    });
+
+    setSchedules([...schedulesData]);
+    setBookingSchedules([...bookingSchedulesData]);
   };
 
-  // console.log("schedules: ", schedules);S
-  // console.log("timeOffs: ", timeOffs);S
+  // console.log("doctor: ", doctor);
+
+  // console.log("schedules: ", schedules);
+  // console.log("bookingSchedules: ", bookingSchedules);
+  // console.log("timeOffs: ", timeOffs);
 
   const loadTimeOffs = async () => {
     await fetchApi(async () => {
@@ -136,18 +178,123 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
     formatDate.locale(formatDateLocale[code]);
   }, [locale]);
 
-  const schedulesDayOfWeekAndSession = useMemo(() => {
-    return groupSchedulesDayOfWeekAndSession(schedules);
+  const [schedulesDayOfWeekAndSession, bookingsByScheduleAnnDateAndTime] = useMemo(() => {
+    return [groupSchedulesDayOfWeekAndSession(schedules), groupBookingsByScheduleAndDateAndTime(schedules)];
   }, [schedules]);
 
-  // return <div>sang</div>;
+  const bookingSchedulesByScheduleAndDateAndTime = useMemo(() => {
+    return groupBookingSchedulesByScheduleAndDateAndTime(bookingSchedules);
+  }, [bookingSchedules]);
+
+  const renderIsTimeOff = (isTimeOff) => {
+    return (
+      isTimeOff && (
+        <Box
+          sx={{
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            top: 0,
+            left: 0,
+            zIndex: 1,
+            bgcolor: "rgba(255, 246, 143, 0.8)"
+          }}
+        />
+      )
+    );
+  };
+
+  const renderCellBtn = (variant, isCurrentTime, isTimeOff, bookData = {}) => {
+    switch (variant) {
+      case FULL_SLOT:
+        return (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexGrow: 1,
+              bgcolor: isCurrentTime ? theme.palette.info.light : theme.palette.success.light,
+              position: "relative",
+              cursor: "pointer"
+            }}
+          >
+            <Typography
+              sx={{
+                // marginTop: "20px",
+                textAlign: "center",
+                fontWeight: "bold",
+                py: 1,
+                color: isCurrentTime ? theme.palette.info.contrastText : theme.palette.success.contrastText
+              }}
+            >
+              {t("button.fullSlot")}
+            </Typography>
+
+            {renderIsTimeOff(isTimeOff)}
+          </Box>
+        );
+
+      case BOOK:
+        return (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexGrow: 1,
+              position: "relative",
+              cursor: "pointer"
+            }}
+          >
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "inherit",
+                color: theme.palette.success.light,
+                ":hover": {
+                  background: theme.palette.success.light,
+                  color: theme.palette.success.contrastText
+                }
+              }}
+              onClick={() => {
+                bookingModal.setShow(true);
+                bookingModal.setData({ ...bookData });
+              }}
+            >
+              {t("button.book")}
+            </Button>
+
+            {renderIsTimeOff(isTimeOff)}
+          </Box>
+        );
+
+      case EMPTY_CELL:
+      default:
+        return (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexGrow: 1,
+              position: "relative",
+              cursor: "pointer"
+            }}
+          >
+            {renderIsTimeOff(isTimeOff)}
+          </Box>
+        );
+    }
+  };
 
   const renderCell = (schedule, colDate, time) => {
-    // console.log("schedule: ", schedule);
-    const booking = findBookingsByDate(schedule?.bookings, colDate, time);
-    // console.log("booking: ", booking);
+    const colDateFormat = formatDate.format(colDate, "YYYY-MM-DD");
+    const bookings = bookingsByScheduleAnnDateAndTime[schedule?.id]?.[colDateFormat]?.[time?.id];
+
     const scheduleStartTime = time.timeStart;
     const scheduleEndTime = time.timeEnd;
+    const typeLabel = scheduleTypeContantListObj[schedule?.type]?.label;
 
     // Chuyển scheduleStartTime và scheduleEndTime về dạng Date String với ngày là ứng với colDate
     const scheduleStartTimeStr = `${formatDate.format(colDate, "YYYY-MM-DD")} ${scheduleStartTime}`;
@@ -166,6 +313,33 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
     const isCurrentTime =
       formatDate.subtract(now, new Date(scheduleStartTimeStr)).toMilliseconds() > 0 &&
       formatDate.subtract(now, new Date(scheduleEndTimeStr)).toMilliseconds() < 0;
+
+    const bookingSchedule = bookingSchedulesByScheduleAndDateAndTime[schedule?.id]?.[colDateFormat]?.[time?.id];
+
+    const isStaffCanBooking = scheduleTypes.TYPE_OFFLINE === schedule?.type;
+    const totalBookingOffline = bookingSchedule?.totalBookingOffline || 0;
+    const totalOffBookOnl = bookingSchedule?.totalOffBookOnl || 0;
+    const amountSfaffCanbooking = totalBookingOffline - totalOffBookOnl || 0;
+
+    const isFullSlot = bookingSchedule?.countBooking >= amountSfaffCanbooking;
+
+    let variant = EMPTY_CELL;
+    let bookData;
+    if (isStaffCanBooking) {
+      if (isFullSlot) variant = FULL_SLOT;
+      else {
+        variant = BOOK;
+        bookData = {
+          schedule,
+          date: colDate,
+          time
+        };
+      }
+    } else if (bookings && bookings?.length > 0) {
+      variant = FULL_SLOT;
+    } else {
+      variant = EMPTY_CELL;
+    }
 
     return (
       <TableCell
@@ -197,58 +371,23 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
                   color: theme.palette.info.contrastText,
                   display: "flex",
                   justifyContent: "center",
-                  alignItems: "center"
-                }}
-              >
-                <Typography sx={{}}>{scheduleTypeContantListObj[schedule?.type]?.label}</Typography>
-              </Box>
-
-              {/* Hiển thị trạng thái booking trong schedule */}
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
                   alignItems: "center",
-                  flexGrow: 1,
-                  bgcolor: isCurrentTime ? theme.palette.info.light : booking && theme.palette.success.light,
-                  // bgcolor: isCurrentTime ? "red" : "inherit",
-                  position: "relative",
-                  cursor: booking && "pointer"
+                  cursor: "pointer"
                 }}
                 onClick={() => {
-                  if (booking) {
+                  if (bookings) {
                     // console.log("booking: ", booking);
                     bookingInfoModal.setShow(true);
-                    bookingInfoModal.setData(booking);
+                    bookingInfoModal.setData({ bookings, scheduleStartTime, scheduleEndTime, typeLabel });
                   }
                 }}
               >
-                <Typography
-                  sx={{
-                    // marginTop: "20px",
-                    textAlign: "center",
-                    fontWeight: "bold",
-                    py: 1,
-                    color: isCurrentTime ? theme.palette.info.contrastText : theme.palette.success.contrastText
-                  }}
-                >
-                  {booking ? t("button.booked") : ""}
-                </Typography>
-
-                {isTimeOff && (
-                  <Box
-                    sx={{
-                      position: "absolute",
-                      width: "100%",
-                      height: "100%",
-                      top: 0,
-                      left: 0,
-                      zIndex: 1,
-                      bgcolor: "rgba(255, 246, 143, 0.8)"
-                    }}
-                  />
-                )}
+                <Typography sx={{ mx: 1 }}>{typeLabel}</Typography>
+                {bookings && bookings?.length > 0 && <Preview sx={{ mx: 1 }} />}
               </Box>
+
+              {/* Hiển thị trạng thái booking trong schedule */}
+              {renderCellBtn(variant, isCurrentTime, isTimeOff, bookData)}
             </>
           )}
         </Box>
@@ -306,6 +445,10 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
 
   const handleAfterAddTimeOff = async () => {
     await loadTimeOffs();
+  };
+
+  const handleAfterBooking = async () => {
+    await loadData();
   };
 
   return (
@@ -465,6 +608,16 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
           setShow={bookingInfoModal.setShow}
           data={bookingInfoModal.data}
           setData={bookingInfoModal.setData}
+        />
+      )}
+
+      {bookingModal.show && (
+        <BookingModal
+          show={bookingModal.show}
+          setShow={bookingModal.setShow}
+          data={bookingModal.data}
+          setData={bookingModal.setData}
+          handleAfterBooking={handleAfterBooking}
         />
       )}
     </>

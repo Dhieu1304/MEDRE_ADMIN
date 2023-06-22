@@ -72,3 +72,81 @@ export const isTimeOffAtThisScheduleTime = (timeOffs, colDate, time) => {
     return false;
   });
 };
+
+export const groupBookingsByScheduleAndDateAndTime = (schedules) => {
+  const bookingsGroupBySchedule = schedules?.reduce((bookingByScheduleAcc, schedule) => {
+    // console.log("schedule: ", schedule);
+    const bookings = schedule?.bookings;
+    const bookingsGroupByDate = bookings?.reduce((bookingsByDateAcc, booking) => {
+      const date = booking?.date;
+      const timeId = booking?.idTime;
+
+      const bookingsByDate = { ...bookingsByDateAcc };
+      if (bookingsByDate[date]) {
+        if (bookingsByDate[date][timeId]) {
+          bookingsByDate[date][timeId].push(booking);
+        } else {
+          bookingsByDate[date][timeId] = [booking];
+        }
+      } else {
+        bookingsByDate[date] = {
+          [timeId]: [booking]
+        };
+      }
+
+      return {
+        ...bookingsByDate
+      };
+    }, {});
+
+    return {
+      ...bookingByScheduleAcc,
+      [schedule?.id]: bookingsGroupByDate
+    };
+  }, {});
+
+  return bookingsGroupBySchedule;
+};
+
+export const groupBookingSchedulesByScheduleAndDateAndTime = (bookingShedules) => {
+  // console.log("bookingShedules: ", bookingShedules);
+  const bookingSchedulesGroup = bookingShedules?.reduce((acc, bookingSchedule) => {
+    const result = { ...acc };
+    const scheduleId = bookingSchedule?.bookingSchedule?.id;
+    const timeId = bookingSchedule?.bookingTimeSchedule?.id;
+
+    if (result?.[scheduleId]) {
+      if (result?.[scheduleId]?.[timeId]) {
+        result[scheduleId][timeId] = { ...bookingSchedule };
+      } else {
+        result[scheduleId][timeId] = { ...bookingSchedule };
+      }
+    } else {
+      result[scheduleId] = {
+        [timeId]: { ...bookingSchedule }
+      };
+    }
+
+    // if (result?.[scheduleId]?.[tempDate]?.[timeId]) {
+
+    //   console.log("Chưa to")
+    //   result[scheduleId][tempDate][timeId] = { ...bookingSchedule };
+    // } else {
+    //   result[scheduleId] = {
+    //     ...result[scheduleId],
+    //     [tempDate]: {
+    //       ...result[scheduleId][tempDate],
+    //       [timeId]: { ...bookingSchedule }
+    //     }
+    //   };
+    // }
+
+    // console.log("result: ", result);
+
+    return { ...result };
+  }, {});
+
+  // console.log("bookingSchedulesGroup: ", bookingSchedulesGroup);
+
+  return bookingSchedulesGroup;
+};

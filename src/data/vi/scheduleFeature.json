@@ -4,7 +4,9 @@
     "button": {
       "currentWeek": "Tuần hiện tại",
       "addTimeOff": "Thêm lịch nghỉ",
-      "booked": "Đã đặt"
+      "booked": "Đã đặt",
+      "book": "Đặt hẹn",
+      "fullSlot": "Hết chỗ"
     }
   },
 
@@ -13,7 +15,8 @@
     "button": {
       "today": "Hôm nay",
       "booked": "Đã đặt",
-      "book": "Đặt hẹn"
+      "book": "Đặt hẹn",
+      "fullSlot": "Hết chỗ"
     }
   },
 

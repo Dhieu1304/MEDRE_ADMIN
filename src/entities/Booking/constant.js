@@ -13,6 +13,11 @@ export const bookingPaymentStatuses = {
   UNPAID: false
 };
 
+export const bookingMethods = {
+  REMOTE: "remote",
+  REDIRECT: "redirect"
+};
+
 export const bookingActionAbility = {
   VIEW: "VIEW",
   UPDATE: "UPDATE",
