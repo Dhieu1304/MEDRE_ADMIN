@@ -317,11 +317,14 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
     const bookingSchedule = bookingSchedulesByScheduleAndDateAndTime[schedule?.id]?.[colDateFormat]?.[time?.id];
 
     const isStaffCanBooking = scheduleTypes.TYPE_OFFLINE === schedule?.type;
-    const totalBookingOffline = bookingSchedule?.totalBookingOffline || 0;
-    const totalOffBookOnl = bookingSchedule?.totalOffBookOnl || 0;
-    const amountSfaffCanbooking = totalBookingOffline - totalOffBookOnl || 0;
+    let isFullSlot = false;
+    if (bookingSchedule) {
+      const totalBookingOffline = bookingSchedule?.totalBookingOffline || 0;
+      const totalOffBookOnl = bookingSchedule?.totalOffBookOnl || 0;
+      const amountSfaffCanbooking = totalBookingOffline - totalOffBookOnl || 0;
 
-    const isFullSlot = bookingSchedule?.countBooking >= amountSfaffCanbooking;
+      isFullSlot = bookingSchedule?.countBooking >= amountSfaffCanbooking;
+    }
 
     let variant = EMPTY_CELL;
     let bookData;
@@ -335,8 +338,8 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
           time
         };
       }
-    } else if (bookings && bookings?.length > 0) {
-      variant = FULL_SLOT;
+      // } else if (bookings && bookings?.length > 0) {
+      //   variant = FULL_SLOT;
     } else {
       variant = EMPTY_CELL;
     }

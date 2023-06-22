@@ -365,13 +365,15 @@ function ScheduleList({ timesList }) {
 
       const bookingSchedule = bookingSchedulesByScheduleAndDateAndTime[schedule?.id]?.[time?.id];
 
-      const isStaffCanBooking = schedule?.type === scheduleTypes.TYPE_OFFLINE;
+      const isStaffCanBooking = scheduleTypes.TYPE_OFFLINE === schedule?.type;
+      let isFullSlot = false;
+      if (bookingSchedule) {
+        const totalBookingOffline = bookingSchedule?.totalBookingOffline || 0;
+        const totalOffBookOnl = bookingSchedule?.totalOffBookOnl || 0;
+        const amountSfaffCanbooking = totalBookingOffline - totalOffBookOnl || 0;
 
-      const totalBookingOffline = bookingSchedule?.totalBookingOffline || 0;
-      const totalOffBookOnl = bookingSchedule?.totalOffBookOnl || 0;
-      const amountSfaffCanbooking = totalBookingOffline - totalOffBookOnl || 0;
-
-      const isFullSlot = bookingSchedule?.countBooking >= amountSfaffCanbooking;
+        isFullSlot = bookingSchedule?.countBooking >= amountSfaffCanbooking;
+      }
 
       let variant = EMPTY_CELL;
       let bookData;
@@ -385,8 +387,8 @@ function ScheduleList({ timesList }) {
             time
           };
         }
-      } else if (bookings && bookings?.length > 0) {
-        variant = FULL_SLOT;
+        // } else if (bookings && bookings?.length > 0) {
+        //   variant = FULL_SLOT;
       } else {
         variant = EMPTY_CELL;
       }
