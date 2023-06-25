@@ -196,7 +196,7 @@ function Header({ open, handleDrawerOpen }) {
                       onClick={() => {
                         const newLocale = locale === "viVN" ? "enUS" : "viVN";
                         localStorageUtil.setItem(localStorageUtil.LOCAL_STORAGE.LOCALE, newLocale);
-                        const code = newLocale.slice(0, 2);
+                        const code = newLocale?.slice(0, 2);
                         setLocale(newLocale);
                         i18n.changeLanguage(code);
                       }}

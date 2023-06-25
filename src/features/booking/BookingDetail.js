@@ -61,7 +61,7 @@ function BookingDetail() {
   const theme = useTheme();
 
   useMemo(() => {
-    const code = locale.slice(0, 2);
+    const code = locale?.slice(0, 2);
     const currentLocale = formatDateLocale[code] || formatDateLocale.en;
     formatDate.locale(currentLocale);
   }, [locale]);
