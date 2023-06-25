@@ -94,7 +94,8 @@ const scheduleBookingTimeApi = {
 
 const expertiseApi = {
   expertiseList: () => "/expertise/list",
-  editExpertise: () => `/expertise/update-expertise`
+  editExpertise: () => `/expertise/update-expertise`,
+  createExpertise: () => "/expertise/create-expertise"
 };
 
 export {

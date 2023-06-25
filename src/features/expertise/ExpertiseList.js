@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 
-import { Box, Paper, Table, TableBody, TableContainer, TableHead, TableRow, useTheme } from "@mui/material";
+import { Box, Button, Paper, Table, TableBody, TableContainer, TableHead, TableRow, useTheme } from "@mui/material";
 import formatDate from "date-and-time";
 import { useTranslation } from "react-i18next";
-import { Edit as EditIcon } from "@mui/icons-material";
+import { Add as AddIcon, Edit as EditIcon } from "@mui/icons-material";
 
 import expertiseServices from "../../services/expertiseServices";
 import { useFetchingStore } from "../../store/FetchingApiStore/hooks";
@@ -14,6 +14,7 @@ import CustomPageTitle from "../../components/CustomPageTitle";
 import CustomTableCell, { customTableCellVariant } from "../../components/CustomTable/CustomTableCell";
 import { useCustomModal } from "../../components/CustomModal";
 import ChangeExpertiseModal from "./components/ChangeExpertiseModal";
+import AddExpertiseModal from "./components/AddExpertiseModal";
 // import { Can } from "../../store/AbilityStore";
 // import Expertise from "../../entities/Expertise/Expertise";
 // import { expertiseActionAbility } from "../../entities/Expertise";
@@ -28,6 +29,7 @@ function ExpertiseList() {
   const { t } = useTranslation("expertiseFeature", { keyPrefix: "ExpertiseList" });
   const { t: tExpertise } = useTranslation("expertiseEntity", { keyPrefix: "properties" });
   const changeExpertiseModal = useCustomModal();
+  const addExpertiseModal = useCustomModal();
 
   const columns = useMemo(
     () => [
@@ -88,11 +90,31 @@ function ExpertiseList() {
     await loadData();
   };
 
+  const handleAfterAddExpertise = async () => {
+    await loadData();
+  };
+
   return (
     <>
       <CustomOverlay open={isLoading} />
       <Box>
-        <CustomPageTitle title={t("title")} />
+        <CustomPageTitle
+          title={t("title")}
+          right={
+            <Button
+              variant="contained"
+              onClick={() => {
+                addExpertiseModal.setShow(true);
+              }}
+              endIcon={<AddIcon fontSize="large" />}
+              sx={{
+                bgcolor: theme.palette.success.light
+              }}
+            >
+              {t("button.add")}
+            </Button>
+          }
+        />
         <TableContainer component={Paper} sx={{ mb: 4, height: 600 }}>
           <Table stickyHeader>
             <TableHead>
@@ -145,6 +167,14 @@ function ExpertiseList() {
           data={changeExpertiseModal.data}
           setData={changeExpertiseModal.setData}
           handleAfterEditExpertise={handleAfterEditExpertise}
+        />
+      )}
+
+      {addExpertiseModal.show && (
+        <AddExpertiseModal
+          show={addExpertiseModal.show}
+          setShow={addExpertiseModal.setShow}
+          handleAfterAddExpertise={handleAfterAddExpertise}
         />
       )}
     </>

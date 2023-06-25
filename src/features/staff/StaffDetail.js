@@ -17,7 +17,7 @@ import { useFetchingStore } from "../../store/FetchingApiStore/hooks";
 import CustomOverlay from "../../components/CustomOverlay";
 import ChangeAvatarModal from "./components/ChangeAvatarModal";
 import { useCustomModal } from "../../components/CustomModal";
-import AddExpertiseModal from "./components/AddExpertiseModal";
+import AddExpertiseModal from "../expertise/components/AddExpertiseModal";
 import Staff, { staffActionAbility, staffGenders, staffInputValidate, staffStatuses } from "../../entities/Staff";
 import { AbilityContext } from "../../store/AbilityStore";
 import { NotHaveAccessModal } from "../auth";

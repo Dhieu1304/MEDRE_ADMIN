@@ -12,5 +12,13 @@
     "button": {
       "save": "Save"
     }
+  },
+
+  "AddExpertiseModal": {
+    "title": "Add Expertise",
+    "expertise": "Expertise",
+    "button": {
+      "add": "Add"
+    }
   }
 }

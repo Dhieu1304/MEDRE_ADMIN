@@ -35,9 +35,14 @@ const getExpertiseList = async () => {
   }
 };
 
-const editExpertise = async ({ id, value }) => {
+const editExpertise = async ({ id, name, onlinePrice, offlinePrice }) => {
   try {
-    const dataBody = cleanUndefinedAndEmptyStrValueObject({ id, value });
+    const dataBody = cleanUndefinedAndEmptyStrValueObject({
+      id,
+      name,
+      price_online: onlinePrice,
+      price_offline: offlinePrice
+    });
     // console.log("dataBody: ", dataBody);
 
     const res = await axiosClient.post(expertiseApi.editExpertise(), dataBody);
@@ -67,7 +72,44 @@ const editExpertise = async ({ id, value }) => {
   }
 };
 
+const createExpertise = async ({ name, onlinePrice, offlinePrice }) => {
+  try {
+    const dataBody = cleanUndefinedAndEmptyStrValueObject({
+      name,
+      price_online: onlinePrice,
+      price_offline: offlinePrice
+    });
+    // console.log("dataBody: ", dataBody);
+
+    const res = await axiosClient.post(expertiseApi.createExpertise(), dataBody);
+
+    // console.log("res: ", res);
+
+    if (res?.status) {
+      return {
+        success: true,
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
+      };
+    }
+    return {
+      success: false,
+      message: res?.message || `Status is ${res.status}`,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
 export default {
   getExpertiseList,
-  editExpertise
+  editExpertise,
+  createExpertise
 };

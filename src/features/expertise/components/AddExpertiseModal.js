@@ -3,37 +3,38 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Grid } from "@mui/material";
 import CustomModal from "../../../components/CustomModal";
-
+import CustomInput from "../../../components/CustomInput";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
-// import expertiseServices from "../../../services/expertiseServices";
-import CustomInput from "../../../components/CustomInput/CustomInput";
+// import staffServices from "../../../services/staffServices";
+import { expertiseInputValidate } from "../../../entities/Expertise";
 
-function ChangeExpertiseModal({ show, setShow, data, setData, handleAfterEditExpertise }) {
-  const { handleSubmit, control, trigger } = useForm({
+function AddExpertiseModal({ show, setShow, handleAfterAddExpertise }) {
+  const { control, trigger, handleSubmit } = useForm({
     mode: "onChange",
     defaultValues: {
-      name: data?.name,
-      offlinePrice: data?.priceOffline,
-      onlinePrice: data?.priceOnline
+      name: "",
+      offlinePrice: "",
+      onlinePrice: ""
     },
     criteriaMode: "all"
   });
 
-  const { t } = useTranslation("expertiseFeature", { keyPrefix: "ChangeExpertiseModal" });
+  const { t } = useTranslation("expertiseFeature", { keyPrefix: "AddExpertiseModal" });
   const { t: tExpertise } = useTranslation("expertiseEntity", { keyPrefix: "properties" });
+
   const { t: tInputValidation } = useTranslation("input", { keyPrefix: "validation" });
 
   const { fetchApi } = useFetchingStore();
 
-  const handleEditExpertise = async () => {
+  const handleAddExpertise = async () => {
+    // console.log({ name, offlinePrice, onlinePrice });
     await fetchApi(async () => {
-      // const id = data?.id;
-      // const res = await expertiseServices.editExpertise({ id, value });
+      // const res = await staffServices.createExpertise(expertise);
       const res = { success: true };
+
       if (res?.success) {
         setShow(false);
-        setData({});
-        if (handleAfterEditExpertise) await handleAfterEditExpertise();
+        if (handleAfterAddExpertise) await handleAfterAddExpertise();
         return { ...res };
       }
       return { ...res };
@@ -44,18 +45,22 @@ function ChangeExpertiseModal({ show, setShow, data, setData, handleAfterEditExp
     <CustomModal
       show={show}
       setShow={setShow}
-      data={data}
-      setData={setData}
       title={t("title")}
-      submitBtnLabel={t("button.save")}
-      onSubmit={handleSubmit(handleEditExpertise)}
+      submitBtnLabel={t("button.add")}
+      onSubmit={handleSubmit(handleAddExpertise)}
     >
       <Grid container>
         <Grid item xl={12} md={12} xs={12} mb={2} px={1}>
           <CustomInput
             control={control}
             rules={{
-              required: tInputValidation("required")
+              required: tInputValidation("required"),
+              maxLength: {
+                value: expertiseInputValidate.NAME_MAX_LENGTH,
+                message: tInputValidation("maxLength", {
+                  maxLength: expertiseInputValidate.NAME_MAX_LENGTH
+                })
+              }
             }}
             label={tExpertise("name")}
             trigger={trigger}
@@ -91,16 +96,14 @@ function ChangeExpertiseModal({ show, setShow, data, setData, handleAfterEditExp
   );
 }
 
-ChangeExpertiseModal.defaultProps = {
-  handleAfterEditExpertise: undefined
+AddExpertiseModal.defaultProps = {
+  handleAfterAddExpertise: undefined
 };
 
-ChangeExpertiseModal.propTypes = {
+AddExpertiseModal.propTypes = {
   show: PropTypes.bool.isRequired,
   setShow: PropTypes.func.isRequired,
-  data: PropTypes.object.isRequired,
-  setData: PropTypes.func.isRequired,
-  handleAfterEditExpertise: PropTypes.func
+  handleAfterAddExpertise: PropTypes.func
 };
 
-export default ChangeExpertiseModal;
+export default AddExpertiseModal;

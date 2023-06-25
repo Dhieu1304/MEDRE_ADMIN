@@ -12,5 +12,13 @@
     "button": {
       "save": "Lưu"
     }
+  },
+
+  "AddExpertiseModal": {
+    "title": "Thêm chuyên khoa",
+    "expertise": "Chuyên khoa",
+    "button": {
+      "add": "Thêm"
+    }
   }
 }

@@ -72,14 +72,6 @@
     }
   },
 
-  "AddExpertiseModal": {
-    "title": "Add Expertise",
-    "expertise": "Expertise",
-    "button": {
-      "add": "Add"
-    }
-  },
-
   "EditStaffRoleModal": {
     "title": "Edit staff role",
     "button": {
@@ -114,13 +106,6 @@
     "button": {
       "upload": "Upload",
       "save": "Save"
-    }
-  },
-
-  "AddStaffModal": {
-    "title": "Add Staff",
-    "button": {
-      "add": "Add"
     }
   }
 }

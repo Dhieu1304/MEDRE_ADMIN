@@ -72,14 +72,6 @@
     }
   },
 
-  "AddExpertiseModal": {
-    "title": "Thêm chuyên khoa",
-    "expertise": "Chuyên khoa",
-    "button": {
-      "add": "Thêm"
-    }
-  },
-
   "EditStaffRoleModal": {
     "title": "Chỉnh sửa vai trò nhân viên",
     "button": {
