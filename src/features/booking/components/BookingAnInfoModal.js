@@ -1,18 +1,20 @@
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 import formatDate from "date-and-time";
 import PropTypes from "prop-types";
 
 import { useTranslation } from "react-i18next";
 import { Box, Grid } from "@mui/material";
 import CustomModal from "../../../components/CustomModal/CustomModal";
-import { useFetchingStore } from "../../../store/FetchingApiStore";
-import bookingServices from "../../../services/bookingServices";
+// import { useFetchingStore } from "../../../store/FetchingApiStore";
+// import bookingServices from "../../../services/bookingServices";
 import CustomInput from "../../../components/CustomInput/CustomInput";
 import CopyButton from "../../../components/CopyButton";
+import routeConfig from "../../../config/routeConfig";
 
 function BookingAnInfoModal({ show, setShow, data, setData }) {
-  const [booking, setBooking] = useState({});
-  const { fetchApi } = useFetchingStore();
+  // const [booking, setBooking] = useState({ ...data });
+  const booking = { ...data };
+  // const { fetchApi } = useFetchingStore();
   const { t } = useTranslation("bookingFeature", {
     keyPrefix: "BookingAnInfoModal"
   });
@@ -29,28 +31,31 @@ function BookingAnInfoModal({ show, setShow, data, setData }) {
     keyPrefix: "properties"
   });
 
-  const handleToBookingDetail = () => {};
+  const handleToBookingDetail = () => {
+    // console.log("handleToBookingDetail: ");
+    window.open(`${routeConfig.booking}/${booking?.id}`, "_blank");
+  };
 
-  // console.log({ data });
+  // console.log(data);
 
-  useEffect(() => {
-    const bookingId = data?.id;
-    const loadData = async () => {
-      await fetchApi(async () => {
-        const res = await bookingServices.getBookingDetailById(bookingId);
+  // useEffect(() => {
+  //   const bookingId = data?.id;
+  //   const loadData = async () => {
+  //     await fetchApi(async () => {
+  //       const res = await bookingServices.getBookingDetailById(bookingId);
 
-        if (res.success) {
-          const bookingData = res.booking;
-          setBooking(bookingData);
-          return { ...res };
-        }
-        setBooking({});
-        return { ...res };
-      });
-    };
+  //       if (res.success) {
+  //         const bookingData = res.booking;
+  //         setBooking(bookingData);
+  //         return { ...res };
+  //       }
+  //       setBooking({});
+  //       return { ...res };
+  //     });
+  //   };
 
-    loadData();
-  }, []);
+  //   loadData();
+  // }, []);
 
   return (
     <CustomModal

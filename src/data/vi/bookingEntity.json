@@ -11,6 +11,7 @@
     "conclusion": "Kết luận bác sĩ",
     "userId": "ID người dùng",
     "patientId": "ID bệnh nhân",
+    "price": "Giá khám",
 
     "patientName": "Họ tên bệnh nhân",
     "patientPhoneNumber": "SĐT bệnh nhân",

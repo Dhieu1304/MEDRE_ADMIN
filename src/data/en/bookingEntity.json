@@ -11,6 +11,7 @@
     "conclusion": "Doctor's Conclusion",
     "userId": "User ID",
     "patientId": "Patient ID",
+    "price": "Price",
 
     "patientName": "Patient name",
     "patientPhoneNumber": "Patient phone number",

@@ -16,6 +16,7 @@ import patientServices from "../../../services/patientServices";
 import ClipboardButton from "../../../components/ClipboardButton";
 import userServices from "../../../services/userServices";
 import { cleanUndefinedAndNullValueObjectToStrObj } from "../../../utils/objectUtil";
+import { scheduleTypes } from "../../../entities/Schedule";
 // import patientServices from "../../../services/patientServices";
 
 const tabTypes = {
@@ -314,9 +315,35 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
           <Typography fontWeight={600} mr={2}>
             {tBooking("time")}:
           </Typography>
+
           <Typography fontWeight={500} textAlign="center">
             {`${data?.time?.timeStart?.split(":")[0]}:${data?.time?.timeStart?.split(":")[1]}`} -{" "}
             {`${data?.time?.timeEnd?.split(":")[0]}:${data?.time?.timeEnd?.split(":")[1]}`}
+          </Typography>
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: {
+              sm: "row",
+              xs: "column"
+            },
+            justifyContent: "flex-start",
+            alignItems: {
+              sm: "center",
+              xs: "flex-start"
+            },
+            mb: 2
+          }}
+        >
+          <Typography fontWeight={600} mr={2}>
+            {tBooking("price")}:
+          </Typography>
+          <Typography fontWeight={500} textAlign="center">
+            {data?.schedule?.type === scheduleTypes.TYPE_OFFLINE
+              ? data?.schedule?.scheduleExpertise?.priceOffline
+              : data?.schedule?.scheduleExpertise?.priceOnline}
           </Typography>
         </Box>
 

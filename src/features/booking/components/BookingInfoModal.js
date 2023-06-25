@@ -7,6 +7,7 @@ import { Box, Grid, Tab, Tabs } from "@mui/material";
 import CustomModal from "../../../components/CustomModal/CustomModal";
 import CustomInput from "../../../components/CustomInput/CustomInput";
 import CopyButton from "../../../components/CopyButton";
+import routeConfig from "../../../config/routeConfig";
 
 function BookingInfoModal({ show, setShow, data, setData }) {
   const [tabValue, setTabValue] = useState(data?.bookings?.[0]?.id);
@@ -42,7 +43,9 @@ function BookingInfoModal({ show, setShow, data, setData }) {
     return [groups, start, end, typeLabel];
   }, [data]);
 
-  const handleToBookingDetail = () => {};
+  const handleToBookingDetail = () => {
+    window.open(`${routeConfig.booking}/${tabValue}`, "_blank");
+  };
 
   // console.log({ data });
 
@@ -82,6 +85,8 @@ function BookingInfoModal({ show, setShow, data, setData }) {
 
   //   loadData();
   // }, []);
+
+  // console.log(bookingsGroup?.[tabValue])
 
   return (
     <CustomModal
@@ -152,6 +157,16 @@ function BookingInfoModal({ show, setShow, data, setData }) {
                 label={tBooking("time")}
               />
             </Grid>
+            {/* <Grid item xs={12} sm={12} md={4} lg={4}>
+              <CustomInput
+                noNameValue={
+                  data?.schedule?.type === scheduleTypes.TYPE_OFFLINE
+                    ? data?.schedule?.scheduleExpertise?.priceOffline
+                    : data?.schedule?.scheduleExpertise?.priceOnline
+                }
+                label={tBooking("price")}
+              />
+            </Grid> */}
             <Grid item xs={12} sm={12} md={4} lg={4}>
               <CustomInput noNameValue={type} label={tSchedule("type")} />
             </Grid>
