@@ -1,0 +1,11 @@
+{
+  "properties": {
+    "id": "ID",
+    "name": "Tên",
+    "offlinePrice": "Giá khám trực tiếp",
+    "onlinePrice": "Giá khám trực tuyến",
+    "createdAt": "Ngày tạo",
+    "updatedAt": "Ngày cập nhập",
+    "deletedAt": "Ngày xóa"
+  }
+}

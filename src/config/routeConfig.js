@@ -13,6 +13,7 @@ const routeConfig = {
   booking: "/booking",
   changePassword: "/change-password",
   reExamination: "/re-examination",
+  expertise: "/expertise",
   default: "/*"
 };
 

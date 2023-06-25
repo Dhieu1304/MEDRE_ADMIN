@@ -1,4 +1,12 @@
-import { faBell, faCalendarAlt, faCalendarDays, faGear, faHospitalUser, faUsers } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBell,
+  faCalendarAlt,
+  faCalendarDays,
+  faGear,
+  faHospitalUser,
+  faScrewdriverWrench,
+  faUsers
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import routeConfig from "../../../config/routeConfig";
 
@@ -32,6 +40,12 @@ export const sideBarItems = [
     to: routeConfig.setting,
     label: "setting_label",
     icon: <FontAwesomeIcon icon={faGear} width={20} />
+  },
+
+  {
+    to: routeConfig.expertise,
+    label: "expertise_label",
+    icon: <FontAwesomeIcon icon={faScrewdriverWrench} width={20} />
   },
 
   {

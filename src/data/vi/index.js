@@ -23,6 +23,8 @@ import reExaminationFeature from "./reExaminationFeature.json";
 import reExaminationEntity from "./reExaminationEntity.json";
 import notificationFeature from "./notificationFeature.json";
 import notificationEntity from "./notificationEntity.json";
+import expertiseFeature from "./expertiseFeature.json";
+import expertiseEntity from "./expertiseEntity.json";
 
 const vi = {
   authFeature,
@@ -49,7 +51,9 @@ const vi = {
   reExaminationFeature,
   reExaminationEntity,
   notificationFeature,
-  notificationEntity
+  notificationEntity,
+  expertiseFeature,
+  expertiseEntity
 };
 
 export default vi;

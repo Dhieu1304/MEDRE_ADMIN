@@ -1,0 +1,11 @@
+{
+  "properties": {
+    "id": "ID",
+    "name": "Name",
+    "offlinePrice": "Offline price",
+    "onlinePrice": "Online price",
+    "createdAt": "Created at",
+    "updatedAt": "Updated at",
+    "deletedAt": "Deleted at"
+  }
+}

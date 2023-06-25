@@ -32,11 +32,6 @@ const staffApi = {
   changePassword: () => "/staff/my-profile/change-password"
 };
 
-const expertiseApi = {
-  expertiseList: () => "/expertise/list",
-  createExpertise: () => "/expertise/create-expertise"
-};
-
 const scheduleApi = {
   scheduleList: () => "/schedule/list-all",
   timeList: () => "/time-schedule/time",
@@ -95,6 +90,11 @@ const uploadApi = {
 
 const scheduleBookingTimeApi = {
   scheduleBookingTimeList: () => "/schedule-booking-time/list"
+};
+
+const expertiseApi = {
+  expertiseList: () => "/expertise/list",
+  editExpertise: () => `/expertise/update-expertise`
 };
 
 export {
