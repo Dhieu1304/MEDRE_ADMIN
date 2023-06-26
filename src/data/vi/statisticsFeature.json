@@ -1,0 +1,16 @@
+{
+  "UserStatistics": {
+    "title": "Thống kê người dùng"
+  },
+  "BookingStatistics": {
+    "title": "Thống kê lịch đặt"
+  },
+  "StatisticsFilter": {
+    "types": {
+      "date": "Ngày",
+      "week": "Tuần",
+      "month": "Tháng",
+      "year": "Năm"
+    }
+  }
+}

@@ -25,6 +25,8 @@ import notificationFeature from "./notificationFeature.json";
 import notificationEntity from "./notificationEntity.json";
 import expertiseFeature from "./expertiseFeature.json";
 import expertiseEntity from "./expertiseEntity.json";
+import statisticsFeature from "./statisticsFeature.json";
+import statisticsPage from "./statisticsPage.json";
 
 const vi = {
   authFeature,
@@ -53,7 +55,9 @@ const vi = {
   notificationFeature,
   notificationEntity,
   expertiseFeature,
-  expertiseEntity
+  expertiseEntity,
+  statisticsFeature,
+  statisticsPage
 };
 
 export default vi;

@@ -1,0 +1,17 @@
+{
+  "UserStatistics": {
+    "title": "User statistics"
+  },
+  "BookingStatistics": {
+    "title": "Booking statistics"
+  },
+
+  "StatisticsFilter": {
+    "types": {
+      "date": "Date",
+      "week": "Week",
+      "month": "Month",
+      "year": "Year"
+    }
+  }
+}

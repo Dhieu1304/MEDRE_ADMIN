@@ -1,20 +1,20 @@
 import { Link, Route, Routes, useLocation } from "react-router-dom";
 
-import { BookingStatistics, UserStatistics } from "../../features/statistics";
-import { statisticsRoutes } from "./routes";
-import { Info as InfoIcon, Schedule as ScheduleIcon } from "@mui/icons-material";
-import routeConfig from "../../config/routeConfig";
+import { Group as GroupIcon, Schedule as ScheduleIcon } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Box, Tab, Tabs, Typography } from "@mui/material";
+import routeConfig from "../../config/routeConfig";
+import { statisticsRoutes } from "./routes";
+import { BookingStatistics, UserStatistics } from "../../features/statistics";
 
 export default function StatisticsPage() {
   const [value, setValue] = useState(statisticsRoutes.booking);
   // const params = useParams();
 
   const path = `${routeConfig.statistics}`;
-  const { t } = useTranslation("staffPage", {
-    keyPrefix: "StaffDetailPage"
+  const { t } = useTranslation("statisticsPage", {
+    keyPrefix: "StatisticsPage"
   });
 
   const location = useLocation();
@@ -77,7 +77,7 @@ export default function StatisticsPage() {
         <Tab
           value={statisticsRoutes.user}
           label={renderTableLabel("tabs.user")}
-          icon={<InfoIcon />}
+          icon={<GroupIcon />}
           iconPosition="start"
           LinkComponent={Link}
           to={path + statisticsRoutes.user}
