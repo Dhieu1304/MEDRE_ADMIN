@@ -10,7 +10,8 @@
     "meeting_label": "Cuộc hẹn",
     "booking_label": "Đặt hẹn",
     "notification_label": "Thông báo",
-    "re_examination_label": "Tái khám"
+    "re_examination_label": "Tái khám",
+    "re_statistics_label": "Thống kê"
   },
   "header": {
     "profile_label": "Thông tin cá nhân",

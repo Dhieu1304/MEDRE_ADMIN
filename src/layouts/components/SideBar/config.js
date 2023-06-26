@@ -2,6 +2,7 @@ import {
   faBell,
   faCalendarAlt,
   faCalendarDays,
+  faChartPie,
   faGear,
   faHospitalUser,
   faScrewdriverWrench,
@@ -57,5 +58,10 @@ export const sideBarItems = [
     to: routeConfig.reExamination,
     label: "re_examination_label",
     icon: <FontAwesomeIcon icon={faCalendarAlt} width={20} />
+  },
+  {
+    to: routeConfig.statistics,
+    label: "re_statistics_label",
+    icon: <FontAwesomeIcon icon={faChartPie} width={20} />
   }
 ];

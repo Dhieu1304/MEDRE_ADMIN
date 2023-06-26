@@ -16,6 +16,7 @@ import AuthLayout from "../layouts/AuthLayout";
 import ChangePasswordPage from "../pages/ChangePasswordPage";
 import ReExaminationListPage from "../pages/ReExaminationPage";
 import ExpertisePage from "../pages/ExpertisePage";
+import StatisticsPage from "../pages/StatisticsPage";
 
 // Public routes
 const publicRoutes = [
@@ -39,6 +40,7 @@ const privateRoutes = [
   { path: `${routeConfig.verification}/*`, component: VerificationPage, layout: AuthLayout },
   { path: `${routeConfig.meeting}/*`, component: MeetingPage, layout: null },
   { path: `${routeConfig.expertise}/*`, component: ExpertisePage },
+  { path: `${routeConfig.statistics}/*`, component: StatisticsPage },
   { path: routeConfig.default, component: Navigate, props: { replace: true, to: routeConfig.home }, layout: null }
 ];
 

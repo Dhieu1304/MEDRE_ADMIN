@@ -14,6 +14,7 @@ const routeConfig = {
   changePassword: "/change-password",
   reExamination: "/re-examination",
   expertise: "/expertise",
+  statistics: "/statistics",
   default: "/*"
 };
 
