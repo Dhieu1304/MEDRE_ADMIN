@@ -1,4 +1,4 @@
-import { Link, Route, Routes, useLocation } from "react-router-dom";
+import { Link, Navigate, Route, Routes, useLocation } from "react-router-dom";
 
 import { Group as GroupIcon, Schedule as ScheduleIcon } from "@mui/icons-material";
 import { useEffect, useState } from "react";
@@ -89,6 +89,7 @@ export default function StatisticsPage() {
         }}
       >
         <Routes>
+          <Route path="/" element={<Navigate to={`${routeConfig.statistics}${statisticsRoutes.booking}`} replace />} />
           <Route path={statisticsRoutes.booking} element={<BookingStatistics />} />
           <Route path={statisticsRoutes.user} element={<UserStatistics />} />
         </Routes>

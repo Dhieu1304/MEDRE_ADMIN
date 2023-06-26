@@ -98,6 +98,13 @@ const expertiseApi = {
   createExpertise: () => "/expertise/create-expertise"
 };
 
+const statisticsApi = {
+  booking: () => "/statistic/booking",
+  user: () => "/statistic/user",
+  patient: () => "/statistic/patient",
+  revenue: () => "/statistic/revenue"
+};
+
 export {
   authApi,
   userApi,
@@ -111,5 +118,6 @@ export {
   notificationApi,
   reExaminationApi,
   uploadApi,
-  scheduleBookingTimeApi
+  scheduleBookingTimeApi,
+  statisticsApi
 };
