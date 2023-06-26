@@ -355,13 +355,7 @@ function CreateNotification() {
         <Controller
           control={control}
           rules={{
-            required: tInputValidation("required"),
-            maxLength: {
-              value: 4,
-              message: tInputValidation("maxLength", {
-                maxLength: 4
-              })
-            }
+            required: tInputValidation("required")
           }}
           name="description"
           render={({ field: { value, onChange }, fieldState: { error } }) => {
