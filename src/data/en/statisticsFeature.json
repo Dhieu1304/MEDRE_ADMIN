@@ -6,6 +6,14 @@
     "title": "Booking statistics"
   },
 
+  "PatientStatistics": {
+    "title": "Patient statistics"
+  },
+
+  "RevenueStatistics": {
+    "title": "Revenue statistics"
+  },
+
   "StatisticsFilter": {
     "types": {
       "date": "Date",

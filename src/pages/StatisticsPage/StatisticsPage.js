@@ -1,12 +1,12 @@
 import { Link, Navigate, Route, Routes, useLocation } from "react-router-dom";
 
-import { Group as GroupIcon, Schedule as ScheduleIcon } from "@mui/icons-material";
+import { Group as GroupIcon, Payment, Person, Schedule as ScheduleIcon } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Box, Tab, Tabs, Typography } from "@mui/material";
 import routeConfig from "../../config/routeConfig";
 import { statisticsRoutes } from "./routes";
-import { BookingStatistics, UserStatistics } from "../../features/statistics";
+import { BookingStatistics, PatientStatistics, RevenueStatistics, UserStatistics } from "../../features/statistics";
 
 export default function StatisticsPage() {
   const [value, setValue] = useState(statisticsRoutes.booking);
@@ -24,6 +24,14 @@ export default function StatisticsPage() {
     switch (currentPath) {
       case path + statisticsRoutes.user:
         setValue(statisticsRoutes.user);
+        break;
+
+      case path + statisticsRoutes.patient:
+        setValue(statisticsRoutes.patient);
+        break;
+
+      case path + statisticsRoutes.revenue:
+        setValue(statisticsRoutes.revenue);
         break;
 
       case path + statisticsRoutes.booking:
@@ -82,6 +90,23 @@ export default function StatisticsPage() {
           LinkComponent={Link}
           to={path + statisticsRoutes.user}
         />
+
+        <Tab
+          value={statisticsRoutes.patient}
+          label={renderTableLabel("tabs.patient")}
+          icon={<Person />}
+          iconPosition="start"
+          LinkComponent={Link}
+          to={path + statisticsRoutes.patient}
+        />
+        <Tab
+          value={statisticsRoutes.revenue}
+          label={renderTableLabel("tabs.revenue")}
+          icon={<Payment />}
+          iconPosition="start"
+          LinkComponent={Link}
+          to={path + statisticsRoutes.revenue}
+        />
       </Tabs>
       <Box
         sx={{
@@ -92,6 +117,8 @@ export default function StatisticsPage() {
           <Route path="/" element={<Navigate to={`${routeConfig.statistics}${statisticsRoutes.booking}`} replace />} />
           <Route path={statisticsRoutes.booking} element={<BookingStatistics />} />
           <Route path={statisticsRoutes.user} element={<UserStatistics />} />
+          <Route path={statisticsRoutes.patient} element={<PatientStatistics />} />
+          <Route path={statisticsRoutes.revenue} element={<RevenueStatistics />} />
         </Routes>
       </Box>
     </Box>

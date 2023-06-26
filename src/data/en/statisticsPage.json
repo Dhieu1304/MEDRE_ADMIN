@@ -2,7 +2,9 @@
   "StatisticsPage": {
     "tabs": {
       "user": "User",
-      "booking": "Booking"
+      "booking": "Booking",
+      "patient": "Patient",
+      "revenue": "Revenue"
     }
   }
 }

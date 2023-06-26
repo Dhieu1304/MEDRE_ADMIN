@@ -15,7 +15,7 @@ export const statisticsFilterTypes = {
   YEAR: "Year"
 };
 
-function UserStatistics() {
+function PatientStatistics() {
   const [dayData, setDayData] = useState([]);
   const [weekData, setWeekData] = useState([]);
   const [monthData, setMonthData] = useState([]);
@@ -25,31 +25,31 @@ function UserStatistics() {
     return [dayData, weekData, monthData, yearData];
   }, [dayData, weekData, monthData, yearData]);
 
-  const { t } = useTranslation("statisticsFeature", { keyPrefix: "UserStatistics" });
+  const { t } = useTranslation("statisticsFeature", { keyPrefix: "PatientStatistics" });
 
   const { isLoading, fetchApi } = useFetchingStore();
 
   const loadData = async () => {
     await fetchApi(async () => {
-      const res = await statisticsServices.getStatisticsByUser({ time: statisticsFilterTypes.DAY });
+      const res = await statisticsServices.getStatisticsByPatient({ time: statisticsFilterTypes.DAY });
       setDayData([...res.data]);
       return { ...res };
     });
 
     await fetchApi(async () => {
-      const res = await statisticsServices.getStatisticsByUser({ time: statisticsFilterTypes.WEEK });
+      const res = await statisticsServices.getStatisticsByPatient({ time: statisticsFilterTypes.WEEK });
       setWeekData([...res.data]);
       return { ...res };
     });
 
     await fetchApi(async () => {
-      const res = await statisticsServices.getStatisticsByUser({ time: statisticsFilterTypes.MONTH });
+      const res = await statisticsServices.getStatisticsByPatient({ time: statisticsFilterTypes.MONTH });
       setMonthData([...res.data]);
       return { ...res };
     });
 
     await fetchApi(async () => {
-      const res = await statisticsServices.getStatisticsByUser({ time: statisticsFilterTypes.YEAR });
+      const res = await statisticsServices.getStatisticsByPatient({ time: statisticsFilterTypes.YEAR });
       setYearData([...res.data]);
       return { ...res };
     });
@@ -91,4 +91,4 @@ function UserStatistics() {
   );
 }
 
-export default UserStatistics;
+export default PatientStatistics;

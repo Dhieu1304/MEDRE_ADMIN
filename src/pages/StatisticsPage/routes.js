@@ -1,6 +1,8 @@
 const statisticsRoutes = {
   booking: "/booking",
-  user: "/user"
+  user: "/user",
+  patient: "/patient",
+  revenue: "/revenue"
 };
 
 export { statisticsRoutes };

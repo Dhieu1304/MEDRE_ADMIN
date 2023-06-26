@@ -2,7 +2,9 @@
   "StatisticsPage": {
     "tabs": {
       "user": "Người dùng",
-      "booking": "Lịch đặt"
+      "booking": "Lịch đặt",
+      "patient": "Bệnh nhân",
+      "revenue": "Doanh thu"
     }
   }
 }

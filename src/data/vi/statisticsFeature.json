@@ -5,6 +5,15 @@
   "BookingStatistics": {
     "title": "Thống kê lịch đặt"
   },
+
+  "PatientStatistics": {
+    "title": "Thống kê bệnh nhân"
+  },
+
+  "RevenueStatistics": {
+    "title": "Thống kê doanh thu"
+  },
+
   "StatisticsFilter": {
     "types": {
       "date": "Ngày",
