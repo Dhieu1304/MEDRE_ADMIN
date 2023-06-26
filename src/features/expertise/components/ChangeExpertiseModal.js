@@ -7,6 +7,7 @@ import CustomModal from "../../../components/CustomModal";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
 // import expertiseServices from "../../../services/expertiseServices";
 import CustomInput from "../../../components/CustomInput/CustomInput";
+import expertiseServices from "../../../services/expertiseServices";
 
 function ChangeExpertiseModal({ show, setShow, data, setData, handleAfterEditExpertise }) {
   const { handleSubmit, control, trigger } = useForm({
@@ -25,11 +26,10 @@ function ChangeExpertiseModal({ show, setShow, data, setData, handleAfterEditExp
 
   const { fetchApi } = useFetchingStore();
 
-  const handleEditExpertise = async () => {
+  const handleEditExpertise = async ({ name, offlinePrice, onlinePrice }) => {
     await fetchApi(async () => {
-      // const id = data?.id;
-      // const res = await expertiseServices.editExpertise({ id, value });
-      const res = { success: true };
+      const id = data?.id;
+      const res = await expertiseServices.editExpertise({ id, name, offlinePrice, onlinePrice });
       if (res?.success) {
         setShow(false);
         setData({});

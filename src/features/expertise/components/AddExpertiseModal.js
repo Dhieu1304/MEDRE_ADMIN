@@ -7,6 +7,7 @@ import CustomInput from "../../../components/CustomInput";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
 // import staffServices from "../../../services/staffServices";
 import { expertiseInputValidate } from "../../../entities/Expertise";
+import expertiseServices from "../../../services/expertiseServices";
 
 function AddExpertiseModal({ show, setShow, handleAfterAddExpertise }) {
   const { control, trigger, handleSubmit } = useForm({
@@ -26,11 +27,10 @@ function AddExpertiseModal({ show, setShow, handleAfterAddExpertise }) {
 
   const { fetchApi } = useFetchingStore();
 
-  const handleAddExpertise = async () => {
+  const handleAddExpertise = async ({ name, offlinePrice, onlinePrice }) => {
     // console.log({ name, offlinePrice, onlinePrice });
     await fetchApi(async () => {
-      // const res = await staffServices.createExpertise(expertise);
-      const res = { success: true };
+      const res = await expertiseServices.createExpertise({ name, offlinePrice, onlinePrice });
 
       if (res?.success) {
         setShow(false);
