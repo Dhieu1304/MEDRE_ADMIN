@@ -53,6 +53,7 @@ import bookingServices from "../../../services/bookingServices";
 import { bookingMethods } from "../../../entities/Booking/constant";
 import BookingModal from "../../booking/components/BookingModal";
 import { useAbility } from "@casl/react";
+import { subject } from "@casl/ability";
 
 const EMPTY_CELL = "EMPTY_CELL";
 const FULL_SLOT = "FULL_SLOT";
@@ -460,7 +461,10 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
 
   // console.log("staff in DoctorScheduleCalendar:", staff);
   // console.log("doctor in DoctorScheduleCalendar:", doctor);
-  // console.log("canAddTimeOff in DoctorScheduleCalendar:", canAddTimeOff);
+  console.log("canAddTimeOff in DoctorScheduleCalendar:", canAddTimeOff);
+
+  const canAddTimeOff2 = ability.can(staffActionAbility.ADD_DOCTOR_TIMEOFF, subject("Staff", staff));
+  console.log("canAddTimeOff2 in DoctorScheduleCalendar:", canAddTimeOff2);
 
   return (
     <>
@@ -489,7 +493,7 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
           </Card>
 
           <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
-            <Can I={staffActionAbility.ADD_DOCTOR_TIMEOFF} this={staff}>
+            <Can I={staffActionAbility.ADD_DOCTOR_TIMEOFF} this={subject("Staff", staff)}>
               <Button
                 variant="contained"
                 onClick={() => {
