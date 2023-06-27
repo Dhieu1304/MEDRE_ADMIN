@@ -456,7 +456,7 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
   };
 
   const ability = useAbility(AbilityContext);
-  const canAddTimeOff = ability.can(staffActionAbility.ADD_DOCTOR_TIMEOFF, staff);
+  const canAddTimeOff = ability.can(staffActionAbility.ADD_DOCTOR_TIMEOFF, "Staff", "id");
 
   console.log("staff in DoctorScheduleCalendar:", staff);
   console.log("doctor in DoctorScheduleCalendar:", doctor);
@@ -489,7 +489,7 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
           </Card>
 
           <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
-            {canAddTimeOff ? (
+            <Can I={staffActionAbility.ADD_DOCTOR_TIMEOFF} this={staff}>
               <Button
                 variant="contained"
                 onClick={() => {
@@ -503,10 +503,7 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
               >
                 {t("button.addTimeOff")}
               </Button>
-            ) : (
-              <div>Can not</div>
-            )}
-
+            </Can>
             <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center", mx: 2 }}>
               {formatDate.format(heads[0], "DD/MM/YYYY")} - {formatDate.format(heads[6], "DD/MM/YYYY")}
             </Box>
