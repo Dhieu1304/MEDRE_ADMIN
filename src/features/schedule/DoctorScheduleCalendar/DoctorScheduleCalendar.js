@@ -62,7 +62,7 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const staff = new Staff(doctor);
+  const staff = new Staff({ ...doctor });
 
   const [schedules, setSchedules] = useState([]);
   const [timeOffs, setTimeOffs] = useState([]);
