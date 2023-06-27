@@ -71,6 +71,7 @@ function StaffTable({
         <TableBody>
           {staffs.map((currentStaff) => {
             const staff = new Staff(currentStaff);
+            console.log("staff in StaffTable");
             return (
               <TableRow key={staff?.id}>
                 <CustomTableCell variant={customTableCellVariant.FIRST_BODY_CELL}>{staff?.name}</CustomTableCell>
