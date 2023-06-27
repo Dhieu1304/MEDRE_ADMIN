@@ -30,6 +30,7 @@ const defineAbilityFor = (staff) => {
           id: staff?.id
         });
 
+        console.log("staff: ", staff);
         can(staffActionAbility.ADD_DOCTOR_TIMEOFF, STAFF, {
           id: staff?.id
         });
