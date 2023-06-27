@@ -15,6 +15,7 @@ import CustomTableCell, { customTableCellVariant } from "../../components/Custom
 import { useCustomModal } from "../../components/CustomModal";
 import ChangeExpertiseModal from "./components/ChangeExpertiseModal";
 import AddExpertiseModal from "./components/AddExpertiseModal";
+import { formatCurrency } from "../../utils/stringFormat";
 // import { Can } from "../../store/AbilityStore";
 // import Expertise from "../../entities/Expertise/Expertise";
 // import { expertiseActionAbility } from "../../entities/Expertise";
@@ -140,8 +141,8 @@ function ExpertiseList() {
                 return (
                   <TableRow key={expertise?.id}>
                     <CustomTableCell>{expertise?.name}</CustomTableCell>
-                    <CustomTableCell>{expertise?.priceOffline}</CustomTableCell>
-                    <CustomTableCell>{expertise?.priceOnline}</CustomTableCell>
+                    <CustomTableCell>{formatCurrency(expertise?.priceOffline)}</CustomTableCell>
+                    <CustomTableCell>{formatCurrency(expertise?.priceOnline)}</CustomTableCell>
                     <CustomTableCell>{formatDate.format(new Date(expertise?.createdAt), "DD/MM/YYYY")}</CustomTableCell>
                     <CustomTableCell>{formatDate.format(new Date(expertise?.updatedAt), "DD/MM/YYYY")}</CustomTableCell>
                     <CustomTableCell variant={customTableCellVariant.ACTION_BODY_CELL}>

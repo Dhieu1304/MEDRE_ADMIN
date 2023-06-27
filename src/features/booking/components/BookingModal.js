@@ -17,6 +17,7 @@ import ClipboardButton from "../../../components/ClipboardButton";
 import userServices from "../../../services/userServices";
 import { cleanUndefinedAndNullValueObjectToStrObj } from "../../../utils/objectUtil";
 import { scheduleTypes } from "../../../entities/Schedule";
+import { formatCurrency } from "../../../utils/stringFormat";
 // import patientServices from "../../../services/patientServices";
 
 const tabTypes = {
@@ -342,8 +343,8 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
           </Typography>
           <Typography fontWeight={500} textAlign="center">
             {data?.schedule?.type === scheduleTypes.TYPE_OFFLINE
-              ? data?.schedule?.scheduleExpertise?.priceOffline
-              : data?.schedule?.scheduleExpertise?.priceOnline}
+              ? formatCurrency(data?.schedule?.scheduleExpertise?.priceOffline)
+              : formatCurrency(data?.schedule?.scheduleExpertise?.priceOnline)}
           </Typography>
         </Box>
 
