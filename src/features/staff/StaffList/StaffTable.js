@@ -78,7 +78,7 @@ function StaffTable({
 
                 <CustomTableCell hide={!showCols?.phoneNumber}>
                   <Typography variant="inherit">{staff?.phoneNumber}</Typography>
-                  {!staff.phoneVerified && (
+                  {!staff?.phoneVerified && (
                     <Typography variant="caption" color={theme.palette.error.light}>
                       {tStaffMessage("phoneVerifiedFailed")}
                     </Typography>
@@ -87,7 +87,7 @@ function StaffTable({
 
                 <CustomTableCell hide={!showCols?.email}>
                   <Typography variant="inherit">{staff?.email}</Typography>
-                  {!staff.emailVerified && (
+                  {!staff?.emailVerified && (
                     <Typography variant="caption" color={theme.palette.error.light}>
                       {tStaffMessage("emailVerifiedFailed")}
                     </Typography>

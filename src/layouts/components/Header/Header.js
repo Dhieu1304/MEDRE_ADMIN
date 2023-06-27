@@ -118,8 +118,9 @@ function Header({ open, handleDrawerOpen }) {
 
           <CustomNotification notifications={notifications} unreadNotificationCount={unreadNotificationCount} />
 
-          <Tooltip title="Open settings">
-            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+          <Typography>{authStore.staff?.name}</Typography>
+          <Tooltip title="Open menu">
+            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, ml: 2 }}>
               <Avatar alt={authStore.staff?.name} src={authStore.staff?.image || " "} />
               {/* src={authStore.staff?.avatar} */}
             </IconButton>
