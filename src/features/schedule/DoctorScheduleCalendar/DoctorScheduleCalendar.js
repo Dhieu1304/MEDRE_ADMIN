@@ -458,6 +458,10 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
   const ability = useAbility(AbilityContext);
   const canAddTimeOff = ability.can(staffActionAbility.ADD_DOCTOR_TIMEOFF, staff);
 
+  console.log("staff in DoctorScheduleCalendar:", staff);
+  console.log("doctor in DoctorScheduleCalendar:", doctor);
+  console.log("canAddTimeOff in DoctorScheduleCalendar:", canAddTimeOff);
+
   return (
     <>
       <Typography>{canAddTimeOff ? "Add" : "Not"}</Typography>
