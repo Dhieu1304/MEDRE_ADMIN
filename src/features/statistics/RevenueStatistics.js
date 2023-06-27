@@ -15,7 +15,6 @@ function RevenueStatistics() {
   const [dataOnline, setDataOnline] = useState([]);
   const [dataOffline, setDataOffline] = useState([]);
 
-
   const { t } = useTranslation("statisticsFeature", { keyPrefix: "RevenueStatistics" });
 
   const { isLoading, fetchApi } = useFetchingStore();

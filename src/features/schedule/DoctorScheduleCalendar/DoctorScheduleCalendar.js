@@ -24,6 +24,7 @@ import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import qs from "query-string";
 
+import { subject } from "@casl/ability";
 import CustomOverlay from "../../../components/CustomOverlay";
 
 import scheduleServices from "../../../services/scheduleServices";
@@ -46,14 +47,11 @@ import BookingInfoModal from "../../booking/components/BookingInfoModal";
 import { useAppConfigStore } from "../../../store/AppConfigStore";
 import { useScheduleTypesContantTranslation } from "../hooks/useScheduleConstantsTranslation";
 import CustomPageTitle from "../../../components/CustomPageTitle";
-import { AbilityContext, Can } from "../../../store/AbilityStore";
+import { Can } from "../../../store/AbilityStore";
 import { staffActionAbility } from "../../../entities/Staff";
-import Staff from "../../../entities/Staff/Staff";
 import bookingServices from "../../../services/bookingServices";
 import { bookingMethods } from "../../../entities/Booking/constant";
 import BookingModal from "../../booking/components/BookingModal";
-import { useAbility } from "@casl/react";
-import { subject } from "@casl/ability";
 
 const EMPTY_CELL = "EMPTY_CELL";
 const FULL_SLOT = "FULL_SLOT";
@@ -63,7 +61,7 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const staff = new Staff({ ...doctor });
+  const staff = { ...doctor };
 
   const [schedules, setSchedules] = useState([]);
   const [timeOffs, setTimeOffs] = useState([]);
@@ -456,19 +454,8 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
     await loadData();
   };
 
-  const ability = useAbility(AbilityContext);
-  const canAddTimeOff = ability.can(staffActionAbility.ADD_DOCTOR_TIMEOFF, "Staff", "id");
-
-  // console.log("staff in DoctorScheduleCalendar:", staff);
-  // console.log("doctor in DoctorScheduleCalendar:", doctor);
-  console.log("canAddTimeOff in DoctorScheduleCalendar:", canAddTimeOff);
-
-  const canAddTimeOff2 = ability.can(staffActionAbility.ADD_DOCTOR_TIMEOFF, subject("Staff", staff));
-  console.log("canAddTimeOff2 in DoctorScheduleCalendar:", canAddTimeOff2);
-
   return (
     <>
-      <Typography>{canAddTimeOff ? "Add" : "Not"}</Typography>
       <Box>
         <CustomOverlay open={isLoading} />
         <CustomPageTitle title={t("title")} />
