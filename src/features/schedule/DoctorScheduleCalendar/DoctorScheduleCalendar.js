@@ -460,6 +460,7 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
 
   return (
     <>
+      <Typography>{canAddTimeOff ? "Add" : "Not"}</Typography>
       <Box>
         <CustomOverlay open={isLoading} />
         <CustomPageTitle title={t("title")} />
@@ -484,7 +485,7 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
           </Card>
 
           <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
-            {canAddTimeOff && (
+            {canAddTimeOff ? (
               <Button
                 variant="contained"
                 onClick={() => {
@@ -498,6 +499,8 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
               >
                 {t("button.addTimeOff")}
               </Button>
+            ) : (
+              <div>Can not</div>
             )}
 
             <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center", mx: 2 }}>
