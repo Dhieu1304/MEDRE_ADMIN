@@ -46,12 +46,13 @@ import BookingInfoModal from "../../booking/components/BookingInfoModal";
 import { useAppConfigStore } from "../../../store/AppConfigStore";
 import { useScheduleTypesContantTranslation } from "../hooks/useScheduleConstantsTranslation";
 import CustomPageTitle from "../../../components/CustomPageTitle";
-import { Can } from "../../../store/AbilityStore";
+import { AbilityContext, Can } from "../../../store/AbilityStore";
 import { staffActionAbility } from "../../../entities/Staff";
 import Staff from "../../../entities/Staff/Staff";
 import bookingServices from "../../../services/bookingServices";
 import { bookingMethods } from "../../../entities/Booking/constant";
 import BookingModal from "../../booking/components/BookingModal";
+import { useAbility } from "@casl/react";
 
 const EMPTY_CELL = "EMPTY_CELL";
 const FULL_SLOT = "FULL_SLOT";
@@ -454,6 +455,9 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
     await loadData();
   };
 
+  const ability = useAbility(AbilityContext);
+  const canAddTimeOff = ability.can(staffActionAbility.ADD_DOCTOR_TIMEOFF, staff);
+
   return (
     <>
       <Box>
@@ -480,7 +484,7 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
           </Card>
 
           <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
-            <Can I={staffActionAbility.ADD_DOCTOR_TIMEOFF} a={staff}>
+            {canAddTimeOff && (
               <Button
                 variant="contained"
                 onClick={() => {
@@ -494,7 +498,7 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
               >
                 {t("button.addTimeOff")}
               </Button>
-            </Can>
+            )}
 
             <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center", mx: 2 }}>
               {formatDate.format(heads[0], "DD/MM/YYYY")} - {formatDate.format(heads[6], "DD/MM/YYYY")}
