@@ -43,7 +43,14 @@ export default function DefaultLayout({ children }) {
       >
         <CustomDrawerHeader />
 
-        {children}
+        <Box
+          sx={{
+            width: "100%",
+            height: "100%"
+          }}
+        >
+          {children}
+        </Box>
       </Box>
     </Box>
   );
