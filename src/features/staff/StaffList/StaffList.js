@@ -1,12 +1,14 @@
 import React, { useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 
-import { Box, Button } from "@mui/material";
+import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
 import qs from "query-string";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
+import formatDate from "date-and-time";
+import { CalendarMonth as CalendarMonthIcon, Search as SearchIcon } from "@mui/icons-material";
 import staffServices from "../../../services/staffServices";
 import { useFetchingStore } from "../../../store/FetchingApiStore/hooks";
 import CustomOverlay from "../../../components/CustomOverlay";
@@ -14,21 +16,23 @@ import { useAppConfigStore } from "../../../store/AppConfigStore/hooks";
 import { useCustomModal } from "../../../components/CustomModal/hooks";
 
 import { NotHaveAccess, NotHaveAccessModal } from "../../auth";
-import { EditStaffRoleModal, BlockStaffModal, AddStaffModal } from "../components";
+import { EditStaffRoleModal, BlockStaffModal, AddStaffModal, StaffRoleStatusButton } from "../components";
 
 import useObjDebounce from "../../../hooks/useObjDebounce";
 
 import StaffFiltersForm from "./StaffFiltersForm";
-import StaffTable from "./StaffTable";
 import { WithExpertisesLoaderWrapper } from "../hocs";
 import { columnsIds, createDefaultValues, initialShowCols } from "./utils";
 import UnblockStaffModal from "../components/UnblockStaffModal";
 import { Can } from "../../../store/AbilityStore";
-import { staffActionAbility } from "../../../entities/Staff";
+import { staffActionAbility, staffStatuses } from "../../../entities/Staff";
 import Staff from "../../../entities/Staff/Staff";
 import ListPageAction from "../../../components/ListPageAction/ListPageAction";
 import ListPageTableWrapper from "../../../components/ListPageTableWrapper";
 import ListPageTop from "../../../components/ListPageTop";
+import { useStaffGendersContantTranslation } from "../hooks/useStaffConstantsTranslation";
+import CopyButton from "../../../components/CopyButton";
+import DataTable from "../../components/DataFilterTable/DataTable";
 
 function StaffList({ expertisesList }) {
   const [isFirst, setIsFirst] = useState(true);
@@ -50,6 +54,12 @@ function StaffList({ expertisesList }) {
 
   // functions for multilingual use
 
+  const theme = useTheme();
+
+  const { t: tStaffMessage } = useTranslation("staffEntity", { keyPrefix: "messages" });
+
+  const [, staffGenderContantListObj] = useStaffGendersContantTranslation();
+
   const { t } = useTranslation("staffFeature", { keyPrefix: "StaffList" });
   const { t: tBtn } = useTranslation("staffFeature", { keyPrefix: "StaffList.button" });
   const { t: tStaff } = useTranslation("staffEntity", { keyPrefix: "properties" });
@@ -61,6 +71,7 @@ function StaffList({ expertisesList }) {
   /*
     The keys of this object represent column-by-column visibility
     We will hide description, education, certificate, healthInsurance for the first time
+    
   */
   const [showCols, setShowCols] = useState({
     ...initialShowCols,
@@ -78,88 +89,191 @@ function StaffList({ expertisesList }) {
       {
         id: columnsIds.name,
         label: tStaff(columnsIds.name),
-        minWidth: 200
+        minWidth: 200,
+        render: (staff) => staff?.name,
+        fixed: true
       },
       {
         id: columnsIds.username,
         label: tStaff(columnsIds.username),
         minWidth: 150,
-        hide: !showCols[columnsIds.username]
+        hide: !showCols[columnsIds.username],
+        render: (staff) => staff?.username
       },
       {
         id: columnsIds.phoneNumber,
         label: tStaff(columnsIds.phoneNumber),
         minWidth: 150,
-        hide: !showCols[columnsIds.phoneNumber]
+        hide: !showCols[columnsIds.phoneNumber],
+        render: (staff) => {
+          return (
+            <>
+              <Typography variant="inherit">{staff?.phoneNumber}</Typography>
+              {!staff?.phoneVerified && (
+                <Typography variant="caption" color={theme.palette.error.light}>
+                  {tStaffMessage("phoneVerifiedFailed")}
+                </Typography>
+              )}
+            </>
+          );
+        }
       },
       {
         id: columnsIds.email,
         label: tStaff(columnsIds.email),
         minWidth: 150,
-        hide: !showCols[columnsIds.email]
+        hide: !showCols[columnsIds.email],
+        render: (staff) => {
+          return (
+            <>
+              <Typography variant="inherit">{staff?.email}</Typography>
+              {!staff?.emailVerified && (
+                <Typography variant="caption" color={theme.palette.error.light}>
+                  {tStaffMessage("emailVerifiedFailed")}
+                </Typography>
+              )}
+            </>
+          );
+        }
       },
       {
         id: columnsIds.address,
         label: tStaff(columnsIds.address),
         minWidth: 150,
-        hide: !showCols[columnsIds.address]
+        hide: !showCols[columnsIds.address],
+        render: (staff) => staff?.address
       },
       {
         id: columnsIds.gender,
         label: tStaff(columnsIds.gender),
         minWidth: 100,
-        hide: !showCols[columnsIds.gender]
+        hide: !showCols[columnsIds.gender],
+        render: (staff) => staffGenderContantListObj?.[staff?.gender]?.label
       },
       {
         id: columnsIds.dob,
         label: tStaff(columnsIds.dob),
         minWidth: 150,
-        hide: !showCols[columnsIds.dob]
+        hide: !showCols[columnsIds.dob],
+        render: (staff) => staff?.dob && formatDate.format(new Date(staff?.dob), "DD/MM/YYYY")
       },
       {
         id: columnsIds.healthInsurance,
         label: tStaff(columnsIds.healthInsurance),
         minWidth: 200,
-        hide: !showCols[columnsIds.healthInsurance]
+        hide: !showCols[columnsIds.healthInsurance],
+        render: (data) => data?.healthInsurance
       },
       {
         id: columnsIds.description,
         label: tStaff(columnsIds.description),
         minWidth: 400,
-        hide: !showCols[columnsIds.description]
+        hide: !showCols[columnsIds.description],
+        render: (data) => data?.description
       },
       {
         id: columnsIds.education,
         label: tStaff(columnsIds.education),
         minWidth: 150,
-        hide: !showCols[columnsIds.education]
+        hide: !showCols[columnsIds.education],
+        render: (data) => data?.education
       },
       {
         id: columnsIds.certificate,
         label: tStaff(columnsIds.certificate),
         minWidth: 150,
-        hide: !showCols[columnsIds.certificate]
+        hide: !showCols[columnsIds.certificate],
+        render: (data) => data?.certificate
       },
 
       {
         id: columnsIds.role,
         label: tStaff(columnsIds.role),
         minWidth: 120,
-        hide: !showCols[columnsIds.role]
+        hide: !showCols[columnsIds.role],
+        render: (staff) => {
+          return (
+            <>
+              <Can I={staffActionAbility.UPDATE_ROLE} a={staff}>
+                <StaffRoleStatusButton
+                  variant={staff?.role}
+                  onClick={() => {
+                    editStaffRoleModal.setShow(true);
+                    editStaffRoleModal.setData(staff);
+                  }}
+                />
+              </Can>
+              <Can not I={staffActionAbility.UPDATE_ROLE} a={staff}>
+                <StaffRoleStatusButton
+                  variant={staff?.role}
+                  onClick={() => {
+                    notHaveAccessModal.setShow(true);
+                  }}
+                />
+              </Can>
+            </>
+          );
+        }
       },
       {
         id: columnsIds.status,
         label: tStaff(columnsIds.status),
         minWidth: 200,
-        hide: !showCols[columnsIds.status]
+        hide: !showCols[columnsIds.status],
+        render: (staff) => {
+          return (
+            <Can I={staffActionAbility.BLOCK} a={staff}>
+              {staff?.blocked ? (
+                <StaffRoleStatusButton
+                  variant={staffStatuses.STATUS_BLOCK}
+                  onClick={() => {
+                    unblockStaffModal.setShow(true);
+                    unblockStaffModal.setData(staff);
+                  }}
+                />
+              ) : (
+                <StaffRoleStatusButton
+                  variant={staffStatuses.STATUS_UNBLOCK}
+                  onClick={() => {
+                    blockStaffModal.setShow(true);
+                    blockStaffModal.setData(staff);
+                  }}
+                />
+              )}
+            </Can>
+          );
+        }
       },
       {
         id: columnsIds.action,
         label: "",
-        minWidth: 80
+        minWidth: 80,
+        render: (staff) => {
+          return (
+            <>
+              <Link
+                to={`${staff?.id}/schedule`}
+                // onClick={() => {
+                //   navigate(`${staff?.id}/schedule`, { relative: true });
+                // }}
+              >
+                <CalendarMonthIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
+              </Link>
+              <IconButton
+                onClick={() => {
+                  navigate(staff?.id, { relative: true });
+                }}
+              >
+                <SearchIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
+              </IconButton>
+              <CopyButton content={staff?.id} />
+            </>
+          );
+        },
+        action: true
       }
     ],
-    [locale, showCols]
+    [locale, showCols, staffs]
   );
 
   const defaultValues = useMemo(() => {
@@ -284,7 +398,7 @@ function StaffList({ expertisesList }) {
             title={t("title")}
             filterFormNode={
               <FormProvider {...filterForm}>
-                <StaffFiltersForm expertisesList={expertisesList} />
+                <StaffFiltersForm expertises={expertisesList} />
               </FormProvider>
             }
           />
@@ -318,17 +432,7 @@ function StaffList({ expertisesList }) {
           />
 
           <ListPageTableWrapper
-            table={
-              <StaffTable
-                staffs={staffs}
-                notHaveAccessModal={notHaveAccessModal}
-                editStaffRoleModal={editStaffRoleModal}
-                blockStaffModal={blockStaffModal}
-                unblockStaffModal={unblockStaffModal}
-                columns={columns}
-                showCols={showCols}
-              />
-            }
+            table={<DataTable rows={staffs} columns={columns} showCols={showCols} />}
             count={count}
             watch={watch}
             loadData={loadData}
