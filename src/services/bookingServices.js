@@ -222,6 +222,9 @@ const updateBookingByDoctor = async ({ id, prescription, conclusion, note }) => 
   });
 
   // console.log("dataBody: ", dataBody);
+
+  // console.log("dataBody?.note: ", dataBody?.note);
+
   try {
     const res = await axiosClient.post(bookingApi.updateBookingByDoctor(), dataBody);
     // console.log("res: ", res);

@@ -19,6 +19,8 @@
     "type": "Type",
     "expertise": "Expertise",
 
+    "reExamination": "Re-examination date",
+
     "schedule": {
       "expertise": "Expertise"
     },

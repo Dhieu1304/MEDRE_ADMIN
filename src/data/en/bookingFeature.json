@@ -42,6 +42,7 @@
       "doctorInfo": "Doctor information",
       "patientInfo": "Patient information",
       "doctorConclusion": "Doctor conclusion",
+      "doctorNote": "Doctor note",
       "doctorPrescription": "Prescription"
     },
     "button": {

@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Grid,
   Paper,
   Table,
   TableBody,
@@ -18,6 +19,7 @@ import formatDate from "date-and-time";
 import { Link, useParams } from "react-router-dom";
 import { RestartAlt, Save, VideoCall as VideoCallIcon } from "@mui/icons-material";
 import { useForm } from "react-hook-form";
+import { decode } from "html-entities";
 import bookingServices from "../../services/bookingServices";
 import { useFetchingStore } from "../../store/FetchingApiStore";
 import { useAppConfigStore } from "../../store/AppConfigStore";
@@ -31,6 +33,7 @@ import routeConfig from "../../config/routeConfig";
 import { mergeObjectsWithoutNullAndUndefined } from "../../utils/objectUtil";
 import uploadServices from "../../services/uploadServices";
 import CopyButton from "../../components/CopyButton";
+import CustomHtmlInput from "../../components/CustomInput/CustomHtmlInput";
 // import paymentServices from "../../services/paymentServices";
 
 function BookingDetail() {
@@ -40,7 +43,8 @@ function BookingDetail() {
   const [defaultValues, setDefaultValues] = useState({
     note: "",
     conclusion: "",
-    prescription: ""
+    prescription: "",
+    reExamination: ""
   });
 
   const { control, trigger, reset, watch, setValue, handleSubmit } = useForm({
@@ -52,6 +56,7 @@ function BookingDetail() {
   const { t } = useTranslation("bookingFeature", { keyPrefix: "BookingDetail" });
   const { t: tBooking } = useTranslation("bookingEntity", { keyPrefix: "properties" });
   const { t: tBookingConstants } = useTranslation("bookingEntity", { keyPrefix: "constants" });
+  const { t: tInputValidation } = useTranslation("input", { keyPrefix: "validation" });
 
   const params = useParams();
   const bookingId = useMemo(() => params?.bookingId, [params?.bookingId]);
@@ -93,9 +98,22 @@ function BookingDetail() {
           const bookingData = res.booking;
           setBooking(bookingData);
 
-          const newDefaultValues = {
+          let newDefaultValues = {
             ...mergeObjectsWithoutNullAndUndefined(defaultValues, bookingData)
           };
+
+          if (newDefaultValues?.note) {
+            newDefaultValues = {
+              ...newDefaultValues,
+              note: decode(newDefaultValues?.note)
+            };
+          }
+          if (newDefaultValues?.conclusion) {
+            newDefaultValues = {
+              ...newDefaultValues,
+              conclusion: decode(newDefaultValues?.conclusion)
+            };
+          }
 
           setDefaultValues(newDefaultValues);
           reset(newDefaultValues);
@@ -174,12 +192,24 @@ function BookingDetail() {
   const handleSaveUpdateBookingByDoctor = async ({ note, conclusion, prescription }) => {
     const id = booking?.id;
 
+    const conclusionWithoutHtml = watch()
+      .conclusion?.replace(/<[^>]+>/g, "")
+      .trim();
+    const conclusionWithoutTabBreakLine = conclusionWithoutHtml?.replace(/\s+/g, " ").trim();
+
+    if (!conclusionWithoutTabBreakLine) {
+      setValue("conclusion", "");
+      trigger("conclusion");
+      return;
+    }
+
     await fetchApi(async () => {
       const res = await bookingServices.updateBookingByDoctor({ id, note, conclusion, prescription });
       return { ...res };
     });
   };
 
+  // console.log("booking: ", booking);
   useEffect(() => {
     if (file) {
       uploadImage(file);
@@ -473,7 +503,7 @@ function BookingDetail() {
               </Table>
             </TableContainer>
           </Box>
-          <Box sx={{ flexDirection: "column", mb: 4 }}>
+          <Box sx={{ flexDirection: "column", mb: 8 }}>
             <Typography
               component="h1"
               variant="h6"
@@ -488,61 +518,83 @@ function BookingDetail() {
             >
               {t("subTitle.doctorConclusion")}
             </Typography>
+            <Grid container sx={{ mb: 4 }}>
+              <Grid item lg={4} xs={12}>
+                <CustomInput
+                  showCanEditIcon
+                  control={control}
+                  rules={{}}
+                  label={tBooking("reExamination")}
+                  trigger={trigger}
+                  name="reExamination"
+                  type="date"
+                />
+              </Grid>
+            </Grid>
 
             <Box sx={{ mb: 4 }}>
-              <CustomInput
-                control={control}
-                label={tBooking("note")}
-                trigger={trigger}
-                name="note"
-                type="text"
-                multiline
-                rows={6}
-              />
-            </Box>
-            <Box sx={{ mb: 4 }}>
-              <CustomInput
-                control={control}
+              <CustomHtmlInput
                 label={tBooking("conclusion")}
-                trigger={trigger}
+                control={control}
                 name="conclusion"
-                type="text"
-                multiline
-                rows={6}
+                rules={{
+                  required: tInputValidation("required")
+                }}
               />
             </Box>
+          </Box>
 
-            <Box sx={{ flexDirection: "column", mb: 4 }}>
-              <Typography
-                component="h1"
-                variant="h6"
-                fontWeight={600}
-                fontSize={{
-                  sm: 25,
-                  xs: 20
-                }}
-                sx={{
-                  mb: 4
-                }}
-              >
-                {t("subTitle.doctorPrescription")}
-              </Typography>
-              <TextField type="file" onChange={handleImageChange} sx={{ mb: 4 }} />
+          <Box sx={{ flexDirection: "column", mb: 8 }}>
+            <Typography
+              component="h1"
+              variant="h6"
+              fontWeight={600}
+              fontSize={{
+                sm: 25,
+                xs: 20
+              }}
+              sx={{
+                mb: 4
+              }}
+            >
+              {t("subTitle.doctorNote")}
+            </Typography>
 
-              {watch().prescription && (
-                <Box sx={{ mb: 4, border: "1px solid #ccc", borderRadius: 10, p: 4 }}>
-                  <Box
-                    component="img"
-                    sx={{
-                      width: 400,
-                      objectfit: "contain"
-                    }}
-                    variant="square"
-                    src={watch().prescription}
-                  />
-                </Box>
-              )}
+            <Box sx={{ mb: 4 }}>
+              <CustomHtmlInput label={tBooking("note")} control={control} name="note" sx={{ height: 100 }} />
             </Box>
+          </Box>
+
+          <Box sx={{ flexDirection: "column", mb: 4 }}>
+            <Typography
+              component="h1"
+              variant="h6"
+              fontWeight={600}
+              fontSize={{
+                sm: 25,
+                xs: 20
+              }}
+              sx={{
+                mb: 4
+              }}
+            >
+              {t("subTitle.doctorPrescription")}
+            </Typography>
+            <TextField type="file" onChange={handleImageChange} sx={{ mb: 4 }} />
+
+            {watch().prescription && (
+              <Box sx={{ mb: 4, border: "1px solid #ccc", borderRadius: 10, p: 4 }}>
+                <Box
+                  component="img"
+                  sx={{
+                    width: 400,
+                    objectfit: "contain"
+                  }}
+                  variant="square"
+                  src={watch().prescription}
+                />
+              </Box>
+            )}
           </Box>
 
           <Box

@@ -19,6 +19,8 @@
     "type": "Loại khám",
     "expertise": "Chuyên khoa",
 
+    "reExamination": "Ngày tái khám",
+
     "schedule": {
       "expertise": "Chuyên khoa"
     },

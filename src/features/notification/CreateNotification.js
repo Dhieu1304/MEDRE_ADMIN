@@ -141,9 +141,7 @@ function CreateNotification() {
     const descriptionWithoutHtml = watch()
       .description?.replace(/<[^>]+>/g, "")
       .trim();
-
     const descriptionWithoutTabBreakLine = descriptionWithoutHtml?.replace(/\s+/g, " ").trim();
-
     if (!descriptionWithoutTabBreakLine) {
       setValue("description", "");
       trigger("description");
@@ -188,12 +186,6 @@ function CreateNotification() {
     }
   };
 
-  //
-
-  const customHandleSubmit = () => {
-    return handleSubmit(handleCreateNotification);
-  };
-
   return (
     <Box>
       <CustomPageTitle
@@ -205,7 +197,7 @@ function CreateNotification() {
               backgroundColor: theme.palette.success.light,
               color: theme.palette.success.contrastText
             }}
-            onClick={customHandleSubmit()}
+            onClick={handleSubmit(handleCreateNotification)}
           >
             {t("button.save")}
           </Button>

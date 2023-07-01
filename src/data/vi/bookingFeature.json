@@ -42,6 +42,7 @@
       "doctorInfo": "Thông tin bác sĩ",
       "patientInfo": "Thông tin bệnh nhân",
       "doctorConclusion": "Kết luận của bác sĩ",
+      "doctorNote": "Ghi chú của bác sĩ",
       "doctorPrescription": "Đơn thuốc"
     },
     "button": {
@@ -55,6 +56,7 @@
       "cancel": "Hủy lịch",
       "booked": "Đã đặt",
       "waiting": "Đang đợi",
+      "reset": "Đặt lại",
 
       "copyUserId": "Sao chép ID người dùng",
       "copyPatientId": "Sao chép ID bệnh nhân"
