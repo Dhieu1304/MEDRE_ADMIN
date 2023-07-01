@@ -9,7 +9,8 @@ const staffDetailRoutes = {
   calendar: "/calendar",
   schedule: "/schedule",
   addSchedule: "/addSchedule",
-  timeOff: "/timeOff"
+  timeOff: "/timeOff",
+  default: "/*"
 };
 
 export { staffRoutes, staffDetailRoutes };

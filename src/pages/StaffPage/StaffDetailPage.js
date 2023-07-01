@@ -1,4 +1,4 @@
-import { Link, Route, Routes, useLocation, useParams } from "react-router-dom";
+import { Link, Navigate, Route, Routes, useLocation, useParams } from "react-router-dom";
 import { Box, Tab, Tabs } from "@mui/material";
 import {
   CalendarMonth as CalendarMonthIcon,
@@ -13,6 +13,9 @@ import { StaffDetail } from "../../features/staff";
 import { DoctorScheduleCalendar, DoctorScheduleList, DoctorTimeOff } from "../../features/schedule";
 import routeConfig from "../../config/routeConfig";
 import { useAppConfigStore } from "../../store/AppConfigStore";
+import { useFetchingStore } from "../../store/FetchingApiStore";
+import staffServices from "../../services/staffServices";
+import { staffRoles } from "../../entities/Staff";
 
 const tabTypes = {
   INFO: "INFO",
@@ -24,6 +27,7 @@ const tabTypes = {
 function StaffDetailPage() {
   const params = useParams();
   const staffId = useMemo(() => params?.staffId, [params?.staffId]);
+  const [staff, setStaff] = useState();
   const [value, setValue] = useState(tabTypes.INFO);
 
   const path = `${routeConfig.staff}/${staffId}`;
@@ -65,27 +69,48 @@ function StaffDetailPage() {
     return tabList;
   }, [locale]);
 
+  const { fetchApi } = useFetchingStore();
+  const loadData = async () => {
+    await fetchApi(async () => {
+      const res = await staffServices.getStaffDetail(staffId);
+      if (res.success) {
+        const staffData = { ...res.staff };
+        setStaff(staffData);
+        return { ...res };
+      }
+      setStaff({});
+      return { ...res };
+    });
+  };
   useEffect(() => {
-    const currentPath = location.pathname;
-    // console.log("currentPath: ", currentPath);
-    switch (currentPath) {
-      case path + staffDetailRoutes.calendar:
-        setValue(tabTypes.CALENDAR);
-        break;
-      case path + staffDetailRoutes.schedule:
-        setValue(tabTypes.SCHEDULE);
-        break;
-      case path + staffDetailRoutes.timeOff:
-        setValue(tabTypes.TIMEOFF);
-        break;
-      case path + staffDetailRoutes.detail:
-      default:
-        setValue(tabTypes.INFO);
-        break;
+    if (staffId) {
+      loadData();
     }
-  }, [location]);
+  }, [staffId]);
 
-  return (
+  useEffect(() => {
+    if (staff && staff?.role === staffRoles.ROLE_DOCTOR) {
+      const currentPath = location.pathname;
+      // console.log("currentPath: ", currentPath);
+      switch (currentPath) {
+        case path + staffDetailRoutes.calendar:
+          setValue(tabTypes.CALENDAR);
+          break;
+        case path + staffDetailRoutes.schedule:
+          setValue(tabTypes.SCHEDULE);
+          break;
+        case path + staffDetailRoutes.timeOff:
+          setValue(tabTypes.TIMEOFF);
+          break;
+        case path + staffDetailRoutes.detail:
+        default:
+          setValue(tabTypes.INFO);
+          break;
+      }
+    }
+  }, [location, staff]);
+
+  return staff?.role === staffRoles.ROLE_DOCTOR ? (
     <Box
       sx={{
         position: "relative"
@@ -132,6 +157,11 @@ function StaffDetailPage() {
         </Routes>
       </Box>
     </Box>
+  ) : (
+    <Routes>
+      <Route path={staffDetailRoutes.detail} element={<StaffDetail staffId={staffId} />} />
+      <Route path={staffDetailRoutes.default} element={<Navigate to={routeConfig.home} replace />} />
+    </Routes>
   );
 }
 
