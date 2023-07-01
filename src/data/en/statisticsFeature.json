@@ -1,25 +1,132 @@
 {
   "UserStatistics": {
-    "title": "User statistics"
+    "title": "User statistics",
+    "chart": {
+      "title": {
+        "day": "User count chart by day",
+        "week": "User count chart by week",
+        "month": "User count chart by month",
+        "year": "User count chart by year"
+      },
+      "xLabel": "Time",
+      "yLabel": "Count",
+      "seriesName": {
+        "total": "Count"
+      }
+    },
+    "table": {
+      "title": {
+        "day": "User count table by day",
+        "week": "User count table by week",
+        "month": "User count table by month",
+        "year": "User count table by year"
+      },
+      "col": {
+        "time": "Time",
+        "total": "Count"
+      }
+    }
   },
   "BookingStatistics": {
-    "title": "Booking statistics"
+    "title": "Booking statistics",
+    "chart": {
+      "title": {
+        "day": "Booking count chart by day",
+        "week": "Booking count chart by week",
+        "month": "Booking count chart by month",
+        "year": "Booking count chart by year"
+      },
+      "xLabel": "Time",
+      "yLabel": "Count",
+      "seriesName": {
+        "totalOff": "Direct bookings count",
+        "totalOnl": "Online bookings count"
+      }
+    },
+    "table": {
+      "title": {
+        "day": "Booking count table by day",
+        "week": "Booking count table by week",
+        "month": "Booking count table by month",
+        "year": "Booking count table by year"
+      },
+      "col": {
+        "time": "Time",
+        "totalOff": "Direct bookings count",
+        "totalOnl": "Online bookings count"
+      }
+    }
   },
-
   "PatientStatistics": {
-    "title": "Patient statistics"
+    "title": "Patient statistics",
+    "chart": {
+      "title": {
+        "day": "Patient count chart by day",
+        "week": "Patient count chart by week",
+        "month": "Patient count chart by month",
+        "year": "Patient count chart by year"
+      },
+      "xLabel": "Time",
+      "yLabel": "Count",
+      "seriesName": {
+        "total": "Count"
+      }
+    },
+    "table": {
+      "title": {
+        "day": "Patient count table by day",
+        "week": "Patient count table by week",
+        "month": "Patient count table by month",
+        "year": "Patient count table by year"
+      },
+      "col": {
+        "time": "Time",
+        "total": "Count"
+      }
+    }
   },
-
   "RevenueStatistics": {
-    "title": "Revenue statistics"
+    "title": "Revenue statistics",
+    "chart": {
+      "title": {
+        "day": "Revenue chart by day",
+        "week": "Revenue chart by week",
+        "month": "Revenue chart by month",
+        "year": "Revenue chart by year"
+      },
+      "xLabel": "Time",
+      "yLabel": "Revenue",
+      "seriesName": {
+        "totalOff": "Direct revenue",
+        "totalOnl": "Online revenue"
+      }
+    },
+    "table": {
+      "title": {
+        "day": "Revenue table by day",
+        "week": "Revenue table by week",
+        "month": "Revenue table by month",
+        "year": "Revenue table by year"
+      },
+      "col": {
+        "time": "Time",
+        "totalOff": "Direct revenue",
+        "totalOnl": "Online revenue"
+      }
+    }
   },
-
   "StatisticsFilter": {
     "types": {
-      "date": "Date",
+      "day": "Day",
       "week": "Week",
       "month": "Month",
       "year": "Year"
+    }
+  },
+  "StatisticsFilterForm": {
+    "filter": {
+      "from": "From date",
+      "to": "To date"
     }
   }
 }
