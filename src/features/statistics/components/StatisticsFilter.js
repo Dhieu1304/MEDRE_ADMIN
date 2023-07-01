@@ -3,9 +3,11 @@ import { Box, Button, useTheme } from "@mui/material";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { statisticsFilterTypes } from "../../../entities/statistics";
+import { useAppConfigStore } from "../../../store/AppConfigStore";
 
 function StatisticsFilter({ time, setTime }) {
   const { t } = useTranslation("statisticsFeature", { keyPrefix: "StatisticsFilter" });
+  const { locale } = useAppConfigStore();
 
   const theme = useTheme();
 
@@ -28,7 +30,7 @@ function StatisticsFilter({ time, setTime }) {
         value: statisticsFilterTypes.YEAR
       }
     ];
-  }, []);
+  }, [locale]);
 
   return (
     <Box
