@@ -2,8 +2,8 @@
   "properties": {
     "id": "ID",
     "title": "Title",
-    "content": "Content",
-    "description": "Description",
+    "content": "Description",
+    "description": "Content",
     "type": "Type",
     "notificationFor": "Notification for",
     "createdBy": "Created by",

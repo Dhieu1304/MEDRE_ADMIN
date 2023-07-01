@@ -1,26 +1,25 @@
-import { Box, Button, Checkbox, FormHelperText, Grid, ListItemText, MenuItem, Select, useTheme } from "@mui/material";
-import { Controller, useForm } from "react-hook-form";
+import { Box, Button, Checkbox, Grid, ListItemText, MenuItem, Select, useTheme } from "@mui/material";
+import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useMemo } from "react";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+
 import CustomPageTitle from "../../components/CustomPageTitle";
 import CustomInput from "../../components/CustomInput/CustomInput";
 import { useFetchingStore } from "../../store/FetchingApiStore";
 import notificationServices from "../../services/notificationServices";
 import { useAppConfigStore } from "../../store/AppConfigStore";
 import { notificationFors, notificationPersonalTypes, notificationTypes } from "../../entities/Notification/constant";
-import { inputErrorFormat } from "../../utils/stringFormat";
+import CustomHtmlInput from "../../components/CustomInput/CustomHtmlInput";
 
 function CreateNotification() {
   // const [value, setValue] = useState("");
 
-  const { control, trigger, watch, reset, handleSubmit } = useForm({
+  const { control, trigger, watch, reset, setValue, handleSubmit } = useForm({
     mode: "onChange",
     defaultValues: {
-      title: "Đây là title",
-      description: "Đây là description",
-      content: "Đây là content",
+      title: "",
+      description: "",
+      content: "",
       notificationFor: "",
       type: "",
       userOrStaffId: "",
@@ -139,6 +138,18 @@ function CreateNotification() {
     userOrStaffId,
     personalType
   }) => {
+    const descriptionWithoutHtml = watch()
+      .description?.replace(/<[^>]+>/g, "")
+      .trim();
+
+    const descriptionWithoutTabBreakLine = descriptionWithoutHtml?.replace(/\s+/g, " ").trim();
+
+    if (!descriptionWithoutTabBreakLine) {
+      setValue("description", "");
+      trigger("description");
+      return;
+    }
+
     const data = {
       title,
       content,
@@ -154,6 +165,7 @@ function CreateNotification() {
         data.userId = userOrStaffId;
       }
     }
+
     await fetchApi(async () => {
       const res = await notificationServices.createNotification(data);
       if (res?.success) {
@@ -163,7 +175,7 @@ function CreateNotification() {
     });
   };
 
-  // console.log("notification: ", notification);
+  //
 
   const gridItemProps = {
     xs: 12,
@@ -176,9 +188,12 @@ function CreateNotification() {
     }
   };
 
-  // console.log("watch().description: ", watch().description);
+  //
 
-  // console.log("value: ", value);
+  const customHandleSubmit = () => {
+    return handleSubmit(handleCreateNotification);
+  };
+
   return (
     <Box>
       <CustomPageTitle
@@ -190,7 +205,7 @@ function CreateNotification() {
               backgroundColor: theme.palette.success.light,
               color: theme.palette.success.contrastText
             }}
-            onClick={handleSubmit(handleCreateNotification)}
+            onClick={customHandleSubmit()}
           >
             {t("button.save")}
           </Button>
@@ -348,67 +363,16 @@ function CreateNotification() {
           name="content"
           type="text"
           multiline
-          rows={15}
+          rows={2}
         />
       </Box>
       <Box sx={{ mb: 10 }}>
-        <Controller
+        <CustomHtmlInput
+          label={tNotification("description")}
           control={control}
+          name="description"
           rules={{
             required: tInputValidation("required")
-          }}
-          name="description"
-          render={({ field: { value, onChange }, fieldState: { error } }) => {
-            return (
-              <>
-                <Box sx={{ mb: 10 }}>
-                  <ReactQuill
-                    theme="snow"
-                    value={value}
-                    onChange={onChange}
-                    style={{
-                      height: 500
-                    }}
-                    modules={{
-                      toolbar: [
-                        [{ header: [1, 2, false] }],
-                        ["bold", "italic", "underline", "strike", "blockquote"],
-                        [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
-                        ["link", "image"],
-                        ["clean"],
-                        [{ color: [] }] // Màu chữ và nền
-                      ]
-                    }}
-                    formats={[
-                      "header",
-                      "bold",
-                      "italic",
-                      "underline",
-                      "strike",
-                      "blockquote",
-                      "list",
-                      "bullet",
-                      "indent",
-                      "link",
-                      "image",
-                      "color"
-                    ]}
-                  />
-                </Box>
-                {error?.message && (
-                  <FormHelperText>
-                    <Box
-                      component="span"
-                      sx={{
-                        color: theme.palette.error.light
-                      }}
-                    >
-                      {inputErrorFormat(tNotification("description"), error?.message)}
-                    </Box>
-                  </FormHelperText>
-                )}
-              </>
-            );
           }}
         />
       </Box>

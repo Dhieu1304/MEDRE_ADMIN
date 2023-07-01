@@ -2,8 +2,8 @@
   "properties": {
     "id": "ID",
     "title": "Tiêu đề",
-    "content": "Nội dung",
-    "description": "Mô tả",
+    "content": "Mô tả",
+    "description": "Nội dung",
     "type": "Loại",
     "notificationFor": "Thông báo cho",
     "createdBy": "Tạo bởi",
