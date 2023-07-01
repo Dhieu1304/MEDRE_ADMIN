@@ -205,6 +205,7 @@ function StaffList({ expertisesList }) {
               </Can>
               <Can not I={staffActionAbility.UPDATE_ROLE} a={staff}>
                 <StaffRoleStatusButton
+                  isLabel
                   variant={staff?.role}
                   onClick={() => {
                     notHaveAccessModal.setShow(true);
@@ -222,25 +223,48 @@ function StaffList({ expertisesList }) {
         hide: !showCols[columnsIds.status],
         render: (staff) => {
           return (
-            <Can I={staffActionAbility.BLOCK} a={staff}>
-              {staff?.blocked ? (
-                <StaffRoleStatusButton
-                  variant={staffStatuses.STATUS_BLOCK}
-                  onClick={() => {
-                    unblockStaffModal.setShow(true);
-                    unblockStaffModal.setData(staff);
-                  }}
-                />
-              ) : (
-                <StaffRoleStatusButton
-                  variant={staffStatuses.STATUS_UNBLOCK}
-                  onClick={() => {
-                    blockStaffModal.setShow(true);
-                    blockStaffModal.setData(staff);
-                  }}
-                />
-              )}
-            </Can>
+            <>
+              <Can I={staffActionAbility.BLOCK} a={staff}>
+                {staff?.blocked ? (
+                  <StaffRoleStatusButton
+                    variant={staffStatuses.STATUS_BLOCK}
+                    onClick={() => {
+                      unblockStaffModal.setShow(true);
+                      unblockStaffModal.setData(staff);
+                    }}
+                  />
+                ) : (
+                  <StaffRoleStatusButton
+                    variant={staffStatuses.STATUS_UNBLOCK}
+                    onClick={() => {
+                      blockStaffModal.setShow(true);
+                      blockStaffModal.setData(staff);
+                    }}
+                  />
+                )}
+              </Can>
+              <Can not I={staffActionAbility.BLOCK} a={staff}>
+                {staff?.blocked ? (
+                  <StaffRoleStatusButton
+                    isLabel
+                    variant={staffStatuses.STATUS_BLOCK}
+                    onClick={() => {
+                      unblockStaffModal.setShow(true);
+                      unblockStaffModal.setData(staff);
+                    }}
+                  />
+                ) : (
+                  <StaffRoleStatusButton
+                    isLabel
+                    variant={staffStatuses.STATUS_UNBLOCK}
+                    onClick={() => {
+                      blockStaffModal.setShow(true);
+                      blockStaffModal.setData(staff);
+                    }}
+                  />
+                )}
+              </Can>
+            </>
           );
         }
       },

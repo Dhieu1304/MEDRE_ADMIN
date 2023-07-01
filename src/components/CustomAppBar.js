@@ -18,6 +18,7 @@ const CustomAppBar = styled(MuiAppBar, {
       duration: theme.transitions.duration.enteringScreen
     })
   })
+  // backgroundColor: "#2b6777"
 }));
 
 export default CustomAppBar;

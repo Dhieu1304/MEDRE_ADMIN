@@ -9,6 +9,8 @@ const openedMixin = (theme) => ({
     duration: theme.transitions.duration.enteringScreen
   }),
   overflowX: "hidden"
+  // backgroundColor: "#2b6777",
+  // color: "white"
 });
 
 const closedMixin = (theme) => ({
@@ -21,6 +23,8 @@ const closedMixin = (theme) => ({
   [theme.breakpoints.up("sm")]: {
     width: `calc(${theme.spacing(8)} + 1px)`
   }
+  // backgroundColor: "#2b6777",
+  // color: "white"
 });
 
 const CustomDrawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== "open" && prop !== "isMobile" })(

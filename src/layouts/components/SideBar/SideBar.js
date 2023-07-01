@@ -16,7 +16,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 import { useTheme } from "@mui/material/styles";
-import { Link } from "react-router-dom";
+import { Link, useMatch } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import images from "../../../assets/images";
 import CustomDrawer, { CustomDrawerHeader } from "../../../components/CustomDrawer";
@@ -65,32 +65,51 @@ function SideBar({ open, handleDrawerClose }) {
         </IconButton>
       </CustomDrawerHeader>
       <Divider />
-      <List>
-        {sideBarItems.map((item) => (
-          <ListItem key={item.label} disablePadding sx={{ display: "block" }}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5
-              }}
-              component={Link}
-              to={item.to}
-            >
-              <ListItemIcon
+      <List
+        sx={{
+          bgcolor: "inherit"
+        }}
+      >
+        {sideBarItems.map((item) => {
+          const isMatch = useMatch(item.to);
+          const activeSx = isMatch
+            ? {
+                backgroundColor: theme.palette.primary.light,
+                color: "white"
+              }
+            : {};
+          return (
+            <ListItem key={item.label} disablePadding sx={{ display: "block", ...activeSx }}>
+              <ListItemButton
                 sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center"
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5
                 }}
+                component={Link}
+                to={item.to}
               >
-                {item.icon}
-              </ListItemIcon>
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center"
+                  }}
+                >
+                  <Box
+                    sx={{
+                      ...activeSx
+                    }}
+                  >
+                    {item.icon}
+                  </Box>
+                </ListItemIcon>
 
-              <ListItemText primary={t(item.label)} sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+                <ListItemText primary={t(item.label)} sx={{ opacity: open ? 1 : 0 }} />
+              </ListItemButton>
+            </ListItem>
+          );
+        })}
       </List>
     </CustomDrawer>
   );

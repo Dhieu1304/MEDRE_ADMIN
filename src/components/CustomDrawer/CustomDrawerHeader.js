@@ -6,6 +6,7 @@ const CustomDrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
   padding: theme.spacing(0, 1),
   ...theme.mixins.toolbar
+  // backgroundColor: "#2b6777"
 }));
 
 export default CustomDrawerHeader;

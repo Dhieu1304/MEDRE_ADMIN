@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { Box, Button, useTheme } from "@mui/material";
+import { Box, Button, Typography, useTheme } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { Lock as LockIcon, LockOpen as LockOpenIcon } from "@mui/icons-material";
 import { staffRoles, staffStatuses } from "../../../entities/Staff";
@@ -7,7 +7,7 @@ import { staffRoles, staffStatuses } from "../../../entities/Staff";
 const { ROLE_ADMIN, ROLE_DOCTOR, ROLE_NURSE, ROLE_CUSTOMER_SERVICE } = staffRoles;
 const { STATUS_BLOCK, STATUS_UNBLOCK } = staffStatuses;
 
-const StaffRoleStatusButton = ({ variant, onClick }) => {
+const StaffRoleStatusButton = ({ variant, onClick, isLabel }) => {
   const { t: tRole } = useTranslation("staffEntity", { keyPrefix: "constants.roles" });
   const { t: tStatus } = useTranslation("staffEntity", { keyPrefix: "constants.statuses" });
 
@@ -61,20 +61,43 @@ const StaffRoleStatusButton = ({ variant, onClick }) => {
 
     return (
       <Box>
-        <Button
-          variant="contained"
-          onClick={onClick}
-          size="small"
-          sx={{
-            color,
-            bgcolor,
-            // maxWidth: 12
-            fontSize: "0.8em"
-          }}
-          endIcon={icon}
-        >
-          {title}
-        </Button>
+        {isLabel ? (
+          <Typography
+            sx={{
+              color: bgcolor,
+              bgcolor: color,
+              // maxWidth: 12
+              fontSize: 14,
+              display: "flex",
+              alignItems: "center"
+            }}
+          >
+            <Box
+              component="span"
+              sx={{
+                mr: 1
+              }}
+            >
+              {icon}
+            </Box>
+            {title}
+          </Typography>
+        ) : (
+          <Button
+            variant="contained"
+            onClick={onClick}
+            size="small"
+            sx={{
+              color,
+              bgcolor,
+              // maxWidth: 12
+              fontSize: 12
+            }}
+            endIcon={icon}
+          >
+            {title}
+          </Button>
+        )}
       </Box>
     );
   };
