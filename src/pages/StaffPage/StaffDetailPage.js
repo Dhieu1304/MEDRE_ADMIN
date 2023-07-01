@@ -16,6 +16,7 @@ import { useAppConfigStore } from "../../store/AppConfigStore";
 import { useFetchingStore } from "../../store/FetchingApiStore";
 import staffServices from "../../services/staffServices";
 import { staffRoles } from "../../entities/Staff";
+import CustomOverlay from "../../components/CustomOverlay/CustomOverlay";
 
 const tabTypes = {
   INFO: "INFO",
@@ -69,7 +70,7 @@ function StaffDetailPage() {
     return tabList;
   }, [locale]);
 
-  const { fetchApi } = useFetchingStore();
+  const { isLoading, fetchApi } = useFetchingStore();
   const loadData = async () => {
     await fetchApi(async () => {
       const res = await staffServices.getStaffDetail(staffId);
@@ -110,59 +111,63 @@ function StaffDetailPage() {
     }
   }, [location, staff]);
 
-  return staff?.role === staffRoles.ROLE_DOCTOR ? (
-    <Box
-      sx={{
-        position: "relative"
-      }}
-    >
-      <Tabs
-        value={value}
-        onChange={(e, newValue) => {
-          setValue(newValue);
-        }}
-        sx={{
-          mb: 2,
-          mt: 0,
-          position: "absolute",
-          top: 0,
-          left: 0,
-          transform: "translateY(-40%)"
-        }}
-      >
-        {tabs?.map((tab) => {
-          return (
-            <Tab
-              key={tab?.value}
-              value={tab?.value}
-              label={tab?.label}
-              icon={tab?.icon}
-              iconPosition="start"
-              LinkComponent={Link}
-              to={tab?.to}
-            />
-          );
-        })}
-      </Tabs>
+  // console.log("staff?.role:", staff?.role);
+  if (staff && staff?.id) {
+    return staff?.role === staffRoles.ROLE_DOCTOR ? (
       <Box
         sx={{
-          py: 10
+          position: "relative"
         }}
       >
-        <Routes>
-          <Route path={staffDetailRoutes.detail} element={<StaffDetail staffId={staffId} />} />
-          <Route path={staffDetailRoutes.calendar} element={<DoctorScheduleCalendar staffId={staffId} />} />
-          <Route path={staffDetailRoutes.schedule} element={<DoctorScheduleList staffId={staffId} />} />
-          <Route path={staffDetailRoutes.timeOff} element={<DoctorTimeOff staffId={staffId} />} />
-        </Routes>
+        <Tabs
+          value={value}
+          onChange={(e, newValue) => {
+            setValue(newValue);
+          }}
+          sx={{
+            mb: 2,
+            mt: 0,
+            position: "absolute",
+            top: 0,
+            left: 0,
+            transform: "translateY(-40%)"
+          }}
+        >
+          {tabs?.map((tab) => {
+            return (
+              <Tab
+                key={tab?.value}
+                value={tab?.value}
+                label={tab?.label}
+                icon={tab?.icon}
+                iconPosition="start"
+                LinkComponent={Link}
+                to={tab?.to}
+              />
+            );
+          })}
+        </Tabs>
+        <Box
+          sx={{
+            py: 10
+          }}
+        >
+          <Routes>
+            <Route path={staffDetailRoutes.detail} element={<StaffDetail staffId={staffId} />} />
+            <Route path={staffDetailRoutes.calendar} element={<DoctorScheduleCalendar staffId={staffId} staff={staff} />} />
+            <Route path={staffDetailRoutes.schedule} element={<DoctorScheduleList staffId={staffId} staff={staff} />} />
+            <Route path={staffDetailRoutes.timeOff} element={<DoctorTimeOff staffId={staffId} staff={staff} />} />
+          </Routes>
+        </Box>
       </Box>
-    </Box>
-  ) : (
-    <Routes>
-      <Route path={staffDetailRoutes.detail} element={<StaffDetail staffId={staffId} />} />
-      <Route path={staffDetailRoutes.default} element={<Navigate to={routeConfig.home} replace />} />
-    </Routes>
-  );
+    ) : (
+      <Routes>
+        <Route path={staffDetailRoutes.detail} element={<StaffDetail staffId={staffId} />} />
+        <Route path={staffDetailRoutes.default} element={<Navigate to={routeConfig.home} replace />} />
+      </Routes>
+    );
+  }
+  return <CustomOverlay open={isLoading} />;
 }
 
 export default StaffDetailPage;

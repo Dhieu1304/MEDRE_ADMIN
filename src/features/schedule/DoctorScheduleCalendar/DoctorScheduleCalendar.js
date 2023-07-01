@@ -31,7 +31,7 @@ import scheduleServices from "../../../services/scheduleServices";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
 import { formatDateLocale, getWeekByDate } from "../../../utils/datetimeUtil";
 import WithTimesLoaderWrapper from "../hocs/WithTimesLoaderWrapper";
-import WithDoctorLoaderWrapper from "../../staff/hocs/WithDoctorLoaderWrapper";
+// import WithDoctorLoaderWrapper from "../../staff/hocs/WithDoctorLoaderWrapper";
 import timeOffServices from "../../../services/timeOffServices";
 import { useCustomModal } from "../../../components/CustomModal";
 import AddNewTimeOffModal from "../components/AddNewTimeOffModal";
@@ -57,11 +57,9 @@ const EMPTY_CELL = "EMPTY_CELL";
 const FULL_SLOT = "FULL_SLOT";
 const BOOK = "BOOK";
 
-function DoctorScheduleCalendar({ timesList, doctor }) {
+function DoctorScheduleCalendar({ timesList, staff }) {
   const location = useLocation();
   const navigate = useNavigate();
-
-  const staff = { ...doctor };
 
   const [schedules, setSchedules] = useState([]);
   const [timeOffs, setTimeOffs] = useState([]);
@@ -140,7 +138,7 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
     setBookingSchedules([...bookingSchedulesData]);
   };
 
-  // console.log("doctor: ", doctor);
+  // console.log("staff: ", staff);
 
   // console.log("schedules: ", schedules);
   // console.log("bookingSchedules: ", bookingSchedules);
@@ -473,9 +471,9 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
             }}
           >
             <CardHeader
-              avatar={<Avatar alt={doctor?.name} src={doctor?.image} />}
-              title={<Typography variant="h6">{doctor?.name}</Typography>}
-              subheader={doctor?.certificate && `(${doctor?.certificate})`}
+              avatar={<Avatar alt={staff?.name} src={staff?.image} />}
+              title={<Typography variant="h6">{staff?.name}</Typography>}
+              subheader={staff?.certificate && `(${staff?.certificate})`}
             />
           </Card>
 
@@ -485,7 +483,7 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
                 variant="contained"
                 onClick={() => {
                   addTimeOffModal.setShow(true);
-                  addTimeOffModal.setData(doctor);
+                  addTimeOffModal.setData(staff);
                 }}
                 endIcon={<AddIcon fontSize="large" />}
                 sx={{
@@ -628,7 +626,8 @@ function DoctorScheduleCalendar({ timesList, doctor }) {
 
 DoctorScheduleCalendar.propTypes = {
   timesList: PropTypes.array.isRequired,
-  doctor: PropTypes.object.isRequired
+  staff: PropTypes.object.isRequired
 };
 
-export default WithTimesLoaderWrapper(WithDoctorLoaderWrapper(DoctorScheduleCalendar));
+// export default WithTimesLoaderWrapper(WithDoctorLoaderWrapper(DoctorScheduleCalendar));
+export default WithTimesLoaderWrapper(DoctorScheduleCalendar);

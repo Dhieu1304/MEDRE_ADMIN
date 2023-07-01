@@ -19,7 +19,7 @@ import formatDate from "date-and-time";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { Add as AddIcon, RemoveCircle as RemoveCircleIcon } from "@mui/icons-material";
-import WithDoctorLoaderWrapper from "../staff/hocs/WithDoctorLoaderWrapper";
+// import WithDoctorLoaderWrapper from "../staff/hocs/WithDoctorLoaderWrapper";
 import { useFetchingStore } from "../../store/FetchingApiStore";
 import { normalizeStrToDateStr } from "../../utils/standardizedForForm";
 import { getWeekByDate } from "../../utils/datetimeUtil";
@@ -39,7 +39,7 @@ import Schedule from "../../entities/Schedule/Schedule";
 import { Can } from "../../store/AbilityStore";
 import CustomPageTitle from "../../components/CustomPageTitle";
 
-function DoctorScheduleList({ doctor, doctorId }) {
+function DoctorScheduleList({ staff, staffId }) {
   const [schedules, setSchedules] = useState([]);
 
   const [checkedCount, setCheckedCount] = useState(0);
@@ -156,7 +156,7 @@ function DoctorScheduleList({ doctor, doctorId }) {
     const { from, to } = filterForm.watch();
 
     await fetchApi(async () => {
-      const res = await scheduleServices.getScheduleListByDoctorId(doctorId, from, to);
+      const res = await scheduleServices.getScheduleListByDoctorId(staffId, from, to);
       let schedulesData = [];
       //
       if (res.success) {
@@ -231,7 +231,7 @@ function DoctorScheduleList({ doctor, doctorId }) {
                 variant="contained"
                 onClick={() => {
                   addScheduleModal.setShow(true);
-                  addScheduleModal.setData(doctor);
+                  addScheduleModal.setData(staff);
                 }}
                 endIcon={<AddIcon fontSize="large" />}
                 sx={{
@@ -463,11 +463,12 @@ function DoctorScheduleList({ doctor, doctorId }) {
 }
 
 DoctorScheduleList.propTypes = {
-  doctor: PropTypes.object.isRequired,
-  doctorId: PropTypes.string.isRequired
+  staff: PropTypes.object.isRequired,
+  staffId: PropTypes.string.isRequired
 };
 
-export default WithDoctorLoaderWrapper(DoctorScheduleList);
+// export default WithDoctorLoaderWrapper(DoctorScheduleList);
+export default DoctorScheduleList;
 
 // const DoctorScheduleList = () => {
 //   return <div>DoctorScheduleList</div>;

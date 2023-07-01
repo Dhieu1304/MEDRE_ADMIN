@@ -20,7 +20,7 @@ import { useTranslation } from "react-i18next";
 import { Add as AddIcon, Edit as EditIcon, RemoveCircle } from "@mui/icons-material";
 
 import PropTypes from "prop-types";
-import WithDoctorLoaderWrapper from "../staff/hocs/WithDoctorLoaderWrapper";
+// import WithDoctorLoaderWrapper from "../staff/hocs/WithDoctorLoaderWrapper";
 import { useFetchingStore } from "../../store/FetchingApiStore";
 import { normalizeStrToDateStr } from "../../utils/standardizedForForm";
 import { formatDateLocale, getWeekByDate } from "../../utils/datetimeUtil";
@@ -32,16 +32,14 @@ import { useCustomModal } from "../../components/CustomModal";
 import { useTimeOffSessionsContantTranslation } from "./hooks/useTimeOffConstantsTranslation";
 import CustomPageTitle from "../../components/CustomPageTitle";
 import { staffActionAbility } from "../../entities/Staff";
-import Staff from "../../entities/Staff/Staff";
+// import Staff from "../../entities/Staff/Staff";
 import { Can } from "../../store/AbilityStore";
 import EditTimeOffModal from "./components/EditTimeOffModal";
 import DeleteTimeOffModal from "./components/DeleteTimeOffModal";
 
-function DoctorTimeOff({ doctor, doctorId }) {
+function DoctorTimeOff({ staff, staffId }) {
   const [timeOffs, setTimeOffs] = useState([]);
   const [count, setCount] = useState(0);
-
-  const staff = new Staff(doctor);
 
   const theme = useTheme();
 
@@ -111,7 +109,7 @@ function DoctorTimeOff({ doctor, doctorId }) {
     // console.log("loadData ");
 
     await fetchApi(async () => {
-      const res = await timeOffServices.getTimeOffByDoctorId(doctorId, paramsObj);
+      const res = await timeOffServices.getTimeOffByDoctorId(staffId, paramsObj);
       let countData = 0;
       let timeOffsData = [];
       // console.log("res: ", res);
@@ -162,7 +160,7 @@ function DoctorTimeOff({ doctor, doctorId }) {
                 variant="contained"
                 onClick={() => {
                   addTimeOffModal.setShow(true);
-                  addTimeOffModal.setData(doctor);
+                  addTimeOffModal.setData(staff);
                 }}
                 endIcon={<AddIcon fontSize="large" />}
                 sx={{
@@ -337,11 +335,11 @@ function DoctorTimeOff({ doctor, doctorId }) {
 }
 
 DoctorTimeOff.propTypes = {
-  doctor: PropTypes.object.isRequired,
-  doctorId: PropTypes.string.isRequired
+  staff: PropTypes.object.isRequired,
+  staffId: PropTypes.string.isRequired
 };
 
-export default WithDoctorLoaderWrapper(DoctorTimeOff);
+export default DoctorTimeOff;
 
 // const DoctorTimeOff = () => {
 //   return <div>DoctorTimeOff</div>;
