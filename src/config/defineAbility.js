@@ -25,55 +25,143 @@ const defineAbilityFor = (staff) => {
 
   return defineAbility((can, cannot) => {
     const role = staff?.role;
+
     switch (role) {
       case staffRoles.ROLE_ADMIN:
-        can("manage", "all");
-        break;
+        // can("run", STAFF);
+        // can("manage", "all");
 
-      case staffRoles.ROLE_DOCTOR:
-        // STAFF
+        // Staff
+        // VIEW_ALL;
+        // VIEW;
+        // ADD;
+        // DELETE;
+        // UPDATE;
+        // UPDATE_ROLE;
+        // UPDATE_DOCTOR_EXPERTISES;
+        // ADD_DOCTOR_TIMEOFF;
+        // UPDATE_DOCTOR_TIMEOFF;
+        // DELETE_DOCTOR_TIMEOFF;
+        // BLOCK;
+
+        can(staffActionAbility.VIEW_ALL, STAFF);
         can(staffActionAbility.VIEW, STAFF);
-        can(staffActionAbility.UPDATE, STAFF, {
-          id: staff?.id
+        can(staffActionAbility.ADD, STAFF);
+        can(staffActionAbility.DELETE, STAFF, {
+          role: { $ne: staffRoles.ROLE_ADMIN }
         });
-
-        // console.log("staff: ", staff)
+        can(staffActionAbility.BLOCK, STAFF, {
+          role: { $ne: staffRoles.ROLE_ADMIN }
+        });
+        can(staffActionAbility.UPDATE, STAFF);
+        can(staffActionAbility.UPDATE_ROLE, STAFF, {
+          role: { $ne: staffRoles.ROLE_ADMIN }
+        });
+        can(staffActionAbility.UPDATE_DOCTOR_EXPERTISES, STAFF, {
+          role: staffRoles.ROLE_DOCTOR
+        });
         can(staffActionAbility.ADD_DOCTOR_TIMEOFF, STAFF, {
-          id: staff?.id
+          role: staffRoles.ROLE_DOCTOR
+        });
+        can(staffActionAbility.UPDATE_DOCTOR_TIMEOFF, STAFF, {
+          role: staffRoles.ROLE_DOCTOR
         });
 
-        cannot(staffActionAbility.BLOCK, STAFF);
-        cannot(staffActionAbility.DELETE, STAFF);
-        cannot(staffActionAbility.UPDATE_ROLE, STAFF);
-        cannot(staffActionAbility.UPDATE_DOCTOR_EXPERTISES, STAFF);
-        cannot(staffActionAbility.ADD, STAFF);
+        can(staffActionAbility.DELETE_DOCTOR_TIMEOFF, STAFF, {
+          role: staffRoles.ROLE_DOCTOR
+        });
 
         // EXPERTISE
+        can(expertiseActionAbility.VIEW_ALL, EXPERTISE);
         can(expertiseActionAbility.VIEW, EXPERTISE);
-
-        cannot(expertiseActionAbility.ADD, EXPERTISE);
-        cannot(expertiseActionAbility.UPDATE, EXPERTISE);
+        can(expertiseActionAbility.ADD, EXPERTISE);
+        can(expertiseActionAbility.UPDATE, EXPERTISE);
 
         // User
+        can(userActionAbility.VIEW_ALL, USER);
         can(userActionAbility.VIEW, USER);
-        cannot(userActionAbility.BLOCK, USER);
-        cannot(userActionAbility.DELETE, USER);
-        cannot(userActionAbility.UPDATE, USER);
+        can(userActionAbility.BLOCK, USER);
+        can(userActionAbility.DELETE, USER);
+        can(userActionAbility.UPDATE, USER);
 
         // Schedule
+        can(scheduleActionAbility.VIEW_ALL, SCHEDULE);
         can(scheduleActionAbility.VIEW, SCHEDULE);
-
-        cannot(scheduleActionAbility.UPDATE, SCHEDULE);
-        cannot(scheduleActionAbility.ADD, SCHEDULE);
+        can(scheduleActionAbility.UPDATE, SCHEDULE);
+        can(scheduleActionAbility.ADD, SCHEDULE);
 
         // TimeOff
         can(timeOffActionAbility.VIEW, TIMEOFF);
         can(timeOffActionAbility.ADD, TIMEOFF);
 
         // Booking
+        can(bookingActionAbility.VIEW_ALL, BOOKING);
         can(bookingActionAbility.VIEW, BOOKING);
-        can(bookingActionAbility.UPDATE_CONCLUSION, BOOKING);
+        cannot(bookingActionAbility.UPDATE, BOOKING);
+        cannot(bookingActionAbility.UPDATE_CONCLUSION, BOOKING);
+        cannot(bookingActionAbility.CANCEL, BOOKING);
+        cannot(bookingActionAbility.ADD, BOOKING);
 
+        // Patient
+        can(patientActionAbility.VIEW, PATIENT);
+        can(patientActionAbility.BLOCK, PATIENT);
+        can(patientActionAbility.DELETE, PATIENT);
+        can(patientActionAbility.UPDATE, PATIENT);
+        break;
+
+      case staffRoles.ROLE_DOCTOR:
+        // STAFF
+        cannot(staffActionAbility.VIEW_ALL, STAFF);
+        can(staffActionAbility.VIEW, STAFF);
+        cannot(staffActionAbility.ADD, STAFF);
+        cannot(staffActionAbility.DELETE, STAFF);
+        cannot(staffActionAbility.BLOCK, STAFF);
+        can(staffActionAbility.UPDATE, STAFF, {
+          id: staff?.id
+        });
+
+        cannot(staffActionAbility.UPDATE_ROLE);
+        cannot(staffActionAbility.UPDATE_DOCTOR_EXPERTISES, STAFF);
+        can(staffActionAbility.ADD_DOCTOR_TIMEOFF, STAFF, {
+          id: staff?.id
+        });
+        can(staffActionAbility.UPDATE_DOCTOR_TIMEOFF, STAFF, {
+          id: staff?.id
+        });
+
+        can(staffActionAbility.DELETE_DOCTOR_TIMEOFF, STAFF, {
+          id: staff?.id
+        });
+
+        /// //
+
+        // EXPERTISE
+        cannot(expertiseActionAbility.VIEW_ALL, EXPERTISE);
+        cannot(expertiseActionAbility.VIEW, EXPERTISE);
+        cannot(expertiseActionAbility.ADD, EXPERTISE);
+        cannot(expertiseActionAbility.UPDATE, EXPERTISE);
+
+        // User
+        cannot(userActionAbility.VIEW_ALL, USER);
+        can(userActionAbility.VIEW, USER);
+        cannot(userActionAbility.BLOCK, USER);
+        cannot(userActionAbility.DELETE, USER);
+        cannot(userActionAbility.UPDATE, USER);
+        // Schedule
+        cannot(scheduleActionAbility.VIEW_ALL, SCHEDULE);
+        cannot(scheduleActionAbility.VIEW, SCHEDULE);
+        cannot(scheduleActionAbility.UPDATE, SCHEDULE);
+        cannot(scheduleActionAbility.ADD, SCHEDULE);
+
+        // TimeOff
+        cannot(timeOffActionAbility.VIEW, TIMEOFF);
+        cannot(timeOffActionAbility.ADD, TIMEOFF);
+
+        // Booking
+        can(bookingActionAbility.VIEW, BOOKING);
+        can(bookingActionAbility.UPDATE_CONCLUSION, BOOKING, {
+          "bookingSchedule?.idDoctor": staff.id
+        });
         cannot(bookingActionAbility.UPDATE, BOOKING);
         cannot(bookingActionAbility.CANCEL, BOOKING);
         cannot(bookingActionAbility.ADD, BOOKING);
@@ -87,49 +175,55 @@ const defineAbilityFor = (staff) => {
         break;
 
       case staffRoles.ROLE_NURSE:
+        // can("run", STAFF, {
+        //   id: staff?.id
+        // });
         // STAFF
+        can(staffActionAbility.VIEW_ALL, STAFF);
         can(staffActionAbility.VIEW, STAFF);
+        cannot(staffActionAbility.ADD, STAFF);
+        cannot(staffActionAbility.DELETE, STAFF);
+        cannot(staffActionAbility.BLOCK, STAFF);
         can(staffActionAbility.UPDATE, STAFF, {
           id: staff?.id
         });
 
-        cannot(staffActionAbility.ADD_DOCTOR_TIMEOFF, STAFF);
-
-        cannot(staffActionAbility.BLOCK, STAFF);
-        cannot(staffActionAbility.DELETE, STAFF);
-        cannot(staffActionAbility.UPDATE_ROLE, STAFF);
+        cannot(staffActionAbility.UPDATE_ROLE);
         cannot(staffActionAbility.UPDATE_DOCTOR_EXPERTISES, STAFF);
-        cannot(staffActionAbility.ADD, STAFF);
+        cannot(staffActionAbility.ADD_DOCTOR_TIMEOFF, STAFF);
+        cannot(staffActionAbility.UPDATE_DOCTOR_TIMEOFF, STAFF);
+        cannot(staffActionAbility.DELETE_DOCTOR_TIMEOFF, STAFF);
+
+        /// //
 
         // EXPERTISE
-        can(expertiseActionAbility.VIEW, EXPERTISE);
-
+        cannot(expertiseActionAbility.VIEW_ALL, EXPERTISE);
+        cannot(expertiseActionAbility.VIEW, EXPERTISE);
         cannot(expertiseActionAbility.ADD, EXPERTISE);
         cannot(expertiseActionAbility.UPDATE, EXPERTISE);
 
         // User
+        can(userActionAbility.VIEW_ALL, USER);
         can(userActionAbility.VIEW, USER);
         cannot(userActionAbility.BLOCK, USER);
         cannot(userActionAbility.DELETE, USER);
         cannot(userActionAbility.UPDATE, USER);
-
         // Schedule
+        can(scheduleActionAbility.VIEW_ALL, SCHEDULE);
         can(scheduleActionAbility.VIEW, SCHEDULE);
-
         cannot(scheduleActionAbility.UPDATE, SCHEDULE);
         cannot(scheduleActionAbility.ADD, SCHEDULE);
 
         // TimeOff
-        can(timeOffActionAbility.VIEW, TIMEOFF);
+        cannot(timeOffActionAbility.VIEW, TIMEOFF);
         cannot(timeOffActionAbility.ADD, TIMEOFF);
 
         // Booking
         can(bookingActionAbility.VIEW, BOOKING);
-
         cannot(bookingActionAbility.UPDATE_CONCLUSION, BOOKING);
-        cannot(bookingActionAbility.UPDATE, BOOKING);
-        cannot(bookingActionAbility.CANCEL, BOOKING);
-        cannot(bookingActionAbility.ADD, BOOKING);
+        can(bookingActionAbility.UPDATE, BOOKING);
+        can(bookingActionAbility.CANCEL, BOOKING);
+        can(bookingActionAbility.ADD, BOOKING);
 
         // Patient
         can(patientActionAbility.VIEW, PATIENT);
@@ -140,53 +234,58 @@ const defineAbilityFor = (staff) => {
         break;
 
       case staffRoles.ROLE_CUSTOMER_SERVICE:
+        // can("run", STAFF, {
+        //   id: staff?.id
+        // });
         // STAFF
+        can(staffActionAbility.VIEW_ALL, STAFF);
         can(staffActionAbility.VIEW, STAFF);
+        cannot(staffActionAbility.ADD, STAFF);
+        cannot(staffActionAbility.DELETE, STAFF);
+        cannot(staffActionAbility.BLOCK, STAFF);
         can(staffActionAbility.UPDATE, STAFF, {
           id: staff?.id
         });
 
-        cannot(staffActionAbility.ADD_DOCTOR_TIMEOFF, STAFF);
-
-        cannot(staffActionAbility.BLOCK, STAFF);
-        cannot(staffActionAbility.DELETE, STAFF);
-        cannot(staffActionAbility.UPDATE_ROLE, STAFF);
+        cannot(staffActionAbility.UPDATE_ROLE);
         cannot(staffActionAbility.UPDATE_DOCTOR_EXPERTISES, STAFF);
-        cannot(staffActionAbility.ADD, STAFF);
+        cannot(staffActionAbility.ADD_DOCTOR_TIMEOFF, STAFF);
+        cannot(staffActionAbility.UPDATE_DOCTOR_TIMEOFF, STAFF);
+        cannot(staffActionAbility.DELETE_DOCTOR_TIMEOFF, STAFF);
+
+        /// //
 
         // EXPERTISE
-        can(expertiseActionAbility.VIEW, EXPERTISE);
-
+        cannot(expertiseActionAbility.VIEW_ALL, EXPERTISE);
+        cannot(expertiseActionAbility.VIEW, EXPERTISE);
         cannot(expertiseActionAbility.ADD, EXPERTISE);
         cannot(expertiseActionAbility.UPDATE, EXPERTISE);
 
         // User
+        can(userActionAbility.VIEW_ALL, USER);
         can(userActionAbility.VIEW, USER);
         cannot(userActionAbility.BLOCK, USER);
         cannot(userActionAbility.DELETE, USER);
         cannot(userActionAbility.UPDATE, USER);
-
         // Schedule
+        can(scheduleActionAbility.VIEW_ALL, SCHEDULE);
         can(scheduleActionAbility.VIEW, SCHEDULE);
-
         cannot(scheduleActionAbility.UPDATE, SCHEDULE);
         cannot(scheduleActionAbility.ADD, SCHEDULE);
 
         // TimeOff
-        can(timeOffActionAbility.VIEW, TIMEOFF);
+        cannot(timeOffActionAbility.VIEW, TIMEOFF);
         cannot(timeOffActionAbility.ADD, TIMEOFF);
 
         // Booking
         can(bookingActionAbility.VIEW, BOOKING);
+        cannot(bookingActionAbility.UPDATE_CONCLUSION, BOOKING);
         can(bookingActionAbility.UPDATE, BOOKING);
         can(bookingActionAbility.CANCEL, BOOKING);
         can(bookingActionAbility.ADD, BOOKING);
 
-        cannot(bookingActionAbility.UPDATE_CONCLUSION, BOOKING);
-
         // Patient
         can(patientActionAbility.VIEW, PATIENT);
-
         cannot(patientActionAbility.BLOCK, PATIENT);
         cannot(patientActionAbility.DELETE, PATIENT);
         cannot(patientActionAbility.UPDATE, PATIENT);

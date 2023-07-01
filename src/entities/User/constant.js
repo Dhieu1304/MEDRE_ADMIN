@@ -22,6 +22,7 @@ export const userStatuses = {
 };
 
 export const userActionAbility = {
+  VIEW_ALL: "VIEW_ALL",
   VIEW: "VIEW",
   DELETE: "DELETE",
   UPDATE: "UPDATE",

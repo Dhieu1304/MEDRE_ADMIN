@@ -257,7 +257,7 @@ function DoctorTimeOff({ doctor, doctorId }) {
                           alignItems: "center"
                         }}
                       >
-                        <Can I={staffActionAbility.EDIT_DOCTOR_TIMEOFF} a={staff}>
+                        <Can I={staffActionAbility.UPDATE_DOCTOR_TIMEOFF} a={staff}>
                           <EditIcon
                             sx={{ mx: 1, color: theme.palette.success.light, cursor: "pointer" }}
                             onClick={() => {

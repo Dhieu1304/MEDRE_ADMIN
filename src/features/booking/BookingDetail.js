@@ -40,6 +40,8 @@ function BookingDetail() {
   const [booking, setBooking] = useState();
   const [file, setFile] = useState(null);
 
+  // console.log("booking: ", booking);
+
   const [defaultValues, setDefaultValues] = useState({
     note: "",
     conclusion: "",

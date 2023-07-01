@@ -19,6 +19,7 @@ export const bookingMethods = {
 };
 
 export const bookingActionAbility = {
+  VIEW_ALL: "VIEW_ALL",
   VIEW: "VIEW",
   UPDATE: "UPDATE",
   UPDATE_CONCLUSION: "UPDATE_CONCLUSION",

@@ -3,6 +3,7 @@ export const expertiseInputValidate = {
 };
 
 export const expertiseActionAbility = {
+  VIEW_ALL: "VIEW_ALL",
   VIEW: "VIEW",
   ADD: "ADD",
   UPDATE: "UPDATE"

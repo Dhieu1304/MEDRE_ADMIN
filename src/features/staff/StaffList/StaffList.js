@@ -9,30 +9,30 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import formatDate from "date-and-time";
 import { CalendarMonth as CalendarMonthIcon, Search as SearchIcon } from "@mui/icons-material";
+import { useAbility } from "@casl/react";
+import { subject } from "@casl/ability";
 import staffServices from "../../../services/staffServices";
 import { useFetchingStore } from "../../../store/FetchingApiStore/hooks";
 import CustomOverlay from "../../../components/CustomOverlay";
 import { useAppConfigStore } from "../../../store/AppConfigStore/hooks";
 import { useCustomModal } from "../../../components/CustomModal/hooks";
 
-import { NotHaveAccess, NotHaveAccessModal } from "../../auth";
 import { EditStaffRoleModal, BlockStaffModal, AddStaffModal, StaffRoleStatusButton } from "../components";
 
 import useObjDebounce from "../../../hooks/useObjDebounce";
-
 import StaffFiltersForm from "./StaffFiltersForm";
 import { WithExpertisesLoaderWrapper } from "../hocs";
 import { columnsIds, createDefaultValues, initialShowCols } from "./utils";
 import UnblockStaffModal from "../components/UnblockStaffModal";
-import { Can } from "../../../store/AbilityStore";
-import { staffActionAbility, staffStatuses } from "../../../entities/Staff";
-import Staff from "../../../entities/Staff/Staff";
+import { AbilityContext, Can } from "../../../store/AbilityStore";
+import { staffActionAbility, staffRoles, staffStatuses } from "../../../entities/Staff";
 import ListPageAction from "../../../components/ListPageAction/ListPageAction";
 import ListPageTableWrapper from "../../../components/ListPageTableWrapper";
 import ListPageTop from "../../../components/ListPageTop";
 import { useStaffGendersContantTranslation } from "../hooks/useStaffConstantsTranslation";
 import CopyButton from "../../../components/CopyButton";
 import DataTable from "../../components/DataFilterTable/DataTable";
+import entities from "../../../entities/entities";
 
 function StaffList({ expertisesList }) {
   const [isFirst, setIsFirst] = useState(true);
@@ -50,7 +50,6 @@ function StaffList({ expertisesList }) {
   const navigate = useNavigate();
   const { isLoading, fetchApi } = useFetchingStore();
 
-  const notHaveAccessModal = useCustomModal();
   const editStaffRoleModal = useCustomModal();
   const blockStaffModal = useCustomModal();
   const unblockStaffModal = useCustomModal();
@@ -87,6 +86,8 @@ function StaffList({ expertisesList }) {
     [columnsIds.healthInsurance]: false,
     [columnsIds.address]: false
   });
+
+  const ability = useAbility(AbilityContext);
 
   const columns = useMemo(
     () => [
@@ -203,27 +204,18 @@ function StaffList({ expertisesList }) {
         minWidth: 120,
         hide: !showCols[columnsIds.role],
         render: (staff) => {
+          const canUpdateStaffRole = ability.can(staffActionAbility.UPDATE_ROLE, subject(entities.STAFF, staff));
           return (
-            <>
-              <Can I={staffActionAbility.UPDATE_ROLE} a={staff}>
-                <StaffRoleStatusButton
-                  variant={staff?.role}
-                  onClick={() => {
-                    editStaffRoleModal.setShow(true);
-                    editStaffRoleModal.setData(staff);
-                  }}
-                />
-              </Can>
-              <Can not I={staffActionAbility.UPDATE_ROLE} a={staff}>
-                <StaffRoleStatusButton
-                  isLabel
-                  variant={staff?.role}
-                  onClick={() => {
-                    notHaveAccessModal.setShow(true);
-                  }}
-                />
-              </Can>
-            </>
+            <StaffRoleStatusButton
+              isLabel={!canUpdateStaffRole}
+              variant={staff?.role}
+              onClick={() => {
+                if (canUpdateStaffRole) {
+                  editStaffRoleModal.setShow(true);
+                  editStaffRoleModal.setData(staff);
+                }
+              }}
+            />
           );
         }
       },
@@ -234,49 +226,29 @@ function StaffList({ expertisesList }) {
         minWidth: 200,
         hide: !showCols[columnsIds.status],
         render: (staff) => {
-          return (
-            <>
-              <Can I={staffActionAbility.BLOCK} a={staff}>
-                {staff?.blocked ? (
-                  <StaffRoleStatusButton
-                    variant={staffStatuses.STATUS_BLOCK}
-                    onClick={() => {
-                      unblockStaffModal.setShow(true);
-                      unblockStaffModal.setData(staff);
-                    }}
-                  />
-                ) : (
-                  <StaffRoleStatusButton
-                    variant={staffStatuses.STATUS_UNBLOCK}
-                    onClick={() => {
-                      blockStaffModal.setShow(true);
-                      blockStaffModal.setData(staff);
-                    }}
-                  />
-                )}
-              </Can>
-              <Can not I={staffActionAbility.BLOCK} a={staff}>
-                {staff?.blocked ? (
-                  <StaffRoleStatusButton
-                    isLabel
-                    variant={staffStatuses.STATUS_BLOCK}
-                    onClick={() => {
-                      unblockStaffModal.setShow(true);
-                      unblockStaffModal.setData(staff);
-                    }}
-                  />
-                ) : (
-                  <StaffRoleStatusButton
-                    isLabel
-                    variant={staffStatuses.STATUS_UNBLOCK}
-                    onClick={() => {
-                      blockStaffModal.setShow(true);
-                      blockStaffModal.setData(staff);
-                    }}
-                  />
-                )}
-              </Can>
-            </>
+          const canBlockStaff = ability.can(staffActionAbility.BLOCK, subject(entities.STAFF, staff));
+          return staff?.blocked ? (
+            <StaffRoleStatusButton
+              isLabel={!canBlockStaff}
+              variant={staffStatuses.STATUS_BLOCK}
+              onClick={() => {
+                if (canBlockStaff) {
+                  unblockStaffModal.setShow(true);
+                  unblockStaffModal.setData(staff);
+                }
+              }}
+            />
+          ) : (
+            <StaffRoleStatusButton
+              isLabel={!canBlockStaff}
+              variant={staffStatuses.STATUS_UNBLOCK}
+              onClick={() => {
+                if (canBlockStaff) {
+                  blockStaffModal.setShow(true);
+                  blockStaffModal.setData(staff);
+                }
+              }}
+            />
           );
         }
       },
@@ -287,14 +259,11 @@ function StaffList({ expertisesList }) {
         render: (staff) => {
           return (
             <>
-              <Link
-                to={`${staff?.id}/schedule`}
-                // onClick={() => {
-                //   navigate(`${staff?.id}/schedule`, { relative: true });
-                // }}
-              >
-                <CalendarMonthIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
-              </Link>
+              {staff?.role === staffRoles.ROLE_DOCTOR && (
+                <Link to={`${staff?.id}/schedule`}>
+                  <CalendarMonthIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
+                </Link>
+              )}
               <IconButton
                 onClick={() => {
                   navigate(staff?.id, { relative: true });
@@ -435,93 +404,83 @@ function StaffList({ expertisesList }) {
     <>
       <CustomOverlay open={isLoading} />
 
-      <Can I={staffActionAbility.VIEW} a={Staff.magicWord()}>
-        <Box>
-          <ListPageTop
-            title={t("title")}
-            filterFormNode={
-              <FormProvider {...filterForm}>
-                <StaffFiltersForm expertises={expertisesList} />
-              </FormProvider>
-            }
-          />
+      <Box>
+        <ListPageTop
+          title={t("title")}
+          filterFormNode={
+            <FormProvider {...filterForm}>
+              <StaffFiltersForm expertises={expertisesList} />
+            </FormProvider>
+          }
+        />
 
-          <ListPageAction
-            leftAction={
-              <Can I={staffActionAbility.ADD} a={Staff.magicWord()}>
-                <Button
-                  variant="contained"
-                  onClick={() => {
-                    addStaffModal.setShow(true);
-                  }}
-                  sx={{ ml: 2 }}
-                >
-                  {tBtn("add")}
-                </Button>
-              </Can>
-            }
-            showCols={showCols}
-            setShowCols={setShowCols}
-            showTableColsMenu={showTableColsMenu}
-            setShowTableColsMenu={setShowTableColsMenu}
-            reset={reset}
-            setIsReset={setIsReset}
-            createDefaultValues={createDefaultValues}
-            columns={columns}
-            setValue={setValue}
-            loadData={loadData}
-            watch={watch}
-            count={count}
-          />
+        <ListPageAction
+          leftAction={
+            <Can I={staffActionAbility.ADD} a={entities.STAFF}>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  addStaffModal.setShow(true);
+                }}
+                sx={{ ml: 2 }}
+              >
+                {tBtn("add")}
+              </Button>
+            </Can>
+          }
+          showCols={showCols}
+          setShowCols={setShowCols}
+          showTableColsMenu={showTableColsMenu}
+          setShowTableColsMenu={setShowTableColsMenu}
+          reset={reset}
+          setIsReset={setIsReset}
+          createDefaultValues={createDefaultValues}
+          columns={columns}
+          setValue={setValue}
+          loadData={loadData}
+          watch={watch}
+          count={count}
+        />
 
-          <ListPageTableWrapper
-            table={<DataTable rows={staffs} columns={columns} showCols={showCols} sort={sort} setSort={setSort} />}
-            count={count}
-            watch={watch}
-            loadData={loadData}
-            setValue={setValue}
-          />
-        </Box>
+        <ListPageTableWrapper
+          table={<DataTable rows={staffs} columns={columns} showCols={showCols} sort={sort} setSort={setSort} />}
+          count={count}
+          watch={watch}
+          loadData={loadData}
+          setValue={setValue}
+        />
+      </Box>
 
-        {addStaffModal.show && <AddStaffModal show={addStaffModal.show} setShow={addStaffModal.setShow} />}
-        {editStaffRoleModal.show && (
-          <EditStaffRoleModal
-            show={editStaffRoleModal.show}
-            setShow={editStaffRoleModal.setShow}
-            data={editStaffRoleModal.data}
-            setData={editStaffRoleModal.setData}
-            handleAfterEditStaffRole={handleAfterEditStaffRole}
-          />
-        )}
+      {addStaffModal.show && <AddStaffModal show={addStaffModal.show} setShow={addStaffModal.setShow} />}
+      {editStaffRoleModal.show && (
+        <EditStaffRoleModal
+          show={editStaffRoleModal.show}
+          setShow={editStaffRoleModal.setShow}
+          data={editStaffRoleModal.data}
+          setData={editStaffRoleModal.setData}
+          handleAfterEditStaffRole={handleAfterEditStaffRole}
+        />
+      )}
 
-        {blockStaffModal.show && (
-          <BlockStaffModal
-            show={blockStaffModal.show}
-            setShow={blockStaffModal.setShow}
-            data={blockStaffModal.data}
-            setData={blockStaffModal.setData}
-            handleAfterBlockStaff={handleAfterBlockStaff}
-          />
-        )}
+      {blockStaffModal.show && (
+        <BlockStaffModal
+          show={blockStaffModal.show}
+          setShow={blockStaffModal.setShow}
+          data={blockStaffModal.data}
+          setData={blockStaffModal.setData}
+          handleAfterBlockStaff={handleAfterBlockStaff}
+        />
+      )}
 
-        {unblockStaffModal.show && (
-          <UnblockStaffModal
-            show={unblockStaffModal.show}
-            setShow={unblockStaffModal.setShow}
-            data={unblockStaffModal.data}
-            setData={unblockStaffModal.setData}
-            handleAfterUnblockStaff={handleAfterUnblockStaff}
-          />
-        )}
-
-        {notHaveAccessModal.show && (
-          <NotHaveAccessModal show={notHaveAccessModal.show} setShow={notHaveAccessModal.setShow} />
-        )}
-      </Can>
-
-      <Can not I={staffActionAbility.VIEW} a={Staff.magicWord()}>
-        <NotHaveAccess />
-      </Can>
+      {unblockStaffModal.show && (
+        <UnblockStaffModal
+          show={unblockStaffModal.show}
+          setShow={unblockStaffModal.setShow}
+          data={unblockStaffModal.data}
+          setData={unblockStaffModal.setData}
+          handleAfterUnblockStaff={handleAfterUnblockStaff}
+        />
+      )}
     </>
   );
 }
