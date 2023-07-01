@@ -15,6 +15,7 @@ const routeConfig = {
   reExamination: "/re-examination",
   expertise: "/expertise",
   statistics: "/statistics",
+  support: "/support",
   default: "/*"
 };
 

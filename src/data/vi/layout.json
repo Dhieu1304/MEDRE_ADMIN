@@ -11,7 +11,9 @@
     "booking_label": "Đặt hẹn",
     "notification_label": "Thông báo",
     "re_examination_label": "Tái khám",
-    "re_statistics_label": "Thống kê"
+    "re_statistics_label": "Thống kê",
+    "support_label": "Phản hồi khách hàng",
+    "doctor_calendar_label": "Lịch khám của tôi"
   },
   "header": {
     "profile_label": "Thông tin cá nhân",

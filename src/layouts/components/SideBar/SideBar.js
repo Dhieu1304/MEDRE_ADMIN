@@ -18,16 +18,59 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { useTheme } from "@mui/material/styles";
 import { Link, useMatch } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useMemo } from "react";
 import images from "../../../assets/images";
 import CustomDrawer, { CustomDrawerHeader } from "../../../components/CustomDrawer";
 import { sideBarItems } from "./config";
 import routeConfig from "../../../config/routeConfig";
+import { useAuthStore } from "../../../store/AuthStore";
+import { staffRoles } from "../../../entities/Staff";
+import { sidebarActionAbility } from "../../../entities/Sidebar/constant";
 
 function SideBar({ open, handleDrawerClose }) {
   const theme = useTheme();
   const isMobile = useMediaQuery("(max-width:768px)");
 
   const { t } = useTranslation("layout", { keyPrefix: "sidebar" });
+  const authStore = useAuthStore();
+
+  const sideBarItemsByRole = useMemo(() => {
+    const { ROLE_ADMIN, ROLE_DOCTOR, ROLE_NURSE, ROLE_CUSTOMER_SERVICE } = staffRoles;
+    const {
+      STAFF,
+      USER,
+      PATIENT,
+      BOOKING,
+      SCHEDULE,
+      SETTING,
+      EXPERTISE,
+      NOTIFICATION,
+      RE_EXAMINATION,
+      STATISTICS,
+      DOCTOR_CALENDAR,
+      SUPPORT
+    } = sidebarActionAbility;
+    let keys = [];
+    switch (authStore.staff?.role) {
+      case ROLE_ADMIN:
+        keys = [...keys, STAFF, USER, PATIENT, BOOKING, SCHEDULE, SETTING, EXPERTISE, NOTIFICATION, STATISTICS];
+        break;
+      case ROLE_DOCTOR:
+        keys = [...keys, BOOKING, DOCTOR_CALENDAR, PATIENT];
+        break;
+      case ROLE_NURSE:
+        keys = [...keys, STAFF, USER, PATIENT, BOOKING, SCHEDULE, RE_EXAMINATION, SUPPORT];
+        break;
+      case ROLE_CUSTOMER_SERVICE:
+        keys = [...keys, STAFF, USER, PATIENT, BOOKING, SCHEDULE, RE_EXAMINATION, SUPPORT];
+        break;
+      default:
+        break;
+    }
+
+    const filteredSidebar = sideBarItems.filter((item) => keys.includes(item.id));
+    return filteredSidebar;
+  }, [authStore.staff]);
 
   return (
     <CustomDrawer variant="permanent" open={open} isMobile={isMobile}>
@@ -70,8 +113,8 @@ function SideBar({ open, handleDrawerClose }) {
           bgcolor: "inherit"
         }}
       >
-        {sideBarItems.map((item) => {
-          const isMatch = useMatch(item.to);
+        {sideBarItemsByRole?.map((item) => {
+          const isMatch = useMatch(item.to());
           const activeSx = isMatch
             ? {
                 backgroundColor: theme.palette.primary.light,
@@ -87,7 +130,7 @@ function SideBar({ open, handleDrawerClose }) {
                   px: 2.5
                 }}
                 component={Link}
-                to={item.to}
+                to={item.to(authStore.staff?.id)}
               >
                 <ListItemIcon
                   sx={{

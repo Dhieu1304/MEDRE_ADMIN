@@ -1,20 +1,27 @@
 import { defineAbility } from "@casl/ability";
-import Staff, { staffRoles, staffActionAbility } from "../entities/Staff";
-import User, { userActionAbility } from "../entities/User";
-import Schedule, { scheduleActionAbility } from "../entities/Schedule";
-import Booking, { bookingActionAbility } from "../entities/Booking";
-import TimeOff, { timeOffActionAbility } from "../entities/TimeOff";
-import Patient, { patientActionAbility } from "../entities/Patient";
-import Expertise, { expertiseActionAbility } from "../entities/Expertise";
+import { staffActionAbility, staffRoles } from "../entities/Staff";
+import { userActionAbility } from "../entities/User";
+import { scheduleActionAbility } from "../entities/Schedule";
+import { bookingActionAbility } from "../entities/Booking";
+import { timeOffActionAbility } from "../entities/TimeOff";
+import { patientActionAbility } from "../entities/Patient";
+import { expertiseActionAbility } from "../entities/Expertise";
+import entities from "../entities/entities";
 
 const defineAbilityFor = (staff) => {
-  const STAFF = Staff.magicWord();
-  const USER = User.magicWord();
-  const EXPERTISE = Expertise.magicWord();
-  const SCHEDULE = Schedule.magicWord();
-  const BOOKING = Booking.magicWord();
-  const TIMEOFF = TimeOff.magicWord();
-  const PATIENT = Patient.magicWord();
+  const {
+    BOOKING,
+    EXPERTISE,
+    // NOTIFICATION,
+    PATIENT,
+    SCHEDULE,
+    // SETTING,
+    STAFF,
+    // STATISTICS,
+    TIMEOFF,
+    USER
+    // TIME
+  } = entities;
 
   return defineAbility((can, cannot) => {
     const role = staff?.role;
