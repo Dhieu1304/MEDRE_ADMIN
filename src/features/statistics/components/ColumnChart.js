@@ -1,8 +1,9 @@
 import PropTypes from "prop-types";
-import Chart from "react-apexcharts";
+import React from "react";
+import ReactApexChart from "react-apexcharts";
 import { Box, Typography } from "@mui/material";
 
-function LineChart({ title, series, categories, xLabel, yLabel, yaxisFormat }) {
+function ColumnChart({ title, series, categories, xLabel, yLabel, yaxisFormat }) {
   return (
     <Box>
       <Typography
@@ -13,15 +14,15 @@ function LineChart({ title, series, categories, xLabel, yLabel, yaxisFormat }) {
       >
         {title}
       </Typography>
-      <Chart
+      <ReactApexChart
         options={{
           chart: {
-            id: "mychart"
+            id: "mychart",
+            type: "bar"
           },
           xaxis: {
             type: "category",
             categories,
-
             title: {
               text: xLabel,
               style: {
@@ -46,18 +47,18 @@ function LineChart({ title, series, categories, xLabel, yLabel, yaxisFormat }) {
           }
         }}
         series={series}
-        type="line"
+        type="bar"
         height={350}
       />
     </Box>
   );
 }
 
-LineChart.defaultProps = {
+ColumnChart.defaultProps = {
   yaxisFormat: undefined
 };
 
-LineChart.propTypes = {
+ColumnChart.propTypes = {
   title: PropTypes.string.isRequired,
   series: PropTypes.array.isRequired,
   categories: PropTypes.array.isRequired,
@@ -66,4 +67,4 @@ LineChart.propTypes = {
   yaxisFormat: PropTypes.func
 };
 
-export default LineChart;
+export default ColumnChart;

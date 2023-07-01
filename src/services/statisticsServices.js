@@ -2,12 +2,14 @@ import { statisticsApi } from "../config/apiConfig";
 import axiosClient from "../config/axiosClient";
 import { cleanUndefinedAndEmptyStrValueObject } from "../utils/objectUtil";
 
-const getStatisticsByBooking = async ({ time }) => {
+const getStatisticsByBooking = async ({ time, from, to }) => {
   const params = cleanUndefinedAndEmptyStrValueObject({
-    time
+    time,
+    from,
+    to
   });
 
-  //   console.log("params: ", params);
+  // console.log("params: ", params);
 
   try {
     const res = await axiosClient.get(statisticsApi.booking(), {
@@ -40,9 +42,11 @@ const getStatisticsByBooking = async ({ time }) => {
   }
 };
 
-const getStatisticsByUser = async ({ time }) => {
+const getStatisticsByUser = async ({ time, from, to }) => {
   const params = cleanUndefinedAndEmptyStrValueObject({
-    time
+    time,
+    from,
+    to
   });
 
   //   console.log("params: ", params);
@@ -78,9 +82,11 @@ const getStatisticsByUser = async ({ time }) => {
   }
 };
 
-const getStatisticsByPatient = async ({ time }) => {
+const getStatisticsByPatient = async ({ time, from, to }) => {
   const params = cleanUndefinedAndEmptyStrValueObject({
-    time
+    time,
+    from,
+    to
   });
 
   //   console.log("params: ", params);
@@ -116,10 +122,11 @@ const getStatisticsByPatient = async ({ time }) => {
   }
 };
 
-const getStatisticsByRevenue = async ({ time, type }) => {
+const getStatisticsByRevenue = async ({ time, from, to }) => {
   const params = cleanUndefinedAndEmptyStrValueObject({
     time,
-    type
+    from,
+    to
   });
 
   //   console.log("params: ", params);

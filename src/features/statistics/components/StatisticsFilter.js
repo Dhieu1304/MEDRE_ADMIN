@@ -2,13 +2,7 @@ import PropTypes from "prop-types";
 import { Box, Button, useTheme } from "@mui/material";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-
-export const statisticsFilterTypes = {
-  DAY: "Day",
-  WEEK: "Week",
-  MONTH: "Month",
-  YEAR: "Year"
-};
+import { statisticsFilterTypes } from "../../../entities/statistics";
 
 function StatisticsFilter({ time, setTime }) {
   const { t } = useTranslation("statisticsFeature", { keyPrefix: "StatisticsFilter" });
@@ -18,8 +12,8 @@ function StatisticsFilter({ time, setTime }) {
   const buttons = useMemo(() => {
     return [
       {
-        label: t("types.date"),
-        value: statisticsFilterTypes.DATE
+        label: t("types.day"),
+        value: statisticsFilterTypes.DAY
       },
       {
         label: t("types.week"),
@@ -47,7 +41,7 @@ function StatisticsFilter({ time, setTime }) {
         return (
           <Button
             sx={{
-              backgroundColor: time === button.value ? theme.palette.success.light : theme.palette.secondary.light,
+              backgroundColor: time === button.value ? theme.palette.success.light : "rgb(204, 204, 204)",
               color: time === button.value ? theme.palette.success.contrastText : theme.palette.secondary.contrastText,
               ml: 2
             }}

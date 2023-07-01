@@ -62,7 +62,6 @@ export default function StatisticsPage() {
       <Tabs
         value={value}
         onChange={(e, newValue) => {
-          // console.log("newValue: ", newValue);
           setValue(newValue);
         }}
         sx={{
