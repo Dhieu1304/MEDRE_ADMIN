@@ -10,7 +10,7 @@
       },
       "xLabel": "Time",
       "yLabel": "Count",
-      "seriesName": {
+      "seriName": {
         "total": "Count"
       }
     },
@@ -38,8 +38,8 @@
       },
       "xLabel": "Time",
       "yLabel": "Count",
-      "seriesName": {
-        "totalOff": "Direct bookings count",
+      "seriName": {
+        "totalOff": "Offline bookings count",
         "totalOnl": "Online bookings count"
       }
     },
@@ -52,7 +52,7 @@
       },
       "col": {
         "time": "Time",
-        "totalOff": "Direct bookings count",
+        "totalOff": "Offline bookings count",
         "totalOnl": "Online bookings count"
       }
     }
@@ -68,7 +68,7 @@
       },
       "xLabel": "Time",
       "yLabel": "Count",
-      "seriesName": {
+      "seriName": {
         "total": "Count"
       }
     },
@@ -96,8 +96,8 @@
       },
       "xLabel": "Time",
       "yLabel": "Revenue",
-      "seriesName": {
-        "totalOff": "Direct revenue",
+      "seriName": {
+        "totalOff": "Offline revenue",
         "totalOnl": "Online revenue"
       }
     },
@@ -110,7 +110,7 @@
       },
       "col": {
         "time": "Time",
-        "totalOff": "Direct revenue",
+        "totalOff": "Offline revenue",
         "totalOnl": "Online revenue"
       }
     }
