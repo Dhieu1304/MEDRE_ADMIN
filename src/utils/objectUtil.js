@@ -70,10 +70,23 @@ const cleanUndefinedAndNullValueObjectToStrObj = (obj) => {
   }, {});
 };
 
+// const updateObjectKeys = (object1, object2) => {
+//   const updatedObject = { ...object1 };
+//
+//   for (const key in updatedObject) {
+//     if ( object2[key] === false) {
+//       updatedObject[key] = undefined;
+//     }
+//   }
+//
+//   return updatedObject;
+// };
+
 export {
   mergeObjectsWithoutNullAndUndefined,
   cleanUndefinedValueObject,
   cleanUndefinedAndEmptyStrValueObject,
   cleanUndefinedAndEmptyStrAndFalseValueObject,
   cleanUndefinedAndNullValueObjectToStrObj
+  // updateObjectKeys
 };

@@ -65,8 +65,10 @@ const getStaffList = async ({
   certificate,
   from,
   to
+  // order
 }) => {
   // console.log("getStaffList: ", { page, limit, name });
+  // console.log("order: ", order);
 
   const params = cleanUndefinedAndEmptyStrValueObject({
     email,

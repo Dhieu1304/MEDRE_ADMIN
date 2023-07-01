@@ -41,6 +41,10 @@ function StaffList({ expertisesList }) {
 
   const [staffs, setStaffs] = useState([]);
   const [count, setCount] = useState(0);
+  const [sort, setSort] = useState({
+    sortBy: columnsIds.name,
+    isAsc: true
+  });
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -88,6 +92,7 @@ function StaffList({ expertisesList }) {
     () => [
       {
         id: columnsIds.name,
+        haveSortIcon: true,
         label: tStaff(columnsIds.name),
         minWidth: 200,
         render: (staff) => staff?.name,
@@ -95,6 +100,7 @@ function StaffList({ expertisesList }) {
       },
       {
         id: columnsIds.username,
+        haveSortIcon: true,
         label: tStaff(columnsIds.username),
         minWidth: 150,
         hide: !showCols[columnsIds.username],
@@ -102,6 +108,7 @@ function StaffList({ expertisesList }) {
       },
       {
         id: columnsIds.phoneNumber,
+        haveSortIcon: true,
         label: tStaff(columnsIds.phoneNumber),
         minWidth: 150,
         hide: !showCols[columnsIds.phoneNumber],
@@ -120,6 +127,7 @@ function StaffList({ expertisesList }) {
       },
       {
         id: columnsIds.email,
+        haveSortIcon: true,
         label: tStaff(columnsIds.email),
         minWidth: 150,
         hide: !showCols[columnsIds.email],
@@ -145,6 +153,7 @@ function StaffList({ expertisesList }) {
       },
       {
         id: columnsIds.gender,
+        haveSortIcon: true,
         label: tStaff(columnsIds.gender),
         minWidth: 100,
         hide: !showCols[columnsIds.gender],
@@ -152,6 +161,7 @@ function StaffList({ expertisesList }) {
       },
       {
         id: columnsIds.dob,
+        haveSortIcon: true,
         label: tStaff(columnsIds.dob),
         minWidth: 150,
         hide: !showCols[columnsIds.dob],
@@ -188,6 +198,7 @@ function StaffList({ expertisesList }) {
 
       {
         id: columnsIds.role,
+        haveSortIcon: true,
         label: tStaff(columnsIds.role),
         minWidth: 120,
         hide: !showCols[columnsIds.role],
@@ -218,6 +229,7 @@ function StaffList({ expertisesList }) {
       },
       {
         id: columnsIds.status,
+        haveSortIcon: true,
         label: tStaff(columnsIds.status),
         minWidth: 200,
         hide: !showCols[columnsIds.status],
@@ -349,11 +361,18 @@ function StaffList({ expertisesList }) {
   );
 
   const loadData = async ({ page }) => {
+    const orderBy = sort.isAsc ? "asc" : "desc";
+    let order;
+    if (sort.sortBy) {
+      order = `${sort.sortBy}:${orderBy}`;
+    }
+
     const paramsObj = {
       ...watch(),
       expertise: watch().expertises,
       blocked: watch().status,
-      page
+      page,
+      order
     };
 
     await fetchApi(async () => {
@@ -398,7 +417,7 @@ function StaffList({ expertisesList }) {
     setValue("page", page);
     navigate(`?${searchParams}`);
     loadData({ page });
-  }, [...Object.values(filterDebounce), ...Object.values(searchDebounce), isReset]);
+  }, [...Object.values(filterDebounce), ...Object.values(searchDebounce), isReset, sort]);
 
   const handleAfterEditStaffRole = async () => {
     await loadData({ page: watch().page });
@@ -456,7 +475,7 @@ function StaffList({ expertisesList }) {
           />
 
           <ListPageTableWrapper
-            table={<DataTable rows={staffs} columns={columns} showCols={showCols} />}
+            table={<DataTable rows={staffs} columns={columns} showCols={showCols} sort={sort} setSort={setSort} />}
             count={count}
             watch={watch}
             loadData={loadData}

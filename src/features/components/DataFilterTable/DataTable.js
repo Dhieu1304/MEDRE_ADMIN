@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Paper, Table, TableBody, TableContainer, TableHead, TableRow } from "@mui/material";
 import CustomTableCell, { customTableCellVariant } from "../../../components/CustomTable/CustomTableCell";
 
-function DataTable({ rows, columns, showCols }) {
+function DataTable({ rows, columns, showCols, sort, setSort }) {
   return (
     <TableContainer component={Paper} sx={{ mb: 4, height: 500, width: "100%" }}>
       <Table stickyHeader>
@@ -12,7 +12,15 @@ function DataTable({ rows, columns, showCols }) {
             {columns?.map((column) => {
               const minWidth = column?.minWidth;
               return column?.fixed ? (
-                <CustomTableCell sx={{ minWidth }} key={column?.id} variant={customTableCellVariant.FIRST_HEAD_CELL}>
+                <CustomTableCell
+                  sx={{ minWidth }}
+                  key={column?.id}
+                  id={column?.id}
+                  variant={customTableCellVariant.FIRST_HEAD_CELL}
+                  haveSortIcon={column?.haveSortIcon}
+                  sort={sort}
+                  setSort={setSort}
+                >
                   {column.label}
                 </CustomTableCell>
               ) : (
@@ -20,7 +28,11 @@ function DataTable({ rows, columns, showCols }) {
                   sx={{ minWidth }}
                   hide={column?.hide}
                   key={column?.id}
+                  id={column?.id}
                   variant={customTableCellVariant.HEAD_CELL}
+                  haveSortIcon={column?.haveSortIcon}
+                  sort={sort}
+                  setSort={setSort}
                 >
                   {column.label}
                 </CustomTableCell>
@@ -60,10 +72,17 @@ function DataTable({ rows, columns, showCols }) {
   );
 }
 
+DataTable.defaultProps = {
+  sort: undefined,
+  setSort: undefined
+};
+
 DataTable.propTypes = {
   rows: PropTypes.array.isRequired,
   columns: PropTypes.array.isRequired,
-  showCols: PropTypes.object.isRequired
+  showCols: PropTypes.object.isRequired,
+  sort: PropTypes.object,
+  setSort: PropTypes.func
 };
 
 export default DataTable;
