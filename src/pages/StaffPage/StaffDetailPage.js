@@ -1,5 +1,5 @@
 import { Link, Route, Routes, useLocation, useParams } from "react-router-dom";
-import { Box, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Tab, Tabs } from "@mui/material";
 import {
   CalendarMonth as CalendarMonthIcon,
   Info as InfoIcon,
@@ -12,11 +12,19 @@ import { staffDetailRoutes } from "./routes";
 import { StaffDetail } from "../../features/staff";
 import { DoctorScheduleCalendar, DoctorScheduleList, DoctorTimeOff } from "../../features/schedule";
 import routeConfig from "../../config/routeConfig";
+import { useAppConfigStore } from "../../store/AppConfigStore";
+
+const tabTypes = {
+  INFO: "INFO",
+  CALENDAR: "CALENDAR",
+  SCHEDULE: "SCHEDULE",
+  TIMEOFF: "TIMEOFF"
+};
 
 function StaffDetailPage() {
   const params = useParams();
   const staffId = useMemo(() => params?.staffId, [params?.staffId]);
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(tabTypes.INFO);
 
   const path = `${routeConfig.staff}/${staffId}`;
 
@@ -25,38 +33,57 @@ function StaffDetailPage() {
   });
 
   const location = useLocation();
+  const { locale } = useAppConfigStore();
+
+  const tabs = useMemo(() => {
+    const tabList = [
+      {
+        value: tabTypes.INFO,
+        label: t("tabs.info"),
+        icon: <InfoIcon />,
+        to: `${path}${staffDetailRoutes.detail}`
+      },
+      {
+        value: tabTypes.CALENDAR,
+        label: t("tabs.calendar"),
+        icon: <CalendarMonthIcon />,
+        to: `${path}${staffDetailRoutes.calendar}`
+      },
+      {
+        value: tabTypes.SCHEDULE,
+        label: t("tabs.schedule"),
+        icon: <ScheduleIcon />,
+        to: `${path}${staffDetailRoutes.schedule}`
+      },
+      {
+        value: tabTypes.TIMEOFF,
+        label: t("tabs.timeOff"),
+        icon: <TimerOffIcon />,
+        to: `${path}${staffDetailRoutes.timeOff}`
+      }
+    ];
+    return tabList;
+  }, [locale]);
 
   useEffect(() => {
     const currentPath = location.pathname;
     // console.log("currentPath: ", currentPath);
     switch (currentPath) {
       case path + staffDetailRoutes.calendar:
-        setValue(1);
+        setValue(tabTypes.CALENDAR);
         break;
       case path + staffDetailRoutes.schedule:
-        setValue(2);
+        setValue(tabTypes.SCHEDULE);
         break;
       case path + staffDetailRoutes.timeOff:
-        setValue(3);
+        setValue(tabTypes.TIMEOFF);
         break;
       case path + staffDetailRoutes.detail:
       default:
-        setValue(0);
+        setValue(tabTypes.INFO);
         break;
     }
   }, [location]);
-
-  const renderTableLabel = (label) => {
-    return (
-      <Typography
-        sx={{
-          display: { xs: "none", md: "block" }
-        }}
-      >
-        {t(label)}
-      </Typography>
-    );
-  };
 
   return (
     <Box
@@ -67,7 +94,6 @@ function StaffDetailPage() {
       <Tabs
         value={value}
         onChange={(e, newValue) => {
-          // console.log("newValue: ", newValue);
           setValue(newValue);
         }}
         sx={{
@@ -79,39 +105,19 @@ function StaffDetailPage() {
           transform: "translateY(-40%)"
         }}
       >
-        <Tab
-          value={0}
-          label={renderTableLabel("tabs.info")}
-          icon={<InfoIcon />}
-          iconPosition="start"
-          LinkComponent={Link}
-          to={path + staffDetailRoutes.detail}
-        />
-        <Tab
-          value={1}
-          label={renderTableLabel("tabs.calendar")}
-          icon={<CalendarMonthIcon />}
-          iconPosition="start"
-          LinkComponent={Link}
-          to={path + staffDetailRoutes.calendar}
-        />
-        <Tab
-          value={2}
-          label={renderTableLabel("tabs.schedule")}
-          icon={<ScheduleIcon />}
-          iconPosition="start"
-          LinkComponent={Link}
-          to={path + staffDetailRoutes.schedule}
-        />
-
-        <Tab
-          value={3}
-          label={renderTableLabel("tabs.timeOff")}
-          icon={<TimerOffIcon />}
-          iconPosition="start"
-          LinkComponent={Link}
-          to={path + staffDetailRoutes.timeOff}
-        />
+        {tabs?.map((tab) => {
+          return (
+            <Tab
+              key={tab?.value}
+              value={tab?.value}
+              label={tab?.label}
+              icon={tab?.icon}
+              iconPosition="start"
+              LinkComponent={Link}
+              to={tab?.to}
+            />
+          );
+        })}
       </Tabs>
       <Box
         sx={{
