@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 
 import { Box, Button, Paper, Table, TableBody, TableContainer, TableHead, TableRow, useTheme } from "@mui/material";
-import formatDate from "date-and-time";
 import { useTranslation } from "react-i18next";
 import { Add as AddIcon, Edit as EditIcon } from "@mui/icons-material";
 
