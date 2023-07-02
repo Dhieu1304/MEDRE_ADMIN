@@ -20,6 +20,8 @@ import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { Add as AddIcon, RemoveCircle as RemoveCircleIcon } from "@mui/icons-material";
 // import WithDoctorLoaderWrapper from "../staff/hocs/WithDoctorLoaderWrapper";
+import qs from "query-string";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useFetchingStore } from "../../store/FetchingApiStore";
 import { normalizeStrToDateStr } from "../../utils/standardizedForForm";
 import { getWeekByDate } from "../../utils/datetimeUtil";
@@ -40,23 +42,31 @@ import CustomPageTitle from "../../components/CustomPageTitle";
 import StaffInfoCard from "../../components/StaffInfoCard";
 import entities from "../../entities/entities";
 
+const createDefaultValues = ({ from, to } = {}) => {
+  const week = getWeekByDate();
+  const result = {
+    from: normalizeStrToDateStr(from, week[0]),
+    to: normalizeStrToDateStr(to, week[6])
+  };
+
+  return result;
+};
+
 function DoctorScheduleList({ staff }) {
   const [schedules, setSchedules] = useState([]);
 
   const [checkedCount, setCheckedCount] = useState(0);
 
-  const week = useMemo(() => {
-    return getWeekByDate();
+  const location = useLocation();
+  const defaultValues = useMemo(() => {
+    const defaultSearchParams = qs.parse(location.search);
+    const result = createDefaultValues(defaultSearchParams);
+    return result;
   }, []);
 
   const filterForm = useForm({
     mode: "onChange",
-    defaultValues: {
-      from: normalizeStrToDateStr(week[0]),
-      to: normalizeStrToDateStr(week[6]),
-      page: 1,
-      limit: 10
-    },
+    defaultValues,
     criteriaMode: "all"
   });
 
@@ -72,6 +82,7 @@ function DoctorScheduleList({ staff }) {
 
   const { fetchApi } = useFetchingStore();
   const { locale } = useAppConfigStore();
+  const navigate = useNavigate();
 
   const theme = useTheme();
 
@@ -174,6 +185,10 @@ function DoctorScheduleList({ staff }) {
 
   useEffect(() => {
     loadData();
+
+    const params = { ...filterForm.watch() };
+    const searchParams = qs.stringify(params);
+    navigate(`?${searchParams}`);
   }, [filterForm.watch().from, filterForm.watch().to]);
 
   const handleChangeApplyEnd = async ({ scheduleIdsObj, applyTo }) => {

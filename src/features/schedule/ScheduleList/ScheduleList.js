@@ -24,7 +24,9 @@ import {
 import formatDate from "date-and-time";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import qs from "query-string";
 
+import { useLocation, useNavigate } from "react-router-dom";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
 import WithTimesLoaderWrapper from "../hocs/WithTimesLoaderWrapper";
 import staffServices from "../../../services/staffServices";
@@ -45,13 +47,17 @@ import CustomPageTitle from "../../../components/CustomPageTitle";
 import { useScheduleTypesContantTranslation } from "../hooks/useScheduleConstantsTranslation";
 import bookingServices from "../../../services/bookingServices";
 import { bookingMethods } from "../../../entities/Booking";
+import { normalizeStrToDateStr } from "../../../utils/standardizedForForm";
 
 const EMPTY_CELL = "EMPTY_CELL";
 const FULL_SLOT = "FULL_SLOT";
 const BOOK = "BOOK";
 
 function ScheduleList({ timesList }) {
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const location = useLocation();
+  const [currentDate, setCurrentDate] = useState(
+    new Date(normalizeStrToDateStr(qs.parse(location.search)?.date, new Date()))
+  );
   const [doctors, setDoctors] = useState([]);
   const [bookingSchedules, setBookingSchedules] = useState([]);
   const [timeOffsGroupByDoctorId, setTimeOffsGroupByDoctorId] = useState([]);
@@ -59,6 +65,7 @@ function ScheduleList({ timesList }) {
   const { isLoading, fetchApi } = useFetchingStore();
   const { t } = useTranslation("scheduleFeature", { keyPrefix: "ScheduleList" });
   const theme = useTheme();
+  const navigate = useNavigate();
   const bookingInfoModal = useCustomModal();
   const bookingModal = useCustomModal();
 
@@ -163,6 +170,9 @@ function ScheduleList({ timesList }) {
 
   useEffect(() => {
     loadData();
+
+    const searchParams = qs.stringify({ date: formatDate.format(currentDate, "YYYY-MM-DD") });
+    navigate(`?${searchParams}`);
   }, [currentDate]);
 
   // console.log("doctors: ", doctors);

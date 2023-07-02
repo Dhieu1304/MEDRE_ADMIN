@@ -18,12 +18,14 @@ import {
 import formatDate from "date-and-time";
 import { useTranslation } from "react-i18next";
 import { Add as AddIcon, Edit as EditIcon, RemoveCircle } from "@mui/icons-material";
+import qs from "query-string";
 
 import PropTypes from "prop-types";
 // import WithDoctorLoaderWrapper from "../staff/hocs/WithDoctorLoaderWrapper";
 import { subject } from "@casl/ability";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useFetchingStore } from "../../store/FetchingApiStore";
-import { normalizeStrToDateStr } from "../../utils/standardizedForForm";
+import { normalizeStrToDateStr, normalizeStrToInt } from "../../utils/standardizedForForm";
 import { formatDateLocale, getWeekByDate } from "../../utils/datetimeUtil";
 import { CustomDateFromToInput } from "../../components/CustomInput";
 import timeOffServices from "../../services/timeOffServices";
@@ -40,24 +42,34 @@ import DeleteTimeOffModal from "./components/DeleteTimeOffModal";
 import StaffInfoCard from "../../components/StaffInfoCard";
 import entities from "../../entities/entities";
 
+const createDefaultValues = ({ from, to, page, limit } = {}) => {
+  const week = getWeekByDate();
+  const result = {
+    from: normalizeStrToDateStr(from, week[0]),
+    to: normalizeStrToDateStr(to, week[6]),
+    page: normalizeStrToInt(page, 1),
+    limit: normalizeStrToInt(limit, 10)
+  };
+
+  return result;
+};
+
 function DoctorTimeOff({ staff }) {
   const [timeOffs, setTimeOffs] = useState([]);
   const [count, setCount] = useState(0);
 
   const theme = useTheme();
 
-  const week = useMemo(() => {
-    return getWeekByDate();
+  const location = useLocation();
+  const defaultValues = useMemo(() => {
+    const defaultSearchParams = qs.parse(location.search);
+    const result = createDefaultValues(defaultSearchParams);
+    return result;
   }, []);
 
   const { watch, setValue } = useForm({
     mode: "onChange",
-    defaultValues: {
-      from: normalizeStrToDateStr(week[0]),
-      to: normalizeStrToDateStr(week[6]),
-      page: 1,
-      limit: 10
-    },
+    defaultValues,
     criteriaMode: "all"
   });
 
@@ -70,6 +82,7 @@ function DoctorTimeOff({ staff }) {
 
   const addTimeOffModal = useCustomModal();
   const editTimeOffModal = useCustomModal();
+  const navigate = useNavigate();
   const deleteTimeOffModal = useCustomModal();
 
   const columns = useMemo(
@@ -134,6 +147,11 @@ function DoctorTimeOff({ staff }) {
   useEffect(() => {
     const page = 1;
     loadData({ page });
+
+    const params = { ...watch(), page };
+    const searchParams = qs.stringify(params);
+    setValue("page", page);
+    navigate(`?${searchParams}`);
   }, [watch().from, watch().to, watch().limit]);
 
   useMemo(() => {
@@ -202,6 +220,9 @@ function DoctorTimeOff({ staff }) {
               onPageChange={(e, page) => {
                 const newPage = page + 1;
                 setValue("page", newPage);
+                const params = { ...watch(), page: newPage };
+                const searchParams = qs.stringify(params);
+                navigate(`?${searchParams}`);
                 loadData({ page: newPage });
               }}
               rowsPerPageOptions={[1, 10, 20, 50, 100]}
@@ -300,6 +321,9 @@ function DoctorTimeOff({ staff }) {
               }}
               onChange={(event, newPage) => {
                 setValue("page", newPage);
+                const params = { ...watch(), page: newPage };
+                const searchParams = qs.stringify(params);
+                navigate(`?${searchParams}`);
                 loadData({ page: newPage });
               }}
             />
