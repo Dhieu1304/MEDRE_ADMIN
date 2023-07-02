@@ -88,7 +88,11 @@
   "BookingModal": {
     "title": "Đặt lịch",
     "subTitle": {
-      "patientInfo": "Thông tin bệnh nhân"
+      "patientInfo": "Thông tin bệnh nhân",
+      "searchUser": "Tìm kiếm người dùng",
+      "searchPatient": "Tìm kiếm bệnh nhân",
+      "userInformationFound": "Thông tin bệnh nhân tìm được",
+      "patientInformationFound": "Thông tin bệnh nhân tìm được"
     },
     "tabLabels": {
       "user": "Người dùng",

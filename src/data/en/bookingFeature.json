@@ -89,7 +89,11 @@
   "BookingModal": {
     "title": "Booking",
     "subTitle": {
-      "patientInfo": "Patient information"
+      "patientInfo": "Patient information",
+      "searchUser": "Search user",
+      "searchPatient": "Search patient",
+      "userInformationFound": "User information found",
+      "patientInformationFound": "Patient information found"
     },
     "tabLabels": {
       "user": "User",

@@ -12,7 +12,7 @@
     "userId": "User ID",
     "emailPhoneNumberOrUserId": "Email, phone or user id",
     "patientId": "Patient ID",
-    "emailPhoneNumberOrPatientId": "Email, phone or patient id",
+    "phoneNumberOrPatientId": "Phone or patient id",
     "price": "Price",
 
     "patientName": "Patient name",

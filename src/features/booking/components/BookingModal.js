@@ -1,4 +1,17 @@
-import { Box, Checkbox, Grid, InputAdornment, ListItemText, MenuItem, Select, Tab, Tabs, Typography } from "@mui/material";
+import {
+  Box,
+  Checkbox,
+  CircularProgress,
+  Grid,
+  InputAdornment,
+  ListItemText,
+  MenuItem,
+  Select,
+  Tab,
+  Tabs,
+  Typography,
+  useTheme
+} from "@mui/material";
 import formatDate from "date-and-time";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
@@ -18,6 +31,8 @@ import userServices from "../../../services/userServices";
 import { cleanUndefinedAndNullValueObjectToStrObj } from "../../../utils/objectUtil";
 import { scheduleTypes } from "../../../entities/Schedule";
 import { formatCurrency } from "../../../utils/stringFormat";
+import patternConfig from "../../../config/patternConfig";
+import useDebounce from "../../../hooks/useDebounce";
 // import patientServices from "../../../services/patientServices";
 
 const tabTypes = {
@@ -30,14 +45,15 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
   const [user, setUser] = useState();
   const [patient, setPatient] = useState();
 
+  const theme = useTheme();
   const bookingForm = useForm({
     defaultValues: {
       scheduleId: data?.schedule?.id,
       timeId: data?.time?.id,
       date: data?.date,
       reason: "",
-      userId: "",
-      patientId: ""
+      emailPhoneNumberOrUserId: "",
+      phoneNumberOrPatientId: ""
     }
   });
 
@@ -51,7 +67,7 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
     defaultValues: createAddPatientFormDefaultValues()
   });
 
-  const { fetchApi } = useFetchingStore();
+  const { fetchApi, isLoading } = useFetchingStore();
 
   const book = async ({ scheduleId, timeId, date, reason, patientId, userId }, isBookingByPatientId = false) => {
     let bookData = { scheduleId, timeId, date, reason };
@@ -98,13 +114,17 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
     const newPatient = await addPatient(patientFormData);
     // console.log("newPatient: ", newPatient);
     if (newPatient?.id) {
-      await book({ ...bookingForm.watch() }, true);
+      // Ghi đè patientId bằng newPatient?.id
+      await book({ ...bookingForm.watch(), patientId: newPatient?.id }, true);
     }
   };
 
-  const handleBooking = async ({ scheduleId, timeId, date, reason, patientId, userId }) => {
-    if (tabValue === tabTypes.USER) await book({ scheduleId, timeId, date, reason, patientId, userId });
-    else if (tabValue === tabTypes.PATIENT) await book({ scheduleId, timeId, date, reason, patientId, userId }, true);
+  const handleBooking = async ({ scheduleId, timeId, date, reason }) => {
+    // console.log({ scheduleId, timeId, date, reason, phoneNumberOrPatientId, emailPhoneNumberOrUserId });
+    const userId = user?.id;
+    const patientId = patient?.id;
+    if (tabValue === tabTypes.USER) await book({ scheduleId, timeId, date, reason, userId, patientId });
+    else if (tabValue === tabTypes.PATIENT) await book({ scheduleId, timeId, date, reason, userId, patientId }, true);
   };
 
   const handleBeforeBookingSubmit = () => {
@@ -128,45 +148,139 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
 
   const [patientGenderContantList, patientGenderContantListObj] = usePatientGendersContantTranslation();
 
-  useEffect(() => {
-    const loadUser = async (userId) => {
-      await fetchApi(async () => {
-        // console.log("userId: ", userId);
-        const res = await userServices.getUserDetail(userId);
-        if (res?.success) {
-          const newUser = res?.user;
-          setUser({ ...newUser });
-          addPatientForm.reset(createAddPatientFormDefaultValues(newUser));
-          return { ...res };
-        }
-        return { ...res };
-      });
-    };
-    const { userId } = bookingForm.watch();
-    if (userId) {
-      loadUser(userId);
-    }
-  }, [bookingForm.watch().userId]);
+  // console.log("re render: ");
+
+  const { debouncedValue: searchUserDebounced, isWaiting: searchUserDebouncedWaiting } = useDebounce(
+    bookingForm.watch().emailPhoneNumberOrUserId,
+    500
+  );
+  const { debouncedValue: searchPatientDebounced, isWaiting: searchPatientDebouncedWaiting } = useDebounce(
+    bookingForm.watch().phoneNumberOrPatientId,
+    500
+  );
+
+  // console.log("searchUserDebouncedWaiting: ", searchUserDebouncedWaiting);
+  const cleanUserAndAddPatientForm = () => {
+    const emptyDefaultValues = createAddPatientFormDefaultValues();
+    setUser({});
+    addPatientForm.reset(emptyDefaultValues);
+  };
+
+  const cleanPatientAndAddPatientForm = () => {
+    const emptyDefaultValues = createAddPatientFormDefaultValues();
+    setPatient({});
+    addPatientForm.reset(emptyDefaultValues);
+  };
 
   useEffect(() => {
-    const loadPatient = async (patientId) => {
-      // console.log("patientId: ", patientId);
-      await fetchApi(async () => {
-        const res = await patientServices.getPatientDetail(patientId);
-        if (res?.success) {
-          const newPatient = res?.patient;
-          setPatient({ ...newPatient });
-          addPatientForm.reset(createAddPatientFormDefaultValues(newPatient));
+    const loadUser = async (emailPhoneNumberOrUserId) => {
+      // console.log("loadUser");
+      let id;
+      let phoneNumber;
+      let email;
+      if (patternConfig.phonePattern.test(emailPhoneNumberOrUserId)) {
+        phoneNumber = emailPhoneNumberOrUserId;
+      } else if (patternConfig.emailPattern.test(emailPhoneNumberOrUserId)) {
+        email = emailPhoneNumberOrUserId;
+      } else if (patternConfig.uuidPattern.test(emailPhoneNumberOrUserId)) {
+        id = emailPhoneNumberOrUserId;
+      } else {
+        // bookingForm.trigger();
+        cleanUserAndAddPatientForm();
+        return;
+      }
+
+      if (id) {
+        await fetchApi(async () => {
+          // console.log("emailPhoneNumberOrUserId: ", emailPhoneNumberOrUserId);
+          const res = await userServices.getUserDetail(id);
+          if (res?.success) {
+            const newUser = res?.user;
+            setUser({ ...newUser });
+            addPatientForm.reset(createAddPatientFormDefaultValues(newUser));
+            return { ...res };
+          }
+          cleanUserAndAddPatientForm();
           return { ...res };
-        }
-        return { ...res };
-      });
+        });
+      } else {
+        await fetchApi(async () => {
+          // console.log("emailPhoneNumberOrUserId: ", emailPhoneNumberOrUserId);
+          const res = await userServices.getUserList({ email, phoneNumber });
+          if (res?.success) {
+            const users = res?.users;
+            if (users && users?.length > 0) {
+              const newUser = users[0];
+              setUser({ ...newUser });
+              addPatientForm.reset(createAddPatientFormDefaultValues(newUser));
+            } else {
+              cleanUserAndAddPatientForm();
+            }
+            return { ...res };
+          }
+          cleanUserAndAddPatientForm();
+          return { ...res };
+        });
+      }
     };
-    const { patientId } = bookingForm.watch();
-    if (patientId) {
-      loadPatient(patientId);
+    const { emailPhoneNumberOrUserId } = bookingForm.watch();
+    if (emailPhoneNumberOrUserId) {
+      loadUser(emailPhoneNumberOrUserId);
     }
-  }, [bookingForm.watch().patientId]);
+  }, [searchUserDebounced]);
+
+  useEffect(() => {
+    const loadPatient = async (phoneNumberOrPatientId) => {
+      let id;
+      let phoneNumber;
+      if (patternConfig.phonePattern.test(phoneNumberOrPatientId)) {
+        phoneNumber = phoneNumberOrPatientId;
+      } else if (patternConfig.uuidPattern.test(phoneNumberOrPatientId)) {
+        id = phoneNumberOrPatientId;
+      } else {
+        // bookingForm.trigger();
+        cleanPatientAndAddPatientForm();
+        return;
+      }
+
+      if (id) {
+        await fetchApi(async () => {
+          const res = await patientServices.getPatientDetail(phoneNumberOrPatientId);
+          if (res?.success) {
+            const newPatient = res?.patient;
+            setPatient({ ...newPatient });
+            addPatientForm.reset(createAddPatientFormDefaultValues(newPatient));
+            return { ...res };
+          }
+          cleanPatientAndAddPatientForm();
+          return { ...res };
+        });
+      } else {
+        await fetchApi(async () => {
+          // console.log("emailPhoneNumberOrUserId: ", emailPhoneNumberOrUserId);
+          const res = await patientServices.getPatients({ phoneNumber });
+          if (res?.success) {
+            const patients = res?.patients;
+            if (patients && patients?.length > 0) {
+              const newPatient = patients[0];
+              setPatient({ ...newPatient });
+              addPatientForm.reset(createAddPatientFormDefaultValues(newPatient));
+            } else {
+              cleanPatientAndAddPatientForm();
+            }
+            return { ...res };
+          }
+          cleanPatientAndAddPatientForm();
+          return { ...res };
+        });
+      }
+    };
+    const { phoneNumberOrPatientId } = bookingForm.watch();
+    if (phoneNumberOrPatientId) {
+      // console.log("loadPatient");
+      loadPatient(phoneNumberOrPatientId);
+    }
+  }, [searchPatientDebounced]);
 
   // console.log("bookingForm.watch(): ", bookingForm.watch());
 
@@ -191,52 +305,103 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
     switch (value) {
       case USER:
         return (
-          <CustomInput
-            key={USER}
-            control={bookingForm.control}
-            label={tBooking("userId")}
-            trigger={bookingForm.trigger}
-            name="userId"
-            rules={{
-              required: tInputValidate("required")
-            }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <ClipboardButton
-                    setValue={(textValue) => {
-                      bookingForm.setValue("userId", textValue);
-                    }}
-                  />
-                </InputAdornment>
-              )
-            }}
-          />
+          <>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Typography fontSize={16} fontWeight={600} sx={{ mb: 2, mr: 2 }}>
+                {t("subTitle.searchUser")}
+              </Typography>
+              {(isLoading || searchUserDebouncedWaiting) && (
+                <CircularProgress
+                  size={24}
+                  thickness={3}
+                  sx={{
+                    color: theme.palette.primary.light,
+                    mr: 2,
+                    mb: 2
+                  }}
+                />
+              )}
+            </Box>
+            <CustomInput
+              key={USER}
+              control={bookingForm.control}
+              label={tBooking("emailPhoneNumberOrUserId")}
+              trigger={bookingForm.trigger}
+              name="emailPhoneNumberOrUserId"
+              rules={{
+                required: tInputValidate("required"),
+                pattern: {
+                  value: patternConfig.phoneOrEmailOrIdPattern,
+                  message: tInputValidate("format")
+                }
+              }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <ClipboardButton
+                      setValue={(textValue) => {
+                        bookingForm.setValue("emailPhoneNumberOrUserId", textValue);
+                      }}
+                    />
+                  </InputAdornment>
+                )
+              }}
+            />
+            <Typography fontSize={16} fontWeight={600} sx={{ my: 2 }}>
+              {t("subTitle.userInformationFound")}
+            </Typography>
+          </>
         );
 
       case PATIENT:
         return (
-          <CustomInput
-            key={PATIENT}
-            control={bookingForm.control}
-            label={tBooking("patientId")}
-            trigger={bookingForm.trigger}
-            name="patientId"
-            rules={{
-              required: tInputValidate("required")
-            }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <ClipboardButton
-                    setValue={(textValue) => {
-                      bookingForm.setValue("patientId", textValue);
-                    }}
-                  />
-                </InputAdornment>
-              )
-            }}
-          />
+          <>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Typography fontSize={16} fontWeight={600} sx={{ mb: 2, mr: 2 }}>
+                {t("subTitle.searchPatient")}
+              </Typography>
+
+              {(isLoading || searchPatientDebouncedWaiting) && (
+                <CircularProgress
+                  size={24}
+                  thickness={3}
+                  sx={{
+                    color: theme.palette.primary.light,
+                    mr: 2,
+                    mb: 2
+                  }}
+                />
+              )}
+            </Box>
+            <CustomInput
+              key={PATIENT}
+              control={bookingForm.control}
+              label={tBooking("phoneNumberOrPatientId")}
+              trigger={bookingForm.trigger}
+              name="phoneNumberOrPatientId"
+              rules={{
+                required: tInputValidate("required"),
+                pattern: {
+                  value: patternConfig.phoneOrIdPattern,
+                  message: tInputValidate("format")
+                }
+              }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <ClipboardButton
+                      setValue={(textValue) => {
+                        bookingForm.setValue("phoneNumberOrPatientId", textValue);
+                      }}
+                    />
+                  </InputAdornment>
+                )
+              }}
+            />
+            <Typography fontSize={16} fontWeight={600} sx={{ my: 2 }}>
+              {t("subTitle.userInformationFound")}
+            </Typography>
+          </>
         );
 
       case NEW_PATIENT:
