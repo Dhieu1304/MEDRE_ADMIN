@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 
-import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, Button, Typography, useTheme } from "@mui/material";
 import qs from "query-string";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -34,6 +34,7 @@ import CopyButton from "../../../components/CopyButton";
 import DataTable from "../../components/DataFilterTable/DataTable";
 import entities from "../../../entities/entities";
 import { getSortValue } from "../../../utils/objectUtil";
+import routeConfig from "../../../config/routeConfig";
 
 function StaffList({ expertisesList }) {
   const [isFirst, setIsFirst] = useState(true);
@@ -75,7 +76,7 @@ function StaffList({ expertisesList }) {
   /*
     The keys of this object represent column-by-column visibility
     We will hide description, education, certificate, healthInsurance for the first time
-    
+
   */
   const [showCols, setShowCols] = useState({
     ...initialShowCols,
@@ -259,20 +260,19 @@ function StaffList({ expertisesList }) {
         label: "",
         minWidth: 80,
         render: (staff) => {
+          const staffPath = routeConfig.staff;
           return (
             <>
               {staff?.role === staffRoles.ROLE_DOCTOR && (
-                <Link to={`${staff?.id}/schedule`}>
+                <Link to={`${staffPath}/${staff?.id}/schedule`}>
                   <CalendarMonthIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
                 </Link>
               )}
-              <IconButton
-                onClick={() => {
-                  navigate(staff?.id, { relative: true });
-                }}
-              >
+
+              <Link to={`${staffPath}/${staff?.id}`}>
                 <SearchIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
-              </IconButton>
+              </Link>
+
               <CopyButton content={staff?.id} />
             </>
           );

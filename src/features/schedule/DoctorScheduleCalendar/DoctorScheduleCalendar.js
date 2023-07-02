@@ -12,10 +12,7 @@ import {
   Box,
   Button,
   IconButton,
-  CardHeader,
-  Avatar,
   Typography,
-  Card
 } from "@mui/material";
 
 import formatDate from "date-and-time";
@@ -52,6 +49,7 @@ import { staffActionAbility } from "../../../entities/Staff";
 import bookingServices from "../../../services/bookingServices";
 import { bookingMethods } from "../../../entities/Booking/constant";
 import BookingModal from "../../booking/components/BookingModal";
+import StaffInfoCard from "../../../components/StaffInfoCard";
 
 const EMPTY_CELL = "EMPTY_CELL";
 const FULL_SLOT = "FULL_SLOT";
@@ -458,24 +456,7 @@ function DoctorScheduleCalendar({ timesList, staff }) {
         <CustomOverlay open={isLoading} />
         <CustomPageTitle title={t("title")} />
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 4 }}>
-          <Card
-            sx={{
-              height: "100%",
-              maxWidth: 500,
-              display: "flex",
-              flexDirection: "column",
-              p: 0,
-              cursor: "pointer",
-              border: "none",
-              boxShadow: "none"
-            }}
-          >
-            <CardHeader
-              avatar={<Avatar alt={staff?.name} src={staff?.image} />}
-              title={<Typography variant="h6">{staff?.name}</Typography>}
-              subheader={staff?.certificate && `(${staff?.certificate})`}
-            />
-          </Card>
+          {staff && staff?.id && <StaffInfoCard staff={staff} />}
 
           <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
             <Can I={staffActionAbility.ADD_DOCTOR_TIMEOFF} this={subject("Staff", staff)}>

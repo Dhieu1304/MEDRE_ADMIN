@@ -54,7 +54,9 @@
       "hideFilterCollapse": "Hide filter",
       "showFilterCollapse": "Show Filter",
       "showMenuColumns": "Show",
-      "add": "Add"
+      "add": "Add",
+      "save": "Save",
+      "verify": "Verify"
     }
   },
 

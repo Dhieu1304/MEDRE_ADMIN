@@ -1,15 +1,15 @@
 import React, { useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 
-import { Grid, Select, MenuItem, Checkbox, ListItemText, IconButton, InputAdornment, useTheme, Button } from "@mui/material";
+import { Grid, Select, MenuItem, Checkbox, ListItemText, InputAdornment, useTheme, Button } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-import { Add as AddIcon } from "@mui/icons-material";
 import { useAbility } from "@casl/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear as faGearIcon } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import { subject } from "@casl/ability";
 import CustomInput from "../../components/CustomInput";
 
 import staffServices from "../../services/staffServices";
@@ -17,11 +17,15 @@ import { useFetchingStore } from "../../store/FetchingApiStore/hooks";
 import CustomOverlay from "../../components/CustomOverlay";
 import ChangeAvatarModal from "./components/ChangeAvatarModal";
 import { useCustomModal } from "../../components/CustomModal";
-import AddExpertiseModal from "../expertise/components/AddExpertiseModal";
-import Staff, { staffActionAbility, staffGenders, staffInputValidate, staffStatuses } from "../../entities/Staff";
+import Staff, {
+  staffActionAbility,
+  staffGenders,
+  staffInputValidate,
+  staffRoles,
+  staffStatuses
+} from "../../entities/Staff";
 import { AbilityContext } from "../../store/AbilityStore";
 import { NotHaveAccessModal } from "../auth";
-import Expertise, { expertiseActionAbility } from "../../entities/Expertise";
 import EditStaffRoleModal from "./components/EditStaffRoleModal";
 import { mergeObjectsWithoutNullAndUndefined } from "../../utils/objectUtil";
 import { useAuthStore } from "../../store/AuthStore";
@@ -31,8 +35,9 @@ import UnblockStaffModal from "./components/UnblockStaffModal";
 import SectionContent from "../../components/SectionContent";
 import PersonDetailWrapper from "../../components/PersonDetailWrapper/PersonDetailWrapper";
 import routeConfig from "../../config/routeConfig";
+import entities from "../../entities/entities";
 
-function StaffDetail({ staff, loadData, expertisesList, loadExpertisesList }) {
+function StaffDetail({ staff, loadData, expertisesList }) {
   // const [staff, setStaff] = useState();
 
   const { t } = useTranslation("staffFeature", { keyPrefix: "StaffDetail" });
@@ -63,7 +68,6 @@ function StaffDetail({ staff, loadData, expertisesList, loadExpertisesList }) {
   const theme = useTheme();
 
   const changeAvatarModal = useCustomModal();
-  const addExpertiseModal = useCustomModal();
   const notHaveAccessModal = useCustomModal();
   const editStaffRoleModal = useCustomModal();
   const blockStaffModal = useCustomModal();
@@ -167,11 +171,10 @@ function StaffDetail({ staff, loadData, expertisesList, loadExpertisesList }) {
 
   const ability = useAbility(AbilityContext);
 
-  const canUpdateStaff = ability.can(staffActionAbility.UPDATE, staff);
-
-  const canUpdateStaffRole = ability.can(staffActionAbility.UPDATE_ROLE, staff);
-  const canBlockStaff = ability.can(staffActionAbility.BLOCK, staff);
-  const canAddExpertise = ability.can(expertiseActionAbility.ADD, Expertise.magicWord());
+  const canUpdateStaff = ability.can(staffActionAbility.UPDATE, subject(entities.STAFF, staff));
+  const canUpdateStaffRole = ability.can(staffActionAbility.UPDATE_ROLE, subject(entities.STAFF, staff));
+  const canUpdateStaffExpertise = ability.can(staffActionAbility.UPDATE_DOCTOR_EXPERTISES, subject(entities.STAFF, staff));
+  const canBlockStaff = ability.can(staffActionAbility.BLOCK, subject(entities.STAFF, staff));
 
   const handleSaveDetail = async ({
     username,
@@ -224,10 +227,6 @@ function StaffDetail({ staff, loadData, expertisesList, loadExpertisesList }) {
         return { ...res };
       });
     }
-  };
-
-  const handleAfterAddExpertise = async () => {
-    await loadExpertisesList();
   };
 
   const handleAfterEditStaffRole = async () => {
@@ -591,150 +590,139 @@ function StaffDetail({ staff, loadData, expertisesList, loadExpertisesList }) {
               </Grid>
             </Grid>
           </SectionContent>
-
-          <SectionContent title={t("title.doctor")}>
-            <Grid container spacing={3}>
-              <Grid item xs={12} sm={12} md={6} lg={6}>
-                <CustomInput
-                  disabled={!canUpdateStaff}
-                  showCanEditIcon
-                  control={control}
-                  rules={{
-                    maxLength: {
-                      value: staffInputValidate.EDUCATION_MAX_LENGTH,
-                      message: tInputValidation("maxLength", {
-                        maxLength: staffInputValidate.EDUCATION_MAX_LENGTH
-                      })
-                    }
-                  }}
-                  label={tStaff("education")}
-                  trigger={trigger}
-                  name="education"
-                  type="text"
-                  multiline
-                  rows={2}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={12} md={6} lg={6}>
-                <CustomInput
-                  disabled={!canUpdateStaff}
-                  showCanEditIcon
-                  control={control}
-                  rules={{
-                    maxLength: {
-                      value: staffInputValidate.CERTIFICATE_MAX_LENGTH,
-                      message: tInputValidation("maxLength", {
-                        maxLength: staffInputValidate.CERTIFICATE_MAX_LENGTH
-                      })
-                    }
-                  }}
-                  label={tStaff("certificate")}
-                  trigger={trigger}
-                  name="certificate"
-                  type="text"
-                  multiline
-                  rows={2}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={12} md={12} lg={12}>
-                <CustomInput
-                  disabled={!canUpdateStaff}
-                  showCanEditIcon
-                  control={control}
-                  rules={{
-                    maxLength: {
-                      value: staffInputValidate.DESCRIPTION_MAX_LENGTH,
-                      message: tInputValidation("maxLength", {
-                        maxLength: staffInputValidate.DESCRIPTION_MAX_LENGTH
-                      })
-                    }
-                  }}
-                  label={tStaff("description")}
-                  trigger={trigger}
-                  name="description"
-                  type="text"
-                  multiline
-                  rows={6}
-                />
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                sm={12}
-                md={12}
-                lg={12}
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "flex-start"
-                }}
-              >
-                <CustomInput
-                  disabled={!canUpdateStaff}
-                  showCanEditIcon
-                  control={control}
-                  rules={{}}
-                  label={tStaff("expertises")}
-                  trigger={trigger}
-                  name="expertises"
-                  childrenType="select"
-                >
-                  <Select
-                    multiple
-                    renderValue={(selected) => {
-                      if (Array.isArray(selected)) {
-                        const selectedValue = selected
-                          ?.map((cur) => {
-                            return expertiseListObj[cur]?.name;
-                          })
-                          ?.join(", ");
-                        return (
-                          <div
-                            style={{
-                              overflow: "auto",
-                              whiteSpace: "pre-wrap"
-                            }}
-                          >
-                            {selectedValue}
-                          </div>
-                        );
+          {staff?.role === staffRoles.ROLE_DOCTOR && (
+            <SectionContent title={t("title.doctor")}>
+              <Grid container spacing={3}>
+                <Grid item xs={12} sm={12} md={6} lg={6}>
+                  <CustomInput
+                    disabled={!canUpdateStaff}
+                    showCanEditIcon
+                    control={control}
+                    rules={{
+                      maxLength: {
+                        value: staffInputValidate.EDUCATION_MAX_LENGTH,
+                        message: tInputValidation("maxLength", {
+                          maxLength: staffInputValidate.EDUCATION_MAX_LENGTH
+                        })
                       }
-
-                      return selected;
-
-                      // if (Array.isArray(selected))
-                      //   return selected?.map((cur) => {
-                      //     return <p>{expertiseListObj[cur]?.name}</p>;
-                      //   });
                     }}
-                  >
-                    {expertisesList.map((item) => {
-                      return (
-                        <MenuItem key={item?.id} value={item?.id}>
-                          <Checkbox checked={watch().expertises?.indexOf(item?.id) > -1} />
-                          <ListItemText primary={item?.name} />
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </CustomInput>
+                    label={tStaff("education")}
+                    trigger={trigger}
+                    name="education"
+                    type="text"
+                    multiline
+                    rows={2}
+                  />
+                </Grid>
 
-                <IconButton
-                  onClick={() => {
-                    if (canAddExpertise) {
-                      addExpertiseModal.setShow(true);
-                    } else {
-                      notHaveAccessModal.setShow(true);
-                    }
+                <Grid item xs={12} sm={12} md={6} lg={6}>
+                  <CustomInput
+                    disabled={!canUpdateStaff}
+                    showCanEditIcon
+                    control={control}
+                    rules={{
+                      maxLength: {
+                        value: staffInputValidate.CERTIFICATE_MAX_LENGTH,
+                        message: tInputValidation("maxLength", {
+                          maxLength: staffInputValidate.CERTIFICATE_MAX_LENGTH
+                        })
+                      }
+                    }}
+                    label={tStaff("certificate")}
+                    trigger={trigger}
+                    name="certificate"
+                    type="text"
+                    multiline
+                    rows={2}
+                  />
+                </Grid>
+
+                <Grid item xs={12} sm={12} md={12} lg={12}>
+                  <CustomInput
+                    disabled={!canUpdateStaff}
+                    showCanEditIcon
+                    control={control}
+                    rules={{
+                      maxLength: {
+                        value: staffInputValidate.DESCRIPTION_MAX_LENGTH,
+                        message: tInputValidation("maxLength", {
+                          maxLength: staffInputValidate.DESCRIPTION_MAX_LENGTH
+                        })
+                      }
+                    }}
+                    label={tStaff("description")}
+                    trigger={trigger}
+                    name="description"
+                    type="text"
+                    multiline
+                    rows={6}
+                  />
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={12}
+                  md={12}
+                  lg={12}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "flex-start"
                   }}
                 >
-                  <AddIcon />
-                </IconButton>
+                  <CustomInput
+                    disabled={!canUpdateStaff || !canUpdateStaffExpertise}
+                    showCanEditIcon
+                    control={control}
+                    rules={{}}
+                    label={tStaff("expertises")}
+                    trigger={trigger}
+                    name="expertises"
+                    childrenType="select"
+                  >
+                    <Select
+                      multiple
+                      renderValue={(selected) => {
+                        if (Array.isArray(selected)) {
+                          const selectedValue = selected
+                            ?.map((cur) => {
+                              return expertiseListObj[cur]?.name;
+                            })
+                            ?.join(", ");
+                          return (
+                            <div
+                              style={{
+                                overflow: "auto",
+                                whiteSpace: "pre-wrap"
+                              }}
+                            >
+                              {selectedValue}
+                            </div>
+                          );
+                        }
+
+                        return selected;
+
+                        // if (Array.isArray(selected))
+                        //   return selected?.map((cur) => {
+                        //     return <p>{expertiseListObj[cur]?.name}</p>;
+                        //   });
+                      }}
+                    >
+                      {expertisesList.map((item) => {
+                        return (
+                          <MenuItem key={item?.id} value={item?.id}>
+                            <Checkbox checked={watch().expertises?.indexOf(item?.id) > -1} />
+                            <ListItemText primary={item?.name} />
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </CustomInput>
+                </Grid>
               </Grid>
-            </Grid>
-          </SectionContent>
+            </SectionContent>
+          )}
         </PersonDetailWrapper>
       )}
       {editStaffRoleModal.show && (
@@ -785,13 +773,6 @@ function StaffDetail({ staff, loadData, expertisesList, loadExpertisesList }) {
           handleAfterChangeAvatar={handleAfterChangeAvatar}
         />
       )}
-      {addExpertiseModal.show && (
-        <AddExpertiseModal
-          show={addExpertiseModal.show}
-          setShow={addExpertiseModal.setShow}
-          handleAfterAddExpertise={handleAfterAddExpertise}
-        />
-      )}
     </>
   );
 }
@@ -799,8 +780,7 @@ function StaffDetail({ staff, loadData, expertisesList, loadExpertisesList }) {
 StaffDetail.propTypes = {
   staff: PropTypes.object.isRequired,
   loadData: PropTypes.func.isRequired,
-  expertisesList: PropTypes.array.isRequired,
-  loadExpertisesList: PropTypes.func.isRequired
+  expertisesList: PropTypes.array.isRequired
 };
 
 export default WithExpertisesLoaderWrapper(StaffDetail);

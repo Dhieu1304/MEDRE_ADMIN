@@ -36,6 +36,7 @@ import { staffActionAbility } from "../../entities/Staff";
 import { Can } from "../../store/AbilityStore";
 import EditTimeOffModal from "./components/EditTimeOffModal";
 import DeleteTimeOffModal from "./components/DeleteTimeOffModal";
+import StaffInfoCard from "../../components/StaffInfoCard";
 
 function DoctorTimeOff({ staff }) {
   const [timeOffs, setTimeOffs] = useState([]);
@@ -173,6 +174,8 @@ function DoctorTimeOff({ staff }) {
             </Can>
           }
         />
+
+        {staff && staff?.id && <StaffInfoCard staff={staff} />}
 
         <Grid container spacing={3} justifyContent="space-between">
           <Grid item xs={12} sm={12} md={6} lg={4}>

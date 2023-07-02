@@ -38,6 +38,7 @@ import {
 import Schedule from "../../entities/Schedule/Schedule";
 import { Can } from "../../store/AbilityStore";
 import CustomPageTitle from "../../components/CustomPageTitle";
+import StaffInfoCard from "../../components/StaffInfoCard";
 
 function DoctorScheduleList({ staff }) {
   const [schedules, setSchedules] = useState([]);
@@ -244,6 +245,7 @@ function DoctorScheduleList({ staff }) {
             </Can>
           }
         />
+        {staff && staff?.id && <StaffInfoCard staff={staff} />}
 
         <Grid
           container
