@@ -11,6 +11,7 @@
     "updatedAt": "Ngày cập nhập",
     "deletedAt": "Ngày xóa",
     "userOrStaffId": "ID người nhận",
+    "userOrStaffEmailPhoneId": "Email, sđt hoặc id người nhận",
     "personalType": "Người nhận"
   },
 

@@ -11,5 +11,8 @@
     "same": "{{left}} must be same as {{right}}",
     "passwordFormat": "must contain at least one digit and one character",
     "length": "{{label}} must have {{length}} characters"
+  },
+  "messages": {
+    "general": "There was an error, please check the input again"
   }
 }

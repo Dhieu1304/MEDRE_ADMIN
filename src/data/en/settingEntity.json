@@ -7,5 +7,23 @@
     "createdAt": "Created at",
     "updatedAt": "Updated at",
     "deletedAt": "Deleted at"
+  },
+
+  "constants": {
+    "names": {
+      "maintain": "System maintenance",
+      "bookAdvanceDay": "Number of days required to book in advance",
+      "bookAfterDay": "Number of days allowed to book after",
+      "createScheduleAdvanceDay": "Number of days required to create schedule in advance",
+      "cancelOnlineBookingAfterMinute": "Number of minutes to cancel online booking"
+    },
+
+    "units": {
+      "maintain": "",
+      "bookAdvanceDay": "days",
+      "bookAfterDay": "days",
+      "createScheduleAdvanceDay": "days",
+      "cancelOnlineBookingAfterMinute": "minutes"
+    }
   }
 }

@@ -7,5 +7,23 @@
     "createdAt": "Ngày tạo",
     "updatedAt": "Ngày cập nhập",
     "deletedAt": "Ngày xóa"
+  },
+
+  "constants": {
+    "names": {
+      "maintain": "Bảo trì hệ thống",
+      "bookAdvanceDay": "Số ngày cần phải đặt lịch trước",
+      "bookAfterDay": "Số ngày được đặt lịch sau",
+      "createScheduleAdvanceDay": "Số ngày cần phải tạo lịch biểu trước",
+      "cancelOnlineBookingAfterMinute": "Số phút hủy lịch đặt online"
+    },
+
+    "units": {
+      "maintain": "",
+      "bookAdvanceDay": "ngày",
+      "bookAfterDay": "ngày",
+      "createScheduleAdvanceDay": "ngày",
+      "cancelOnlineBookingAfterMinute": "phút"
+    }
   }
 }

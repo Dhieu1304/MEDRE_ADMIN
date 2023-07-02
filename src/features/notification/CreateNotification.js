@@ -1,4 +1,4 @@
-import { Box, Button, Checkbox, Grid, ListItemText, MenuItem, Select, useTheme } from "@mui/material";
+import { Box, Button, Checkbox, Grid, ListItemText, MenuItem, Select, Typography, useTheme } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useMemo } from "react";
@@ -10,6 +10,7 @@ import notificationServices from "../../services/notificationServices";
 import { useAppConfigStore } from "../../store/AppConfigStore";
 import { notificationFors, notificationPersonalTypes, notificationTypes } from "../../entities/Notification/constant";
 import CustomHtmlInput from "../../components/CustomInput/CustomHtmlInput";
+import patternConfig from "../../config/patternConfig";
 
 function CreateNotification() {
   // const [value, setValue] = useState("");
@@ -22,7 +23,7 @@ function CreateNotification() {
       content: "",
       notificationFor: "",
       type: "",
-      userOrStaffId: "",
+      userOrStaffEmailPhoneId: "",
       personalType: notificationPersonalTypes.USER
     },
     criteriaMode: "all"
@@ -36,7 +37,8 @@ function CreateNotification() {
   const { t: tNotificationTypes } = useTranslation("notificationEntity", { keyPrefix: "constants.types" });
   const { t: tNotificationPersonalTypes } = useTranslation("notificationEntity", { keyPrefix: "constants.personalTypes" });
   const { t: tInputValidation } = useTranslation("input", { keyPrefix: "validation" });
-  const { fetchApi } = useFetchingStore();
+  const { t: tInputMessages } = useTranslation("input", { keyPrefix: "messages" });
+  const { fetchApi, fetchApiError } = useFetchingStore();
   const theme = useTheme();
 
   const [notificationForList, notificationForListObj] = useMemo(() => {
@@ -135,7 +137,7 @@ function CreateNotification() {
     description,
     notificationFor,
     type,
-    userOrStaffId,
+    userOrStaffEmailPhoneId,
     personalType
   }) => {
     const descriptionWithoutHtml = watch()
@@ -157,12 +159,33 @@ function CreateNotification() {
     };
 
     if (notificationFor === notificationFors.PERSONAL) {
-      if (personalType === notificationPersonalTypes.STAFF) {
-        data.staffId = userOrStaffId;
+      let id;
+      let phoneNumber;
+      let email;
+
+      if (patternConfig.uuidPattern.test(userOrStaffEmailPhoneId)) {
+        id = userOrStaffEmailPhoneId;
+      } else if (patternConfig.phonePattern.test(userOrStaffEmailPhoneId)) {
+        phoneNumber = userOrStaffEmailPhoneId;
+      } else if (patternConfig.emailPattern.test(userOrStaffEmailPhoneId)) {
+        email = userOrStaffEmailPhoneId;
       } else {
-        data.userId = userOrStaffId;
+        trigger();
+        return;
+      }
+
+      if (personalType === notificationPersonalTypes.STAFF) {
+        data.staffEmail = email;
+        data.staffPhoneNumber = phoneNumber;
+        data.staffId = id;
+      } else {
+        data.userEmail = email;
+        data.stafuserPhoneNumberfPhoneNumber = phoneNumber;
+        data.userId = id;
       }
     }
+
+    // console.log("data: ", data);
 
     await fetchApi(async () => {
       const res = await notificationServices.createNotification(data);
@@ -270,11 +293,18 @@ function CreateNotification() {
                 <CustomInput
                   control={control}
                   rules={{
-                    required: watch().notificationFor === notificationFors.PERSONAL ? tInputValidation("required") : false
+                    required: watch().notificationFor === notificationFors.PERSONAL ? tInputValidation("required") : false,
+                    pattern:
+                      watch().notificationFor === notificationFors.PERSONAL
+                        ? {
+                            value: patternConfig.phoneOrEmailOrIdPattern,
+                            message: tInputValidation("format")
+                          }
+                        : undefined
                   }}
-                  label={tNotification("userOrStaffId")}
+                  label={tNotification("userOrStaffEmailPhoneId")}
                   trigger={trigger}
-                  name="userOrStaffId"
+                  name="userOrStaffEmailPhoneId"
                 />
               </Grid>
 
@@ -308,6 +338,14 @@ function CreateNotification() {
             </>
           )}
         </Grid>
+
+        <Box
+          sx={{
+            width: "100%"
+          }}
+        >
+          {fetchApiError && <Typography sx={{ color: theme.palette.error.light }}>{tInputMessages("general")}</Typography>}
+        </Box>
       </Box>
       <Box
         sx={{

@@ -19,3 +19,7 @@ export const notificationPersonalTypes = {
   STAFF: "Staff",
   USER: "User"
 };
+
+export const notificationActionAbility = {
+  ADD: "ADD"
+};

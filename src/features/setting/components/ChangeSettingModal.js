@@ -1,11 +1,13 @@
 import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { useMemo } from "react";
 import CustomModal from "../../../components/CustomModal";
 
 import { useFetchingStore } from "../../../store/FetchingApiStore";
 import settingServices from "../../../services/settingServices";
 import CustomInput from "../../../components/CustomInput/CustomInput";
+import { useAppConfigStore } from "../../../store/AppConfigStore";
 
 function ChangeSettingModal({ show, setShow, data, setData, handleAfterEditSetting }) {
   const { handleSubmit, control, trigger } = useForm({
@@ -16,9 +18,36 @@ function ChangeSettingModal({ show, setShow, data, setData, handleAfterEditSetti
     criteriaMode: "all"
   });
 
+  const { locale } = useAppConfigStore();
   const { t } = useTranslation("settingFeature", { keyPrefix: "ChangeSettingModal" });
-  const { t: tSetting } = useTranslation("settingEntity", { keyPrefix: "properties" });
   const { t: tInputValidation } = useTranslation("input", { keyPrefix: "validation" });
+
+  const { t: tSettingNames } = useTranslation("settingEntity", { keyPrefix: "constants.names" });
+  const { t: tSettingUnits } = useTranslation("settingEntity", { keyPrefix: "constants.units" });
+  const settingLabelObj = useMemo(() => {
+    return {
+      maintain: {
+        label: tSettingNames("maintain"),
+        unit: tSettingUnits("maintain")
+      },
+      bookAdvanceDay: {
+        label: tSettingNames("bookAdvanceDay"),
+        unit: tSettingUnits("bookAdvanceDay")
+      },
+      bookAfterDay: {
+        label: tSettingNames("bookAfterDay"),
+        unit: tSettingUnits("bookAfterDay")
+      },
+      createScheduleAdvanceDay: {
+        label: tSettingNames("createScheduleAdvanceDay"),
+        unit: tSettingUnits("createScheduleAdvanceDay")
+      },
+      cancelOnlineBookingAfterMinute: {
+        label: tSettingNames("cancelOnlineBookingAfterMinute"),
+        unit: tSettingUnits("cancelOnlineBookingAfterMinute")
+      }
+    };
+  }, [locale]);
 
   const { fetchApi } = useFetchingStore();
 
@@ -52,7 +81,7 @@ function ChangeSettingModal({ show, setShow, data, setData, handleAfterEditSetti
         rules={{
           required: tInputValidation("required")
         }}
-        label={tSetting("descName")}
+        label={settingLabelObj[data?.name]?.label}
         trigger={trigger}
         name="value"
         type="number"

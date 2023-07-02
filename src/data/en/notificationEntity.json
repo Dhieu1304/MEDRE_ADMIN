@@ -13,6 +13,7 @@
     "userId": "User ID",
     "staffId": "Staff ID",
     "userOrStaffId": "Received Id",
+    "userOrStaffEmailPhoneId": "Email, phone or id receiver",
     "personalType": "Personal type"
   },
 

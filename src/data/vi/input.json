@@ -11,5 +11,9 @@
     "same": "{{left}} phải giống với {{right}}",
     "passwordFormat": "phải có ít nhất một chữ số và một ký tự",
     "length": "{{label}} phải có {{length}} ký tự"
+  },
+
+  "messages": {
+    "general": "Đã xảy ra lỗi, vui lòng kiểm tra lại đầu vào"
   }
 }

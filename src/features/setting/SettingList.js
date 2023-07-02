@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 
 import { Box, Button, Paper, Table, TableBody, TableContainer, TableHead, TableRow, useTheme } from "@mui/material";
-import formatDate from "date-and-time";
 import { useTranslation } from "react-i18next";
 import { Edit as EditIcon } from "@mui/icons-material";
 
@@ -15,8 +14,8 @@ import CustomTableCell, { customTableCellVariant } from "../../components/Custom
 import { useCustomModal } from "../../components/CustomModal";
 import ChangeSettingModal from "./components/ChangeSettingModal";
 import { Can } from "../../store/AbilityStore";
-import Setting from "../../entities/Setting/Setting";
 import { settingActionAbility } from "../../entities/Setting";
+import entities from "../../entities/entities";
 
 function SettingList() {
   const [settings, setSettings] = useState([]);
@@ -27,6 +26,9 @@ function SettingList() {
 
   const { t } = useTranslation("settingFeature", { keyPrefix: "SettingList" });
   const { t: tSetting } = useTranslation("settingEntity", { keyPrefix: "properties" });
+  const { t: tSettingNames } = useTranslation("settingEntity", { keyPrefix: "constants.names" });
+  const { t: tSettingUnits } = useTranslation("settingEntity", { keyPrefix: "constants.units" });
+
   const changeSettingModal = useCustomModal();
 
   const columns = useMemo(
@@ -37,16 +39,6 @@ function SettingList() {
         minWidth: 100
       },
       {
-        id: "createdAt",
-        label: tSetting("createdAt"),
-        minWidth: 50
-      },
-      {
-        id: "updatedAt",
-        label: tSetting("updatedAt"),
-        minWidth: 50
-      },
-      {
         id: "value",
         label: tSetting("value"),
         minWidth: 20
@@ -54,6 +46,31 @@ function SettingList() {
     ],
     [locale]
   );
+
+  const settingLabelObj = useMemo(() => {
+    return {
+      maintain: {
+        label: tSettingNames("maintain"),
+        unit: tSettingUnits("maintain")
+      },
+      bookAdvanceDay: {
+        label: tSettingNames("bookAdvanceDay"),
+        unit: tSettingUnits("bookAdvanceDay")
+      },
+      bookAfterDay: {
+        label: tSettingNames("bookAfterDay"),
+        unit: tSettingUnits("bookAfterDay")
+      },
+      createScheduleAdvanceDay: {
+        label: tSettingNames("createScheduleAdvanceDay"),
+        unit: tSettingUnits("createScheduleAdvanceDay")
+      },
+      cancelOnlineBookingAfterMinute: {
+        label: tSettingNames("cancelOnlineBookingAfterMinute"),
+        unit: tSettingUnits("cancelOnlineBookingAfterMinute")
+      }
+    };
+  }, [locale]);
 
   const loadData = async () => {
     await fetchApi(async () => {
@@ -69,6 +86,8 @@ function SettingList() {
       return { ...res };
     });
   };
+
+  // console.log("settings ", settings);
 
   useEffect(() => {
     loadData();
@@ -107,11 +126,9 @@ function SettingList() {
               {settings?.map((setting) => {
                 return (
                   <TableRow key={setting?.id}>
-                    <CustomTableCell>{setting?.descName}</CustomTableCell>
-                    <CustomTableCell>{formatDate.format(new Date(setting?.createdAt), "DD/MM/YYYY")}</CustomTableCell>
-                    <CustomTableCell>{formatDate.format(new Date(setting?.updatedAt), "DD/MM/YYYY")}</CustomTableCell>
-                    <CustomTableCell align="center">
-                      <Can I={settingActionAbility.UPDATE} a={Setting.magicWord()}>
+                    <CustomTableCell>{settingLabelObj[setting?.name]?.label}</CustomTableCell>
+                    <CustomTableCell align="left">
+                      <Can I={settingActionAbility.UPDATE} a={entities.SETTING}>
                         <Button
                           onClick={() => {
                             changeSettingModal.setShow(true);
@@ -122,7 +139,7 @@ function SettingList() {
                           {setting?.value}
                         </Button>
                       </Can>
-                      <Can not I={settingActionAbility.UPDATE} a={Setting.magicWord()}>
+                      <Can not I={settingActionAbility.UPDATE} a={entities.SETTING}>
                         {setting?.value}
                       </Can>
                     </CustomTableCell>

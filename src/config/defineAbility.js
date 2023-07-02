@@ -7,15 +7,17 @@ import { timeOffActionAbility } from "../entities/TimeOff";
 import { patientActionAbility } from "../entities/Patient";
 import { expertiseActionAbility } from "../entities/Expertise";
 import entities from "../entities/entities";
+import { settingActionAbility } from "../entities/Setting";
+import { notificationActionAbility } from "../entities/Notification/constant";
 
 const defineAbilityFor = (staff) => {
   const {
     BOOKING,
     EXPERTISE,
-    // NOTIFICATION,
+    NOTIFICATION,
     PATIENT,
     SCHEDULE,
-    // SETTING,
+    SETTING,
     STAFF,
     // STATISTICS,
     TIMEOFF,
@@ -105,8 +107,15 @@ const defineAbilityFor = (staff) => {
         can(patientActionAbility.BLOCK, PATIENT);
         can(patientActionAbility.DELETE, PATIENT);
         can(patientActionAbility.UPDATE, PATIENT);
-        break;
 
+        // Setting
+        can(settingActionAbility.VIEW, SETTING);
+        can(settingActionAbility.UPDATE, SETTING);
+
+        // Notification
+        can(notificationActionAbility.ADD, NOTIFICATION);
+
+        break;
       case staffRoles.ROLE_DOCTOR:
         // STAFF
         cannot(staffActionAbility.VIEW_ALL, STAFF);
@@ -165,6 +174,13 @@ const defineAbilityFor = (staff) => {
         cannot(patientActionAbility.BLOCK, PATIENT);
         cannot(patientActionAbility.DELETE, PATIENT);
         cannot(patientActionAbility.UPDATE, PATIENT);
+
+        // Setting
+        cannot(settingActionAbility.VIEW, SETTING);
+        cannot(settingActionAbility.UPDATE, SETTING);
+
+        // Notification
+        cannot(notificationActionAbility.ADD, NOTIFICATION);
 
         break;
 
@@ -225,6 +241,13 @@ const defineAbilityFor = (staff) => {
         cannot(patientActionAbility.DELETE, PATIENT);
         cannot(patientActionAbility.UPDATE, PATIENT);
 
+        // Setting
+        cannot(settingActionAbility.VIEW, SETTING);
+        cannot(settingActionAbility.UPDATE, SETTING);
+
+        // Notification
+        cannot(notificationActionAbility.ADD, NOTIFICATION);
+
         break;
 
       case staffRoles.ROLE_CUSTOMER_SERVICE:
@@ -283,6 +306,13 @@ const defineAbilityFor = (staff) => {
         cannot(patientActionAbility.BLOCK, PATIENT);
         cannot(patientActionAbility.DELETE, PATIENT);
         cannot(patientActionAbility.UPDATE, PATIENT);
+
+        // Setting
+        cannot(settingActionAbility.VIEW, SETTING);
+        cannot(settingActionAbility.UPDATE, SETTING);
+
+        // Notification
+        cannot(notificationActionAbility.ADD, NOTIFICATION);
 
         break;
       default:
