@@ -6,7 +6,8 @@
       "addTimeOff": "Add time off",
       "booked": "Booked",
       "book": "Book",
-      "fullSlot": "Full"
+      "fullSlot": "Full",
+      "view": "View"
     }
   },
 
@@ -16,7 +17,8 @@
       "today": "Today",
       "booked": "Booked",
       "book": "Book",
-      "fullSlot": "Full"
+      "fullSlot": "Full",
+      "view": "View"
     }
   },
 

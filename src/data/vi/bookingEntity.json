@@ -11,6 +11,8 @@
     "conclusion": "Kết luận bác sĩ",
     "userId": "ID người dùng",
     "patientId": "ID bệnh nhân",
+    "emailPhoneNumberOrUserId": "Email, phone or user id",
+    "emailPhoneNumberOrPatientId": "Email, phone or patient id",
     "price": "Giá khám",
 
     "patientName": "Họ tên bệnh nhân",

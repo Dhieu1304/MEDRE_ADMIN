@@ -6,7 +6,8 @@
       "addTimeOff": "Thêm lịch nghỉ",
       "booked": "Đã đặt",
       "book": "Đặt hẹn",
-      "fullSlot": "Hết chỗ"
+      "fullSlot": "Hết chỗ",
+      "view": "Xem"
     }
   },
 
@@ -16,7 +17,8 @@
       "today": "Hôm nay",
       "booked": "Đã đặt",
       "book": "Đặt hẹn",
-      "fullSlot": "Hết chỗ"
+      "fullSlot": "Hết chỗ",
+      "view": "Xem"
     }
   },
 

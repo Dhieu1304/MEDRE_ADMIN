@@ -266,6 +266,7 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
       title={t("title")}
       submitBtnLabel={t("button.book")}
       onSubmit={handleBeforeBookingSubmit()}
+      width={800}
     >
       <Box
         sx={{

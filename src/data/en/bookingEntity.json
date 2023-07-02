@@ -10,7 +10,9 @@
     "ordinalNumber": "Ordinal Number",
     "conclusion": "Doctor's Conclusion",
     "userId": "User ID",
+    "emailPhoneNumberOrUserId": "Email, phone or user id",
     "patientId": "Patient ID",
+    "emailPhoneNumberOrPatientId": "Email, phone or patient id",
     "price": "Price",
 
     "patientName": "Patient name",

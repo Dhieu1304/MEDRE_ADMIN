@@ -103,5 +103,10 @@
     "button": {
       "book": "Đặt lịch"
     }
+  },
+
+  "BookingNoDataModal": {
+    "title": "Thông tin lịch đặt",
+    "noDataMessage": "Không có lịch hẹn nào"
   }
 }

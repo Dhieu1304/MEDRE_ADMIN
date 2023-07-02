@@ -22,6 +22,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import qs from "query-string";
 
 import { subject } from "@casl/ability";
+import { useAbility } from "@casl/react";
 import CustomOverlay from "../../../components/CustomOverlay";
 
 import scheduleServices from "../../../services/scheduleServices";
@@ -44,12 +45,16 @@ import BookingInfoModal from "../../booking/components/BookingInfoModal";
 import { useAppConfigStore } from "../../../store/AppConfigStore";
 import { useScheduleTypesContantTranslation } from "../hooks/useScheduleConstantsTranslation";
 import CustomPageTitle from "../../../components/CustomPageTitle";
-import { Can } from "../../../store/AbilityStore";
+import { AbilityContext, Can } from "../../../store/AbilityStore";
 import { staffActionAbility } from "../../../entities/Staff";
 import bookingServices from "../../../services/bookingServices";
-import { bookingMethods } from "../../../entities/Booking/constant";
+import { bookingActionAbility, bookingMethods } from "../../../entities/Booking/constant";
 import BookingModal from "../../booking/components/BookingModal";
 import StaffInfoCard from "../../../components/StaffInfoCard";
+import ViewBookingBtn from "../../booking/components/BookingButton/ViewBookingBtn";
+import BookingBtn from "../../booking/components/BookingButton/BookingBtn";
+import entities from "../../../entities/entities";
+import BookingNoDataModal from "../../booking/components/BookingNoDataModal";
 
 const EMPTY_CELL = "EMPTY_CELL";
 const FULL_SLOT = "FULL_SLOT";
@@ -82,6 +87,7 @@ function DoctorScheduleCalendar({ timesList, staff }) {
   const addTimeOffModal = useCustomModal();
   const bookingInfoModal = useCustomModal();
   const bookingModal = useCustomModal();
+  const bookingNoDataModal = useCustomModal();
 
   const { t } = useTranslation("scheduleFeature", { keyPrefix: "DoctorScheduleCalendar" });
   const [, scheduleTypeContantListObj] = useScheduleTypesContantTranslation();
@@ -178,6 +184,9 @@ function DoctorScheduleCalendar({ timesList, staff }) {
     return [groupSchedulesDayOfWeekAndSession(schedules), groupBookingsByScheduleAndDateAndTime(schedules)];
   }, [schedules]);
 
+  const ability = useAbility(AbilityContext);
+  const canBooking = ability.can(bookingActionAbility.ADD, entities.BOOKING);
+
   const bookingSchedulesByScheduleAndDateAndTime = useMemo(() => {
     return groupBookingSchedulesByScheduleAndDateAndTime(bookingSchedules);
   }, [bookingSchedules]);
@@ -200,7 +209,7 @@ function DoctorScheduleCalendar({ timesList, staff }) {
     );
   };
 
-  const renderCellBtn = (variant, isCurrentTime, isTimeOff, bookData = {}) => {
+  const renderCellBtn = (variant, isCurrentTime, isTimeOff, previewBooking, bookData = {}) => {
     switch (variant) {
       case FULL_SLOT:
         return (
@@ -214,6 +223,7 @@ function DoctorScheduleCalendar({ timesList, staff }) {
               position: "relative",
               cursor: "pointer"
             }}
+            onClick={() => previewBooking()}
           >
             <Typography
               sx={{
@@ -243,23 +253,22 @@ function DoctorScheduleCalendar({ timesList, staff }) {
               cursor: "pointer"
             }}
           >
-            <Button
-              variant="contained"
-              sx={{
-                backgroundColor: "inherit",
-                color: theme.palette.success.light,
-                ":hover": {
-                  background: theme.palette.success.light,
-                  color: theme.palette.success.contrastText
-                }
-              }}
-              onClick={() => {
-                bookingModal.setShow(true);
-                bookingModal.setData({ ...bookData });
-              }}
-            >
-              {t("button.book")}
-            </Button>
+            {canBooking ? (
+              <BookingBtn
+                label={t("button.book")}
+                onClick={() => {
+                  bookingModal.setShow(true);
+                  bookingModal.setData({ ...bookData });
+                }}
+              />
+            ) : (
+              <ViewBookingBtn
+                label={t("button.view")}
+                onClick={() => {
+                  previewBooking();
+                }}
+              />
+            )}
 
             {renderIsTimeOff(isTimeOff)}
           </Box>
@@ -278,12 +287,28 @@ function DoctorScheduleCalendar({ timesList, staff }) {
               cursor: "pointer"
             }}
           >
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "inherit",
+                color: theme.palette.info.light,
+                ":hover": {
+                  background: theme.palette.info.light,
+                  color: theme.palette.info.contrastText
+                }
+              }}
+              onClick={() => {
+                previewBooking();
+              }}
+            >
+              {t("button.view")}
+            </Button>
+
             {renderIsTimeOff(isTimeOff)}
           </Box>
         );
     }
   };
-
   const renderCell = (schedule, colDate, time) => {
     const colDateFormat = formatDate.format(colDate, "YYYY-MM-DD");
     const bookings = bookingsByScheduleAnnDateAndTime[schedule?.id]?.[colDateFormat]?.[time?.id];
@@ -313,14 +338,31 @@ function DoctorScheduleCalendar({ timesList, staff }) {
     const bookingSchedule = bookingSchedulesByScheduleAndDateAndTime[schedule?.id]?.[colDateFormat]?.[time?.id];
 
     const isStaffCanBooking = scheduleTypes.TYPE_OFFLINE === schedule?.type;
+
+    const totalBookingOffline = bookingSchedule?.totalBookingOffline || 0;
+    const totalOffBookOnl = bookingSchedule?.totalOffBookOnl || 0;
+    const amountSfaffCanbooking = totalBookingOffline - totalOffBookOnl || 0;
+    const countBooking = bookingSchedule?.countBooking || 0;
+
+    let rate = "";
+
+    if (schedule?.type === scheduleTypes.TYPE_OFFLINE) {
+      rate = amountSfaffCanbooking > 0 ? `${countBooking}/${amountSfaffCanbooking}` : "";
+    }
+
     let isFullSlot = false;
     if (bookingSchedule) {
-      const totalBookingOffline = bookingSchedule?.totalBookingOffline || 0;
-      const totalOffBookOnl = bookingSchedule?.totalOffBookOnl || 0;
-      const amountSfaffCanbooking = totalBookingOffline - totalOffBookOnl || 0;
-
-      isFullSlot = bookingSchedule?.countBooking >= amountSfaffCanbooking;
+      isFullSlot = countBooking >= amountSfaffCanbooking;
     }
+
+    // let isFullSlot = false;
+    // if (bookingSchedule) {
+    //   const totalBookingOffline = bookingSchedule?.totalBookingOffline || 0;
+    //   const totalOffBookOnl = bookingSchedule?.totalOffBookOnl || 0;
+    //   const amountSfaffCanbooking = totalBookingOffline - totalOffBookOnl || 0;
+
+    //   isFullSlot = bookingSchedule?.countBooking >= amountSfaffCanbooking;
+    // }
 
     let variant = EMPTY_CELL;
     let bookData;
@@ -339,6 +381,16 @@ function DoctorScheduleCalendar({ timesList, staff }) {
     } else {
       variant = EMPTY_CELL;
     }
+
+    const previewBooking = () => {
+      if (bookings) {
+        // console.log("booking: ", booking);
+        bookingInfoModal.setShow(true);
+        bookingInfoModal.setData({ bookings, scheduleStartTime, scheduleEndTime, typeLabel });
+      } else {
+        bookingNoDataModal.setShow(true);
+      }
+    };
 
     return (
       <TableCell
@@ -374,19 +426,16 @@ function DoctorScheduleCalendar({ timesList, staff }) {
                   cursor: "pointer"
                 }}
                 onClick={() => {
-                  if (bookings) {
-                    // console.log("booking: ", booking);
-                    bookingInfoModal.setShow(true);
-                    bookingInfoModal.setData({ bookings, scheduleStartTime, scheduleEndTime, typeLabel });
-                  }
+                  previewBooking();
                 }}
               >
                 <Typography sx={{ mx: 1 }}>{typeLabel}</Typography>
+                {rate && <Typography sx={{ color: theme.palette.error.light, mx: 0.5 }}>{rate}</Typography>}
                 {bookings && bookings?.length > 0 && <Preview sx={{ mx: 1 }} />}
               </Box>
 
               {/* Hiển thị trạng thái booking trong schedule */}
-              {renderCellBtn(variant, isCurrentTime, isTimeOff, bookData)}
+              {renderCellBtn(variant, false, isTimeOff, previewBooking, bookData)}
             </>
           )}
         </Box>
@@ -601,6 +650,8 @@ function DoctorScheduleCalendar({ timesList, staff }) {
           handleAfterBooking={handleAfterBooking}
         />
       )}
+
+      {bookingNoDataModal.show && <BookingNoDataModal show={bookingNoDataModal.show} setShow={bookingNoDataModal.setShow} />}
     </>
   );
 }

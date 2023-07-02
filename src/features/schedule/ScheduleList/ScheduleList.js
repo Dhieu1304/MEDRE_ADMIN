@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-import { ArrowLeft as ArrowLeftIcon, ArrowRight as ArrowRightIcon, Preview } from "@mui/icons-material";
+import { ArrowLeft as ArrowLeftIcon, ArrowRight as ArrowRightIcon, Preview as PreviewIcon } from "@mui/icons-material";
 import {
   Table,
   TableCell,
@@ -27,6 +27,7 @@ import { useTranslation } from "react-i18next";
 import qs from "query-string";
 
 import { useLocation, useNavigate } from "react-router-dom";
+import { useAbility } from "@casl/react";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
 import WithTimesLoaderWrapper from "../hocs/WithTimesLoaderWrapper";
 import staffServices from "../../../services/staffServices";
@@ -46,8 +47,13 @@ import BookingModal from "../../booking/components/BookingModal";
 import CustomPageTitle from "../../../components/CustomPageTitle";
 import { useScheduleTypesContantTranslation } from "../hooks/useScheduleConstantsTranslation";
 import bookingServices from "../../../services/bookingServices";
-import { bookingMethods } from "../../../entities/Booking";
+import { bookingActionAbility, bookingMethods } from "../../../entities/Booking";
 import { normalizeStrToDateStr } from "../../../utils/standardizedForForm";
+import BookingNoDataModal from "../../booking/components/BookingNoDataModal";
+import { AbilityContext } from "../../../store/AbilityStore";
+import entities from "../../../entities/entities";
+import BookingBtn from "../../booking/components/BookingButton/BookingBtn";
+import ViewBookingBtn from "../../booking/components/BookingButton/ViewBookingBtn";
 
 const EMPTY_CELL = "EMPTY_CELL";
 const FULL_SLOT = "FULL_SLOT";
@@ -68,6 +74,7 @@ function ScheduleList({ timesList }) {
   const navigate = useNavigate();
   const bookingInfoModal = useCustomModal();
   const bookingModal = useCustomModal();
+  const bookingNoDataModal = useCustomModal();
 
   const [, scheduleTypeContantListObj] = useScheduleTypesContantTranslation();
 
@@ -182,6 +189,9 @@ function ScheduleList({ timesList }) {
   //   return filterDoctorsByDayOfWeek(doctors, timesList, currentDate, timeOffs);
   // }, [doctors, timeOffs, timesList]);
 
+  const ability = useAbility(AbilityContext);
+  const canBooking = ability.can(bookingActionAbility.ADD, entities.BOOKING);
+
   const bookingSchedulesByScheduleAndDateAndTime = useMemo(() => {
     return groupBookingSchedulesByScheduleAndDateAndTime(bookingSchedules);
   }, [bookingSchedules]);
@@ -204,7 +214,7 @@ function ScheduleList({ timesList }) {
     );
   };
 
-  const renderCellBtn = (variant, isCurrentTime, isTimeOff, bookData = {}) => {
+  const renderCellBtn = (variant, isCurrentTime, isTimeOff, previewBooking, bookData = {}) => {
     switch (variant) {
       case FULL_SLOT:
         return (
@@ -218,6 +228,7 @@ function ScheduleList({ timesList }) {
               position: "relative",
               cursor: "pointer"
             }}
+            onClick={() => previewBooking()}
           >
             <Typography
               sx={{
@@ -247,23 +258,22 @@ function ScheduleList({ timesList }) {
               cursor: "pointer"
             }}
           >
-            <Button
-              variant="contained"
-              sx={{
-                backgroundColor: "inherit",
-                color: theme.palette.success.light,
-                ":hover": {
-                  background: theme.palette.success.light,
-                  color: theme.palette.success.contrastText
-                }
-              }}
-              onClick={() => {
-                bookingModal.setShow(true);
-                bookingModal.setData({ ...bookData });
-              }}
-            >
-              {t("button.book")}
-            </Button>
+            {canBooking ? (
+              <BookingBtn
+                label={t("button.book")}
+                onClick={() => {
+                  bookingModal.setShow(true);
+                  bookingModal.setData({ ...bookData });
+                }}
+              />
+            ) : (
+              <ViewBookingBtn
+                label={t("button.view")}
+                onClick={() => {
+                  previewBooking();
+                }}
+              />
+            )}
 
             {renderIsTimeOff(isTimeOff)}
           </Box>
@@ -282,6 +292,23 @@ function ScheduleList({ timesList }) {
               cursor: "pointer"
             }}
           >
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "inherit",
+                color: theme.palette.info.light,
+                ":hover": {
+                  background: theme.palette.info.light,
+                  color: theme.palette.info.contrastText
+                }
+              }}
+              onClick={() => {
+                previewBooking();
+              }}
+            >
+              {t("button.view")}
+            </Button>
+
             {renderIsTimeOff(isTimeOff)}
           </Box>
         );
@@ -329,6 +356,7 @@ function ScheduleList({ timesList }) {
   // };
 
   // console.log("doctorss: ", doctors);
+  // console.log("bookingSchedules: ", bookingSchedules);
 
   const renderCols = (doctor) => {
     // console.log("doctor?.staffSchedules: ", doctor?.staffSchedules);
@@ -376,13 +404,23 @@ function ScheduleList({ timesList }) {
       const bookingSchedule = bookingSchedulesByScheduleAndDateAndTime[schedule?.id]?.[time?.id];
 
       const isStaffCanBooking = scheduleTypes.TYPE_OFFLINE === schedule?.type;
+
+      const totalBookingOffline = bookingSchedule?.totalBookingOffline || 0;
+      const totalOffBookOnl = bookingSchedule?.totalOffBookOnl || 0;
+      const amountSfaffCanbooking = totalBookingOffline - totalOffBookOnl || 0;
+      const countBooking = bookingSchedule?.countBooking || 0;
+
+      let rate = "";
+
+      if (schedule?.type === scheduleTypes.TYPE_OFFLINE) {
+        rate = amountSfaffCanbooking > 0 ? `${countBooking}/${amountSfaffCanbooking}` : "";
+      }
+      // else if (schedule?.type === scheduleTypes.TYPE_ONLINE) {
+      // }
+
       let isFullSlot = false;
       if (bookingSchedule) {
-        const totalBookingOffline = bookingSchedule?.totalBookingOffline || 0;
-        const totalOffBookOnl = bookingSchedule?.totalOffBookOnl || 0;
-        const amountSfaffCanbooking = totalBookingOffline - totalOffBookOnl || 0;
-
-        isFullSlot = bookingSchedule?.countBooking >= amountSfaffCanbooking;
+        isFullSlot = countBooking >= amountSfaffCanbooking;
       }
 
       let variant = EMPTY_CELL;
@@ -403,6 +441,16 @@ function ScheduleList({ timesList }) {
         variant = EMPTY_CELL;
       }
 
+      const previewBooking = () => {
+        if (bookings) {
+          // console.log("booking: ", booking);
+          bookingInfoModal.setShow(true);
+          bookingInfoModal.setData({ bookings, scheduleStartTime, scheduleEndTime, typeLabel });
+        } else {
+          bookingNoDataModal.setShow(true);
+        }
+      };
+
       return schedule ? (
         <TableCell
           key={timeId}
@@ -411,7 +459,7 @@ function ScheduleList({ timesList }) {
             p: 0,
             position: "relative",
             bgcolor: isTimeOff ? "rgba(255, 246, 143, 0.4)" : "inherit",
-            minWidth: 150
+            minWidth: 180
           }}
           align="center"
         >
@@ -438,19 +486,16 @@ function ScheduleList({ timesList }) {
                     alignItems: "center"
                   }}
                   onClick={() => {
-                    if (bookings) {
-                      // console.log("booking: ", booking);
-                      bookingInfoModal.setShow(true);
-                      bookingInfoModal.setData({ bookings, scheduleStartTime, scheduleEndTime, typeLabel });
-                    }
+                    previewBooking();
                   }}
                 >
-                  <Typography sx={{ mx: 1 }}>{typeLabel}</Typography>
-                  {bookings && bookings?.length > 0 && <Preview sx={{ mx: 1 }} />}
+                  <Typography sx={{ mx: 0.5 }}>{typeLabel}</Typography>
+                  {rate && <Typography sx={{ color: theme.palette.error.light, mx: 0.5 }}>{rate}</Typography>}
+                  {bookings && bookings?.length > 0 && <PreviewIcon sx={{ mx: 1 }} />}
                 </Box>
 
                 {/* Hiển thị trạng thái booking trong schedule */}
-                {renderCellBtn(variant, false, isTimeOff, bookData)}
+                {renderCellBtn(variant, false, isTimeOff, previewBooking, bookData)}
               </>
             )}
           </Box>
@@ -638,6 +683,8 @@ function ScheduleList({ timesList }) {
           handleAfterBooking={handleAfterBooking}
         />
       )}
+
+      {bookingNoDataModal.show && <BookingNoDataModal show={bookingNoDataModal.show} setShow={bookingNoDataModal.setShow} />}
     </>
   );
 }

@@ -104,5 +104,10 @@
     "button": {
       "book": "Book"
     }
+  },
+
+  "BookingNoDataModal": {
+    "title": "Booking detail",
+    "noDataMessage": "No bookings yet"
   }
 }
