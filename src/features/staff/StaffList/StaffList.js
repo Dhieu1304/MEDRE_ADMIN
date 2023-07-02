@@ -33,6 +33,7 @@ import { useStaffGendersContantTranslation } from "../hooks/useStaffConstantsTra
 import CopyButton from "../../../components/CopyButton";
 import DataTable from "../../components/DataFilterTable/DataTable";
 import entities from "../../../entities/entities";
+import { getSortValue } from "../../../utils/objectUtil";
 
 function StaffList({ expertisesList }) {
   const [isFirst, setIsFirst] = useState(true);
@@ -89,8 +90,8 @@ function StaffList({ expertisesList }) {
 
   const ability = useAbility(AbilityContext);
 
-  const columns = useMemo(
-    () => [
+  const columns = useMemo(() => {
+    const cols = [
       {
         id: columnsIds.name,
         haveSortIcon: true,
@@ -226,6 +227,7 @@ function StaffList({ expertisesList }) {
         minWidth: 200,
         hide: !showCols[columnsIds.status],
         render: (staff) => {
+          // console.log("staff: ", staff);
           const canBlockStaff = ability.can(staffActionAbility.BLOCK, subject(entities.STAFF, staff));
           return staff?.blocked ? (
             <StaffRoleStatusButton
@@ -277,9 +279,9 @@ function StaffList({ expertisesList }) {
         },
         action: true
       }
-    ],
-    [locale, showCols, staffs]
-  );
+    ];
+    return cols;
+  }, [locale, showCols, staffs]);
 
   const defaultValues = useMemo(() => {
     const defaultSearchParams = qs.parse(location.search);
@@ -333,9 +335,30 @@ function StaffList({ expertisesList }) {
     const orderBy = sort.isAsc ? "asc" : "desc";
     let order;
     if (sort.sortBy) {
-      order = `${sort.sortBy}:${orderBy}`;
+      //  { username, phoneNumber, email, name, dob, role, status }
+      // console.log("columnsIds: ", columnsIds);
+      const sortByFormat = getSortValue(
+        columnsIds,
+        {
+          username: "username",
+          phoneNumber: "phone_number",
+          email: "email",
+          name: "name",
+          gender: "gender",
+          dob: "dob",
+          role: "role",
+          status: "blocked"
+        },
+        sort.sortBy
+      );
+
+      // console.log("sortByFormat: ", sortByFormat);
+      if (sortByFormat) {
+        order = `${sortByFormat}:${orderBy}`;
+      }
     }
 
+    // console.log("order: ", order);
     const paramsObj = {
       ...watch(),
       expertise: watch().expertises,
@@ -393,10 +416,12 @@ function StaffList({ expertisesList }) {
   };
 
   const handleAfterBlockStaff = async () => {
+    // console.log("handleAfterBlockStaff: ");
     await loadData({ page: watch().page });
   };
 
   const handleAfterUnblockStaff = async () => {
+    // console.log("handleAfterUnblockStaff: ");
     await loadData({ page: watch().page });
   };
 

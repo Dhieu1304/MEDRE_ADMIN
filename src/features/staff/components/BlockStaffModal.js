@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import CustomModal from "../../../components/CustomModal";
-import Staff from "../../../entities/Staff/Staff";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
 import staffServices from "../../../services/staffServices";
 import CustomInput from "../../../components/CustomInput/CustomInput";
@@ -81,7 +80,7 @@ BlockStaffModal.defaultProps = {
 BlockStaffModal.propTypes = {
   show: PropTypes.bool.isRequired,
   setShow: PropTypes.func.isRequired,
-  data: PropTypes.instanceOf(Staff).isRequired,
+  data: PropTypes.object.isRequired,
   setData: PropTypes.func.isRequired,
   handleAfterBlockStaff: PropTypes.func
 };

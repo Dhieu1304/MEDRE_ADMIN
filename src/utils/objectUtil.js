@@ -82,11 +82,20 @@ const cleanUndefinedAndNullValueObjectToStrObj = (obj) => {
 //   return updatedObject;
 // };
 
+function getSortValue(columnIds, sortFormat, sortKey) {
+  if (Object.prototype.hasOwnProperty.call(columnIds, sortKey)) {
+    if (sortKey in sortFormat) {
+      return sortFormat[sortKey];
+    }
+  }
+  return null; // Hoặc bất kỳ giá trị mặc định nào phù hợp với yêu cầu của bạn
+}
 export {
   mergeObjectsWithoutNullAndUndefined,
   cleanUndefinedValueObject,
   cleanUndefinedAndEmptyStrValueObject,
   cleanUndefinedAndEmptyStrAndFalseValueObject,
-  cleanUndefinedAndNullValueObjectToStrObj
+  cleanUndefinedAndNullValueObjectToStrObj,
   // updateObjectKeys
+  getSortValue
 };

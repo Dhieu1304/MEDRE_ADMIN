@@ -64,8 +64,8 @@ const getStaffList = async ({
   education,
   certificate,
   from,
-  to
-  // order
+  to,
+  order
 }) => {
   // console.log("getStaffList: ", { page, limit, name });
   // console.log("order: ", order);
@@ -88,7 +88,8 @@ const getStaffList = async ({
     education,
     certificate,
     from,
-    to
+    to,
+    order
   });
 
   // console.log("params: ", params);
@@ -466,10 +467,13 @@ const editStaffRole = async (id, { role }) => {
 const blockStaff = async (id, reason) => {
   try {
     // console.log("blockStaff: ", { id, reason });
-    const res = await axiosClient.post(staffApi.blockStaff(), {
+    const dataBody = cleanUndefinedAndEmptyStrValueObject({
       id_account: id,
       reason
     });
+    // console.log("dataBody: ", dataBody);
+    const res = await axiosClient.post(staffApi.blockStaff(), dataBody);
+    // console.log("res: ", res);
 
     if (res?.status) {
       const staff = camelcaseKeys(res?.data?.staff, { deep: true });
