@@ -21,7 +21,7 @@ import {
 import formatDate from "date-and-time";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import qs from "query-string";
 
 import { subject } from "@casl/ability";
@@ -72,8 +72,8 @@ function DoctorScheduleCalendar({ timesList, staff }) {
     new Date(normalizeStrToDateStr(qs.parse(location.search)?.date, new Date()))
   );
 
-  const params = useParams();
-  const { staffId } = params;
+  const staffId = staff?.id;
+  // console.log("staffId: ", staffId);
 
   const theme = useTheme();
 

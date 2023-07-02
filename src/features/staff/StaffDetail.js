@@ -32,8 +32,8 @@ import SectionContent from "../../components/SectionContent";
 import PersonDetailWrapper from "../../components/PersonDetailWrapper/PersonDetailWrapper";
 import routeConfig from "../../config/routeConfig";
 
-function StaffDetail({ staffId, expertisesList, loadExpertisesList }) {
-  const [staff, setStaff] = useState();
+function StaffDetail({ staff, loadData, expertisesList, loadExpertisesList }) {
+  // const [staff, setStaff] = useState();
 
   const { t } = useTranslation("staffFeature", { keyPrefix: "StaffDetail" });
 
@@ -115,36 +115,55 @@ function StaffDetail({ staffId, expertisesList, loadExpertisesList }) {
     criteriaMode: "all"
   });
 
-  const loadData = async () => {
-    await fetchApi(async () => {
-      const res = await staffServices.getStaffDetail(staffId);
+  // const loadData = async () => {
+  //   await fetchApi(async () => {
+  //     const res = await staffServices.getStaffDetail(staffId);
 
-      if (res.success) {
-        const staffData = new Staff(res.staff);
+  //     if (res.success) {
+  //       const staffData = new Staff(res.staff);
 
-        setStaff(staffData);
+  //       setStaff(staffData);
 
-        const expertiseIds = staffData?.expertises?.map((expertise) => expertise?.id) || [];
+  //       const expertiseIds = staffData?.expertises?.map((expertise) => expertise?.id) || [];
 
-        const newDefaultValues = {
-          ...mergeObjectsWithoutNullAndUndefined(defaultValues, staffData),
-          expertises: expertiseIds,
-          status: staffData?.blocked ? staffStatuses.STATUS_BLOCK : staffStatuses.STATUS_UNBLOCK
-          // gender: ""
-        };
+  //       const newDefaultValues = {
+  //         ...mergeObjectsWithoutNullAndUndefined(defaultValues, staffData),
+  //         expertises: expertiseIds,
+  //         status: staffData?.blocked ? staffStatuses.STATUS_BLOCK : staffStatuses.STATUS_UNBLOCK
+  //         // gender: ""
+  //       };
 
-        setDefaultValues(newDefaultValues);
-        reset(newDefaultValues);
+  //       setDefaultValues(newDefaultValues);
+  //       reset(newDefaultValues);
 
-        return { ...res };
-      }
-      setStaff({});
-      return { ...res };
-    });
-  };
+  //       return { ...res };
+  //     }
+  //     setStaff({});
+  //     return { ...res };
+  //   });
+  // };
+  // useEffect(() => {
+  //   loadData();
+  // }, [staffId]);
+
   useEffect(() => {
-    loadData();
-  }, [staffId]);
+    // console.log("useEffect: ");
+    if (staff && staff?.id) {
+      // console.log("staff change: ", staff);
+      const staffData = new Staff(staff);
+
+      // setStaff(staffData);
+      const expertiseIds = staffData?.expertises?.map((expertise) => expertise?.id) || [];
+      const newDefaultValues = {
+        ...mergeObjectsWithoutNullAndUndefined(defaultValues, staffData),
+        expertises: expertiseIds,
+        status: staffData?.blocked ? staffStatuses.STATUS_BLOCK : staffStatuses.STATUS_UNBLOCK
+        // gender: ""
+      };
+      setDefaultValues(newDefaultValues);
+      reset(newDefaultValues);
+    }
+  }, [staff]);
 
   const ability = useAbility(AbilityContext);
 
@@ -226,6 +245,9 @@ function StaffDetail({ staffId, expertisesList, loadExpertisesList }) {
   const handleAfterChangeAvatar = async () => {
     await loadData();
   };
+
+  // console.log("staff: ", staff);
+  // console.log("watch(): ", watch());
 
   return (
     <>
@@ -775,7 +797,8 @@ function StaffDetail({ staffId, expertisesList, loadExpertisesList }) {
 }
 
 StaffDetail.propTypes = {
-  staffId: PropTypes.string.isRequired,
+  staff: PropTypes.object.isRequired,
+  loadData: PropTypes.func.isRequired,
   expertisesList: PropTypes.array.isRequired,
   loadExpertisesList: PropTypes.func.isRequired
 };

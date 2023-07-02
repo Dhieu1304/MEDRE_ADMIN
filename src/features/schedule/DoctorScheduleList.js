@@ -39,7 +39,7 @@ import Schedule from "../../entities/Schedule/Schedule";
 import { Can } from "../../store/AbilityStore";
 import CustomPageTitle from "../../components/CustomPageTitle";
 
-function DoctorScheduleList({ staff, staffId }) {
+function DoctorScheduleList({ staff }) {
   const [schedules, setSchedules] = useState([]);
 
   const [checkedCount, setCheckedCount] = useState(0);
@@ -156,6 +156,7 @@ function DoctorScheduleList({ staff, staffId }) {
     const { from, to } = filterForm.watch();
 
     await fetchApi(async () => {
+      const staffId = staff?.id;
       const res = await scheduleServices.getScheduleListByDoctorId(staffId, from, to);
       let schedulesData = [];
       //
@@ -463,8 +464,7 @@ function DoctorScheduleList({ staff, staffId }) {
 }
 
 DoctorScheduleList.propTypes = {
-  staff: PropTypes.object.isRequired,
-  staffId: PropTypes.string.isRequired
+  staff: PropTypes.object.isRequired
 };
 
 // export default WithDoctorLoaderWrapper(DoctorScheduleList);

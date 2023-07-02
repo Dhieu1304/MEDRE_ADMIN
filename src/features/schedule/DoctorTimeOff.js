@@ -37,7 +37,7 @@ import { Can } from "../../store/AbilityStore";
 import EditTimeOffModal from "./components/EditTimeOffModal";
 import DeleteTimeOffModal from "./components/DeleteTimeOffModal";
 
-function DoctorTimeOff({ staff, staffId }) {
+function DoctorTimeOff({ staff }) {
   const [timeOffs, setTimeOffs] = useState([]);
   const [count, setCount] = useState(0);
 
@@ -109,6 +109,7 @@ function DoctorTimeOff({ staff, staffId }) {
     // console.log("loadData ");
 
     await fetchApi(async () => {
+      const staffId = staff?.id;
       const res = await timeOffServices.getTimeOffByDoctorId(staffId, paramsObj);
       let countData = 0;
       let timeOffsData = [];
@@ -335,8 +336,7 @@ function DoctorTimeOff({ staff, staffId }) {
 }
 
 DoctorTimeOff.propTypes = {
-  staff: PropTypes.object.isRequired,
-  staffId: PropTypes.string.isRequired
+  staff: PropTypes.object.isRequired
 };
 
 export default DoctorTimeOff;

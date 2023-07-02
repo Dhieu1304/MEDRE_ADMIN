@@ -153,16 +153,16 @@ function StaffDetailPage() {
           }}
         >
           <Routes>
-            <Route path={staffDetailRoutes.detail} element={<StaffDetail staffId={staffId} />} />
-            <Route path={staffDetailRoutes.calendar} element={<DoctorScheduleCalendar staffId={staffId} staff={staff} />} />
-            <Route path={staffDetailRoutes.schedule} element={<DoctorScheduleList staffId={staffId} staff={staff} />} />
-            <Route path={staffDetailRoutes.timeOff} element={<DoctorTimeOff staffId={staffId} staff={staff} />} />
+            <Route path={staffDetailRoutes.detail} element={<StaffDetail staff={staff} loadData={loadData} />} />
+            <Route path={staffDetailRoutes.calendar} element={<DoctorScheduleCalendar staff={staff} />} />
+            <Route path={staffDetailRoutes.schedule} element={<DoctorScheduleList staff={staff} />} />
+            <Route path={staffDetailRoutes.timeOff} element={<DoctorTimeOff staff={staff} />} />
           </Routes>
         </Box>
       </Box>
     ) : (
       <Routes>
-        <Route path={staffDetailRoutes.detail} element={<StaffDetail staffId={staffId} />} />
+        <Route path={staffDetailRoutes.detail} element={<StaffDetail staff={staff} loadData={loadData} />} />
         <Route path={staffDetailRoutes.default} element={<Navigate to={routeConfig.home} replace />} />
       </Routes>
     );
