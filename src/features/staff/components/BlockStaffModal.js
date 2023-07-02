@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
@@ -17,8 +17,9 @@ function BlockStaffModal({ show, setShow, data, setData, handleAfterBlockStaff }
   });
 
   const { t } = useTranslation("staffFeature", { keyPrefix: "BlockStaffModal" });
+  const theme = useTheme();
 
-  const { fetchApi } = useFetchingStore();
+  const { fetchApi, fetchApiError } = useFetchingStore();
 
   const handleBlockStaffStatus = async ({ reason }) => {
     await fetchApi(async () => {
@@ -47,27 +48,34 @@ function BlockStaffModal({ show, setShow, data, setData, handleAfterBlockStaff }
     >
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center"
+          width: "100%"
         }}
       >
-        <Typography variant="h6" sx={{ mb: 2 }}>
-          {t("confirmQuestion", {
-            name: data?.name
-          })}
-        </Typography>
-        <CustomInput
-          control={control}
-          rules={{}}
-          label={t("form.reason")}
-          trigger={trigger}
-          name="reason"
-          type="text"
-          multiline
-          rows={5}
-        />
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+        >
+          <Typography variant="h6" sx={{ mb: 2 }}>
+            {t("confirmQuestion", {
+              name: data?.name
+            })}
+          </Typography>
+          <CustomInput
+            control={control}
+            rules={{}}
+            label={t("form.reason")}
+            trigger={trigger}
+            name="reason"
+            type="text"
+            multiline
+            rows={5}
+          />
+        </Box>
+        {fetchApiError && <Typography sx={{ color: theme.palette.error.light }}>{fetchApiError}</Typography>}
       </Box>
     </CustomModal>
   );

@@ -12,7 +12,7 @@ import {
   Box,
   Button,
   IconButton,
-  Typography,
+  Typography
 } from "@mui/material";
 
 import formatDate from "date-and-time";

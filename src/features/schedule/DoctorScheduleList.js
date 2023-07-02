@@ -35,10 +35,10 @@ import {
   useScheduleSessionsContantTranslation,
   useScheduleTypesContantTranslation
 } from "./hooks/useScheduleConstantsTranslation";
-import Schedule from "../../entities/Schedule/Schedule";
 import { Can } from "../../store/AbilityStore";
 import CustomPageTitle from "../../components/CustomPageTitle";
 import StaffInfoCard from "../../components/StaffInfoCard";
+import entities from "../../entities/entities";
 
 function DoctorScheduleList({ staff }) {
   const [schedules, setSchedules] = useState([]);
@@ -228,7 +228,7 @@ function DoctorScheduleList({ staff }) {
         <CustomPageTitle
           title={t("title")}
           right={
-            <Can I={scheduleActionAbility.ADD} a={Schedule.magicWord()}>
+            <Can I={scheduleActionAbility.ADD} a={entities.SCHEDULE}>
               <Button
                 variant="contained"
                 onClick={() => {
@@ -281,7 +281,7 @@ function DoctorScheduleList({ staff }) {
                 }
               }}
             >
-              <Can I={scheduleActionAbility.UPDATE} a={Schedule.magicWord()}>
+              <Can I={scheduleActionAbility.UPDATE} a={entities.SCHEDULE}>
                 <Button
                   variant="contained"
                   sx={{
@@ -295,7 +295,7 @@ function DoctorScheduleList({ staff }) {
                 </Button>
               </Can>
 
-              <Can I={scheduleActionAbility.DELETE} a={Schedule.magicWord()}>
+              <Can I={scheduleActionAbility.DELETE} a={entities.SCHEDULE}>
                 <Button
                   variant="contained"
                   onClick={() => {
@@ -318,7 +318,7 @@ function DoctorScheduleList({ staff }) {
           <Table>
             <TableHead>
               <TableRow>
-                <Can I={scheduleActionAbility.UPDATE} a={Schedule.magicWord()}>
+                <Can I={scheduleActionAbility.UPDATE} a={entities.SCHEDULE}>
                   <TableCell
                     align="center"
                     style={{ width: 10 }}
@@ -357,7 +357,7 @@ function DoctorScheduleList({ staff }) {
               {schedules.map((schedule) => {
                 return (
                   <TableRow key={schedule?.id}>
-                    <Can I={scheduleActionAbility.UPDATE} a={Schedule.magicWord()}>
+                    <Can I={scheduleActionAbility.UPDATE} a={entities.SCHEDULE}>
                       <TableCell
                         align="center"
                         style={{ width: 10 }}

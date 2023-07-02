@@ -2,7 +2,18 @@ import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useMemo } from "react";
-import { Box, Button, Checkbox, Grid, IconButton, ListItemText, MenuItem, Select, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  Checkbox,
+  Grid,
+  IconButton,
+  ListItemText,
+  MenuItem,
+  Select,
+  Typography,
+  useTheme
+} from "@mui/material";
 import { Add as AddIcon, RemoveCircle as RemoveCircleIcon } from "@mui/icons-material";
 import CustomModal from "../../../components/CustomModal";
 
@@ -37,7 +48,7 @@ function AddScheduleModal({ show, setShow, data, setData, handleAfterAddSchedule
   const { t: tScheduleConstants } = useTranslation("scheduleEntity", { keyPrefix: "constants" });
   const { t: tInputValidate } = useTranslation("input", { keyPrefix: "validation" });
 
-  const { isLoading, fetchApi } = useFetchingStore();
+  const { isLoading, fetchApi, fetchApiError } = useFetchingStore();
   const { locale } = useAppConfigStore();
   const theme = useTheme();
 
@@ -382,6 +393,14 @@ function AddScheduleModal({ show, setShow, data, setData, handleAfterAddSchedule
               </Box>
             );
           })}
+
+          <Box
+            sx={{
+              width: "100%"
+            }}
+          >
+            {fetchApiError && <Typography sx={{ color: theme.palette.error.light }}>{fetchApiError}</Typography>}
+          </Box>
 
           <Button
             variant="contained"

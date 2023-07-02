@@ -21,6 +21,7 @@ import { Add as AddIcon, Edit as EditIcon, RemoveCircle } from "@mui/icons-mater
 
 import PropTypes from "prop-types";
 // import WithDoctorLoaderWrapper from "../staff/hocs/WithDoctorLoaderWrapper";
+import { subject } from "@casl/ability";
 import { useFetchingStore } from "../../store/FetchingApiStore";
 import { normalizeStrToDateStr } from "../../utils/standardizedForForm";
 import { formatDateLocale, getWeekByDate } from "../../utils/datetimeUtil";
@@ -37,6 +38,7 @@ import { Can } from "../../store/AbilityStore";
 import EditTimeOffModal from "./components/EditTimeOffModal";
 import DeleteTimeOffModal from "./components/DeleteTimeOffModal";
 import StaffInfoCard from "../../components/StaffInfoCard";
+import entities from "../../entities/entities";
 
 function DoctorTimeOff({ staff }) {
   const [timeOffs, setTimeOffs] = useState([]);
@@ -157,7 +159,7 @@ function DoctorTimeOff({ staff }) {
         <CustomPageTitle
           title={t("title")}
           right={
-            <Can I={staffActionAbility.ADD_DOCTOR_TIMEOFF} a={staff}>
+            <Can I={staffActionAbility.ADD_DOCTOR_TIMEOFF} a={subject(entities.STAFF, staff)}>
               <Button
                 variant="contained"
                 onClick={() => {
@@ -259,7 +261,7 @@ function DoctorTimeOff({ staff }) {
                           alignItems: "center"
                         }}
                       >
-                        <Can I={staffActionAbility.UPDATE_DOCTOR_TIMEOFF} a={staff}>
+                        <Can I={staffActionAbility.UPDATE_DOCTOR_TIMEOFF} a={subject(entities.STAFF, staff)}>
                           <EditIcon
                             sx={{ mx: 1, color: theme.palette.success.light, cursor: "pointer" }}
                             onClick={() => {
@@ -268,7 +270,7 @@ function DoctorTimeOff({ staff }) {
                             }}
                           />
                         </Can>
-                        <Can I={staffActionAbility.DELETE_DOCTOR_TIMEOFF} a={staff}>
+                        <Can I={staffActionAbility.DELETE_DOCTOR_TIMEOFF} a={subject(entities.STAFF, staff)}>
                           <RemoveCircle
                             sx={{ mx: 1, color: theme.palette.error.light, cursor: "pointer" }}
                             onClick={() => {

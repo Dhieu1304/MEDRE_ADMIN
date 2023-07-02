@@ -60,9 +60,7 @@ const defineAbilityFor = (staff) => {
         can(staffActionAbility.UPDATE_DOCTOR_EXPERTISES, STAFF, {
           role: staffRoles.ROLE_DOCTOR
         });
-        can(staffActionAbility.ADD_DOCTOR_TIMEOFF, STAFF, {
-          role: staffRoles.ROLE_DOCTOR
-        });
+        cannot(staffActionAbility.ADD_DOCTOR_TIMEOFF, STAFF);
         can(staffActionAbility.UPDATE_DOCTOR_TIMEOFF, STAFF, {
           role: staffRoles.ROLE_DOCTOR
         });
@@ -125,13 +123,9 @@ const defineAbilityFor = (staff) => {
         can(staffActionAbility.ADD_DOCTOR_TIMEOFF, STAFF, {
           id: staff?.id
         });
-        can(staffActionAbility.UPDATE_DOCTOR_TIMEOFF, STAFF, {
-          id: staff?.id
-        });
+        cannot(staffActionAbility.UPDATE_DOCTOR_TIMEOFF, STAFF);
 
-        can(staffActionAbility.DELETE_DOCTOR_TIMEOFF, STAFF, {
-          id: staff?.id
-        });
+        cannot(staffActionAbility.DELETE_DOCTOR_TIMEOFF, STAFF);
 
         /// //
 

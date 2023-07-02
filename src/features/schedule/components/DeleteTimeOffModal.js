@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import CustomModal from "../../../components/CustomModal";
 
 import { useFetchingStore } from "../../../store/FetchingApiStore";
@@ -10,7 +10,8 @@ import WithTimesLoaderWrapper from "../hocs/WithTimesLoaderWrapper";
 function DeleteNewTimeOffModal({ show, setShow, data, setData, handleAfterDeleteTimeOff }) {
   const { t } = useTranslation("scheduleFeature", { keyPrefix: "DeleteTimeOffModal" });
 
-  const { fetchApi } = useFetchingStore();
+  const theme = useTheme();
+  const { fetchApi, fetchApiError } = useFetchingStore();
 
   const handleDeleteTimeOff = async () => {
     // console.log({ data, date, session });
@@ -37,8 +38,13 @@ function DeleteNewTimeOffModal({ show, setShow, data, setData, handleAfterDelete
       submitBtnLabel={t("button.save")}
       onSubmit={handleDeleteTimeOff}
     >
-      <Box>
+      <Box
+        sx={{
+          width: "100%"
+        }}
+      >
         <Typography>{t("question")}</Typography>
+        {fetchApiError && <Typography sx={{ color: theme.palette.error.light }}>{fetchApiError}</Typography>}
       </Box>
     </CustomModal>
   );

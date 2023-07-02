@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { Checkbox, Grid, ListItemText, MenuItem, Select } from "@mui/material";
+import { Box, Checkbox, Grid, ListItemText, MenuItem, Select, Typography, useTheme } from "@mui/material";
 import CustomModal from "../../../components/CustomModal";
 
 import { useFetchingStore } from "../../../store/FetchingApiStore";
@@ -26,7 +26,8 @@ function EditNewTimeOffModal({ show, setShow, data, setData, handleAfterEditTime
   const { t: tInputValidate } = useTranslation("input", { keyPrefix: "validation" });
   const [timeOffSessionContantList, timeOffSessionContantListObj] = useTimeOffSessionsContantTranslation();
 
-  const { fetchApi } = useFetchingStore();
+  const theme = useTheme();
+  const { fetchApi, fetchApiError } = useFetchingStore();
 
   const handleEditTimeOff = async ({ from, to, session }) => {
     // console.log({ data, date, session });
@@ -53,71 +54,79 @@ function EditNewTimeOffModal({ show, setShow, data, setData, handleAfterEditTime
       submitBtnLabel={t("button.save")}
       onSubmit={handleSubmit(handleEditTimeOff)}
     >
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
-          <CustomInput
-            control={control}
-            rules={{
-              required: tInputValidate("required")
-            }}
-            label={tTimeOff("from")}
-            trigger={trigger}
-            name="from"
-            type="date"
-          />
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <CustomInput
-            control={control}
-            rules={{
-              required: `${tTimeOff("to")} ${tInputValidate("required")}`,
-              validate: (value) => {
-                const { from } = watch();
-                const to = value;
-
-                if (from <= to) {
-                  return true;
-                }
-                return tInputValidate("gte", {
-                  left: tTimeOff("toLabel"),
-                  right: tTimeOff("fromLabel")
-                });
-              }
-            }}
-            label={tTimeOff("to")}
-            trigger={trigger}
-            name="to"
-            type="date"
-            isCustomError
-          />
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <CustomInput
-            control={control}
-            rules={{
-              required: tInputValidate("required")
-            }}
-            label={tTimeOff("session")}
-            trigger={trigger}
-            name="session"
-          >
-            <Select
-              renderValue={(selected) => {
-                return timeOffSessionContantListObj[selected].label;
+      <Box
+        sx={{
+          width: "100%"
+        }}
+      >
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={4}>
+            <CustomInput
+              control={control}
+              rules={{
+                required: tInputValidate("required")
               }}
+              label={tTimeOff("from")}
+              trigger={trigger}
+              name="from"
+              type="date"
+            />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <CustomInput
+              control={control}
+              rules={{
+                required: `${tTimeOff("to")} ${tInputValidate("required")}`,
+                validate: (value) => {
+                  const { from } = watch();
+                  const to = value;
+
+                  if (from <= to) {
+                    return true;
+                  }
+                  return tInputValidate("gte", {
+                    left: tTimeOff("toLabel"),
+                    right: tTimeOff("fromLabel")
+                  });
+                }
+              }}
+              label={tTimeOff("to")}
+              trigger={trigger}
+              name="to"
+              type="date"
+              isCustomError
+            />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <CustomInput
+              control={control}
+              rules={{
+                required: tInputValidate("required")
+              }}
+              label={tTimeOff("session")}
+              trigger={trigger}
+              name="session"
             >
-              {timeOffSessionContantList?.map((timeOffSession) => {
-                return (
-                  <MenuItem key={timeOffSession?.value} value={timeOffSession?.value}>
-                    <Checkbox checked={watch().session === timeOffSession?.value} />
-                    <ListItemText primary={timeOffSession?.label} />
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </CustomInput>
+              <Select
+                renderValue={(selected) => {
+                  return timeOffSessionContantListObj[selected].label;
+                }}
+              >
+                {timeOffSessionContantList?.map((timeOffSession) => {
+                  return (
+                    <MenuItem key={timeOffSession?.value} value={timeOffSession?.value}>
+                      <Checkbox checked={watch().session === timeOffSession?.value} />
+                      <ListItemText primary={timeOffSession?.label} />
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </CustomInput>
+          </Grid>
         </Grid>
-      </Grid>
+
+        {fetchApiError && <Typography sx={{ color: theme.palette.error.light }}>{fetchApiError}</Typography>}
+      </Box>
     </CustomModal>
   );
 }

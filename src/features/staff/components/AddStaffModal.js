@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { Box, Checkbox, Grid, ListItemText, MenuItem, Select } from "@mui/material";
+import { Box, Checkbox, Grid, ListItemText, MenuItem, Select, Typography, useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import CustomModal from "../../../components/CustomModal";
 import CustomInput from "../../../components/CustomInput";
@@ -27,7 +27,8 @@ function AddStaffModal({ show, setShow }) {
     criteriaMode: "all"
   });
 
-  const { isLoading, fetchApi } = useFetchingStore();
+  const theme = useTheme();
+  const { isLoading, fetchApi, fetchApiError } = useFetchingStore();
   const navigate = useNavigate();
 
   const { t } = useTranslation("staffFeature", { keyPrefix: "AddStaffModal" });
@@ -226,6 +227,13 @@ function AddStaffModal({ show, setShow }) {
               />
             </Grid>
           </Grid>
+          <Box
+            sx={{
+              width: "100%"
+            }}
+          >
+            {fetchApiError && <Typography sx={{ color: theme.palette.error.light }}>{fetchApiError}</Typography>}
+          </Box>
         </Box>
       </CustomModal>
     </>
