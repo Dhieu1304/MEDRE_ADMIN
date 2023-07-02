@@ -42,22 +42,12 @@ function ExpertiseList() {
       {
         id: "offlinePrice",
         label: tExpertise("offlinePrice"),
-        minWidth: 100
+        minWidth: 60
       },
       {
         id: "onlinePrice",
         label: tExpertise("onlinePrice"),
-        minWidth: 100
-      },
-      {
-        id: "createdAt",
-        label: tExpertise("createdAt"),
-        minWidth: 50
-      },
-      {
-        id: "updatedAt",
-        label: tExpertise("updatedAt"),
-        minWidth: 50
+        minWidth: 60
       },
       {
         id: "action",
@@ -143,11 +133,12 @@ function ExpertiseList() {
                     <CustomTableCell>{expertise?.name}</CustomTableCell>
                     <CustomTableCell>{formatCurrency(expertise?.priceOffline)}</CustomTableCell>
                     <CustomTableCell>{formatCurrency(expertise?.priceOnline)}</CustomTableCell>
-                    <CustomTableCell>{formatDate.format(new Date(expertise?.createdAt), "DD/MM/YYYY")}</CustomTableCell>
-                    <CustomTableCell>{formatDate.format(new Date(expertise?.updatedAt), "DD/MM/YYYY")}</CustomTableCell>
                     <CustomTableCell variant={customTableCellVariant.ACTION_BODY_CELL}>
                       <EditIcon
-                        color={theme.palette.success.light}
+                        sx={{
+                          cursor: "pointer",
+                          color: theme.palette.success.light
+                        }}
                         onClick={() => {
                           changeExpertiseModal.setShow(true);
                           changeExpertiseModal.setData({ ...expertise });

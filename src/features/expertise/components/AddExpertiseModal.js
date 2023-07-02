@@ -71,9 +71,17 @@ function AddExpertiseModal({ show, setShow, handleAfterAddExpertise }) {
           <CustomInput
             control={control}
             rules={{
-              required: tInputValidation("required")
+              required: tInputValidation("required"),
+              min: {
+                value: 0,
+                message: tInputValidation("gt", {
+                  left: tExpertise("offlinePriceLabel"),
+                  right: 0
+                })
+              }
             }}
-            label={tExpertise("offlinePrice")}
+            label={tExpertise("offlinePriceLabel")}
+            isCustomError
             trigger={trigger}
             name="offlinePrice"
             type="number"
@@ -83,9 +91,17 @@ function AddExpertiseModal({ show, setShow, handleAfterAddExpertise }) {
           <CustomInput
             control={control}
             rules={{
-              required: tInputValidation("required")
+              required: tInputValidation("required"),
+              min: {
+                value: 0,
+                message: tInputValidation("gt", {
+                  left: tExpertise("onlinePriceLabel"),
+                  right: 0
+                })
+              }
             }}
-            label={tExpertise("onlinePrice")}
+            label={tExpertise("onlinePriceLabel")}
+            isCustomError
             trigger={trigger}
             name="onlinePrice"
             type="number"
