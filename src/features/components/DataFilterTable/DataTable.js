@@ -42,7 +42,7 @@ function DataTable({ rows, columns, showCols, sort, setSort }) {
         </TableHead>
 
         <TableBody>
-          {rows.map((row) => {
+          {rows.map((row, rowIndex) => {
             return (
               <TableRow key={row?.id}>
                 {columns?.map((column) => {
@@ -59,7 +59,7 @@ function DataTable({ rows, columns, showCols, sort, setSort }) {
 
                   return (
                     <CustomTableCell key={column?.id} hide={hide} variant={variant}>
-                      {column?.render(row)}
+                      {column?.render(row, rowIndex)}
                     </CustomTableCell>
                   );
                 })}

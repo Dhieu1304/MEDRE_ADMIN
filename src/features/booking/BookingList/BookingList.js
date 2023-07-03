@@ -32,7 +32,7 @@ function BookingList() {
   const [bookings, setBookings] = useState([]);
   const [count, setCount] = useState(0);
   const [sort, setSort] = useState({
-    sortBy: columnsIds.name,
+    sortBy: columnsIds.date,
     isAsc: true
   });
 

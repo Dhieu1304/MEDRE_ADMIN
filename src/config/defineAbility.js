@@ -9,6 +9,7 @@ import { expertiseActionAbility } from "../entities/Expertise";
 import entities from "../entities/entities";
 import { settingActionAbility } from "../entities/Setting";
 import { notificationActionAbility } from "../entities/Notification/constant";
+import { reExaminationActionAbility } from "../entities/ReExamination";
 
 const defineAbilityFor = (staff) => {
   const {
@@ -21,8 +22,9 @@ const defineAbilityFor = (staff) => {
     STAFF,
     // STATISTICS,
     TIMEOFF,
-    USER
+    USER,
     // TIME
+    RE_EXAMINATION
   } = entities;
 
   return defineAbility((can, cannot) => {
@@ -115,6 +117,10 @@ const defineAbilityFor = (staff) => {
         // Notification
         can(notificationActionAbility.ADD, NOTIFICATION);
 
+        // ReExamination
+        can(reExaminationActionAbility.VIEW_ALL, RE_EXAMINATION);
+        cannot(reExaminationActionAbility.UPDATE, RE_EXAMINATION);
+
         break;
       case staffRoles.ROLE_DOCTOR:
         // STAFF
@@ -182,6 +188,10 @@ const defineAbilityFor = (staff) => {
         // Notification
         cannot(notificationActionAbility.ADD, NOTIFICATION);
 
+        // ReExamination
+        cannot(reExaminationActionAbility.VIEW_ALL, RE_EXAMINATION);
+        cannot(reExaminationActionAbility.UPDATE, RE_EXAMINATION);
+
         break;
 
       case staffRoles.ROLE_NURSE:
@@ -248,6 +258,10 @@ const defineAbilityFor = (staff) => {
         // Notification
         cannot(notificationActionAbility.ADD, NOTIFICATION);
 
+        // ReExamination
+        can(reExaminationActionAbility.VIEW_ALL, RE_EXAMINATION);
+        can(reExaminationActionAbility.UPDATE, RE_EXAMINATION);
+
         break;
 
       case staffRoles.ROLE_CUSTOMER_SERVICE:
@@ -313,6 +327,10 @@ const defineAbilityFor = (staff) => {
 
         // Notification
         cannot(notificationActionAbility.ADD, NOTIFICATION);
+
+        // ReExamination
+        can(reExaminationActionAbility.VIEW_ALL, RE_EXAMINATION);
+        can(reExaminationActionAbility.UPDATE, RE_EXAMINATION);
 
         break;
       default:

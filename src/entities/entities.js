@@ -10,6 +10,7 @@ const entities = {
   TIMEOFF: "TimeOff",
   USER: "User",
   TIME: "Time",
+  RE_EXAMINATION: "RE_EXAMINATION",
   SIDEBAR: "Sidebar"
 };
 

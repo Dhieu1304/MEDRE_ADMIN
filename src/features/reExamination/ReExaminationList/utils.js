@@ -7,15 +7,15 @@ import { normalizeStrToDateStr, normalizeStrToInt, normalizeStrToStr } from "../
  *  then the keys of showCols are also changed.
  */
 export const columnsIds = {
-  dateRemind: "dateRemind",
+  // dateRemind: "dateRemind",
   dateReExam: "dateReExam",
   isRemind: "isRemind",
-  isApply: "isApply",
+  // isApply: "isApply",
   bookingDate: "bookingDate",
   bookingUserPhoneNumber: "bookingUserPhoneNumber",
   bookingUserEmail: "bookingUserEmail",
-  bookingUserName: "bookingUserName",
-  action: "action"
+  bookingUserName: "bookingUserName"
+  // action: "action"
 };
 
 /*
@@ -24,7 +24,7 @@ export const columnsIds = {
 */
 
 export const initialShowCols = Object.keys(columnsIds).reduce((obj, key) => {
-  if (key === columnsIds.action || key === columnsIds.dateRemind) {
+  if (key === columnsIds.bookingUserName) {
     return { ...obj };
   }
   return { ...obj, [key]: true };
@@ -34,12 +34,12 @@ export const initialShowCols = Object.keys(columnsIds).reduce((obj, key) => {
     - From the object's keys in the parameter
     - we will reformat the correct format to be the value for the input in the filter form
 */
-export const createDefaultValues = ({ isApply, isRemind, idStaffRemind, dateRemind, dateReExam, page, limit } = {}) => {
+export const createDefaultValues = ({ isRemind, dateReExam, page, limit } = {}) => {
   const result = {
-    isApply: normalizeStrToStr(isApply),
+    // isApply: normalizeStrToStr(isApply),
     isRemind: normalizeStrToStr(isRemind),
-    idStaffRemind: normalizeStrToStr(idStaffRemind),
-    dateRemind: normalizeStrToDateStr(dateRemind),
+    // idStaffRemind: normalizeStrToStr(idStaffRemind),
+    // dateRemind: normalizeStrToDateStr(dateRemind),
     dateReExam: normalizeStrToDateStr(dateReExam),
 
     page: normalizeStrToInt(page, 1),
