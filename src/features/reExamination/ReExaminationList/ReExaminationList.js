@@ -40,7 +40,7 @@ function ReExaminationList() {
 
   const { t } = useTranslation("reExaminationFeature", { keyPrefix: "ReExaminationList" });
   const { t: tReExamination } = useTranslation("reExaminationEntity", { keyPrefix: "properties" });
-  const { t: tReExaminationConstants } = useTranslation("reExaminationEntity", { keyPrefix: "contants" });
+  const { t: tReExaminationConstants } = useTranslation("reExaminationEntity", { keyPrefix: "constants" });
 
   const [showTableColsMenu, setShowTableColsMenu] = useState(null);
   const [showCols, setShowCols] = useState({
