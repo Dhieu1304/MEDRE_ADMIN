@@ -1,4 +1,4 @@
-export const ticketStatus = {
+export const ticketStatuses = {
   OPEN: "Open",
   CLOSE: "Close"
 };
