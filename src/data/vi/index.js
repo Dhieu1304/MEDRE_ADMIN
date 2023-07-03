@@ -18,7 +18,16 @@ import patientEntity from "./patientEntity.json";
 import patientFeature from "./patientFeature.json";
 import settingFeature from "./settingFeature.json";
 import settingEntity from "./settingEntity.json";
-
+import verificationFeature from "./verificationFeature.json";
+import reExaminationFeature from "./reExaminationFeature.json";
+import reExaminationEntity from "./reExaminationEntity.json";
+import notificationFeature from "./notificationFeature.json";
+import notificationEntity from "./notificationEntity.json";
+import expertiseFeature from "./expertiseFeature.json";
+import expertiseEntity from "./expertiseEntity.json";
+import statisticsFeature from "./statisticsFeature.json";
+import statisticsPage from "./statisticsPage.json";
+import supportPage from "./supportPage.json";
 const vi = {
   authFeature,
   authPage,
@@ -39,7 +48,17 @@ const vi = {
   patientEntity,
   patientFeature,
   settingFeature,
-  settingEntity
+  settingEntity,
+  verificationFeature,
+  reExaminationFeature,
+  reExaminationEntity,
+  notificationFeature,
+  notificationEntity,
+  expertiseFeature,
+  expertiseEntity,
+  statisticsFeature,
+  statisticsPage,
+  supportPage
 };
 
 export default vi;
