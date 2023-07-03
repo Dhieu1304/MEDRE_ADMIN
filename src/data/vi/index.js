@@ -12,6 +12,7 @@ import staffEntity from "./staffEntity.json";
 import userFeature from "./userFeature.json";
 import userEntity from "./userEntity.json";
 import ticketEntity from "./ticketEntity.json";
+import ticketFeature from "./ticketFeature.json";
 import timeOffEntity from "./timeOffEntity.json";
 import bookingFeature from "./bookingFeature.json";
 import bookingEntity from "./bookingEntity.json";
@@ -45,6 +46,7 @@ const vi = {
   userFeature,
   userEntity,
   ticketEntity,
+  ticketFeature,
   timeOffEntity,
   bookingFeature,
   bookingEntity,

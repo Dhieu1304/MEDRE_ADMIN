@@ -1,65 +1,232 @@
-import { Avatar, Button, TextField } from "@mui/material";
-import { useTranslation } from "react-i18next";
+import {
+  Divider,
+  Grid,
+  ListItem,
+  ListItemText,
+  TextField,
+  Typography,
+  Paper,
+  List,
+  Fab,
+  Box,
+  Card,
+  CardHeader,
+  Button,
+  useTheme
+} from "@mui/material";
+import formatDate from "date-and-time";
+
 import SendIcon from "@mui/icons-material/Send";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // import { useAuthStore } from "../../store/AuthStore";
-import images from "../../assets/images";
+
 import "./SupportPage.css";
+import { useParams } from "react-router-dom";
+import { Controller, useForm } from "react-hook-form";
 
-export default function SupportDetail() {
-  // const authStore = useAuthStore();
-  const { t } = useTranslation("supportPage");
-  function createData(avatar, name, description) {
-    return { avatar, name, description };
-  }
+import { Done } from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
+import CustomOverlay from "../../components/CustomOverlay/CustomOverlay";
+import { useFetchingStore } from "../../store/FetchingApiStore";
+import ticketServices from "../../services/ticketServices";
+import { ticketStatuses } from "../../entities/Ticket";
 
-  const chatDatas = [
-    createData(images.logo, "Thanh", "Dau dau qua"),
-    createData(images.logo, "Hieu", "Mua thuoc di"),
-    createData(images.logo, "Thanh", "Dau rang qua"),
-    createData(images.logo, "Hieu", "Di kham rang di"),
-    createData(images.logo, "Thanh", "Dau hong qua"),
-    createData(images.logo, "Hieu", "Mua thuoc ho di")
-  ];
-  const [question, setQuestion] = useState("");
-  const changeQuestion = (e) => {
-    setQuestion(e.target.value);
+function TicketDetail() {
+  const [ticket, setTicket] = useState();
+
+  const params = useParams();
+  const ticketId = params?.ticketId;
+
+  const { t } = useTranslation("ticketFeature", { keyPrefix: "TicketDetail" });
+
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+      content: ""
+    }
+  });
+  const theme = useTheme();
+  const { isLoading, fetchApi } = useFetchingStore();
+
+  const loadData = async () => {
+    await fetchApi(async () => {
+      const res = await ticketServices.getTicketDetail(ticketId);
+
+      if (res.success) {
+        const ticketData = res?.ticket;
+        setTicket(ticketData);
+
+        return { ...res };
+      }
+      setTicket({});
+      return { ...res };
+    });
   };
-  const sendQuestion = () => {
-    // alert(question);
+  useEffect(() => {
+    if (ticketId) {
+      loadData();
+    }
+  }, [ticketId]);
+
+  const handleResponseMessage = async ({ content }) => {
+    const data = {
+      id: ticketId,
+      content
+    };
+
+    await fetchApi(async () => {
+      const res = await ticketServices.responseTicket(data);
+
+      if (res.success) {
+        await loadData();
+        return { ...res };
+      }
+
+      return { ...res };
+    });
   };
+
+  const handleFinish = async () => {
+    const data = {
+      id: ticketId,
+      status: ticketStatuses.CLOSE
+    };
+
+    await fetchApi(async () => {
+      const res = await ticketServices.updateTicket(data);
+
+      if (res.success) {
+        await loadData();
+        return { ...res };
+      }
+
+      return { ...res };
+    });
+  };
+
   return (
     <>
-      <div className="support-detail-title">
-        <h2>
-          <b>
-            {t("detail.form-detail").toUpperCase()} {question}
-          </b>
-        </h2>
-        <Button variant="contained" className="back-btn" href="../../support">
-          {t("detail.back").toUpperCase()}
-        </Button>
-      </div>
-      <div className="chatting-info">
-        {chatDatas.map((chatData) => (
-          <div className="chatting-group">
-            <div>
-              <Avatar alt="Bệnh nhân" src={chatData.avatar} />
-            </div>
-            <div>
-              <h3>{chatData.name}</h3>
-              <h4>{chatData.description}</h4>
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="input-question">
-        <TextField fullWidth id="question" onChange={changeQuestion} />
-        <Button onClick={sendQuestion}>
-          <SendIcon sx={{ fontSize: 40 }} />
-        </Button>
-      </div>
+      <CustomOverlay open={isLoading} />
+      <Card
+        sx={{
+          width: "100%",
+          border: "1px solid #ccc",
+          borderRadius: 4
+        }}
+      >
+        <CardHeader
+          title={ticket?.title}
+          action={
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center"
+              }}
+            >
+              {ticket?.status === ticketStatuses.OPEN ? (
+                <Button
+                  onClick={handleFinish}
+                  sx={{
+                    backgroundColor: theme.palette.success.light,
+                    color: theme.palette.success.contrastText,
+                    "&:hover": {
+                      backgroundColor: theme.palette.primary.light,
+                      color: theme.palette.primary.contrastText
+                    }
+                  }}
+                  endIcon={<Done />}
+                >
+                  {t("button.markFinish")}
+                </Button>
+              ) : (
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center"
+                  }}
+                >
+                  <Typography color={theme.palette.success.light}>{t("button.finished")}</Typography>
+                  <Done sx={{ ml: 1, color: theme.palette.success.light }} />
+                </Box>
+              )}
+            </Box>
+          }
+        />
+        <Divider />
+
+        <Box component={Paper}>
+          <Box>
+            <List sx={{ height: "60vh", overflowY: "auto" }}>
+              {ticket?.ticketDetails?.map((item) => {
+                return item?.idUser ? (
+                  <ListItem key={item?.id}>
+                    <Grid container>
+                      <Grid item xs={12}>
+                        <ListItemText sx={{ textAlign: "left" }} primary={item?.content} />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <ListItemText
+                          sx={{ textAlign: "left" }}
+                          secondary={formatDate.format(new Date(item?.createdAt), "DD/MM/YY hh:mm")}
+                        />
+                      </Grid>
+                    </Grid>
+                  </ListItem>
+                ) : (
+                  <ListItem key={item?.id}>
+                    <Grid container>
+                      <Grid item xs={12}>
+                        <ListItemText sx={{ textAlign: "right" }} primary={item?.content} />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <ListItemText
+                          sx={{ textAlign: "right" }}
+                          secondary={formatDate.format(new Date(item?.createdAt), "DD/MM/YY hh:mm")}
+                        />
+                      </Grid>
+                    </Grid>
+                  </ListItem>
+                );
+              })}
+            </List>
+            <Divider />
+            <Grid container sx={{ padding: "20px" }}>
+              <Grid item xs={11}>
+                <Controller
+                  control={control}
+                  name="content"
+                  rules={{
+                    required: true
+                  }}
+                  render={({ field: { value, onChange } }) => {
+                    return (
+                      <TextField
+                        sx={{
+                          height: "100%",
+                          width: "100%"
+                        }}
+                        variant="outlined"
+                        value={value}
+                        onChange={onChange}
+                        fullWidth
+                        multiline
+                        disabled={ticket?.status === ticketStatuses.CLOSE}
+                      />
+                    );
+                  }}
+                />
+              </Grid>
+              <Grid item xs={1} sx={{ textAlign: "right" }}>
+                <Fab color="primary" aria-label="add" onClick={handleSubmit(handleResponseMessage)}>
+                  <SendIcon />
+                </Fab>
+              </Grid>
+            </Grid>
+          </Box>
+        </Box>
+      </Card>
     </>
   );
 }
+
+export default TicketDetail;

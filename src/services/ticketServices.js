@@ -119,12 +119,12 @@ const responseTicket = async ({ id, content }) => {
 
 const updateTicket = async ({ id, status }) => {
   const dataBody = cleanUndefinedAndEmptyStrValueObject({
-    id_ticket: id,
+    id,
     status
   });
 
   try {
-    const res = await axiosClient.post(ticketApi.updateTicket(), dataBody);
+    const res = await axiosClient.put(ticketApi.updateTicket(), dataBody);
 
     if (res?.status) {
       const ticket = camelcaseKeys(res?.data, { deep: true });

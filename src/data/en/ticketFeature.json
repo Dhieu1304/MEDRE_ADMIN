@@ -1,0 +1,35 @@
+{
+  "TicketList": {
+    "title": "Find ticket",
+
+    "filter": {
+      "status": "Status"
+    },
+
+    "select": {
+      "statuses": {
+        "open": "open",
+        "close": "Close",
+        "all": "All"
+      }
+    },
+
+    "button": {
+      "reset": "Reset",
+      "hideFilterCollapse": "Hide filter",
+      "showFilterCollapse": "Show Filter",
+      "showMenuColumns": "Show",
+      "add": "Add"
+    }
+  },
+
+  "TicketDetail": {
+    "title": "Ticket detail",
+    "button": {
+      "back": "Back",
+      "save": "Save",
+      "markFinish": "Mark finish",
+      "finished": "Finished"
+    }
+  }
+}
