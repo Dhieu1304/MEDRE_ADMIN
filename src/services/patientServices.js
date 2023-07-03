@@ -42,7 +42,7 @@ const createPatient = async ({ phoneNumber, name, gender, address, dob, healthIn
   }
 };
 
-const getPatients = async ({ phoneNumber, name, page, limit, gender, address, healthInsurance }) => {
+const getPatients = async ({ phoneNumber, name, page, limit, gender, address, healthInsurance, order }) => {
   // console.log("getUserList: ", { page, limit, name });
 
   const params = cleanUndefinedAndEmptyStrValueObject({
@@ -52,7 +52,8 @@ const getPatients = async ({ phoneNumber, name, page, limit, gender, address, he
     limit,
     gender,
     address,
-    healthInsurance
+    healthInsurance,
+    order
   });
 
   // console.log("params: ", params);

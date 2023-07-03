@@ -1,11 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
 
-import { Box } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import qs from "query-string";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import formatDate from "date-and-time";
 
+import { Search as SearchIcon } from "@mui/icons-material";
 import patientServices from "../../../services/patientServices";
 import { useFetchingStore } from "../../../store/FetchingApiStore/hooks";
 import { useAppConfigStore } from "../../../store/AppConfigStore/hooks";
@@ -13,13 +15,17 @@ import { useAppConfigStore } from "../../../store/AppConfigStore/hooks";
 import useObjDebounce from "../../../hooks/useObjDebounce";
 
 import PatientFiltersForm from "./PatientFiltersForm";
-import PatientTable from "./PatientTable";
 
 import { columnsIds, createDefaultValues, initialShowCols } from "./utils";
 import CustomOverlay from "../../../components/CustomOverlay/CustomOverlay";
 import ListPageAction from "../../../components/ListPageAction/ListPageAction";
 import ListPageTableWrapper from "../../../components/ListPageTableWrapper";
 import ListPageTop from "../../../components/ListPageTop";
+import CopyButton from "../../../components/CopyButton";
+import { getSortValue } from "../../../utils/objectUtil";
+import DataTable from "../../components/DataFilterTable/DataTable";
+import { usePatientGendersContantTranslation } from "../hooks/usePatientConstantsTranslation";
+import routeConfig from "../../../config/routeConfig";
 
 function PatientList() {
   const { locale } = useAppConfigStore();
@@ -28,12 +34,19 @@ function PatientList() {
 
   const [patients, setPatients] = useState([]);
   const [count, setCount] = useState(0);
+  const [sort, setSort] = useState({
+    sortBy: columnsIds.name,
+    isAsc: true
+  });
 
+  const theme = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
   const { isLoading, fetchApi } = useFetchingStore();
 
   // functions for multilingual use
+
+  const [, patientGenderContantListObj] = usePatientGendersContantTranslation();
 
   const { t } = useTranslation("patientFeature", { keyPrefix: "PatientList" });
   const { t: tPatient } = useTranslation("patientEntity", { keyPrefix: "properties" });
@@ -56,43 +69,71 @@ function PatientList() {
     () => [
       {
         id: columnsIds.name,
+        haveSortIcon: true,
         label: tPatient(columnsIds.name),
-        minWidth: 100
+        minWidth: 100,
+        render: (patient) => patient?.name,
+        fixed: true
       },
       {
         id: columnsIds.phoneNumber,
+        haveSortIcon: true,
         label: tPatient(columnsIds.phoneNumber),
         minWidth: 100,
-        hide: !showCols[columnsIds.phoneNumber]
+        hide: !showCols[columnsIds.phoneNumber],
+        render: (patient) => patient?.phoneNumber
       },
       {
         id: columnsIds.address,
         label: tPatient(columnsIds.address),
         minWidth: 100,
-        hide: !showCols[columnsIds.address]
+        hide: !showCols[columnsIds.address],
+        render: (patient) => patient?.address
       },
       {
         id: columnsIds.gender,
+        haveSortIcon: true,
         label: tPatient(columnsIds.gender),
         minWidth: 100,
-        hide: !showCols[columnsIds.gender]
+        hide: !showCols[columnsIds.gender],
+        render: (patient) => patientGenderContantListObj?.[patient?.gender]?.label
       },
       {
         id: columnsIds.dob,
+        haveSortIcon: true,
         label: tPatient(columnsIds.dob),
         minWidth: 100,
-        hide: !showCols[columnsIds.dob]
+        hide: !showCols[columnsIds.dob],
+        render: (patient) => patient?.dob && formatDate.format(new Date(patient?.dob), "DD/MM/YYYY")
       },
       {
         id: columnsIds.healthInsurance,
         label: tPatient(columnsIds.healthInsurance),
         minWidth: 200,
-        hide: !showCols[columnsIds.healthInsurance]
+        hide: !showCols[columnsIds.healthInsurance],
+        render: (patient) => patient?.healthInsurance
       },
       {
         id: columnsIds.action,
         label: "",
-        minWidth: 100
+        minWidth: 100,
+        render: (patient) => {
+          const patientPath = routeConfig.patient;
+          return (
+            <>
+              {/* <Box sx={{ ml: 2 }} component={Link} to={`${patientPath}/${patient?.id}/booking`}>
+                <CalendarMonthIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
+              </Box> */}
+
+              <Box sx={{ ml: 1, mr: 1 }} component={Link} to={`${patientPath}/${patient?.id}`}>
+                <SearchIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
+              </Box>
+
+              <CopyButton content={patient?.id} />
+            </>
+          );
+        },
+        action: true
       }
     ],
     [locale, showCols]
@@ -138,9 +179,32 @@ function PatientList() {
   );
 
   const loadData = async ({ page }) => {
+    const orderBy = sort.isAsc ? "asc" : "desc";
+    let order;
+    if (sort.sortBy) {
+      //  { username, phoneNumber, email, name, dob, role, status }
+      // console.log("columnsIds: ", columnsIds);
+      const sortByFormat = getSortValue(
+        columnsIds,
+        {
+          phoneNumber: "phone_number",
+          name: "name",
+          gender: "gender",
+          dob: "dob"
+        },
+        sort.sortBy
+      );
+
+      // console.log("sortByFormat: ", sortByFormat);
+      if (sortByFormat) {
+        order = `${sortByFormat}:${orderBy}`;
+      }
+    }
+
     const paramsObj = {
       ...watch(),
-      page
+      page,
+      order
     };
 
     await fetchApi(async () => {
@@ -183,7 +247,7 @@ function PatientList() {
     setValue("page", page);
     navigate(`?${searchParams}`);
     loadData({ page });
-  }, [...Object.values(filterDebounce), ...Object.values(searchDebounce), isReset]);
+  }, [...Object.values(filterDebounce), ...Object.values(searchDebounce), isReset, sort]);
 
   return (
     <Box>
@@ -214,7 +278,7 @@ function PatientList() {
       />
 
       <ListPageTableWrapper
-        table={<PatientTable patients={patients} columns={columns} showCols={showCols} />}
+        table={<DataTable rows={patients} columns={columns} showCols={showCols} sort={sort} setSort={setSort} />}
         count={count}
         watch={watch}
         loadData={loadData}
