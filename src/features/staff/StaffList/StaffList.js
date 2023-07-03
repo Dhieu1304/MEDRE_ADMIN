@@ -175,28 +175,28 @@ function StaffList({ expertisesList }) {
         label: tStaff(columnsIds.healthInsurance),
         minWidth: 200,
         hide: !showCols[columnsIds.healthInsurance],
-        render: (data) => data?.healthInsurance
+        render: (staff) => staff?.healthInsurance
       },
       {
         id: columnsIds.description,
         label: tStaff(columnsIds.description),
         minWidth: 400,
         hide: !showCols[columnsIds.description],
-        render: (data) => data?.description
+        render: (staff) => staff?.description
       },
       {
         id: columnsIds.education,
         label: tStaff(columnsIds.education),
         minWidth: 150,
         hide: !showCols[columnsIds.education],
-        render: (data) => data?.education
+        render: (staff) => staff?.education
       },
       {
         id: columnsIds.certificate,
         label: tStaff(columnsIds.certificate),
         minWidth: 150,
         hide: !showCols[columnsIds.certificate],
-        render: (data) => data?.certificate
+        render: (staff) => staff?.certificate
       },
 
       {
@@ -264,14 +264,14 @@ function StaffList({ expertisesList }) {
           return (
             <>
               {staff?.role === staffRoles.ROLE_DOCTOR && (
-                <Link to={`${staffPath}/${staff?.id}/schedule`}>
+                <Box sx={{ ml: 2 }} component={Link} to={`${staffPath}/${staff?.id}/schedule`}>
                   <CalendarMonthIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
-                </Link>
+                </Box>
               )}
 
-              <Link to={`${staffPath}/${staff?.id}`}>
+              <Box sx={{ ml: 2 }} component={Link} to={`${staffPath}/${staff?.id}`}>
                 <SearchIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
-              </Link>
+              </Box>
 
               <CopyButton content={staff?.id} />
             </>

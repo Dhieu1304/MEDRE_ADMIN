@@ -3,7 +3,7 @@ import { userApi } from "../config/apiConfig";
 import axiosClient from "../config/axiosClient";
 import { cleanUndefinedAndEmptyStrValueObject } from "../utils/objectUtil";
 
-const getUserList = async ({ email, phoneNumber, name, page, limit, blocked, gender, address, healthInsurance }) => {
+const getUserList = async ({ email, phoneNumber, name, page, limit, blocked, gender, address, healthInsurance, order }) => {
   // console.log("getUserList: ", { page, limit, name });
 
   const params = cleanUndefinedAndEmptyStrValueObject({
@@ -15,7 +15,8 @@ const getUserList = async ({ email, phoneNumber, name, page, limit, blocked, gen
     blocked,
     gender,
     address,
-    healthInsurance
+    healthInsurance,
+    order
   });
 
   // console.log("params: ", params);

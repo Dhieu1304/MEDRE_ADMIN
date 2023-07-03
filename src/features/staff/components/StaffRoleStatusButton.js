@@ -105,12 +105,14 @@ const StaffRoleStatusButton = ({ variant, onClick, isLabel }) => {
   return render();
 };
 
-// StaffRoleStatusButton.defaultProps = {};
+StaffRoleStatusButton.defaultProps = {
+  isLabel: undefined
+};
 
 StaffRoleStatusButton.propTypes = {
   variant: PropTypes.oneOf([ROLE_ADMIN, ROLE_DOCTOR, ROLE_NURSE, ROLE_CUSTOMER_SERVICE, STATUS_UNBLOCK, STATUS_BLOCK])
     .isRequired,
-
+  isLabel: PropTypes.bool,
   onClick: PropTypes.func.isRequired
 };
 

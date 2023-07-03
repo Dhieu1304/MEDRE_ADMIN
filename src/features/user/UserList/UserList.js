@@ -1,11 +1,15 @@
 import React, { useEffect, useMemo, useState } from "react";
 
-import { Box } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import qs from "query-string";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import formatDate from "date-and-time";
 
+import { Search as SearchIcon } from "@mui/icons-material";
+import { useAbility } from "@casl/react";
+import { subject } from "@casl/ability";
 import userServices from "../../../services/userServices";
 import { useFetchingStore } from "../../../store/FetchingApiStore/hooks";
 import { useAppConfigStore } from "../../../store/AppConfigStore/hooks";
@@ -16,14 +20,21 @@ import { NotHaveAccessModal } from "../../auth";
 import useObjDebounce from "../../../hooks/useObjDebounce";
 
 import UserFiltersForm from "./UserFiltersForm";
-import UserTable from "./UserTable";
 
 import { columnsIds, createDefaultValues, initialShowCols } from "./utils";
-import { BlockUserModal, UnblockUserModal } from "../components";
+import { BlockUserModal, UnblockUserModal, UserStatusButton } from "../components";
 import CustomOverlay from "../../../components/CustomOverlay/CustomOverlay";
 import ListPageAction from "../../../components/ListPageAction/ListPageAction";
 import ListPageTableWrapper from "../../../components/ListPageTableWrapper";
 import ListPageTop from "../../../components/ListPageTop";
+import { AbilityContext } from "../../../store/AbilityStore";
+import { userActionAbility, userStatuses } from "../../../entities/User";
+import { useUserGendersContantTranslation } from "../hooks/useUserConstantsTranslation";
+import DataTable from "../../components/DataFilterTable/DataTable";
+import CopyButton from "../../../components/CopyButton";
+import routeConfig from "../../../config/routeConfig";
+import entities from "../../../entities/entities";
+import { getSortValue } from "../../../utils/objectUtil";
 
 function UserList() {
   const { locale } = useAppConfigStore();
@@ -32,6 +43,10 @@ function UserList() {
 
   const [users, setUsers] = useState([]);
   const [count, setCount] = useState(0);
+  const [sort, setSort] = useState({
+    sortBy: columnsIds.name,
+    isAsc: true
+  });
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -41,7 +56,13 @@ function UserList() {
   const blockUserModal = useCustomModal();
   const unblockUserModal = useCustomModal();
 
+  const theme = useTheme();
+
   // functions for multilingual use
+
+  const { t: tUserMessage } = useTranslation("userEntity", { keyPrefix: "messages" });
+
+  const [, userGenderContantListObj] = useUserGendersContantTranslation();
 
   const { t } = useTranslation("userFeature", { keyPrefix: "UserList" });
   const { t: tUser } = useTranslation("userEntity", { keyPrefix: "properties" });
@@ -60,59 +81,141 @@ function UserList() {
     [columnsIds.address]: false
   });
 
+  const ability = useAbility(AbilityContext);
+
   const columns = useMemo(
     () => [
       {
         id: columnsIds.name,
+        haveSortIcon: true,
         label: tUser(columnsIds.name),
-        minWidth: 100
+        minWidth: 100,
+        render: (user) => user?.name,
+        fixed: true
       },
       {
         id: columnsIds.phoneNumber,
+        haveSortIcon: true,
         label: tUser(columnsIds.phoneNumber),
         minWidth: 100,
-        hide: !showCols[columnsIds.phoneNumber]
+        hide: !showCols[columnsIds.phoneNumber],
+        render: (user) => {
+          return (
+            <>
+              <Typography variant="inherit">{user?.phoneNumber}</Typography>
+              {!user.phoneVerified && (
+                <Typography variant="caption" color={theme.palette.error.light}>
+                  {tUserMessage("phoneVerifiedFailed")}
+                </Typography>
+              )}
+            </>
+          );
+        }
       },
       {
         id: columnsIds.email,
+        haveSortIcon: true,
         label: tUser(columnsIds.email),
         minWidth: 100,
-        hide: !showCols[columnsIds.email]
+        hide: !showCols[columnsIds.email],
+        render: (user) => {
+          return (
+            <>
+              <Typography variant="inherit">{user?.email}</Typography>
+              {!user.emailVerified && (
+                <Typography variant="caption" color={theme.palette.error.light}>
+                  {tUserMessage("emailVerifiedFailed")}
+                </Typography>
+              )}
+            </>
+          );
+        }
       },
       {
         id: columnsIds.address,
         label: tUser(columnsIds.address),
         minWidth: 100,
-        hide: !showCols[columnsIds.address]
+        hide: !showCols[columnsIds.address],
+        render: (user) => user?.address
       },
       {
         id: columnsIds.gender,
+        haveSortIcon: true,
         label: tUser(columnsIds.gender),
         minWidth: 100,
-        hide: !showCols[columnsIds.gender]
+        hide: !showCols[columnsIds.gender],
+        render: (user) => userGenderContantListObj?.[user?.gender]?.label
       },
       {
         id: columnsIds.dob,
+        haveSortIcon: true,
         label: tUser(columnsIds.dob),
         minWidth: 100,
-        hide: !showCols[columnsIds.dob]
+        hide: !showCols[columnsIds.dob],
+        render: (user) => user?.dob && formatDate.format(new Date(user?.dob), "DD/MM/YYYY")
       },
       {
         id: columnsIds.healthInsurance,
         label: tUser(columnsIds.healthInsurance),
         minWidth: 200,
-        hide: !showCols[columnsIds.healthInsurance]
+        hide: !showCols[columnsIds.healthInsurance],
+        render: (user) => user?.healthInsurance
       },
       {
         id: columnsIds.status,
+        haveSortIcon: true,
         label: tUser(columnsIds.status),
         minWidth: 200,
-        hide: !showCols[columnsIds.status]
+        hide: !showCols[columnsIds.status],
+        render: (user) => {
+          const canBlockUser = ability.can(userActionAbility.BLOCK, subject(entities.USER, user));
+
+          return user?.blocked ? (
+            <UserStatusButton
+              isLabel={!canBlockUser}
+              variant={userStatuses.STATUS_BLOCK}
+              onClick={() => {
+                if (canBlockUser) {
+                  unblockUserModal.setShow(true);
+                  unblockUserModal.setData(user);
+                }
+              }}
+            />
+          ) : (
+            <UserStatusButton
+              isLabel={!canBlockUser}
+              variant={userStatuses.STATUS_UNBLOCK}
+              onClick={() => {
+                if (canBlockUser) {
+                  blockUserModal.setShow(true);
+                  blockUserModal.setData(user);
+                }
+              }}
+            />
+          );
+        }
       },
       {
         id: columnsIds.action,
         label: "",
-        minWidth: 100
+        minWidth: 100,
+        render: (user) => {
+          const userPath = routeConfig.user;
+          return (
+            <>
+              {/* <Box sx={{ ml: 2 }} component={Link} to={`${userPath}/${user?.id}/booking`}>
+                <CalendarMonthIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
+              </Box> */}
+
+              <Box sx={{ ml: 2 }} component={Link} to={`${userPath}/${user?.id}`}>
+                <SearchIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
+              </Box>
+
+              <CopyButton content={user?.id} />
+            </>
+          );
+        },
+        action: true
       }
     ],
     [locale, showCols]
@@ -159,10 +262,35 @@ function UserList() {
   );
 
   const loadData = async ({ page }) => {
+    const orderBy = sort.isAsc ? "asc" : "desc";
+    let order;
+    if (sort.sortBy) {
+      //  { username, phoneNumber, email, name, dob, role, status }
+      // console.log("columnsIds: ", columnsIds);
+      const sortByFormat = getSortValue(
+        columnsIds,
+        {
+          phoneNumber: "phone_number",
+          email: "email",
+          name: "name",
+          gender: "gender",
+          dob: "dob",
+          status: "blocked"
+        },
+        sort.sortBy
+      );
+
+      // console.log("sortByFormat: ", sortByFormat);
+      if (sortByFormat) {
+        order = `${sortByFormat}:${orderBy}`;
+      }
+    }
+
     const paramsObj = {
       ...watch(),
       blocked: watch().status,
-      page
+      page,
+      order
     };
 
     await fetchApi(async () => {
@@ -205,7 +333,7 @@ function UserList() {
     setValue("page", page);
     navigate(`?${searchParams}`);
     loadData({ page });
-  }, [...Object.values(filterDebounce), ...Object.values(searchDebounce), isReset]);
+  }, [...Object.values(filterDebounce), ...Object.values(searchDebounce), isReset, sort]);
 
   const handleAfterBlockUser = async () => {
     await loadData({ page: watch().page });
@@ -245,16 +373,7 @@ function UserList() {
         />
 
         <ListPageTableWrapper
-          table={
-            <UserTable
-              users={users}
-              notHaveAccessModal={notHaveAccessModal}
-              blockUserModal={blockUserModal}
-              unblockUserModal={unblockUserModal}
-              columns={columns}
-              showCols={showCols}
-            />
-          }
+          table={<DataTable rows={users} columns={columns} showCols={showCols} sort={sort} setSort={setSort} />}
           count={count}
           watch={watch}
           loadData={loadData}
