@@ -218,7 +218,7 @@ function UserList() {
         action: true
       }
     ],
-    [locale, showCols]
+    [locale, showCols, users]
   );
 
   const defaultValues = useMemo(() => {

@@ -1,9 +1,11 @@
 import { useTranslation } from "react-i18next";
 import qs from "query-string";
-import { Box } from "@mui/material";
+import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FormProvider, useForm } from "react-hook-form";
+import { Preview as PreviewIcon, Search as SearchIcon } from "@mui/icons-material";
+import formatDate from "date-and-time";
 import CustomOverlay from "../../../components/CustomOverlay/CustomOverlay";
 import ListPageTop from "../../../components/ListPageTop";
 import { useAppConfigStore } from "../../../store/AppConfigStore";
@@ -13,10 +15,14 @@ import { useFetchingStore } from "../../../store/FetchingApiStore";
 import useObjDebounce from "../../../hooks/useObjDebounce";
 import BookingFiltersForm from "./BookingFiltersForm";
 import ListPageTableWrapper from "../../../components/ListPageTableWrapper";
-import BookingTable from "./BookingTable";
 import ListPageAction from "../../../components/ListPageAction/ListPageAction";
 import { useCustomModal } from "../../../components/CustomModal";
 import BookingAnInfoModal from "../components/BookingAnInfoModal";
+import CopyButton from "../../../components/CopyButton";
+import { bookingStatuses as bookingStatusesConstans } from "../../../entities/Booking";
+import DataTable from "../../components/DataFilterTable/DataTable";
+import routeConfig from "../../../config/routeConfig";
+import { getSortValue } from "../../../utils/objectUtil";
 
 function BookingList() {
   const { locale } = useAppConfigStore();
@@ -25,6 +31,10 @@ function BookingList() {
 
   const [bookings, setBookings] = useState([]);
   const [count, setCount] = useState(0);
+  const [sort, setSort] = useState({
+    sortBy: columnsIds.name,
+    isAsc: true
+  });
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -32,8 +42,14 @@ function BookingList() {
 
   // functions for multilingual use
 
+  const theme = useTheme();
+
   const { t } = useTranslation("bookingFeature", { keyPrefix: "BookingList" });
   const { t: tBooking } = useTranslation("bookingEntity", { keyPrefix: "properties" });
+  const { t: tBookingStatuses } = useTranslation("bookingEntity", { keyPrefix: "constants.statuses" });
+  const { t: tBookingPaymentStatuses } = useTranslation("bookingEntity", { keyPrefix: "constants.paymentStatuses" });
+
+  const bookingAnInfoModal = useCustomModal();
 
   // state is used to represent the visibility of the Menu
   // (This menu allows the patient to hide or show custom columns)
@@ -54,70 +70,184 @@ function BookingList() {
       {
         id: columnsIds.patientName,
         label: tBooking(columnsIds.patientName),
-        minWidth: 100
+        minWidth: 100,
+        render: (booking) => booking?.bookingOfPatient?.name,
+        fixed: true
       },
       {
         id: columnsIds.patientPhoneNumber,
         label: tBooking(columnsIds.patientPhoneNumber),
         minWidth: 100,
-        hide: !showCols[columnsIds.patientPhoneNumber]
+        hide: !showCols[columnsIds.patientPhoneNumber],
+        render: (booking) => booking?.bookingOfPatient?.phoneNumber
       },
       {
         id: columnsIds.doctorName,
         label: tBooking(columnsIds.doctorName),
         minWidth: 100,
-        hide: !showCols[columnsIds.doctorName]
+        hide: !showCols[columnsIds.doctorName],
+        render: (booking) => booking?.bookingSchedule?.scheduleOfStaff?.name
       },
       {
         id: columnsIds.date,
+        haveSortIcon: true,
         label: tBooking(columnsIds.date),
         minWidth: 100,
-        hide: !showCols[columnsIds.date]
+        hide: !showCols[columnsIds.date],
+        render: (booking) => booking?.date && formatDate.format(new Date(booking?.date), "DD/MM/YYYY")
       },
       {
         id: columnsIds.time,
         label: tBooking(columnsIds.time),
         minWidth: 100,
-        hide: !showCols[columnsIds.time]
+        hide: !showCols[columnsIds.time],
+        render: (booking) => (
+          <Typography fontWeight={500} textAlign="center" fontSize={16}>
+            {`${booking?.bookingTimeSchedule?.timeStart?.split(":")[0]}:${
+              booking?.bookingTimeSchedule?.timeStart?.split(":")[1]
+            }`}{" "}
+            -{" "}
+            {`${booking?.bookingTimeSchedule?.timeEnd?.split(":")[0]}:${
+              booking?.bookingTimeSchedule?.timeEnd?.split(":")[1]
+            }`}
+          </Typography>
+        )
       },
       {
         id: columnsIds.type,
         label: tBooking(columnsIds.type),
         minWidth: 100,
-        hide: !showCols[columnsIds.type]
+        hide: !showCols[columnsIds.type],
+        render: (booking) => booking?.bookingSchedule?.type
       },
       {
         id: columnsIds.expertise,
         label: tBooking(columnsIds.expertise),
         minWidth: 100,
-        hide: !showCols[columnsIds.expertise]
+        hide: !showCols[columnsIds.expertise],
+        render: (booking) => booking?.bookingSchedule?.scheduleExpertise?.name
       },
       {
         id: columnsIds.ordinalNumber,
+        haveSortIcon: true,
         label: tBooking(columnsIds.ordinalNumber),
         minWidth: 100,
-        hide: !showCols[columnsIds.ordinalNumber]
+        hide: !showCols[columnsIds.ordinalNumber],
+        render: (booking) => booking?.ordinalNumber
       },
       {
         id: columnsIds.status,
+        haveSortIcon: true,
         label: tBooking(columnsIds.status),
-        minWidth: 100,
-        hide: !showCols[columnsIds.status]
+        minWidth: 140,
+        hide: !showCols[columnsIds.status],
+        render: (booking) => {
+          switch (booking?.bookingStatus) {
+            case bookingStatusesConstans.BOOKED:
+              return (
+                <Typography
+                  sx={{
+                    width: "100%",
+                    fontSize: 14,
+                    color: theme.palette.success.light
+                  }}
+                >
+                  {tBookingStatuses("booked")}
+                </Typography>
+              );
+            case bookingStatusesConstans.CANCELED:
+              return (
+                <Typography
+                  sx={{
+                    width: "100%",
+                    fontSize: 14,
+                    color: theme.palette.error.light
+                  }}
+                >
+                  {tBookingStatuses("cancel")}
+                </Typography>
+              );
+            case bookingStatusesConstans.WAITING:
+            default:
+              return (
+                <Typography
+                  sx={{
+                    width: "100%",
+                    fontSize: 14,
+                    color: theme.palette.warning.light
+                  }}
+                >
+                  {tBookingStatuses("waiting")}
+                </Typography>
+              );
+          }
+        }
       },
       {
         id: columnsIds.paymentStatus,
+        haveSortIcon: true,
         label: tBooking(columnsIds.paymentStatus),
         minWidth: 120,
-        hide: !showCols[columnsIds.paymentStatus]
+        hide: !showCols[columnsIds.paymentStatus],
+        render: (booking) => {
+          if (booking?.isPayment)
+            return (
+              <Typography
+                sx={{
+                  width: "100%",
+                  fontSize: 14,
+                  color: theme.palette.success.light
+                }}
+              >
+                {tBookingPaymentStatuses("paid")}
+              </Typography>
+            );
+
+          return (
+            <Typography
+              sx={{
+                width: "100%",
+                fontSize: 14,
+                color: theme.palette.warning.light
+              }}
+            >
+              {tBookingPaymentStatuses("unpaid")}
+            </Typography>
+          );
+        }
       },
 
       {
         id: columnsIds.action,
         label: "",
-        minWidth: 100
+        minWidth: 100,
+        render: (booking) => {
+          const bookingPath = routeConfig.booking;
+          return (
+            <>
+              <Box sx={{ ml: 2 }} component={Link} to={`${bookingPath}/${booking?.id}`}>
+                <SearchIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
+              </Box>
+
+              <IconButton
+                onClick={() => {
+                  if (booking) {
+                    bookingAnInfoModal.setShow(true);
+                    bookingAnInfoModal.setData(booking);
+                  }
+                }}
+              >
+                <PreviewIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
+              </IconButton>
+
+              <CopyButton content={booking?.id} />
+            </>
+          );
+        },
+        action: true
       }
     ],
-    [locale, showCols]
+    [locale, showCols, bookings]
   );
 
   const defaultValues = useMemo(() => {
@@ -164,12 +294,33 @@ function BookingList() {
     1000
   );
 
-  const bookingAnInfoModal = useCustomModal();
-
   const loadData = async ({ page }) => {
+    const orderBy = sort.isAsc ? "asc" : "desc";
+    let order;
+    if (sort.sortBy) {
+      //  { username, phoneNumber, email, name, dob, role, status }
+      // console.log("columnsIds: ", columnsIds);
+      const sortByFormat = getSortValue(
+        columnsIds,
+        {
+          date: "date",
+          ordinalNumber: "ordinal_number",
+          status: "booking_status",
+          paymentStatus: "is_payment"
+        },
+        sort.sortBy
+      );
+
+      // console.log("sortByFormat: ", sortByFormat);
+      if (sortByFormat) {
+        order = `${sortByFormat}:${orderBy}`;
+      }
+    }
+
     const paramsObj = {
       ...watch(),
-      page
+      page,
+      order
     };
 
     await fetchApi(async () => {
@@ -214,7 +365,7 @@ function BookingList() {
     setValue("page", page);
     navigate(`?${searchParams}`);
     loadData({ page });
-  }, [...Object.values(filterDebounce), ...Object.values(searchDebounce), isReset]);
+  }, [...Object.values(filterDebounce), ...Object.values(searchDebounce), isReset, sort]);
 
   return (
     <>
@@ -245,14 +396,7 @@ function BookingList() {
         />
 
         <ListPageTableWrapper
-          table={
-            <BookingTable
-              bookings={bookings}
-              columns={columns}
-              showCols={showCols}
-              bookingAnInfoModal={bookingAnInfoModal}
-            />
-          }
+          table={<DataTable rows={bookings} columns={columns} showCols={showCols} sort={sort} setSort={setSort} />}
           count={count}
           watch={watch}
           loadData={loadData}

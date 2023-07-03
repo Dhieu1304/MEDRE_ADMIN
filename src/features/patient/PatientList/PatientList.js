@@ -136,7 +136,7 @@ function PatientList() {
         action: true
       }
     ],
-    [locale, showCols]
+    [locale, showCols, patients]
   );
 
   const defaultValues = useMemo(() => {
