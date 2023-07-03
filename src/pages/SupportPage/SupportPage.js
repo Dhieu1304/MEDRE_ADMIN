@@ -1,12 +1,12 @@
 import { Route, Routes } from "react-router-dom";
-import { SupportList, SupportDetail } from "../../features/support";
+import { TicketList, TicketDetail } from "../../features/ticket";
 import { supportRoutes } from "./routes";
 
 function SupportPage() {
   return (
     <Routes>
-      <Route path={supportRoutes.list} element={<SupportList />} />
-      <Route path={supportRoutes.detail} element={<SupportDetail />} />
+      <Route path={supportRoutes.list} element={<TicketList />} />
+      <Route path={supportRoutes.detail} element={<TicketDetail />} />
     </Routes>
   );
 }

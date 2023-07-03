@@ -105,6 +105,13 @@ const statisticsApi = {
   revenue: () => "/statistic/revenue"
 };
 
+const ticketApi = {
+  ticketList: () => "/ticket/list",
+  ticketDetail: (id) => `/ticket/detail/${id}`,
+  responseTicket: () => "/ticket/response",
+  updateTicket: () => "/ticket/update"
+};
+
 export {
   authApi,
   userApi,
@@ -119,5 +126,6 @@ export {
   reExaminationApi,
   uploadApi,
   scheduleBookingTimeApi,
-  statisticsApi
+  statisticsApi,
+  ticketApi
 };

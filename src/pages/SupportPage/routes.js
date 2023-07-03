@@ -1,6 +1,6 @@
 const supportRoutes = {
   list: "/",
-  detail: "/:supportId",
+  detail: "/:ticketId",
   default: "/*"
 };
 

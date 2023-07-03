@@ -10,6 +10,7 @@ import entities from "../entities/entities";
 import { settingActionAbility } from "../entities/Setting";
 import { notificationActionAbility } from "../entities/Notification/constant";
 import { reExaminationActionAbility } from "../entities/ReExamination";
+import { ticketActionAbility } from "../entities/Ticket";
 
 const defineAbilityFor = (staff) => {
   const {
@@ -24,7 +25,8 @@ const defineAbilityFor = (staff) => {
     TIMEOFF,
     USER,
     // TIME
-    RE_EXAMINATION
+    RE_EXAMINATION,
+    TICKET
   } = entities;
 
   return defineAbility((can, cannot) => {
@@ -121,6 +123,12 @@ const defineAbilityFor = (staff) => {
         can(reExaminationActionAbility.VIEW_ALL, RE_EXAMINATION);
         cannot(reExaminationActionAbility.UPDATE, RE_EXAMINATION);
 
+        // TICKET
+        cannot(ticketActionAbility.VIEW_ALL, TICKET);
+        cannot(ticketActionAbility.VIEW, TICKET);
+        cannot(ticketActionAbility.UPDATE, TICKET);
+        cannot(ticketActionAbility.RESPONSE, TICKET);
+
         break;
       case staffRoles.ROLE_DOCTOR:
         // STAFF
@@ -192,6 +200,11 @@ const defineAbilityFor = (staff) => {
         cannot(reExaminationActionAbility.VIEW_ALL, RE_EXAMINATION);
         cannot(reExaminationActionAbility.UPDATE, RE_EXAMINATION);
 
+        // TICKET
+        cannot(ticketActionAbility.VIEW_ALL, TICKET);
+        cannot(ticketActionAbility.VIEW, TICKET);
+        cannot(ticketActionAbility.UPDATE, TICKET);
+        cannot(ticketActionAbility.RESPONSE, TICKET);
         break;
 
       case staffRoles.ROLE_NURSE:
@@ -262,6 +275,12 @@ const defineAbilityFor = (staff) => {
         can(reExaminationActionAbility.VIEW_ALL, RE_EXAMINATION);
         can(reExaminationActionAbility.UPDATE, RE_EXAMINATION);
 
+        // TICKET
+        can(ticketActionAbility.VIEW_ALL, TICKET);
+        can(ticketActionAbility.VIEW, TICKET);
+        can(ticketActionAbility.UPDATE, TICKET);
+        can(ticketActionAbility.RESPONSE, TICKET);
+
         break;
 
       case staffRoles.ROLE_CUSTOMER_SERVICE:
@@ -331,6 +350,12 @@ const defineAbilityFor = (staff) => {
         // ReExamination
         can(reExaminationActionAbility.VIEW_ALL, RE_EXAMINATION);
         can(reExaminationActionAbility.UPDATE, RE_EXAMINATION);
+
+        // TICKET
+        can(ticketActionAbility.VIEW_ALL, TICKET);
+        can(ticketActionAbility.VIEW, TICKET);
+        can(ticketActionAbility.UPDATE, TICKET);
+        can(ticketActionAbility.RESPONSE, TICKET);
 
         break;
       default:

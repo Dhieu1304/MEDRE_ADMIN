@@ -11,6 +11,7 @@ const entities = {
   USER: "User",
   TIME: "Time",
   RE_EXAMINATION: "RE_EXAMINATION",
+  TICKET: "TICKET",
   SIDEBAR: "Sidebar"
 };
 
