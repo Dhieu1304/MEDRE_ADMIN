@@ -27,6 +27,7 @@ import expertiseFeature from "./expertiseFeature.json";
 import expertiseEntity from "./expertiseEntity.json";
 import statisticsFeature from "./statisticsFeature.json";
 import statisticsPage from "./statisticsPage.json";
+import supportPage from "./supportPage.json";
 
 const en = {
   authFeature,
@@ -57,7 +58,8 @@ const en = {
   expertiseFeature,
   expertiseEntity,
   statisticsFeature,
-  statisticsPage
+  statisticsPage,
+  supportPage
 };
 
 export default en;

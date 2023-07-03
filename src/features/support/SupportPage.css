@@ -1,0 +1,38 @@
+.support-detail-title {
+  display: flex;
+  flex-direction: row;
+}
+
+.back-btn {
+  height: 40px;
+}
+.chatting-info {
+  height: 350px;
+  overflow: scroll;
+}
+.chatting-group {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+}
+h3 {
+  font-size: large;
+  font-weight: bold;
+  color: black;
+  padding-left: 10px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+h4 {
+  font-size: large;
+  font-style: normal;
+  font-weight: lighter;
+  color: black;
+  padding-left: 10px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+.input-question {
+  display: flex;
+  flex-direction: row;
+}
