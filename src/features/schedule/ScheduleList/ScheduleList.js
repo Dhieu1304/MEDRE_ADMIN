@@ -16,8 +16,7 @@ import {
   // Avatar,
   Typography,
   TableBody,
-  useTheme,
-  TextField
+  useTheme
   // Card
 } from "@mui/material";
 
@@ -55,7 +54,6 @@ import entities from "../../../entities/entities";
 import BookingBtn from "../../booking/components/BookingButton/BookingBtn";
 import ViewBookingBtn from "../../booking/components/BookingButton/ViewBookingBtn";
 import routeConfig from "../../../config/routeConfig";
-import { Controller, useForm } from "react-hook-form";
 import CustomDateInput from "../../../components/CustomInput/CustomDateInput";
 
 const EMPTY_CELL = "EMPTY_CELL";
@@ -125,7 +123,7 @@ function ScheduleList({ timesList }) {
     let timeOffsGroupByDoctorIdData = {};
 
     await fetchApi(async () => {
-      console.log("loadDoctorData");
+      // console.log("loadDoctorData");
 
       const paramsObj = {
         role: staffRoles.ROLE_DOCTOR,
@@ -163,7 +161,7 @@ function ScheduleList({ timesList }) {
     // console.log("Expertise IDs:", expertiseIds);
 
     await fetchApi(async () => {
-      console.log("loadBookingSchedulesData");
+      // console.log("loadBookingSchedulesData");
       // console.log("expertiseIds: ", expertiseIds);
       const res = await bookingServices.getCountBookingScheduleByManyStaff({
         expertiseIds,
@@ -182,7 +180,7 @@ function ScheduleList({ timesList }) {
 
     // Load TimeOffs
     await fetchApi(async () => {
-      console.log("loadTimeOffs");
+      // console.log("loadTimeOffs");
       const res = await timeOffServices.getTimeOffByDoctorId(undefined, {
         from: formatDate.format(currentDate, "YYYY-MM-DD"),
         to: formatDate.format(currentDate, "YYYY-MM-DD")
@@ -215,7 +213,7 @@ function ScheduleList({ timesList }) {
   };
 
   useEffect(() => {
-    console.log("useEffect loadData: ");
+    // console.log("useEffect loadData: ");
     loadData();
 
     const searchParams = qs.stringify({ date: formatDate.format(currentDate, "YYYY-MM-DD") });

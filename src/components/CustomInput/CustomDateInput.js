@@ -1,13 +1,14 @@
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
+import PropTypes from "prop-types";
+
 import formatDate from "date-and-time";
-import { Box, Button, Grid, InputAdornment, Menu, Switch, Typography } from "@mui/material";
+import { Box, Button, InputAdornment, Menu } from "@mui/material";
 import { CalendarToday as CalendarTodayIcon } from "@mui/icons-material";
 import { useForm } from "react-hook-form";
-import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import CustomInput from "./CustomInput";
 
-function CustomDateInput({ label, setDate, rules, date }) {
+function CustomDateInput({ label, setDate, rules, date, render }) {
   const [showMenu, setShowMenu] = useState(null);
 
   const { control, trigger, handleSubmit } = useForm({
@@ -20,17 +21,22 @@ function CustomDateInput({ label, setDate, rules, date }) {
 
   const { t } = useTranslation("components", { keyPrefix: "CustomDateInput" });
 
-  const handleFormDateSubmit = ({ date }) => {
-    setDate(date);
+  const handleFormDateSubmit = ({ date: newDate }) => {
+    setDate(newDate);
     setShowMenu(null);
+  };
+
+  const renderDate = () => {
+    if (render) return render();
+    return formatDate.format(new Date(date), "DD/MM/YYYY");
   };
 
   return (
     <>
       <CustomInput
         label={label}
-        noNameValue={date}
-        type="date"
+        noNameValue={renderDate(date)}
+        type="text"
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
@@ -89,25 +95,16 @@ function CustomDateInput({ label, setDate, rules, date }) {
 }
 
 CustomDateInput.defaultProps = {
-  // label: "",
-  // fromDateRules: {},
-  // toDateRules: {},
-  // fromDateLabel: "",
-  // toDateLabel: "",
-  // haveTime: undefined
+  rules: {},
+  render: undefined
 };
 
 CustomDateInput.propTypes = {
-  // label: PropTypes.string,
-  // watchMainForm: PropTypes.func.isRequired,
-  // setMainFormValue: PropTypes.func.isRequired,
-  // fromDateName: PropTypes.string.isRequired,
-  // fromDateRules: PropTypes.object,
-  // toDateName: PropTypes.string.isRequired,
-  // toDateRules: PropTypes.object,
-  // fromDateLabel: PropTypes.string,
-  // toDateLabel: PropTypes.string,
-  // haveTime: PropTypes.bool
+  label: PropTypes.string.isRequired,
+  setDate: PropTypes.func.isRequired,
+  rules: PropTypes.object,
+  date: PropTypes.string.isRequired,
+  render: PropTypes.string
 };
 
 export default CustomDateInput;

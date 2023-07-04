@@ -12,7 +12,7 @@ function UserFiltersForm() {
 
   const filterForm = useFormContext();
 
-  const { userGenderList, userGenderListObj, userStatusList, userStatusListObj } = useUserFilterTranslation();
+  const { userStatusList, userStatusListObj } = useUserFilterTranslation();
 
   const inputs = useMemo(() => {
     return [

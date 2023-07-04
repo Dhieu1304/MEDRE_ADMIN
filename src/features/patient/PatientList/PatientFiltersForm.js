@@ -2,8 +2,8 @@ import { useFormContext } from "react-hook-form";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useAppConfigStore } from "../../../store/AppConfigStore";
-import { usePatientFilterTranslation } from "./hooks";
-import DataFilter, { inputComponentTypes } from "../../components/DataFilterTable/DataFilter";
+// import { usePatientFilterTranslation } from "./hooks";
+import DataFilter from "../../components/DataFilterTable/DataFilter";
 
 function PatientFiltersForm() {
   const { locale } = useAppConfigStore();
@@ -12,7 +12,7 @@ function PatientFiltersForm() {
 
   const filterForm = useFormContext();
 
-  const { patientGenderList, patientGenderListObj } = usePatientFilterTranslation();
+  // const { patientGenderList, patientGenderListObj } = usePatientFilterTranslation();
 
   const inputs = useMemo(() => {
     return [

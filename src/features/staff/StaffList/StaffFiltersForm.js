@@ -19,8 +19,8 @@ function StaffFiltersForm({ expertises }) {
   const {
     staffRoleList,
     staffRoleListObj,
-    staffGenderList,
-    staffGenderListObj,
+    // staffGenderList,
+    // staffGenderListObj,
     // staffTypeList,
     // staffTypeListObj,
     staffStatusList,
