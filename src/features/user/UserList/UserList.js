@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import formatDate from "date-and-time";
 
-import { Search as SearchIcon } from "@mui/icons-material";
+import { CalendarMonth as CalendarMonthIcon, Search as SearchIcon } from "@mui/icons-material";
 import { useAbility } from "@casl/react";
 import { subject } from "@casl/ability";
 import userServices from "../../../services/userServices";
@@ -201,11 +201,17 @@ function UserList() {
         minWidth: 100,
         render: (user) => {
           const userPath = routeConfig.user;
+
+          const userBookingSearchParams = {
+            userId: user?.id
+          };
+          const userBookingSearchParamsUrl = qs.stringify(userBookingSearchParams);
+
           return (
             <>
-              {/* <Box sx={{ ml: 2 }} component={Link} to={`${userPath}/${user?.id}/booking`}>
+              <Box sx={{ ml: 2 }} component={Link} to={`${routeConfig.booking}?${userBookingSearchParamsUrl}`}>
                 <CalendarMonthIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
-              </Box> */}
+              </Box>
 
               <Box sx={{ ml: 2 }} component={Link} to={`${userPath}/${user?.id}`}>
                 <SearchIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />

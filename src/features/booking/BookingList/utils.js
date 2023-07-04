@@ -1,3 +1,6 @@
+import { bookingPaymentStatuses, bookingStatuses as bookingStatusesConstants } from "../../../entities/Booking";
+import { staffRoles } from "../../../entities/Staff";
+import { removeKeys } from "../../../utils/objectUtil";
 import {
   normalizeStrToArray,
   normalizeStrToDateStr,
@@ -25,6 +28,26 @@ export const columnsIds = {
   action: "action"
 };
 
+export const hideColsByRole = (role) => {
+  // console.log("role: ", role);
+  switch (role) {
+    case staffRoles.ROLE_DOCTOR:
+      return {
+        patientPhoneNumber: false,
+        expertise: false,
+        // doctorName: false,
+        status: false,
+        paymentStatus: false
+      };
+
+    default:
+      return {
+        patientPhoneNumber: false,
+        expertise: false
+      };
+  }
+};
+
 /*
     - Generate YYY from XXX, remove "action" because it must appear in the table
     - The rest of the keys will default to true
@@ -41,22 +64,50 @@ export const initialShowCols = Object.keys(columnsIds).reduce((obj, key) => {
     - From the object's keys in the parameter
     - we will reformat the correct format to be the value for the input in the filter form
 */
-export const createDefaultValues = ({
-  patientPhoneNumber,
-  userId,
-  patientId,
-  doctorId,
-  staffBookingId,
-  staffCancelId,
-  type,
-  isPayment,
-  from,
-  to,
-  bookingStatuses,
-  page,
-  limit
-} = {}) => {
-  const result = {
+
+export const fixedFiltersByStaffRole = (staff) => {
+  const role = staff?.role;
+  const staffId = staff?.id;
+
+  const defaultHide = {
+    staffBookingId: undefined,
+    staffCancelId: undefined
+  };
+
+  switch (role) {
+    case staffRoles.ROLE_DOCTOR:
+      return {
+        ...defaultHide,
+        doctorId: staffId,
+        isPayment: bookingPaymentStatuses.PAID,
+        bookingStatuses: [bookingStatusesConstants.BOOKED],
+        userId: undefined
+      };
+
+    default:
+      return { ...defaultHide };
+  }
+};
+
+export const createDefaultValues = (
+  {
+    patientPhoneNumber,
+    userId,
+    patientId,
+    doctorId,
+    staffBookingId,
+    staffCancelId,
+    type,
+    isPayment,
+    from,
+    to,
+    bookingStatuses,
+    page,
+    limit
+  } = {},
+  staff = null
+) => {
+  const defaultValuesInUrl = {
     patientPhoneNumber: normalizeStrToStr(patientPhoneNumber),
     userId: normalizeStrToStr(userId),
     patientId: normalizeStrToStr(patientId),
@@ -65,12 +116,14 @@ export const createDefaultValues = ({
     staffCancelId: normalizeStrToStr(staffCancelId),
     type: normalizeStrToStr(type),
     isPayment: normalizeStrToStr(isPayment),
-    from: normalizeStrToDateStr(from),
-    to: normalizeStrToDateStr(to),
+    from: normalizeStrToDateStr(from, new Date()),
+    to: normalizeStrToDateStr(to, new Date()),
     bookingStatuses: normalizeStrToArray(bookingStatuses),
     page: normalizeStrToInt(page, 1),
     limit: normalizeStrToInt(limit, 10)
   };
+
+  const result = removeKeys(defaultValuesInUrl, fixedFiltersByStaffRole(staff));
 
   return result;
 };

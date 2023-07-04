@@ -26,6 +26,7 @@ import routeConfig from "../../../config/routeConfig";
 import { useAuthStore } from "../../../store/AuthStore";
 import { staffRoles } from "../../../entities/Staff";
 import { sidebarActionAbility } from "../../../entities/Sidebar/constant";
+import { useAppConfigStore } from "../../../store/AppConfigStore";
 
 function SideBar({ open, handleDrawerClose }) {
   const theme = useTheme();
@@ -33,6 +34,7 @@ function SideBar({ open, handleDrawerClose }) {
 
   const { t } = useTranslation("layout", { keyPrefix: "sidebar" });
   const authStore = useAuthStore();
+  const { locale } = useAppConfigStore();
 
   const sideBarItemsByRole = useMemo(() => {
     const { ROLE_ADMIN, ROLE_DOCTOR, ROLE_NURSE, ROLE_CUSTOMER_SERVICE } = staffRoles;
@@ -76,7 +78,7 @@ function SideBar({ open, handleDrawerClose }) {
         return indexA - indexB;
       });
     return filteredSidebar;
-  }, [authStore.staff]);
+  }, [authStore.staff, locale]);
 
   return (
     <CustomDrawer variant="permanent" open={open} isMobile={isMobile}>

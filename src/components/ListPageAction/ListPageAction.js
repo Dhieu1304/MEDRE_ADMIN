@@ -4,6 +4,7 @@ import { RestartAlt as RestartAltIcon } from "@mui/icons-material";
 import { Box, Button, Menu, MenuItem, Switch, TablePagination, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../store/AuthStore";
 
 function ListPageAction({
   leftAction,
@@ -22,6 +23,7 @@ function ListPageAction({
 }) {
   const navigate = useNavigate();
   const { t } = useTranslation("components", { keyPrefix: "ListPageAction" });
+  const authStore = useAuthStore();
 
   return (
     <Box
@@ -51,7 +53,7 @@ function ListPageAction({
         <Button
           color="inherit"
           onClick={() => {
-            reset(createDefaultValues());
+            reset(createDefaultValues({}, authStore.staff));
             setIsReset((prev) => !prev);
           }}
           sx={{
@@ -110,7 +112,7 @@ function ListPageAction({
         <Button
           color="inherit"
           onClick={() => {
-            reset(createDefaultValues());
+            reset(createDefaultValues({}, authStore.staff));
             setIsReset((prev) => !prev);
           }}
           sx={{

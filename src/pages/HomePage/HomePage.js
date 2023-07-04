@@ -2,6 +2,7 @@ import { Navigate } from "react-router-dom";
 import { useAuthStore } from "../../store/AuthStore";
 import { staffRoles } from "../../entities/Staff";
 import routeConfig from "../../config/routeConfig";
+import "../../config/i18n";
 
 function HomePage() {
   const authStore = useAuthStore();

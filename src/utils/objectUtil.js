@@ -90,6 +90,25 @@ function getSortValue(columnIds, sortFormat, sortKey) {
   }
   return null; // Hoặc bất kỳ giá trị mặc định nào phù hợp với yêu cầu của bạn
 }
+
+function removeKeys(object1, object2) {
+  const object1Keys = Object.keys(object1);
+  const object2Keys = Object.keys(object2);
+
+  const filteredKeys = object1Keys.filter((key) => !object2Keys.includes(key));
+
+  // const result = {};
+  // for (const key of filteredKeys) {
+  //   result[key] = object1[key];
+  // }
+
+  const result = filteredKeys.reduce((acc, key) => {
+    acc[key] = object1[key];
+    return acc;
+  }, {});
+
+  return result;
+}
 export {
   mergeObjectsWithoutNullAndUndefined,
   cleanUndefinedValueObject,
@@ -97,5 +116,6 @@ export {
   cleanUndefinedAndEmptyStrAndFalseValueObject,
   cleanUndefinedAndNullValueObjectToStrObj,
   // updateObjectKeys
-  getSortValue
+  getSortValue,
+  removeKeys
 };

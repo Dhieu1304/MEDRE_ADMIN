@@ -87,7 +87,7 @@ export const sideBarItems = [
   {
     id: STATISTICS,
     to: () => routeConfig.statistics,
-    label: "re_statistics_label",
+    label: "statistics_label",
     icon: <FontAwesomeIcon icon={faChartPie} width={20} />
   },
   {

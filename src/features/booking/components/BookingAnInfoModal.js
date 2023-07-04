@@ -3,18 +3,22 @@ import formatDate from "date-and-time";
 import PropTypes from "prop-types";
 
 import { useTranslation } from "react-i18next";
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, useTheme } from "@mui/material";
+import { VideoCall as VideoCallIcon } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 import CustomModal from "../../../components/CustomModal/CustomModal";
 // import { useFetchingStore } from "../../../store/FetchingApiStore";
 // import bookingServices from "../../../services/bookingServices";
 import CustomInput from "../../../components/CustomInput/CustomInput";
 import CopyButton from "../../../components/CopyButton";
 import routeConfig from "../../../config/routeConfig";
+import { scheduleTypes } from "../../../entities/Schedule";
 
 function BookingAnInfoModal({ show, setShow, data, setData }) {
   // const [booking, setBooking] = useState({ ...data });
   const booking = { ...data };
   // const { fetchApi } = useFetchingStore();
+  const theme = useTheme();
   const { t } = useTranslation("bookingFeature", {
     keyPrefix: "BookingAnInfoModal"
   });
@@ -66,6 +70,7 @@ function BookingAnInfoModal({ show, setShow, data, setData }) {
       title={t("title")}
       submitBtnLabel={t("button.detail")}
       onSubmit={handleToBookingDetail}
+      width={800}
     >
       <Box
         sx={{
@@ -83,12 +88,43 @@ function BookingAnInfoModal({ show, setShow, data, setData }) {
           sx={{
             display: "flex",
             alignItems: "center",
+            justifyContent: "space-between",
             mb: 4
           }}
         >
-          {booking?.bookingOfUser?.id && <CopyButton content={booking?.bookingOfUser?.id} label={t("button.copyUserId")} />}
-          {booking?.bookingOfPatient?.id && (
-            <CopyButton content={booking?.bookingOfPatient?.id} label={t("button.copyPatientId")} />
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center"
+            }}
+          >
+            {booking?.bookingOfUser?.id && (
+              <CopyButton content={booking?.bookingOfUser?.id} label={t("button.copyUserId")} />
+            )}
+            {booking?.bookingOfPatient?.id && (
+              <CopyButton content={booking?.bookingOfPatient?.id} label={t("button.copyPatientId")} />
+            )}
+          </Box>
+
+          {booking?.bookingSchedule?.type === scheduleTypes.TYPE_ONLINE && booking?.isPayment && booking?.code && (
+            <Box
+              component={Link}
+              to={`${routeConfig.meeting}/${booking?.id}`}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                px: 2,
+                py: 1,
+                ml: 2,
+                background: theme.palette.success.light,
+                color: theme.palette.success.contrastText,
+                borderRadius: 10,
+                textDecoration: "none"
+              }}
+            >
+              <VideoCallIcon sx={{ mr: 1 }} />
+              {t("button.meet")}
+            </Box>
           )}
         </Box>
         <Grid container spacing={3}>
@@ -123,9 +159,9 @@ function BookingAnInfoModal({ show, setShow, data, setData }) {
           <Grid item xs={12} sm={12} md={12} lg={12}>
             <CustomInput noNameValue={booking?.reason} label={tBooking("reason")} multiline rows={6} />
           </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12}>
+          {/* <Grid item xs={12} sm={12} md={12} lg={12}>
             <CustomInput noNameValue={booking?.note} label={tBooking("note")} multiline rows={6} />
-          </Grid>
+          </Grid> */}
         </Grid>
       </Box>
     </CustomModal>

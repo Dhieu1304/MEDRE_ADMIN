@@ -4,6 +4,8 @@ import { useTranslation } from "react-i18next";
 import { useAppConfigStore } from "../../../store/AppConfigStore";
 import { useBookingFilterTranslation } from "./hooks";
 import DataFilter, { inputComponentTypes } from "../../components/DataFilterTable/DataFilter";
+import { useAuthStore } from "../../../store/AuthStore";
+import { fixedFiltersByStaffRole } from "./utils";
 
 function BookingFiltersForm() {
   const { locale } = useAppConfigStore();
@@ -11,6 +13,7 @@ function BookingFiltersForm() {
 
   const { t: tFilter } = useTranslation("bookingFeature", { keyPrefix: "BookingList.filter" });
 
+  const authStore = useAuthStore();
   const { isPaymentList, isPaymentListObj, bookingTypeList, bookingTypeListObj, bookingStatusList, bookingStatusListObj } =
     useBookingFilterTranslation();
 
@@ -58,7 +61,26 @@ function BookingFiltersForm() {
         toDateLabel: tFilter("to"),
         previewLabel: tFilter("bookingRangePreview")
       }
-    ];
+    ].filter((input) => {
+      const hideFilters = fixedFiltersByStaffRole(authStore.staff);
+      // console.log("hideFilters: ", hideFilters);
+
+      if (input.inputComponentType === inputComponentTypes.DATE_RANGE) {
+        if (input?.fromDateName in hideFilters || input?.toDateLabel in hideFilters) {
+          return false;
+        }
+        return true;
+      }
+      // if (hideFilters[input?.name] !== undefined) {
+      //   return false;
+      // }
+      // if (hideFilters?.hasOwnProperty(input?.name)) {
+      if (input?.name in hideFilters) {
+        return false;
+      }
+
+      return true;
+    });
   }, [locale]);
 
   return <DataFilter inputs={inputs} filterForm={filterForm} />;

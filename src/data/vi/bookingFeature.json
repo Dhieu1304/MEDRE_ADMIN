@@ -70,7 +70,8 @@
       "detail": "Chi tiết",
       "reset": "Đặt lại",
       "copyUserId": "Sao chép ID người dùng",
-      "copyPatientId": "Sao chép ID bệnh nhân"
+      "copyPatientId": "Sao chép ID bệnh nhân",
+      "meet": "Khám"
     }
   },
 
@@ -81,7 +82,8 @@
       "detail": "Chi tiết",
       "reset": "Đặt lại",
       "copyUserId": "Sao chép ID người dùng",
-      "copyPatientId": "Sao chép ID bệnh nhân"
+      "copyPatientId": "Sao chép ID bệnh nhân",
+      "meet": "Khám"
     }
   },
 

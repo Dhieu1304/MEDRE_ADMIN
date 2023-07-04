@@ -4,12 +4,12 @@ import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FormProvider, useForm } from "react-hook-form";
-import { Preview as PreviewIcon, Search as SearchIcon } from "@mui/icons-material";
+import { Preview as PreviewIcon, Search as SearchIcon, VideoCall as VideoCallIcon } from "@mui/icons-material";
 import formatDate from "date-and-time";
 import CustomOverlay from "../../../components/CustomOverlay/CustomOverlay";
 import ListPageTop from "../../../components/ListPageTop";
 import { useAppConfigStore } from "../../../store/AppConfigStore";
-import { columnsIds, createDefaultValues, initialShowCols } from "./utils";
+import { columnsIds, createDefaultValues, fixedFiltersByStaffRole, hideColsByRole, initialShowCols } from "./utils";
 import bookingServices from "../../../services/bookingServices";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
 import useObjDebounce from "../../../hooks/useObjDebounce";
@@ -23,11 +23,14 @@ import { bookingStatuses as bookingStatusesConstans } from "../../../entities/Bo
 import DataTable from "../../components/DataFilterTable/DataTable";
 import routeConfig from "../../../config/routeConfig";
 import { getSortValue } from "../../../utils/objectUtil";
+import { useAuthStore } from "../../../store/AuthStore";
+import { scheduleTypes } from "../../../entities/Schedule";
+// import { staffRoles } from "../../../entities/Staff";
 
 function BookingList() {
   const { locale } = useAppConfigStore();
-  const [isFirst, setIsFirst] = useState(true);
-  const [countRender, setCountRender] = useState(1);
+  // const [isFirst, setIsFirst] = useState(true);
+  // const [countRender, setCountRender] = useState(1);
 
   const [bookings, setBookings] = useState([]);
   const [count, setCount] = useState(0);
@@ -43,6 +46,7 @@ function BookingList() {
   // functions for multilingual use
 
   const theme = useTheme();
+  const authStore = useAuthStore();
 
   const { t } = useTranslation("bookingFeature", { keyPrefix: "BookingList" });
   const { t: tBooking } = useTranslation("bookingEntity", { keyPrefix: "properties" });
@@ -59,10 +63,10 @@ function BookingList() {
     The keys of this object represent column-by-column visibility
     We will hide address, healthInsurance for the first time
   */
+
   const [showCols, setShowCols] = useState({
     ...initialShowCols,
-    patientPhoneNumber: false,
-    expertise: false
+    ...hideColsByRole(authStore.staff?.role)
   });
 
   const columns = useMemo(
@@ -225,6 +229,11 @@ function BookingList() {
           const bookingPath = routeConfig.booking;
           return (
             <>
+              {booking?.bookingSchedule?.type === scheduleTypes.TYPE_ONLINE && booking?.isPayment && booking?.code && (
+                <Box sx={{ ml: 2 }} component={Link} to={`${routeConfig.meeting}/${booking?.id}`}>
+                  <VideoCallIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
+                </Box>
+              )}
               <Box sx={{ ml: 2 }} component={Link} to={`${bookingPath}/${booking?.id}`}>
                 <SearchIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
               </Box>
@@ -252,7 +261,7 @@ function BookingList() {
 
   const defaultValues = useMemo(() => {
     const defaultSearchParams = qs.parse(location.search);
-    const result = createDefaultValues(defaultSearchParams);
+    const result = createDefaultValues(defaultSearchParams, authStore.staff);
     return result;
   }, []);
 
@@ -295,6 +304,7 @@ function BookingList() {
   );
 
   const loadData = async ({ page }) => {
+    // console.log("loadData: ");
     const orderBy = sort.isAsc ? "asc" : "desc";
     let order;
     if (sort.sortBy) {
@@ -317,11 +327,17 @@ function BookingList() {
       }
     }
 
+    const fixFilter = fixedFiltersByStaffRole(authStore.staff);
+    // console.log("fixFilter: ", fixFilter);
+
     const paramsObj = {
       ...watch(),
+      ...fixFilter,
       page,
       order
     };
+
+    // console.log("paramsObj: ", paramsObj);
 
     await fetchApi(async () => {
       const res = await bookingServices.getBookingList(paramsObj);
@@ -346,6 +362,7 @@ function BookingList() {
   useEffect(() => {
     // console.log("isReset change");
 
+    /* BỎ
     if (isFirst) {
       setIsFirst(false);
       setCountRender((prev) => prev + 1);
@@ -358,6 +375,9 @@ function BookingList() {
       page = watch().page;
       setCountRender((prev) => prev + 1);
     }
+
+    */
+    const page = 1;
 
     const params = { ...watch(), page };
 

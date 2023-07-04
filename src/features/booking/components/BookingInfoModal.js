@@ -3,15 +3,19 @@ import formatDate from "date-and-time";
 import PropTypes from "prop-types";
 
 import { useTranslation } from "react-i18next";
-import { Box, Grid, Tab, Tabs } from "@mui/material";
+import { VideoCall as VideoCallIcon } from "@mui/icons-material";
+import { Box, Grid, Tab, Tabs, useTheme } from "@mui/material";
 import CustomModal from "../../../components/CustomModal/CustomModal";
 import CustomInput from "../../../components/CustomInput/CustomInput";
 import CopyButton from "../../../components/CopyButton";
 import routeConfig from "../../../config/routeConfig";
+import { scheduleTypes } from "../../../entities/Schedule";
+import { Link } from "react-router-dom";
 
 function BookingInfoModal({ show, setShow, data, setData }) {
   const [tabValue, setTabValue] = useState(data?.bookings?.[0]?.id);
 
+  const theme = useTheme();
   // const [bookingsGroup, setBookingsGroup] = useState({});
   const { t } = useTranslation("bookingFeature", {
     keyPrefix: "BookingInfoModal"
@@ -135,15 +139,46 @@ function BookingInfoModal({ show, setShow, data, setData }) {
             sx={{
               display: "flex",
               alignItems: "center",
+              justifyContent: "space-between",
               mb: 4
             }}
           >
-            {bookingsGroup?.[tabValue]?.idUser && (
-              <CopyButton content={bookingsGroup?.[tabValue]?.idUser} label={t("button.copyUserId")} />
-            )}
-            {bookingsGroup?.[tabValue]?.idPatient && (
-              <CopyButton content={bookingsGroup?.[tabValue]?.idPatient} label={t("button.copyPatientId")} />
-            )}
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center"
+              }}
+            >
+              {bookingsGroup?.[tabValue]?.bookingOfUser?.id && (
+                <CopyButton content={bookingsGroup?.[tabValue]?.bookingOfUser?.id} label={t("button.copyUserId")} />
+              )}
+              {bookingsGroup?.[tabValue]?.bookingOfPatient?.id && (
+                <CopyButton content={bookingsGroup?.[tabValue]?.bookingOfPatient?.id} label={t("button.copyPatientId")} />
+              )}
+            </Box>
+
+            {bookingsGroup?.[tabValue]?.bookingSchedule?.type === scheduleTypes.TYPE_ONLINE &&
+              bookingsGroup?.[tabValue]?.isPayment &&
+              bookingsGroup?.[tabValue]?.code && (
+                <Box
+                  component={Link}
+                  to={`${routeConfig.meeting}/${bookingsGroup?.[tabValue]?.id}`}
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    px: 2,
+                    py: 1,
+                    ml: 2,
+                    background: theme.palette.success.light,
+                    color: theme.palette.success.contrastText,
+                    borderRadius: 10,
+                    textDecoration: "none"
+                  }}
+                >
+                  <VideoCallIcon sx={{ mr: 1 }} />
+                  {t("button.meet")}
+                </Box>
+              )}
           </Box>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={12} md={4} lg={4}>
@@ -185,9 +220,9 @@ function BookingInfoModal({ show, setShow, data, setData }) {
             <Grid item xs={12} sm={12} md={12} lg={12}>
               <CustomInput noNameValue={bookingsGroup?.[tabValue]?.reason} label={tBooking("reason")} multiline rows={6} />
             </Grid>
-            <Grid item xs={12} sm={12} md={12} lg={12}>
+            {/* <Grid item xs={12} sm={12} md={12} lg={12}>
               <CustomInput noNameValue={bookingsGroup?.[tabValue]?.note} label={tBooking("note")} multiline rows={6} />
-            </Grid>
+            </Grid> */}
           </Grid>
         </Box>
       </Box>

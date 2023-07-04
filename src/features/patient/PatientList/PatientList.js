@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import formatDate from "date-and-time";
 
-import { Search as SearchIcon } from "@mui/icons-material";
+import { CalendarMonth as CalendarMonthIcon, Search as SearchIcon } from "@mui/icons-material";
 import patientServices from "../../../services/patientServices";
 import { useFetchingStore } from "../../../store/FetchingApiStore/hooks";
 import { useAppConfigStore } from "../../../store/AppConfigStore/hooks";
@@ -119,11 +119,16 @@ function PatientList() {
         minWidth: 100,
         render: (patient) => {
           const patientPath = routeConfig.patient;
+          const patientBookingSearchParams = {
+            patientId: patient?.id
+          };
+          const patientBookingSearchParamsUrl = qs.stringify(patientBookingSearchParams);
+
           return (
             <>
-              {/* <Box sx={{ ml: 2 }} component={Link} to={`${patientPath}/${patient?.id}/booking`}>
+              <Box sx={{ ml: 2 }} component={Link} to={`${routeConfig.booking}?${patientBookingSearchParamsUrl}`}>
                 <CalendarMonthIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
-              </Box> */}
+              </Box>
 
               <Box sx={{ ml: 1, mr: 1 }} component={Link} to={`${patientPath}/${patient?.id}`}>
                 <SearchIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />

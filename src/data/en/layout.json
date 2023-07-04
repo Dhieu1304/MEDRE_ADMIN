@@ -11,7 +11,7 @@
     "booking_label": "Booking",
     "notification_label": "Notification",
     "re_examination_label": "Re-examination",
-    "re_statistics_label": "Statistics",
+    "statistics_label": "Statistics",
     "support_label": "Ticket",
     "doctor_calendar_label": "My calendar"
   },

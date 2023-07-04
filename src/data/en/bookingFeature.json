@@ -71,7 +71,8 @@
       "detail": "Detail",
 
       "copyUserId": "Copy user ID",
-      "copyPatientId": "Copy patient ID"
+      "copyPatientId": "Copy patient ID",
+      "meet": "Meet"
     }
   },
 
@@ -82,7 +83,8 @@
       "detail": "Detail",
 
       "copyUserId": "Copy user ID",
-      "copyPatientId": "Copy patient ID"
+      "copyPatientId": "Copy patient ID",
+      "meet": "Meet"
     }
   },
 
