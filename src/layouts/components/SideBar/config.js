@@ -1,14 +1,16 @@
-import {
-  faBell,
-  faCalendarAlt,
-  faCalendarDays,
-  faChartPie,
-  faGear,
-  faHospitalUser,
-  faScrewdriverWrench,
-  faUsers
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import PeopleIcon from "@mui/icons-material/People";
+import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
+import HotelIcon from "@mui/icons-material/Hotel";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import SettingsIcon from "@mui/icons-material/Settings";
+import ListAltIcon from "@mui/icons-material/ListAlt";
+import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
+import EventAvailableIcon from "@mui/icons-material/EventAvailable";
+import AnalyticsIcon from "@mui/icons-material/Analytics";
+import HelpIcon from "@mui/icons-material/Help";
+import ScheduleIcon from "@mui/icons-material/Schedule";
+
 import routeConfig from "../../../config/routeConfig";
 import { sidebarActionAbility } from "../../../entities/Sidebar/constant";
 
@@ -32,74 +34,74 @@ export const sideBarItems = [
     id: STAFF,
     to: () => routeConfig.staff,
     label: "staff_label",
-    icon: <FontAwesomeIcon icon={faUsers} width={20} />
+    icon: <AccountBoxIcon width={20} />
   },
   {
     id: USER,
     to: () => routeConfig.user,
     label: "user_label",
-    icon: <FontAwesomeIcon icon={faUsers} width={20} />
+    icon: <PeopleIcon width={20} />
   },
   {
     id: BOOKING,
     to: () => routeConfig.booking,
     label: "booking_label",
-    icon: <FontAwesomeIcon icon={faHospitalUser} width={20} />
+    icon: <LocalHospitalIcon width={20} />
   },
   {
     id: PATIENT,
     to: () => routeConfig.patient,
     label: "patient_label",
-    icon: <FontAwesomeIcon icon={faHospitalUser} width={20} />
+    icon: <HotelIcon width={20} />
   },
   {
     id: SCHEDULE,
     to: () => routeConfig.schedule,
     label: "schedule_label",
-    icon: <FontAwesomeIcon icon={faCalendarDays} width={20} />
+    icon: <CalendarMonthIcon width={20} />
   },
   {
     id: SETTING,
     to: () => routeConfig.setting,
     label: "setting_label",
-    icon: <FontAwesomeIcon icon={faGear} width={20} />
+    icon: <SettingsIcon width={20} />
   },
 
   {
     id: EXPERTISE,
     to: () => routeConfig.expertise,
     label: "expertise_label",
-    icon: <FontAwesomeIcon icon={faScrewdriverWrench} width={20} />
+    icon: <ListAltIcon width={20} />
   },
 
   {
     id: NOTIFICATION,
     to: () => routeConfig.notification,
     label: "notification_label",
-    icon: <FontAwesomeIcon icon={faBell} width={20} />
+    icon: <NotificationsActiveIcon width={20} />
   },
   {
     id: RE_EXAMINATION,
     to: () => routeConfig.reExamination,
     label: "re_examination_label",
-    icon: <FontAwesomeIcon icon={faCalendarAlt} width={20} />
+    icon: <EventAvailableIcon width={20} />
   },
   {
     id: STATISTICS,
     to: () => routeConfig.statistics,
     label: "re_statistics_label",
-    icon: <FontAwesomeIcon icon={faChartPie} width={20} />
+    icon: <AnalyticsIcon width={20} />
   },
   {
     id: SUPPORT,
     to: () => routeConfig.support,
     label: "support_label",
-    icon: <FontAwesomeIcon icon={faChartPie} width={20} />
+    icon: <HelpIcon width={20} />
   },
   {
     id: DOCTOR_CALENDAR,
     to: (doctorId) => `${routeConfig.staff}/${doctorId}/calendar`,
     label: "doctor_calendar_label",
-    icon: <FontAwesomeIcon icon={faChartPie} width={20} />
+    icon: <ScheduleIcon width={20} />
   }
 ];
