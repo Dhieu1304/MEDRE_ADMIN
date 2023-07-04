@@ -5,12 +5,12 @@ import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { VideoCall as VideoCallIcon } from "@mui/icons-material";
 import { Box, Grid, Tab, Tabs, useTheme } from "@mui/material";
+import { Link } from "react-router-dom";
 import CustomModal from "../../../components/CustomModal/CustomModal";
 import CustomInput from "../../../components/CustomInput/CustomInput";
 import CopyButton from "../../../components/CopyButton";
 import routeConfig from "../../../config/routeConfig";
 import { scheduleTypes } from "../../../entities/Schedule";
-import { Link } from "react-router-dom";
 
 function BookingInfoModal({ show, setShow, data, setData }) {
   const [tabValue, setTabValue] = useState(data?.bookings?.[0]?.id);
