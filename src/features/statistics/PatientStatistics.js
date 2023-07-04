@@ -147,7 +147,7 @@ function PatientStatistics() {
                     <TableRow>
                       <TableCell
                         sx={{
-                          width: 200
+                          width: 100
                         }}
                       >
                         <Typography variant="subtitle1">{t("table.col.time")}</Typography>

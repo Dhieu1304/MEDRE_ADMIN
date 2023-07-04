@@ -53,22 +53,28 @@ function SideBar({ open, handleDrawerClose }) {
     let keys = [];
     switch (authStore.staff?.role) {
       case ROLE_ADMIN:
-        keys = [...keys, STAFF, USER, PATIENT, BOOKING, SCHEDULE, SETTING, EXPERTISE, NOTIFICATION, STATISTICS];
+        keys = [...keys, STATISTICS, STAFF, USER, PATIENT, BOOKING, SCHEDULE, SETTING, EXPERTISE, NOTIFICATION];
         break;
       case ROLE_DOCTOR:
         keys = [...keys, BOOKING, DOCTOR_CALENDAR, PATIENT];
         break;
       case ROLE_NURSE:
-        keys = [...keys, STAFF, USER, PATIENT, BOOKING, SCHEDULE, RE_EXAMINATION, SUPPORT];
+        keys = [...keys, SCHEDULE, RE_EXAMINATION, SUPPORT, STAFF, USER, PATIENT, BOOKING];
         break;
       case ROLE_CUSTOMER_SERVICE:
-        keys = [...keys, STAFF, USER, PATIENT, BOOKING, SCHEDULE, RE_EXAMINATION, SUPPORT];
+        keys = [...keys, SCHEDULE, RE_EXAMINATION, SUPPORT, STAFF, USER, PATIENT, BOOKING];
         break;
       default:
         break;
     }
 
-    const filteredSidebar = sideBarItems.filter((item) => keys.includes(item.id));
+    const filteredSidebar = sideBarItems
+      .filter((item) => keys.includes(item.id))
+      .sort((a, b) => {
+        const indexA = keys.indexOf(a.id);
+        const indexB = keys.indexOf(b.id);
+        return indexA - indexB;
+      });
     return filteredSidebar;
   }, [authStore.staff]);
 
@@ -114,7 +120,13 @@ function SideBar({ open, handleDrawerClose }) {
         }}
       >
         {sideBarItemsByRole?.map((item) => {
-          const isMatch = useMatch(item.to());
+          // const isMatch = useMatch(item.to());
+          // const isMatch = useMatch(`/g/:${item.to()}/*`);
+          const isMatch = useMatch({
+            path: item.to(authStore.staff?.id),
+            end: false
+          });
+
           const activeSx = isMatch
             ? {
                 backgroundColor: theme.palette.primary.light,

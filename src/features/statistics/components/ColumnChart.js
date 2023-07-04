@@ -20,6 +20,9 @@ function ColumnChart({ title, series, categories, xLabel, yLabel, yaxisFormat })
             id: "mychart",
             type: "bar"
           },
+          dataLabels: {
+            enabled: false
+          },
           xaxis: {
             type: "category",
             categories,
