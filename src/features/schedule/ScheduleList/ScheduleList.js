@@ -26,7 +26,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import qs from "query-string";
 
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAbility } from "@casl/react";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
 import WithTimesLoaderWrapper from "../hocs/WithTimesLoaderWrapper";
@@ -54,6 +54,7 @@ import { AbilityContext } from "../../../store/AbilityStore";
 import entities from "../../../entities/entities";
 import BookingBtn from "../../booking/components/BookingButton/BookingBtn";
 import ViewBookingBtn from "../../booking/components/BookingButton/ViewBookingBtn";
+import routeConfig from "../../../config/routeConfig";
 
 const EMPTY_CELL = "EMPTY_CELL";
 const FULL_SLOT = "FULL_SLOT";
@@ -654,7 +655,13 @@ function ScheduleList({ timesList }) {
                       component="th"
                       scope="row"
                     >
-                      {doctor?.name}
+                      <Box
+                        component={Link}
+                        to={`${routeConfig.staff}/${doctor?.id}/calendar`}
+                        sx={{ textDecoration: "none", display: "flex", alignItems: "center", color: "inherit" }}
+                      >
+                        {doctor?.name}
+                      </Box>
                     </TableCell>
 
                     {renderCols(doctor)}

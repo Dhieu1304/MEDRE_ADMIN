@@ -13,7 +13,7 @@ import userServices from "../../services/userServices";
 import { useFetchingStore } from "../../store/FetchingApiStore/hooks";
 import CustomOverlay from "../../components/CustomOverlay";
 import { useCustomModal } from "../../components/CustomModal";
-import User, { userActionAbility, userInputValidate, userStatuses } from "../../entities/User";
+import { userActionAbility, userInputValidate, userStatuses } from "../../entities/User";
 import { AbilityContext } from "../../store/AbilityStore";
 import { NotHaveAccessModal } from "../auth";
 import { mergeObjectsWithoutNullAndUndefined } from "../../utils/objectUtil";
@@ -21,9 +21,10 @@ import { BlockUserModal, UnblockUserModal } from "./components";
 import { useUserGendersContantTranslation } from "./hooks/useUserConstantsTranslation";
 import SectionContent from "../../components/SectionContent";
 import PersonDetailWrapper from "../../components/PersonDetailWrapper/PersonDetailWrapper";
+import entities from "../../entities/entities";
 
 function UserDetail() {
-  const [user, setUser] = useState(new User());
+  const [user, setUser] = useState();
 
   const { t } = useTranslation("userFeature", { keyPrefix: "UserDetail" });
 
@@ -66,8 +67,8 @@ function UserDetail() {
       const res = await userServices.getUserDetail(userId);
 
       if (res.success) {
-        const userData = new User(res.user);
-        setUser(userData);
+        const userData = res.user;
+        setUser({ ...userData });
 
         const newDefaultValues = {
           ...mergeObjectsWithoutNullAndUndefined(defaultValues, userData),
@@ -90,8 +91,8 @@ function UserDetail() {
 
   const ability = useAbility(AbilityContext);
 
-  const canUpdateUser = ability.can(userActionAbility.UPDATE, user);
-  const canBlockUser = ability.can(userActionAbility.BLOCK, user);
+  const canUpdateUser = ability.can(userActionAbility.UPDATE, entities.USER);
+  const canBlockUser = ability.can(userActionAbility.BLOCK, entities.USER);
 
   const handleSaveDetail = async ({
     phoneNumber,

@@ -86,7 +86,7 @@ const defineAbilityFor = (staff) => {
         can(userActionAbility.VIEW, USER);
         can(userActionAbility.BLOCK, USER);
         can(userActionAbility.DELETE, USER);
-        can(userActionAbility.UPDATE, USER);
+        cannot(userActionAbility.UPDATE, USER);
 
         // Schedule
         can(scheduleActionAbility.VIEW_ALL, SCHEDULE);
