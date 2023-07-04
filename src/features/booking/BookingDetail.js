@@ -14,10 +14,16 @@ import {
 } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import qs from "query-string";
 
 import formatDate from "date-and-time";
 import { Link, useParams } from "react-router-dom";
-import { RestartAlt, Save, VideoCall as VideoCallIcon } from "@mui/icons-material";
+import {
+  CalendarMonth as CalendarMonthIcon,
+  RestartAlt as RestartAltIcon,
+  Save as SaveIcon,
+  VideoCall as VideoCallIcon
+} from "@mui/icons-material";
 import { useForm } from "react-hook-form";
 import { decode } from "html-entities";
 import { useAbility } from "@casl/react";
@@ -261,6 +267,57 @@ function BookingDetail() {
     }
   };
 
+  const renderHeaderRightButton = (bookingData) => {
+    const defaultSx = {
+      display: "flex",
+      alignItems: "center",
+      px: 2,
+      py: 1,
+      ml: 2,
+      borderRadius: 10
+    };
+
+    const patientBookingSearchParams = {
+      patientId: bookingData?.bookingOfPatient?.id,
+      from: formatDate.format(new Date(2020, 0, 1), "YYYY-MM-DD")
+    };
+    const patientBookingSearchParamsUrl = qs.stringify(patientBookingSearchParams);
+
+    return (
+      <>
+        <Box
+          component={Link}
+          to={`${routeConfig.booking}?${patientBookingSearchParamsUrl}`}
+          sx={{
+            ...defaultSx,
+            textDecoration: "none",
+            // background: theme.palette.info.light,
+            color: theme.palette.info.light
+          }}
+        >
+          <CalendarMonthIcon sx={{ mr: 1 }} />
+          {t("button.oldBooking")}
+        </Box>
+
+        {bookingData?.bookingSchedule?.type === scheduleTypes.TYPE_ONLINE && bookingData?.isPayment && bookingData?.code && (
+          <Box
+            component={Link}
+            to={`${routeConfig.meeting}/${bookingData?.id}`}
+            sx={{
+              ...defaultSx,
+              textDecoration: "none",
+              background: theme.palette.success.light,
+              color: theme.palette.success.contrastText
+            }}
+          >
+            <VideoCallIcon sx={{ mr: 1 }} />
+            {t("button.meet")}
+          </Box>
+        )}
+      </>
+    );
+  };
+
   return (
     <>
       <CustomOverlay open={isLoading} />
@@ -279,8 +336,7 @@ function BookingDetail() {
                 <Box
                   sx={{
                     display: "flex",
-                    alignItems: "center",
-                    mb: 4
+                    alignItems: "center"
                   }}
                 >
                   <Button
@@ -325,42 +381,28 @@ function BookingDetail() {
                   </Button>
                 </Box>
               )}
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center"
-                }}
-              >
-                {canUpdateBooking && booking?.bookingOfUser?.id && (
-                  <CopyButton content={booking?.bookingOfUser?.id} label={t("button.copyUserId")} />
-                )}
-                {canUpdateBooking && booking?.bookingOfPatient?.id && (
-                  <CopyButton content={booking?.bookingOfPatient?.id} label={t("button.copyPatientId")} />
-                )}
-                {booking?.bookingSchedule?.type === scheduleTypes.TYPE_ONLINE && booking?.isPayment && booking?.code && (
-                  <Box
-                    component={Link}
-                    to={`${routeConfig.meeting}/${booking?.id}`}
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      px: 2,
-                      py: 1,
-                      ml: 2,
-                      background: theme.palette.info.light,
-                      color: theme.palette.info.contrastText,
-                      borderRadius: 10,
-                      textDecoration: "none"
-                    }}
-                  >
-                    <VideoCallIcon sx={{ mr: 1 }} />
-                    {t("button.meet")}
-                  </Box>
-                )}
-              </Box>
             </Box>
           }
         />
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: {
+              lg: "flex-end",
+              xs: "flex-start"
+            }
+          }}
+        >
+          {canUpdateBooking && booking?.bookingOfUser?.id && (
+            <CopyButton content={booking?.bookingOfUser?.id} label={t("button.copyUserId")} />
+          )}
+          {canUpdateBooking && booking?.bookingOfPatient?.id && (
+            <CopyButton content={booking?.bookingOfPatient?.id} label={t("button.copyPatientId")} />
+          )}
+
+          {renderHeaderRightButton(booking)}
+        </Box>
         {/*
           <Button
             variant="contained"
@@ -644,7 +686,7 @@ function BookingDetail() {
                   ml: 2,
                   bgcolor: theme.palette.warning.light
                 }}
-                startIcon={<RestartAlt color={theme.palette.warning.contrastText} />}
+                startIcon={<RestartAltIcon color={theme.palette.warning.contrastText} />}
               >
                 {t("button.reset")}
               </Button>
@@ -656,7 +698,7 @@ function BookingDetail() {
                   ml: 2,
                   bgcolor: theme.palette.success.light
                 }}
-                startIcon={<Save color={theme.palette.success.contrastText} />}
+                startIcon={<SaveIcon color={theme.palette.success.contrastText} />}
               >
                 {t("button.save")}
               </Button>

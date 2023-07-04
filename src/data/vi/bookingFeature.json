@@ -59,7 +59,8 @@
       "reset": "Đặt lại",
 
       "copyUserId": "Sao chép ID người dùng",
-      "copyPatientId": "Sao chép ID bệnh nhân"
+      "copyPatientId": "Sao chép ID bệnh nhân",
+      "oldBooking": "Thông tin khám cũ"
     }
   },
 
@@ -71,7 +72,8 @@
       "reset": "Đặt lại",
       "copyUserId": "Sao chép ID người dùng",
       "copyPatientId": "Sao chép ID bệnh nhân",
-      "meet": "Khám"
+      "meet": "Khám",
+      "oldBooking": "Thông tin khám cũ"
     }
   },
 
@@ -83,7 +85,8 @@
       "reset": "Đặt lại",
       "copyUserId": "Sao chép ID người dùng",
       "copyPatientId": "Sao chép ID bệnh nhân",
-      "meet": "Khám"
+      "meet": "Khám",
+      "oldBooking": "Thông tin khám cũ"
     }
   },
 
