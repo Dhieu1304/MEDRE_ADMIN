@@ -177,8 +177,9 @@ const defineAbilityFor = (staff) => {
         // Booking
         can(bookingActionAbility.VIEW, BOOKING);
         can(bookingActionAbility.UPDATE_CONCLUSION, BOOKING, {
-          "bookingSchedule?.idDoctor": staff.id
+          "bookingSchedule.idDoctor": { $eq: staff?.id }
         });
+        // console.log("b: ", b);
         cannot(bookingActionAbility.UPDATE, BOOKING);
         cannot(bookingActionAbility.CANCEL, BOOKING);
         cannot(bookingActionAbility.ADD, BOOKING);

@@ -20,11 +20,13 @@ import { Link, useParams } from "react-router-dom";
 import { RestartAlt, Save, VideoCall as VideoCallIcon } from "@mui/icons-material";
 import { useForm } from "react-hook-form";
 import { decode } from "html-entities";
+import { useAbility } from "@casl/react";
+import { subject } from "@casl/ability";
 import bookingServices from "../../services/bookingServices";
 import { useFetchingStore } from "../../store/FetchingApiStore";
 import { useAppConfigStore } from "../../store/AppConfigStore";
 import { formatDateLocale } from "../../utils/datetimeUtil";
-import { bookingPaymentStatuses, bookingStatuses } from "../../entities/Booking/constant";
+import { bookingActionAbility, bookingPaymentStatuses, bookingStatuses } from "../../entities/Booking/constant";
 import CustomOverlay from "../../components/CustomOverlay/CustomOverlay";
 import CustomPageTitle from "../../components/CustomPageTitle";
 import CustomInput from "../../components/CustomInput/CustomInput";
@@ -34,6 +36,9 @@ import { mergeObjectsWithoutNullAndUndefined } from "../../utils/objectUtil";
 import uploadServices from "../../services/uploadServices";
 import CopyButton from "../../components/CopyButton";
 import CustomHtmlInput from "../../components/CustomInput/CustomHtmlInput";
+import { AbilityContext } from "../../store/AbilityStore";
+import entities from "../../entities/entities";
+import reExaminationServices from "../../services/reExaminationServices";
 // import paymentServices from "../../services/paymentServices";
 
 function BookingDetail() {
@@ -46,7 +51,7 @@ function BookingDetail() {
     note: "",
     conclusion: "",
     prescription: "",
-    reExamination: ""
+    dateReExam: ""
   });
 
   const { control, trigger, reset, watch, setValue, handleSubmit } = useForm({
@@ -66,6 +71,12 @@ function BookingDetail() {
   const { isLoading, fetchApi } = useFetchingStore();
   const { locale } = useAppConfigStore();
   const theme = useTheme();
+
+  const ability = useAbility(AbilityContext);
+  const canUpdateBookingConlusion = ability.can(bookingActionAbility.UPDATE_CONCLUSION, subject(entities.BOOKING, booking));
+  // console.log("canUpdateBookingConlusion: ", canUpdateBookingConlusion);
+  // console.log("booking: ", booking);
+  const canUpdateBooking = ability.can(bookingActionAbility.UPDATE, entities.BOOKING);
 
   useMemo(() => {
     const code = locale?.slice(0, 2);
@@ -101,7 +112,8 @@ function BookingDetail() {
           setBooking(bookingData);
 
           let newDefaultValues = {
-            ...mergeObjectsWithoutNullAndUndefined(defaultValues, bookingData)
+            ...mergeObjectsWithoutNullAndUndefined(defaultValues, bookingData),
+            dateReExam: bookingData?.bookingReExam?.dateReExam || ""
           };
 
           if (newDefaultValues?.note) {
@@ -191,7 +203,7 @@ function BookingDetail() {
     });
   };
 
-  const handleSaveUpdateBookingByDoctor = async ({ note, conclusion, prescription }) => {
+  const handleSaveUpdateBookingByDoctor = async ({ note, conclusion, prescription, dateReExam }) => {
     const id = booking?.id;
 
     const conclusionWithoutHtml = watch()
@@ -209,6 +221,13 @@ function BookingDetail() {
       const res = await bookingServices.updateBookingByDoctor({ id, note, conclusion, prescription });
       return { ...res };
     });
+
+    if (dateReExam) {
+      await fetchApi(async () => {
+        const res = await reExaminationServices.createReExamination({ id, dateReExam });
+        return { ...res };
+      });
+    }
   };
 
   // console.log("booking: ", booking);
@@ -256,64 +275,66 @@ function BookingDetail() {
                 alignItems: "flex-end"
               }}
             >
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  mb: 4
-                }}
-              >
-                <Button
-                  variant="contained"
-                  size="small"
-                  sx={booking?.isPayment ? activeBtnSx : disabledBtnSx}
-                  onClick={async () => handleUpdateBooking({ isPayment: true })}
+              {canUpdateBooking && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    mb: 4
+                  }}
                 >
-                  {t("button.paid")}
-                </Button>
-                <Button
-                  variant="contained"
-                  size="small"
-                  sx={!booking?.isPayment ? activeBtnSx : disabledBtnSx}
-                  onClick={async () => handleUpdateBooking({ isPayment: false })}
-                >
-                  {t("button.unpaid")}
-                </Button>
-                <Button
-                  variant="contained"
-                  size="small"
-                  sx={booking?.bookingStatus === bookingStatuses.BOOKED ? activeBtnSx : disabledBtnSx}
-                  onClick={async () => handleUpdateBooking({ bookingStatus: bookingStatuses.BOOKED })}
-                >
-                  {t("button.booked")}
-                </Button>
-                <Button
-                  variant="contained"
-                  size="small"
-                  sx={booking?.bookingStatus === bookingStatuses.WAITING ? activeBtnSx : disabledBtnSx}
-                  onClick={async () => handleUpdateBooking({ bookingStatus: bookingStatuses.WAITING })}
-                >
-                  {t("button.waiting")}
-                </Button>
-                <Button
-                  variant="contained"
-                  size="small"
-                  sx={booking?.bookingStatus === bookingStatuses.CANCELED ? activeBtnSx : disabledBtnSx}
-                  onClick={async () => handleUpdateBooking({ bookingStatus: bookingStatuses.CANCELED })}
-                >
-                  {t("button.cancel")}
-                </Button>
-              </Box>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    sx={booking?.isPayment ? activeBtnSx : disabledBtnSx}
+                    onClick={async () => handleUpdateBooking({ isPayment: true })}
+                  >
+                    {t("button.paid")}
+                  </Button>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    sx={!booking?.isPayment ? activeBtnSx : disabledBtnSx}
+                    onClick={async () => handleUpdateBooking({ isPayment: false })}
+                  >
+                    {t("button.unpaid")}
+                  </Button>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    sx={booking?.bookingStatus === bookingStatuses.BOOKED ? activeBtnSx : disabledBtnSx}
+                    onClick={async () => handleUpdateBooking({ bookingStatus: bookingStatuses.BOOKED })}
+                  >
+                    {t("button.booked")}
+                  </Button>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    sx={booking?.bookingStatus === bookingStatuses.WAITING ? activeBtnSx : disabledBtnSx}
+                    onClick={async () => handleUpdateBooking({ bookingStatus: bookingStatuses.WAITING })}
+                  >
+                    {t("button.waiting")}
+                  </Button>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    sx={booking?.bookingStatus === bookingStatuses.CANCELED ? activeBtnSx : disabledBtnSx}
+                    onClick={async () => handleUpdateBooking({ bookingStatus: bookingStatuses.CANCELED })}
+                  >
+                    {t("button.cancel")}
+                  </Button>
+                </Box>
+              )}
               <Box
                 sx={{
                   display: "flex",
                   alignItems: "center"
                 }}
               >
-                {booking?.bookingOfUser?.id && (
+                {canUpdateBooking && booking?.bookingOfUser?.id && (
                   <CopyButton content={booking?.bookingOfUser?.id} label={t("button.copyUserId")} />
                 )}
-                {booking?.bookingOfPatient?.id && (
+                {canUpdateBooking && booking?.bookingOfPatient?.id && (
                   <CopyButton content={booking?.bookingOfPatient?.id} label={t("button.copyPatientId")} />
                 )}
                 {booking?.bookingSchedule?.type === scheduleTypes.TYPE_ONLINE && booking?.isPayment && booking?.code && (
@@ -524,11 +545,12 @@ function BookingDetail() {
               <Grid item lg={4} xs={12}>
                 <CustomInput
                   showCanEditIcon
+                  disabled={!canUpdateBookingConlusion}
                   control={control}
                   rules={{}}
-                  label={tBooking("reExamination")}
+                  label={tBooking("dateReExam")}
                   trigger={trigger}
-                  name="reExamination"
+                  name="dateReExam"
                   type="date"
                 />
               </Grid>
@@ -537,6 +559,7 @@ function BookingDetail() {
             <Box sx={{ mb: 4 }}>
               <CustomHtmlInput
                 label={tBooking("conclusion")}
+                disabled={!canUpdateBookingConlusion}
                 control={control}
                 name="conclusion"
                 rules={{
@@ -563,7 +586,13 @@ function BookingDetail() {
             </Typography>
 
             <Box sx={{ mb: 4 }}>
-              <CustomHtmlInput label={tBooking("note")} control={control} name="note" sx={{ height: 100 }} />
+              <CustomHtmlInput
+                disabled={!canUpdateBookingConlusion}
+                label={tBooking("note")}
+                control={control}
+                name="note"
+                sx={{ height: 100 }}
+              />
             </Box>
           </Box>
 
@@ -582,7 +611,7 @@ function BookingDetail() {
             >
               {t("subTitle.doctorPrescription")}
             </Typography>
-            <TextField type="file" onChange={handleImageChange} sx={{ mb: 4 }} />
+            <TextField disabled={!canUpdateBookingConlusion} type="file" onChange={handleImageChange} sx={{ mb: 4 }} />
 
             {watch().prescription && (
               <Box sx={{ mb: 4, border: "1px solid #ccc", borderRadius: 10, p: 4 }}>
@@ -599,38 +628,40 @@ function BookingDetail() {
             )}
           </Box>
 
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end"
-            }}
-          >
-            <Button
-              variant="contained"
-              onClick={() => {
-                reset(defaultValues);
-              }}
+          {canUpdateBookingConlusion && (
+            <Box
               sx={{
-                ml: 2,
-                bgcolor: theme.palette.warning.light
+                display: "flex",
+                justifyContent: "flex-end"
               }}
-              startIcon={<RestartAlt color={theme.palette.warning.contrastText} />}
             >
-              {t("button.reset")}
-            </Button>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  reset(defaultValues);
+                }}
+                sx={{
+                  ml: 2,
+                  bgcolor: theme.palette.warning.light
+                }}
+                startIcon={<RestartAlt color={theme.palette.warning.contrastText} />}
+              >
+                {t("button.reset")}
+              </Button>
 
-            <Button
-              variant="contained"
-              onClick={handleSubmit(handleSaveUpdateBookingByDoctor)}
-              sx={{
-                ml: 2,
-                bgcolor: theme.palette.success.light
-              }}
-              startIcon={<Save color={theme.palette.success.contrastText} />}
-            >
-              {t("button.save")}
-            </Button>
-          </Box>
+              <Button
+                variant="contained"
+                onClick={handleSubmit(handleSaveUpdateBookingByDoctor)}
+                sx={{
+                  ml: 2,
+                  bgcolor: theme.palette.success.light
+                }}
+                startIcon={<Save color={theme.palette.success.contrastText} />}
+              >
+                {t("button.save")}
+              </Button>
+            </Box>
+          )}
         </Box>
       </Box>
     </>

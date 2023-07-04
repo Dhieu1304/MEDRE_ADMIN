@@ -97,7 +97,44 @@ const updateReExamination = async ({ id, isApply, isRemind, dateReExam }) => {
   }
 };
 
+const createReExamination = async ({ id, dateReExam }) => {
+  const dataBody = cleanUndefinedAndEmptyStrValueObject({
+    id_booking: id,
+    date_re_exam: dateReExam
+  });
+  // console.log("dataBody: ", dataBody);
+  try {
+    const res = await axiosClient.post(reExaminationApi.createReExamination(), dataBody);
+    // console.log("Update");
+    if (res?.status) {
+      const data = camelcaseKeys(res?.data, { deep: true });
+      // console.log("res: ", res);
+
+      return {
+        data,
+        success: true,
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
+      };
+    }
+    return {
+      success: false,
+      message: res?.message || `Status is ${res.status}`,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
 export default {
   getReExaminationList,
-  updateReExamination
+  updateReExamination,
+  createReExamination
 };

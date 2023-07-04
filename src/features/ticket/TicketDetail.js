@@ -21,7 +21,6 @@ import { useEffect, useState } from "react";
 
 // import { useAuthStore } from "../../store/AuthStore";
 
-import "./SupportPage.css";
 import { useParams } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 
@@ -40,7 +39,7 @@ function TicketDetail() {
 
   const { t } = useTranslation("ticketFeature", { keyPrefix: "TicketDetail" });
 
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit, reset } = useForm({
     defaultValues: {
       content: ""
     }
@@ -79,6 +78,7 @@ function TicketDetail() {
 
       if (res.success) {
         await loadData();
+        reset();
         return { ...res };
       }
 
@@ -97,6 +97,7 @@ function TicketDetail() {
 
       if (res.success) {
         await loadData();
+        reset();
         return { ...res };
       }
 

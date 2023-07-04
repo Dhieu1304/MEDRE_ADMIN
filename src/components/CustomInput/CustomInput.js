@@ -110,7 +110,7 @@ function CustomInput({
         fullWidth
         InputProps={{
           ...InputProps,
-          readOnly: true
+          disabled: true
         }}
         required={!!rules?.required}
         value={noNameValue || ""}

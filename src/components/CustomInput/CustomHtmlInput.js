@@ -6,7 +6,7 @@ import "react-quill/dist/quill.snow.css";
 import { Box, FormHelperText, useTheme } from "@mui/material";
 import { inputErrorFormat } from "../../utils/stringFormat";
 
-function CustomHtmlInput({ label, control, name, rules, sx }) {
+function CustomHtmlInput({ label, control, name, rules, sx, disabled }) {
   const theme = useTheme();
   return (
     <Controller
@@ -25,6 +25,7 @@ function CustomHtmlInput({ label, control, name, rules, sx }) {
                   borderRadius: "2px",
                   ...errorStyles
                 }}
+                readOnly={disabled}
                 theme="snow"
                 value={value}
                 onChange={onChange}
@@ -75,7 +76,8 @@ function CustomHtmlInput({ label, control, name, rules, sx }) {
 
 CustomHtmlInput.defaultProps = {
   rules: {},
-  sx: {}
+  sx: {},
+  disabled: false
 };
 
 CustomHtmlInput.propTypes = {
@@ -83,7 +85,8 @@ CustomHtmlInput.propTypes = {
   name: PropTypes.string.isRequired,
   sx: PropTypes.object,
   control: PropTypes.object.isRequired,
-  rules: PropTypes.object
+  rules: PropTypes.object,
+  disabled: PropTypes.bool
 };
 
 export default CustomHtmlInput;

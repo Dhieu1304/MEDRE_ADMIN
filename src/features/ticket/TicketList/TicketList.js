@@ -70,7 +70,7 @@ function TicketList() {
         id: columnsIds.userName,
         label: tTicket(columnsIds.userName),
         minWidth: 100,
-        render: (ticket) => ticket?.user?.name,
+        render: (ticket) => ticket?.ticketOfUser?.name,
         fixed: true
       },
       {
