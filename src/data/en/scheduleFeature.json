@@ -1,6 +1,9 @@
 {
   "DoctorScheduleCalendar": {
     "title": "Calendar",
+    "filter": {
+      "week": "Week"
+    },
     "button": {
       "currentWeek": "Current week",
       "addTimeOff": "Add time off",

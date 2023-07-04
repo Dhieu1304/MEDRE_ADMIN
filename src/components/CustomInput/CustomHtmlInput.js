@@ -8,6 +8,7 @@ import { inputErrorFormat } from "../../utils/stringFormat";
 
 function CustomHtmlInput({ label, control, name, rules, sx, disabled }) {
   const theme = useTheme();
+
   return (
     <Controller
       control={control}
@@ -23,22 +24,26 @@ function CustomHtmlInput({ label, control, name, rules, sx, disabled }) {
                 sx={{
                   height: "100%",
                   borderRadius: "2px",
-                  ...errorStyles
+                  ...errorStyles,
+                  border: disabled && "1px #ccc solid"
                 }}
                 readOnly={disabled}
                 theme="snow"
+                // theme="bubble"
                 value={value}
                 onChange={onChange}
-                modules={{
-                  toolbar: [
-                    [{ header: [1, 2, false] }],
-                    ["bold", "italic", "underline", "strike", "blockquote"],
-                    [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
-                    ["link", "image"],
-                    ["clean"],
-                    [{ color: [] }] // Màu chữ và nền
-                  ]
-                }}
+                modules={
+                  !disabled && {
+                    toolbar: [
+                      [{ header: [1, 2, false] }],
+                      ["bold", "italic", "underline", "strike", "blockquote"],
+                      [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
+                      ["link", "image"],
+                      ["clean"],
+                      [{ color: [] }] // Màu chữ và nền
+                    ]
+                  }
+                }
                 formats={[
                   "header",
                   "bold",

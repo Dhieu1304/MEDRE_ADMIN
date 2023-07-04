@@ -57,6 +57,7 @@
       "unpaid": "Unpaid",
       "booked": "Booked",
       "cancel": "Cancel",
+      "canceled": "Canceled",
       "waiting": "Waiting",
 
       "copyUserId": "Copy user ID",

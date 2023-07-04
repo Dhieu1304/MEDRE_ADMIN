@@ -14,8 +14,8 @@ export const columnsIds = {
   bookingDate: "bookingDate",
   bookingUserPhoneNumber: "bookingUserPhoneNumber",
   bookingUserEmail: "bookingUserEmail",
-  bookingUserName: "bookingUserName"
-  // action: "action"
+  bookingUserName: "bookingUserName",
+  action: "action"
 };
 
 /*
@@ -24,7 +24,7 @@ export const columnsIds = {
 */
 
 export const initialShowCols = Object.keys(columnsIds).reduce((obj, key) => {
-  if (key === columnsIds.bookingUserName) {
+  if (key === columnsIds.action || key === columnsIds.bookingUserName) {
     return { ...obj };
   }
   return { ...obj, [key]: true };

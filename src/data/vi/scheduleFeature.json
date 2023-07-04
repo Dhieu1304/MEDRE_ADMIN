@@ -1,6 +1,9 @@
 {
   "DoctorScheduleCalendar": {
     "title": "Thông tin lịch khám",
+    "filter": {
+      "week": "Tuần"
+    },
     "button": {
       "currentWeek": "Tuần hiện tại",
       "addTimeOff": "Thêm lịch nghỉ",

@@ -247,23 +247,19 @@ function BookingDetail() {
     width: { sm: "inherit", xs: "100%" },
     mb: { sm: 0, xs: 1 },
     ml: { sm: 1, xs: 0 },
-    backgroundColor: "rgb(235, 235, 228)",
-    color: "rgb(154, 153, 153)",
-    ":hover": {
-      backgroundColor: theme.palette.success.dark,
-      color: theme.palette.success.contrastText
-    }
+    backgroundColor: theme.palette.error.light,
+    color: theme.palette.error.contrastText
   };
 
   const activeBtnSx = {
     width: { sm: "inherit", xs: "100%" },
     mb: { sm: 0, xs: 1 },
     ml: { sm: 1, xs: 0 },
-    backgroundColor: theme.palette.success.light,
-    color: theme.palette.success.contrastText,
+    backgroundColor: theme.palette.error.light,
+    color: theme.palette.error.contrastText,
     ":hover": {
-      backgroundColor: theme.palette.success.dark,
-      color: theme.palette.success.contrastText
+      backgroundColor: theme.palette.error.dark,
+      color: theme.palette.error.contrastText
     }
   };
 
@@ -342,42 +338,11 @@ function BookingDetail() {
                   <Button
                     variant="contained"
                     size="small"
-                    sx={booking?.isPayment ? activeBtnSx : disabledBtnSx}
-                    onClick={async () => handleUpdateBooking({ isPayment: true })}
-                  >
-                    {t("button.paid")}
-                  </Button>
-                  <Button
-                    variant="contained"
-                    size="small"
-                    sx={!booking?.isPayment ? activeBtnSx : disabledBtnSx}
-                    onClick={async () => handleUpdateBooking({ isPayment: false })}
-                  >
-                    {t("button.unpaid")}
-                  </Button>
-                  <Button
-                    variant="contained"
-                    size="small"
-                    sx={booking?.bookingStatus === bookingStatuses.BOOKED ? activeBtnSx : disabledBtnSx}
-                    onClick={async () => handleUpdateBooking({ bookingStatus: bookingStatuses.BOOKED })}
-                  >
-                    {t("button.booked")}
-                  </Button>
-                  <Button
-                    variant="contained"
-                    size="small"
-                    sx={booking?.bookingStatus === bookingStatuses.WAITING ? activeBtnSx : disabledBtnSx}
-                    onClick={async () => handleUpdateBooking({ bookingStatus: bookingStatuses.WAITING })}
-                  >
-                    {t("button.waiting")}
-                  </Button>
-                  <Button
-                    variant="contained"
-                    size="small"
-                    sx={booking?.bookingStatus === bookingStatuses.CANCELED ? activeBtnSx : disabledBtnSx}
+                    sx={booking?.bookingStatus === bookingStatuses.CANCELED ? disabledBtnSx : activeBtnSx}
                     onClick={async () => handleUpdateBooking({ bookingStatus: bookingStatuses.CANCELED })}
+                    disabled={booking?.bookingStatus === bookingStatuses.CANCELED}
                   >
-                    {t("button.cancel")}
+                    {booking?.bookingStatus === bookingStatuses.CANCELED ? t("button.canceled") : t("button.cancel")}
                   </Button>
                 </Box>
               )}
@@ -653,7 +618,9 @@ function BookingDetail() {
             >
               {t("subTitle.doctorPrescription")}
             </Typography>
-            <TextField disabled={!canUpdateBookingConlusion} type="file" onChange={handleImageChange} sx={{ mb: 4 }} />
+            {canUpdateBookingConlusion && (
+              <TextField disabled={!canUpdateBookingConlusion} type="file" onChange={handleImageChange} sx={{ mb: 4 }} />
+            )}
 
             {watch().prescription && (
               <Box sx={{ mb: 4, border: "1px solid #ccc", borderRadius: 10, p: 4 }}>

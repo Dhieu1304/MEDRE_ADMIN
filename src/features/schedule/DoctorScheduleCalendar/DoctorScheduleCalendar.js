@@ -55,6 +55,7 @@ import ViewBookingBtn from "../../booking/components/BookingButton/ViewBookingBt
 import BookingBtn from "../../booking/components/BookingButton/BookingBtn";
 import entities from "../../../entities/entities";
 import BookingNoDataModal from "../../booking/components/BookingNoDataModal";
+import CustomDateInput from "../../../components/CustomInput/CustomDateInput";
 
 const EMPTY_CELL = "EMPTY_CELL";
 const FULL_SLOT = "FULL_SLOT";
@@ -526,9 +527,18 @@ function DoctorScheduleCalendar({ timesList, staff }) {
                 {t("button.addTimeOff")}
               </Button>
             </Can>
-            <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center", mx: 2 }}>
+            {/* <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center", mx: 2 }}>
               {formatDate.format(heads[0], "DD/MM/YYYY")} - {formatDate.format(heads[6], "DD/MM/YYYY")}
-            </Box>
+            </Box> */}
+            <CustomDateInput
+              label={t("filter.week")}
+              setDate={(date) => setCurrentDate(new Date(date))}
+              rules={{}}
+              date={formatDate.format(currentDate, "YYYY-MM-DD")}
+              render={() => {
+                return `${formatDate.format(heads[0], "DD/MM/YYYY")} - ${formatDate.format(heads[6], "DD/MM/YYYY")}`;
+              }}
+            />
             <IconButton
               onClick={() => {
                 const newCurrentDate = new Date(currentDate);
@@ -550,6 +560,9 @@ function DoctorScheduleCalendar({ timesList, staff }) {
                 navigate(`?${searchParams}`);
               }}
               size="small"
+              sx={{
+                minWidth: 140
+              }}
             >
               {t("button.currentWeek")}
             </Button>

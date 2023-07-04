@@ -49,7 +49,7 @@ function TicketList() {
 
   const [, ticketStatusListObj] = useTicketStatusesContantTranslation();
 
-  const { t } = useTranslation("ticketFeature", { keyPrefix: "TicketDetail" });
+  const { t } = useTranslation("ticketFeature", { keyPrefix: "TicketList" });
   const { t: tTicket } = useTranslation("ticketEntity", { keyPrefix: "properties" });
 
   // state is used to represent the visibility of the Menu

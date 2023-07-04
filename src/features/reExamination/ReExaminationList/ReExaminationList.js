@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { Box, Checkbox, Typography, useTheme } from "@mui/material";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Box, Checkbox, IconButton, Typography, useTheme } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import qs from "query-string";
 import { FormProvider, useForm } from "react-hook-form";
 import formatDate from "date-and-time";
+import { CalendarMonth as CalendarMonthIcon, Preview as PreviewIcon } from "@mui/icons-material";
 import reExaminationServices from "../../../services/reExaminationServices";
 import { useAppConfigStore } from "../../../store/AppConfigStore";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
@@ -20,6 +21,9 @@ import { getSortValue } from "../../../utils/objectUtil";
 import { Can } from "../../../store/AbilityStore";
 import { reExaminationActionAbility } from "../../../entities/ReExamination";
 import entities from "../../../entities/entities";
+import routeConfig from "../../../config/routeConfig";
+import { useCustomModal } from "../../../components/CustomModal";
+import BookingAnInfoModal from "../../booking/components/BookingAnInfoModal";
 
 function ReExaminationList() {
   const { locale } = useAppConfigStore();
@@ -41,6 +45,8 @@ function ReExaminationList() {
   const { t } = useTranslation("reExaminationFeature", { keyPrefix: "ReExaminationList" });
   const { t: tReExamination } = useTranslation("reExaminationEntity", { keyPrefix: "properties" });
   const { t: tReExaminationConstants } = useTranslation("reExaminationEntity", { keyPrefix: "constants" });
+
+  const bookingAnInfoModal = useCustomModal();
 
   const [showTableColsMenu, setShowTableColsMenu] = useState(null);
   const [showCols, setShowCols] = useState({
@@ -172,7 +178,7 @@ function ReExaminationList() {
       {
         id: columnsIds.isRemind,
         label: tReExamination(columnsIds.isRemind),
-        minWidth: 100,
+        minWidth: 40,
         hide: !showCols[columnsIds.isRemind],
         render: (reExamination) => {
           return (
@@ -196,6 +202,38 @@ function ReExaminationList() {
             </>
           );
         }
+      },
+      {
+        id: columnsIds.action,
+        label: "",
+        minWidth: 40,
+        render: (reExamination) => {
+          // console.log("reExamination: ", reExamination);
+          const scheduleSearchParams = {
+            date: reExamination?.dateReExam
+          };
+          const scheduleSearchParamsUrl = qs.stringify(scheduleSearchParams);
+          return (
+            <>
+              <IconButton
+                sx={{ p: 0 }}
+                onClick={() => {
+                  if (reExamination?.reExamOfBooking) {
+                    bookingAnInfoModal.setShow(true);
+                    bookingAnInfoModal.setData(reExamination?.reExamOfBooking);
+                  }
+                }}
+              >
+                <PreviewIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
+              </IconButton>
+
+              <Box sx={{ ml: 2, mt: 0.5 }} component={Link} to={`${routeConfig.schedule}?${scheduleSearchParamsUrl}`}>
+                <CalendarMonthIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
+              </Box>
+            </>
+          );
+        },
+        action: true
       }
     ];
 
@@ -243,41 +281,52 @@ function ReExaminationList() {
   // console.log("reExaminations: ", reExaminations);
 
   return (
-    <Box>
-      <CustomOverlay open={isLoading} />
+    <>
+      <Box>
+        <CustomOverlay open={isLoading} />
 
-      <ListPageTop
-        title={t("title")}
-        filterFormNode={
-          <FormProvider {...filterForm}>
-            <ReExaminationFiltersForm />
-          </FormProvider>
-        }
-      />
+        <ListPageTop
+          title={t("title")}
+          filterFormNode={
+            <FormProvider {...filterForm}>
+              <ReExaminationFiltersForm />
+            </FormProvider>
+          }
+        />
 
-      <ListPageAction
-        showCols={showCols}
-        createDefaultValues={createDefaultValues}
-        columns={columns}
-        setValue={setValue}
-        loadData={loadData}
-        watch={watch}
-        count={count}
-        setShowCols={setShowCols}
-        showTableColsMenu={showTableColsMenu}
-        setShowTableColsMenu={setShowTableColsMenu}
-        reset={reset}
-        setIsReset={setIsReset}
-      />
+        <ListPageAction
+          showCols={showCols}
+          createDefaultValues={createDefaultValues}
+          columns={columns}
+          setValue={setValue}
+          loadData={loadData}
+          watch={watch}
+          count={count}
+          setShowCols={setShowCols}
+          showTableColsMenu={showTableColsMenu}
+          setShowTableColsMenu={setShowTableColsMenu}
+          reset={reset}
+          setIsReset={setIsReset}
+        />
 
-      <ListPageTableWrapper
-        table={<DataTable rows={reExaminations} columns={columns} showCols={showCols} sort={sort} setSort={setSort} />}
-        count={count}
-        watch={watch}
-        loadData={loadData}
-        setValue={setValue}
-      />
-    </Box>
+        <ListPageTableWrapper
+          table={<DataTable rows={reExaminations} columns={columns} showCols={showCols} sort={sort} setSort={setSort} />}
+          count={count}
+          watch={watch}
+          loadData={loadData}
+          setValue={setValue}
+        />
+      </Box>
+
+      {bookingAnInfoModal.show && (
+        <BookingAnInfoModal
+          show={bookingAnInfoModal.show}
+          setShow={bookingAnInfoModal.setShow}
+          data={bookingAnInfoModal.data}
+          setData={bookingAnInfoModal.setData}
+        />
+      )}
+    </>
   );
 }
 
