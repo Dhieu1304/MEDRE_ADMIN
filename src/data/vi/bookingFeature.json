@@ -1,6 +1,6 @@
 {
   "BookingList": {
-    "title": "Tìm kiếm lịch hẹn",
+    "title": "Tìm kiếm lịch được đặt",
     "filter": {
       "patientPhoneNumber": "SĐT bệnh nhân",
       "userId": "ID người dùng",

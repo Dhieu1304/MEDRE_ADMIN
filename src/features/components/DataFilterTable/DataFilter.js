@@ -10,13 +10,13 @@ export const inputComponentTypes = {
   DATE_RANGE: "DATE_RANGE"
 };
 
-function DataFilter({ inputs, filterForm }) {
+function DataFilter({ inputs, filterForm, gridLg }) {
   const { control, trigger, watch, setValue } = filterForm;
   const gridItemProps = {
     xs: 12,
     sm: 6,
     md: 4,
-    lg: 3,
+    lg: gridLg || 3,
     sx: {
       p: 0,
       m: 0
@@ -137,9 +137,14 @@ function DataFilter({ inputs, filterForm }) {
   );
 }
 
+DataFilter.defaultProps = {
+  gridLg: undefined
+};
+
 DataFilter.propTypes = {
   inputs: PropTypes.array.isRequired,
-  filterForm: PropTypes.object.isRequired
+  filterForm: PropTypes.object.isRequired,
+  gridLg: PropTypes.number
 };
 
 export default DataFilter;

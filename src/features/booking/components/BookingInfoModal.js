@@ -11,12 +11,15 @@ import CustomInput from "../../../components/CustomInput/CustomInput";
 import CopyButton from "../../../components/CopyButton";
 import routeConfig from "../../../config/routeConfig";
 import { scheduleTypes } from "../../../entities/Schedule";
+import { usePatientGendersContantTranslation } from "../../patient/hooks/usePatientConstantsTranslation";
 
 function BookingInfoModal({ show, setShow, data, setData }) {
   const [tabValue, setTabValue] = useState(data?.bookings?.[0]?.id);
 
   const theme = useTheme();
   // const [bookingsGroup, setBookingsGroup] = useState({});
+  const [, patientGenderContantListObj] = usePatientGendersContantTranslation();
+
   const { t } = useTranslation("bookingFeature", {
     keyPrefix: "BookingInfoModal"
   });
@@ -209,7 +212,10 @@ function BookingInfoModal({ show, setShow, data, setData }) {
               <CustomInput noNameValue={bookingsGroup?.[tabValue]?.bookingOfPatient?.name} label={tPatient("name")} />
             </Grid>
             <Grid item xs={12} sm={12} md={6} lg={6}>
-              <CustomInput noNameValue={bookingsGroup?.[tabValue]?.bookingOfPatient?.gender} label={tPatient("gender")} />
+              <CustomInput
+                noNameValue={patientGenderContantListObj?.[bookingsGroup?.[tabValue]?.bookingOfPatient?.gender]?.label}
+                label={tPatient("gender")}
+              />
             </Grid>
             <Grid item xs={12} sm={12} md={6} lg={6}>
               <CustomInput

@@ -13,6 +13,7 @@ import CustomInput from "../../../components/CustomInput/CustomInput";
 import CopyButton from "../../../components/CopyButton";
 import routeConfig from "../../../config/routeConfig";
 import { scheduleTypes } from "../../../entities/Schedule";
+import { usePatientGendersContantTranslation } from "../../patient/hooks/usePatientConstantsTranslation";
 
 function BookingAnInfoModal({ show, setShow, data, setData }) {
   // const [booking, setBooking] = useState({ ...data });
@@ -34,6 +35,8 @@ function BookingAnInfoModal({ show, setShow, data, setData }) {
   const { t: tPatient } = useTranslation("patientEntity", {
     keyPrefix: "properties"
   });
+
+  const [, patientGenderContantListObj] = usePatientGendersContantTranslation();
 
   const handleToBookingDetail = () => {
     // console.log("handleToBookingDetail: ");
@@ -148,7 +151,10 @@ function BookingAnInfoModal({ show, setShow, data, setData }) {
             <CustomInput noNameValue={booking?.bookingOfPatient?.name} label={tPatient("name")} />
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={6}>
-            <CustomInput noNameValue={booking?.bookingOfPatient?.gender} label={tPatient("gender")} />
+            <CustomInput
+              noNameValue={patientGenderContantListObj?.[booking?.bookingOfPatient?.gender]?.label}
+              label={tPatient("gender")}
+            />
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={6}>
             <CustomInput

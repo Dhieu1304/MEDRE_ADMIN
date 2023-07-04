@@ -98,16 +98,6 @@ function DoctorTimeOff({ staff }) {
         minWidth: 100
       },
       {
-        id: "createdAt",
-        label: tTimeOff("createdAt"),
-        minWidth: 100
-      },
-      {
-        id: "updatedAt",
-        label: tTimeOff("updatedAt"),
-        minWidth: 100
-      },
-      {
         id: "action",
         label: "",
         minWidth: 100
@@ -269,12 +259,7 @@ function DoctorTimeOff({ staff }) {
                     <TableCell align="left" sx={{ display: "table-cell" }}>
                       {timeOffSessionContantListObj[timeOff?.session]?.label}
                     </TableCell>
-                    <TableCell align="left" sx={{ display: "table-cell" }}>
-                      {formatDate.format(new Date(timeOff?.createdAt), "DD/MM/YYYY hh:mm:ss")}
-                    </TableCell>
-                    <TableCell align="left" sx={{ display: "table-cell" }}>
-                      {formatDate.format(new Date(timeOff?.updatedAt), "DD/MM/YYYY hh:mm:ss")}
-                    </TableCell>
+
                     <TableCell align="left" sx={{ display: "table-cell" }}>
                       <Box
                         sx={{

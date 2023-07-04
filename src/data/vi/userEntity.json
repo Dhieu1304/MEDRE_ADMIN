@@ -11,7 +11,7 @@
     "dob": "Ngày sinh",
     "healthInsurance": "Bảo hiểm y tế",
     "createdAt": "Ngày tạo",
-    "updatedAt": "Ngày cập nhập",
+    "updatedAt": "Ngày cập nhật",
     "deletedAt": "Ngày xóa",
     "status": "Tình trạng"
   },

@@ -42,16 +42,16 @@ function UserFiltersForm() {
         inputComponentType: inputComponentTypes.SELECT,
         list: userStatusList,
         listObj: userStatusListObj
-      },
-
-      {
-        label: tFilter("healthInsurance"),
-        name: "healthInsurance"
       }
+
+      // {
+      //   label: tFilter("healthInsurance"),
+      //   name: "healthInsurance"
+      // }
     ];
   }, [locale]);
 
-  return <DataFilter inputs={inputs} filterForm={filterForm} />;
+  return <DataFilter inputs={inputs} filterForm={filterForm} gridLg={3} />;
 }
 
 export default UserFiltersForm;

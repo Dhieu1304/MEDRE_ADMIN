@@ -32,11 +32,18 @@ export const initialShowCols = Object.keys(columnsIds).reduce((obj, key) => {
     - From the object's keys in the parameter
     - we will reformat the correct format to be the value for the input in the filter form
 */
-export const createDefaultValues = ({ phoneNumber, name, healthInsurance, gender, page, limit } = {}) => {
+export const createDefaultValues = ({
+  phoneNumber,
+  name,
+  //  healthInsurance,
+  gender,
+  page,
+  limit
+} = {}) => {
   const result = {
     phoneNumber: normalizeStrToStr(phoneNumber),
     name: normalizeStrToStr(name),
-    healthInsurance: normalizeStrToStr(healthInsurance),
+    // healthInsurance: normalizeStrToStr(healthInsurance),
     gender: normalizeStrToStr(gender),
 
     page: normalizeStrToInt(page, 1),

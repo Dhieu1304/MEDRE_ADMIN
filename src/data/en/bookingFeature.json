@@ -1,6 +1,6 @@
 {
   "BookingList": {
-    "title": "Find Booking",
+    "title": "Find reservation",
     "filter": {
       "patientPhoneNumber": "Patient phone number",
       "userId": "User ID",

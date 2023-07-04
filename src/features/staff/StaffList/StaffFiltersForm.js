@@ -21,8 +21,8 @@ function StaffFiltersForm({ expertises }) {
     staffRoleListObj,
     staffGenderList,
     staffGenderListObj,
-    staffTypeList,
-    staffTypeListObj,
+    // staffTypeList,
+    // staffTypeListObj,
     staffStatusList,
     staffStatusListObj,
     expertisesList,
@@ -46,10 +46,10 @@ function StaffFiltersForm({ expertises }) {
         label: tFilter("phone"),
         name: "phoneNumber"
       },
-      {
-        label: tFilter("username"),
-        name: "username"
-      },
+      // {
+      //   label: tFilter("username"),
+      //   name: "username"
+      // },
       {
         label: tFilter("gender"),
         name: "gender",
@@ -77,32 +77,32 @@ function StaffFiltersForm({ expertises }) {
         inputComponentType: inputComponentTypes.MULTI_SELECT,
         list: expertisesList,
         listObj: expertiseListObj
-      },
-      {
-        label: tFilter("address"),
-        name: "address"
-      },
-      {
-        label: tFilter("healthInsurance"),
-        name: "healthInsurance"
-      },
-      {
-        label: tFilter("schedules"),
-        inputComponentType: inputComponentTypes.DATE_RANGE,
-        name: "fromTo",
-        fromDateName: "from",
-        toDateName: "to",
-        fromDateLabel: tFilter("from"),
-        toDateLabel: tFilter("to"),
-        previewLabel: tFilter("scheduleFromToPreview")
-      },
-      {
-        label: tFilter("type"),
-        name: "type",
-        inputComponentType: inputComponentTypes.SELECT,
-        list: staffTypeList,
-        listObj: staffTypeListObj
       }
+      // {
+      //   label: tFilter("address"),
+      //   name: "address"
+      // },
+      // {
+      //   label: tFilter("healthInsurance"),
+      //   name: "healthInsurance"
+      // },
+      // {
+      //   label: tFilter("schedules"),
+      //   inputComponentType: inputComponentTypes.DATE_RANGE,
+      //   name: "fromTo",
+      //   fromDateName: "from",
+      //   toDateName: "to",
+      //   fromDateLabel: tFilter("from"),
+      //   toDateLabel: tFilter("to"),
+      //   previewLabel: tFilter("scheduleFromToPreview")
+      // },
+      // {
+      //   label: tFilter("type"),
+      //   name: "type",
+      //   inputComponentType: inputComponentTypes.SELECT,
+      //   list: staffTypeList,
+      //   listObj: staffTypeListObj
+      // }
     ];
   }, [locale, expertises]);
 

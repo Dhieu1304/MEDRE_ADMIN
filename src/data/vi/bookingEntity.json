@@ -1,7 +1,7 @@
 {
   "properties": {
     "date": "Ngày khám",
-    "time": "Thời gian",
+    "time": "Ca khám",
     "status": "Tình trạng",
     "code": "Code",
     "paymentStatus": "Thanh toán",

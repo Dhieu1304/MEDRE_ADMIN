@@ -81,7 +81,10 @@ function BookingStatistics() {
     const params = { ...watch() };
     await fetchApi(async () => {
       const res = await statisticsServices.getStatisticsByBooking(params);
-      setData([...res.data]);
+      if (res.success) {
+        setData([...res.data]);
+        return { ...res };
+      }
       return { ...res };
     });
   };

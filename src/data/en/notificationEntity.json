@@ -2,8 +2,8 @@
   "properties": {
     "id": "ID",
     "title": "Title",
-    "content": "Description",
-    "description": "Content",
+    "content": "Brief description",
+    "description": "Detailed description",
     "type": "Type",
     "notificationFor": "Notification for",
     "createdBy": "Created by",
@@ -32,6 +32,10 @@
       "doctor": "Doctor",
       "nurse": "Nurse",
       "customerService": "Customer Service"
+    },
+    "personalTypes": {
+      "user": "User",
+      "staff": "Staff"
     }
   }
 }

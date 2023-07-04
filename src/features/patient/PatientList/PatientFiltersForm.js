@@ -30,11 +30,11 @@ function PatientFiltersForm() {
         inputComponentType: inputComponentTypes.SELECT,
         list: patientGenderList,
         listObj: patientGenderListObj
-      },
-      {
-        label: tFilter("healthInsurance"),
-        name: "healthInsurance"
       }
+      // {
+      //   label: tFilter("healthInsurance"),
+      //   name: "healthInsurance"
+      // }
     ];
   }, [locale]);
 
