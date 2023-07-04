@@ -13,6 +13,9 @@
 
   "ScheduleList": {
     "title": "Schedule",
+    "filter": {
+      "date": "Date"
+    },
     "button": {
       "today": "Today",
       "booked": "Booked",

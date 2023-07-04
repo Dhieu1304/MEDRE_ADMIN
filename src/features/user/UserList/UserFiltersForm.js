@@ -29,13 +29,13 @@ function UserFiltersForm() {
         label: tFilter("phoneNumber"),
         name: "phoneNumber"
       },
-      {
-        label: tFilter("gender"),
-        name: "gender",
-        inputComponentType: inputComponentTypes.SELECT,
-        list: userGenderList,
-        listObj: userGenderListObj
-      },
+      // {
+      //   label: tFilter("gender"),
+      //   name: "gender",
+      //   inputComponentType: inputComponentTypes.SELECT,
+      //   list: userGenderList,
+      //   listObj: userGenderListObj
+      // },
       {
         label: tFilter("status"),
         name: "status",

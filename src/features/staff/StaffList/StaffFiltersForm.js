@@ -50,13 +50,13 @@ function StaffFiltersForm({ expertises }) {
       //   label: tFilter("username"),
       //   name: "username"
       // },
-      {
-        label: tFilter("gender"),
-        name: "gender",
-        inputComponentType: inputComponentTypes.SELECT,
-        list: staffGenderList,
-        listObj: staffGenderListObj
-      },
+      // {
+      //   label: tFilter("gender"),
+      //   name: "gender",
+      //   inputComponentType: inputComponentTypes.SELECT,
+      //   list: staffGenderList,
+      //   listObj: staffGenderListObj
+      // },
       {
         label: tFilter("status"),
         name: "status",

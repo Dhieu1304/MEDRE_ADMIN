@@ -1,6 +1,6 @@
 {
   "TicketList": {
-    "title": "Tìm kiếm câu hỏi",
+    "title": "Danh sách phản hồi của khách hàng",
 
     "filter": {
       "status": "Tình trạng"
@@ -24,7 +24,7 @@
   },
 
   "TicketDetail": {
-    "title": "Chi tiết hỗ trợ",
+    "title": "Chi tiết phản hồi khách hàng",
     "button": {
       "back": "Quay lại",
       "save": "Lưu",

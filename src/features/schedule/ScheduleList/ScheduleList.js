@@ -55,6 +55,8 @@ import entities from "../../../entities/entities";
 import BookingBtn from "../../booking/components/BookingButton/BookingBtn";
 import ViewBookingBtn from "../../booking/components/BookingButton/ViewBookingBtn";
 import routeConfig from "../../../config/routeConfig";
+import { Controller, useForm } from "react-hook-form";
+import CustomDateInput from "../../../components/CustomInput/CustomDateInput";
 
 const EMPTY_CELL = "EMPTY_CELL";
 const FULL_SLOT = "FULL_SLOT";
@@ -65,11 +67,13 @@ function ScheduleList({ timesList }) {
   const [currentDate, setCurrentDate] = useState(
     new Date(normalizeStrToDateStr(qs.parse(location.search)?.date, new Date()))
   );
+  const [isLoading, setIsLoading] = useState(false);
+
   const [doctors, setDoctors] = useState([]);
   const [bookingSchedules, setBookingSchedules] = useState([]);
-  const [timeOffsGroupByDoctorId, setTimeOffsGroupByDoctorId] = useState([]);
+  const [timeOffsGroupByDoctorId, setTimeOffsGroupByDoctorId] = useState({});
 
-  const { isLoading, fetchApi } = useFetchingStore();
+  const { fetchApi } = useFetchingStore();
   const { t } = useTranslation("scheduleFeature", { keyPrefix: "ScheduleList" });
   const theme = useTheme();
   const navigate = useNavigate();
@@ -79,47 +83,50 @@ function ScheduleList({ timesList }) {
 
   const [, scheduleTypeContantListObj] = useScheduleTypesContantTranslation();
 
-  // console.log("currentDate: ", currentDate);
+  // const loadTimeOffs = async () => {
+  //   await fetchApi(async () => {
+  //     const res = await timeOffServices.getTimeOffByDoctorId(undefined, {
+  //       from: formatDate.format(currentDate, "YYYY-MM-DD"),
+  //       to: formatDate.format(currentDate, "YYYY-MM-DD")
+  //     });
+  //     if (res.success) {
+  //       const timeOffsData = res.timeOffs;
 
-  const loadTimeOffs = async () => {
-    await fetchApi(async () => {
-      const res = await timeOffServices.getTimeOffByDoctorId(undefined, {
-        from: formatDate.format(currentDate, "YYYY-MM-DD"),
-        to: formatDate.format(currentDate, "YYYY-MM-DD")
-      });
-      if (res.success) {
-        const timeOffsData = res.timeOffs;
+  //       const timeOffsObjData = timeOffsData.reduce((result, timeOff) => {
+  //         const newResult = { ...result };
+  //         if (!newResult[timeOff.doctorId]) {
+  //           newResult[timeOff.idDoctor] = [];
+  //         }
+  //         newResult[timeOff.idDoctor].push(timeOff);
+  //         return { ...newResult };
+  //       }, {});
 
-        const timeOffsObjData = timeOffsData.reduce((result, timeOff) => {
-          const newResult = { ...result };
-          if (!newResult[timeOff.doctorId]) {
-            newResult[timeOff.idDoctor] = [];
-          }
-          newResult[timeOff.idDoctor].push(timeOff);
-          return { ...newResult };
-        }, {});
+  //       setTimeOffsGroupByDoctorId({ ...timeOffsObjData });
+  //       // timeOffsOfDoctor.push(timeOffsData);
+  //       return { ...res };
+  //     }
+  //     setTimeOffsGroupByDoctorId([]);
+  //     return { ...res };
+  //   });
+  // };
 
-        setTimeOffsGroupByDoctorId({ ...timeOffsObjData });
-        // timeOffsOfDoctor.push(timeOffsData);
-        return { ...res };
-      }
-      setTimeOffsGroupByDoctorId([]);
-      return { ...res };
-    });
-  };
+  // // console.log("doctors: ", doctors);
+  // // console.log("timeOffsObj: ", timeOffsGroupByDoctorId);
 
-  // console.log("doctors: ", doctors);
-  // console.log("timeOffsObj: ", timeOffsGroupByDoctorId);
-
-  useEffect(() => {
-    loadTimeOffs();
-  }, [doctors, currentDate]);
+  // useEffect(() => {
+  //   console.log("useEffect loadTimeOffs: ");
+  //   loadTimeOffs();
+  // }, [doctors, ...Object.values(filterDebounce)]);
 
   const loadData = async () => {
+    setIsLoading(true);
     let doctorsData = [];
     let bookingSchedulesData = [];
+    let timeOffsGroupByDoctorIdData = {};
 
     await fetchApi(async () => {
+      console.log("loadDoctorData");
+
       const paramsObj = {
         role: staffRoles.ROLE_DOCTOR,
         limit: 200,
@@ -156,6 +163,7 @@ function ScheduleList({ timesList }) {
     // console.log("Expertise IDs:", expertiseIds);
 
     await fetchApi(async () => {
+      console.log("loadBookingSchedulesData");
       // console.log("expertiseIds: ", expertiseIds);
       const res = await bookingServices.getCountBookingScheduleByManyStaff({
         expertiseIds,
@@ -172,11 +180,42 @@ function ScheduleList({ timesList }) {
       return { ...res };
     });
 
+    // Load TimeOffs
+    await fetchApi(async () => {
+      console.log("loadTimeOffs");
+      const res = await timeOffServices.getTimeOffByDoctorId(undefined, {
+        from: formatDate.format(currentDate, "YYYY-MM-DD"),
+        to: formatDate.format(currentDate, "YYYY-MM-DD")
+      });
+      if (res.success) {
+        const timeOffsData = res.timeOffs;
+
+        const timeOffsObjData = timeOffsData.reduce((result, timeOff) => {
+          const newResult = { ...result };
+          if (!newResult[timeOff.doctorId]) {
+            newResult[timeOff.idDoctor] = [];
+          }
+          newResult[timeOff.idDoctor].push(timeOff);
+          return { ...newResult };
+        }, {});
+
+        timeOffsGroupByDoctorIdData = { ...timeOffsObjData };
+        // setTimeOffsGroupByDoctorId({ ...timeOffsObjData });
+
+        return { ...res };
+      }
+
+      return { ...res };
+    });
+
     setDoctors([...doctorsData]);
     setBookingSchedules([...bookingSchedulesData]);
+    setTimeOffsGroupByDoctorId({ ...timeOffsGroupByDoctorIdData });
+    setIsLoading(false);
   };
 
   useEffect(() => {
+    console.log("useEffect loadData: ");
     loadData();
 
     const searchParams = qs.stringify({ date: formatDate.format(currentDate, "YYYY-MM-DD") });
@@ -524,6 +563,7 @@ function ScheduleList({ timesList }) {
   return (
     <>
       <CustomOverlay open={isLoading} />
+
       <Box>
         <CustomPageTitle title={t("title")} />
 
@@ -552,13 +592,11 @@ function ScheduleList({ timesList }) {
               alignItems: "center"
             }}
           >
-            <TextField
-              value={formatDate.format(currentDate, "YYYY-MM-DD")}
-              onChange={(e) => {
-                // console.log("e.target.value: ", e.target.value);
-                setCurrentDate(() => new Date(e.target.value));
-              }}
-              type="date"
+            <CustomDateInput
+              label={t("filter.date")}
+              setDate={(date) => setCurrentDate(new Date(date))}
+              rules={{}}
+              date={formatDate.format(currentDate, "YYYY-MM-DD")}
             />
           </Box>
           <Box
@@ -601,77 +639,80 @@ function ScheduleList({ timesList }) {
           </Box>
         </Box>
 
-        <TableContainer
-          component={Paper}
-          sx={{
-            height: 600
-          }}
-        >
-          <Table size="small" aria-label="a dense table" stickyHeader>
-            <TableHead>
-              <TableRow>
-                <TableCell
-                  sx={{
-                    border: "1px solid rgba(0,0,0,0.2)",
-                    position: "sticky",
-                    left: 0,
-                    zIndex: 2,
-                    backgroundColor: "#fff"
-                  }}
-                />
-                {timesList?.map((time) => {
+        {!isLoading && (
+          <TableContainer
+            component={Paper}
+            sx={{
+              height: 600
+            }}
+          >
+            <Table size="small" aria-label="a dense table" stickyHeader>
+              <TableHead>
+                <TableRow>
+                  <TableCell
+                    sx={{
+                      border: "1px solid rgba(0,0,0,0.2)",
+                      position: "sticky",
+                      left: 0,
+                      zIndex: 2,
+                      backgroundColor: "#fff"
+                    }}
+                  />
+                  {timesList?.map((time) => {
+                    return (
+                      <TableCell
+                        sx={{
+                          border: "1px solid rgba(0,0,0,0.2)",
+                          fontWeight: "600",
+                          position: "sticky",
+                          left: 0,
+                          zIndex: 1
+                        }}
+                        key={time?.id}
+                        align="center"
+                      >
+                        {`${time?.timeStart.split(":")[0]}:${time?.timeStart.split(":")[1]}`}
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {doctors.map((doctor) => {
                   return (
-                    <TableCell
-                      sx={{
-                        border: "1px solid rgba(0,0,0,0.2)",
-                        fontWeight: "600",
-                        position: "sticky",
-                        left: 0,
-                        zIndex: 1
-                      }}
-                      key={time?.id}
-                      align="center"
-                    >
-                      {`${time?.timeStart.split(":")[0]}:${time?.timeStart.split(":")[1]}`}
-                    </TableCell>
+                    <TableRow key={doctor.id}>
+                      <TableCell
+                        sx={{
+                          border: "1px solid rgba(0,0,0,0.2)",
+                          fontWeight: "600",
+                          minWidth: 200,
+                          position: "sticky",
+                          left: 0,
+                          zIndex: 1,
+                          backgroundColor: "#fff"
+                        }}
+                        component="th"
+                        scope="row"
+                      >
+                        <Box
+                          component={Link}
+                          to={`${routeConfig.staff}/${doctor?.id}/calendar`}
+                          sx={{ textDecoration: "none", display: "flex", alignItems: "center", color: "inherit" }}
+                        >
+                          {doctor?.name}
+                        </Box>
+                      </TableCell>
+
+                      {renderCols(doctor)}
+                    </TableRow>
                   );
                 })}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {doctors.map((doctor) => {
-                return (
-                  <TableRow key={doctor.id}>
-                    <TableCell
-                      sx={{
-                        border: "1px solid rgba(0,0,0,0.2)",
-                        fontWeight: "600",
-                        minWidth: 200,
-                        position: "sticky",
-                        left: 0,
-                        zIndex: 1,
-                        backgroundColor: "#fff"
-                      }}
-                      component="th"
-                      scope="row"
-                    >
-                      <Box
-                        component={Link}
-                        to={`${routeConfig.staff}/${doctor?.id}/calendar`}
-                        sx={{ textDecoration: "none", display: "flex", alignItems: "center", color: "inherit" }}
-                      >
-                        {doctor?.name}
-                      </Box>
-                    </TableCell>
-
-                    {renderCols(doctor)}
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
       </Box>
+
       {bookingInfoModal.show && (
         <BookingInfoModal
           show={bookingInfoModal.show}

@@ -23,14 +23,14 @@ function PatientFiltersForm() {
       {
         label: tFilter("phoneNumber"),
         name: "phoneNumber"
-      },
-      {
-        label: tFilter("gender"),
-        name: "gender",
-        inputComponentType: inputComponentTypes.SELECT,
-        list: patientGenderList,
-        listObj: patientGenderListObj
       }
+      // {
+      //   label: tFilter("gender"),
+      //   name: "gender",
+      //   inputComponentType: inputComponentTypes.SELECT,
+      //   list: patientGenderList,
+      //   listObj: patientGenderListObj
+      // }
       // {
       //   label: tFilter("healthInsurance"),
       //   name: "healthInsurance"

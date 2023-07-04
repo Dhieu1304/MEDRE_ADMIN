@@ -13,6 +13,9 @@
 
   "ScheduleList": {
     "title": "Thông tin lịch biểu",
+    "filter": {
+      "date": "Ngày"
+    },
     "button": {
       "today": "Hôm nay",
       "booked": "Đã đặt",

@@ -16,8 +16,8 @@
         "all": "Tất cả"
       },
       "isRemind": {
-        "true": "Rồi",
-        "false": "Chưa",
+        "true": "Đã nhắc",
+        "false": "Chưa nhắc",
         "all": "Tất cả"
       }
     },
