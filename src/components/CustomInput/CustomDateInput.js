@@ -104,7 +104,7 @@ CustomDateInput.propTypes = {
   setDate: PropTypes.func.isRequired,
   rules: PropTypes.object,
   date: PropTypes.string.isRequired,
-  render: PropTypes.string
+  render: PropTypes.func
 };
 
 export default CustomDateInput;
