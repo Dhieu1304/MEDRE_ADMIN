@@ -30,7 +30,7 @@ export default function Login() {
 
   const onLogin = async ({ emailOrUsernameOrPhoneNumber, password }) => {
     const res = await authStore.login(emailOrUsernameOrPhoneNumber, password);
-    toast(res?.message);
+    if (res?.message) toast(res?.message);
 
     // Sau khi login thì tự động navigate sang home nên ko cần tự nưa.
 
