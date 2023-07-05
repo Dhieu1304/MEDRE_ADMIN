@@ -1,10 +1,10 @@
 import { useTranslation } from "react-i18next";
 import qs from "query-string";
-import { Box, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FormProvider, useForm } from "react-hook-form";
-import { Preview as PreviewIcon, Search as SearchIcon, VideoCall as VideoCallIcon } from "@mui/icons-material";
+import { Preview as PreviewIcon, VideoCall as VideoCallIcon } from "@mui/icons-material";
 import formatDate from "date-and-time";
 import CustomOverlay from "../../../components/CustomOverlay/CustomOverlay";
 import ListPageTop from "../../../components/ListPageTop";
@@ -16,8 +16,8 @@ import useObjDebounce from "../../../hooks/useObjDebounce";
 import BookingFiltersForm from "./BookingFiltersForm";
 import ListPageTableWrapper from "../../../components/ListPageTableWrapper";
 import ListPageAction from "../../../components/ListPageAction/ListPageAction";
-import { useCustomModal } from "../../../components/CustomModal";
-import BookingAnInfoModal from "../components/BookingAnInfoModal";
+// import { useCustomModal } from "../../../components/CustomModal";
+// import BookingAnInfoModal from "../components/BookingAnInfoModal";
 import CopyButton from "../../../components/CopyButton";
 import { bookingStatuses as bookingStatusesConstans } from "../../../entities/Booking";
 import DataTable from "../../components/DataFilterTable/DataTable";
@@ -53,7 +53,7 @@ function BookingList() {
   const { t: tBookingStatuses } = useTranslation("bookingEntity", { keyPrefix: "constants.statuses" });
   const { t: tBookingPaymentStatuses } = useTranslation("bookingEntity", { keyPrefix: "constants.paymentStatuses" });
 
-  const bookingAnInfoModal = useCustomModal();
+  // const bookingAnInfoModal = useCustomModal();
 
   // state is used to represent the visibility of the Menu
   // (This menu allows the patient to hide or show custom columns)
@@ -235,10 +235,10 @@ function BookingList() {
                 </Box>
               )}
               <Box sx={{ ml: 2 }} component={Link} to={`${bookingPath}/${booking?.id}`}>
-                <SearchIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
+                <PreviewIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
               </Box>
 
-              <IconButton
+              {/* <IconButton
                 onClick={() => {
                   if (booking) {
                     bookingAnInfoModal.setShow(true);
@@ -247,7 +247,7 @@ function BookingList() {
                 }}
               >
                 <PreviewIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
-              </IconButton>
+              </IconButton> */}
 
               <CopyButton content={booking?.id} />
             </>
@@ -427,14 +427,14 @@ function BookingList() {
         />
       </Box>
 
-      {bookingAnInfoModal.show && (
+      {/* {bookingAnInfoModal.show && (
         <BookingAnInfoModal
           show={bookingAnInfoModal.show}
           setShow={bookingAnInfoModal.setShow}
           data={bookingAnInfoModal.data}
           setData={bookingAnInfoModal.setData}
         />
-      )}
+      )} */}
     </>
   );
 }

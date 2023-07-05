@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import formatDate from "date-and-time";
-import { CalendarMonth as CalendarMonthIcon, Search as SearchIcon } from "@mui/icons-material";
+import { CalendarMonth as CalendarMonthIcon, Preview as PreviewIcon } from "@mui/icons-material";
 import { useAbility } from "@casl/react";
 import { subject } from "@casl/ability";
 import staffServices from "../../../services/staffServices";
@@ -225,7 +225,7 @@ function StaffList({ expertisesList }) {
         id: columnsIds.status,
         haveSortIcon: true,
         label: tStaff(columnsIds.status),
-        minWidth: 200,
+        minWidth: 100,
         hide: !showCols[columnsIds.status],
         render: (staff) => {
           // console.log("staff: ", staff);
@@ -264,16 +264,18 @@ function StaffList({ expertisesList }) {
           return (
             <>
               {staff?.role === staffRoles.ROLE_DOCTOR && (
-                <Box sx={{ ml: 2 }} component={Link} to={`${staffPath}/${staff?.id}/schedule`}>
+                <Box sx={{ ml: 1 }} component={Link} to={`${staffPath}/${staff?.id}/schedule`}>
                   <CalendarMonthIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
                 </Box>
               )}
 
-              <Box sx={{ ml: 2 }} component={Link} to={`${staffPath}/${staff?.id}`}>
-                <SearchIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
+              <Box sx={{ ml: 1 }} component={Link} to={`${staffPath}/${staff?.id}`}>
+                <PreviewIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
               </Box>
 
-              <CopyButton content={staff?.id} />
+              <Box sx={{ ml: 1 }}>
+                <CopyButton content={staff?.id} />
+              </Box>
             </>
           );
         },

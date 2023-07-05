@@ -3,6 +3,7 @@
     "id": "ID",
     "name": "Name",
     "descName": "Desc name",
+    "unit": "Unit",
     "value": "Value",
     "createdAt": "Created at",
     "updatedAt": "Updated at",
@@ -20,10 +21,15 @@
 
     "units": {
       "maintain": "",
-      "bookAdvanceDay": "days",
-      "bookAfterDay": "days",
-      "createScheduleAdvanceDay": "days",
-      "cancelOnlineBookingAfterMinute": "minutes"
+      "bookAdvanceDay": "Days",
+      "bookAfterDay": "Days",
+      "createScheduleAdvanceDay": "Days",
+      "cancelOnlineBookingAfterMinute": "Minutes"
+    },
+
+    "maintains": {
+      "true": "Active",
+      "false": "Disabled"
     }
   }
 }

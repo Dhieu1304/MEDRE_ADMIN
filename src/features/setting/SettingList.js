@@ -38,11 +38,11 @@ function SettingList() {
         label: tSetting("descName"),
         minWidth: 100
       },
-      // {
-      //   id: "unit",
-      //   label: tSetting("unit"),
-      //   minWidth: 20
-      // },
+      {
+        id: "unit",
+        label: tSetting("unit"),
+        minWidth: 50
+      },
       {
         id: "value",
         label: tSetting("value"),
@@ -135,6 +135,7 @@ function SettingList() {
                 return (
                   <TableRow key={setting?.id}>
                     <CustomTableCell>{settingLabelObj[setting?.name]?.label}</CustomTableCell>
+                    <CustomTableCell>{settingLabelObj[setting?.name]?.unit}</CustomTableCell>
                     <CustomTableCell align="left">
                       <Can I={settingActionAbility.UPDATE} a={entities.SETTING}>
                         <Button

@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import formatDate from "date-and-time";
 
-import { Search as SearchIcon } from "@mui/icons-material";
+import { Preview as PreviewIcon } from "@mui/icons-material";
 import ticketServices from "../../../services/ticketServices";
 import { useFetchingStore } from "../../../store/FetchingApiStore/hooks";
 import { useAppConfigStore } from "../../../store/AppConfigStore/hooks";
@@ -110,7 +110,7 @@ function TicketList() {
           return (
             <>
               <Box sx={{ ml: 1, mr: 1 }} component={Link} to={`${ticketPath}/${ticket?.id}`}>
-                <SearchIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
+                <PreviewIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
               </Box>
 
               <CopyButton content={ticket?.id} />

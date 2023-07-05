@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import formatDate from "date-and-time";
 
-import { CalendarMonth as CalendarMonthIcon, Search as SearchIcon } from "@mui/icons-material";
+import { CalendarMonth as CalendarMonthIcon, Preview as PreviewIcon } from "@mui/icons-material";
 import patientServices from "../../../services/patientServices";
 import { useFetchingStore } from "../../../store/FetchingApiStore/hooks";
 import { useAppConfigStore } from "../../../store/AppConfigStore/hooks";
@@ -102,7 +102,7 @@ function PatientList() {
         id: columnsIds.dob,
         haveSortIcon: true,
         label: tPatient(columnsIds.dob),
-        minWidth: 100,
+        minWidth: 60,
         hide: !showCols[columnsIds.dob],
         render: (patient) => patient?.dob && formatDate.format(new Date(patient?.dob), "DD/MM/YYYY")
       },
@@ -116,7 +116,7 @@ function PatientList() {
       {
         id: columnsIds.action,
         label: "",
-        minWidth: 100,
+        minWidth: 80,
         render: (patient) => {
           const patientPath = routeConfig.patient;
           const patientBookingSearchParams = {
@@ -131,7 +131,7 @@ function PatientList() {
               </Box>
 
               <Box sx={{ ml: 1, mr: 1 }} component={Link} to={`${patientPath}/${patient?.id}`}>
-                <SearchIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
+                <PreviewIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
               </Box>
 
               <CopyButton content={patient?.id} />

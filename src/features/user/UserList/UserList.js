@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import formatDate from "date-and-time";
 
-import { CalendarMonth as CalendarMonthIcon, Search as SearchIcon } from "@mui/icons-material";
+import { CalendarMonth as CalendarMonthIcon, Preview as PreviewIcon } from "@mui/icons-material";
 import { useAbility } from "@casl/react";
 import { subject } from "@casl/ability";
 import userServices from "../../../services/userServices";
@@ -165,7 +165,7 @@ function UserList() {
         id: columnsIds.status,
         haveSortIcon: true,
         label: tUser(columnsIds.status),
-        minWidth: 200,
+        minWidth: 100,
         hide: !showCols[columnsIds.status],
         render: (user) => {
           const canBlockUser = ability.can(userActionAbility.BLOCK, subject(entities.USER, user));
@@ -209,15 +209,17 @@ function UserList() {
 
           return (
             <>
-              <Box sx={{ ml: 2 }} component={Link} to={`${routeConfig.booking}?${userBookingSearchParamsUrl}`}>
+              <Box sx={{ ml: 1 }} component={Link} to={`${routeConfig.booking}?${userBookingSearchParamsUrl}`}>
                 <CalendarMonthIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
               </Box>
 
-              <Box sx={{ ml: 2 }} component={Link} to={`${userPath}/${user?.id}`}>
-                <SearchIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
+              <Box sx={{ ml: 1 }} component={Link} to={`${userPath}/${user?.id}`}>
+                <PreviewIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
               </Box>
 
-              <CopyButton content={user?.id} />
+              <Box sx={{ ml: 1 }}>
+                <CopyButton content={user?.id} />
+              </Box>
             </>
           );
         },
