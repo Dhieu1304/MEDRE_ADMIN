@@ -10,10 +10,10 @@ export const useStaffFilterTranslation = ({ expertises }) => {
 
   const [staffRoleList, staffRoleListObj] = useMemo(() => {
     const list = [
-      {
-        label: tSelect("roles.admin"),
-        value: staffRoles.ROLE_ADMIN
-      },
+      // {
+      //   label: tSelect("roles.admin"),
+      //   value: staffRoles.ROLE_ADMIN
+      // },
       {
         label: tSelect("roles.doctor"),
         value: staffRoles.ROLE_DOCTOR

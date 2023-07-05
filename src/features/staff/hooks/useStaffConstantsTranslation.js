@@ -79,6 +79,40 @@ export const useStaffRolesContantTranslation = () => {
   return [staffRoleContantList, staffRoleContantListObj];
 };
 
+export const useStaffRolesContantToEditRoleTranslation = () => {
+  const { locale } = useAppConfigStore();
+
+  const { t: tStaffRole } = useTranslation("staffEntity", { keyPrefix: "constants.roles" });
+
+  const [staffRoleContantList, staffRoleContantListObj] = useMemo(() => {
+    const list = [
+      {
+        label: tStaffRole("doctor"),
+        value: staffRoles.ROLE_DOCTOR
+      },
+      {
+        label: tStaffRole("nurse"),
+        value: staffRoles.ROLE_NURSE
+      },
+      {
+        label: tStaffRole("customerService"),
+        value: staffRoles.ROLE_CUSTOMER_SERVICE
+      }
+    ];
+
+    const listObj = list.reduce((obj, cur) => {
+      return {
+        ...obj,
+        [cur?.value]: cur
+      };
+    }, {});
+
+    return [list, listObj];
+  }, [locale]);
+
+  return [staffRoleContantList, staffRoleContantListObj];
+};
+
 export const useStaffStatusesContantTranslation = () => {
   const { locale } = useAppConfigStore();
 

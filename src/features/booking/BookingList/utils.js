@@ -116,8 +116,8 @@ export const createDefaultValues = (
     staffCancelId: normalizeStrToStr(staffCancelId),
     type: normalizeStrToStr(type),
     isPayment: normalizeStrToStr(isPayment),
-    from: normalizeStrToDateStr(from, new Date()),
-    to: normalizeStrToDateStr(to, new Date()),
+    from: normalizeStrToDateStr(from),
+    to: normalizeStrToDateStr(to),
     bookingStatuses: normalizeStrToArray(bookingStatuses),
     page: normalizeStrToInt(page, 1),
     limit: normalizeStrToInt(limit, 10)

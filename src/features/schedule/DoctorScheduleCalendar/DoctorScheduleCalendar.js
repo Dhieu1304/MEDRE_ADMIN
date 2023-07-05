@@ -522,7 +522,9 @@ function DoctorScheduleCalendar({ timesList, staff }) {
                 }}
                 endIcon={<AddIcon fontSize="large" />}
                 sx={{
-                  bgcolor: theme.palette.success.light
+                  bgcolor: theme.palette.success.light,
+                  width: 400,
+                  mr: 2
                 }}
               >
                 {t("button.addTimeOff")}

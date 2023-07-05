@@ -331,6 +331,7 @@ function StaffList({ expertisesList }) {
     1000
   );
 
+  // console.log("staffs: ", staffs);
   const loadData = async ({ page }) => {
     const orderBy = sort.isAsc ? "asc" : "desc";
     let order;
