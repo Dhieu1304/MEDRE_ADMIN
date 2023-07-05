@@ -38,15 +38,18 @@ function App() {
 
   useEffect(() => {
     const loadData = async () => {
-      await fetchApi(async () => {
-        const res = await staffServices.getStaffInfo();
+      await fetchApi(
+        async () => {
+          const res = await staffServices.getStaffInfo();
 
-        if (res.success) {
-          const staff = res?.staff;
-          authStore.autoLogin(staff);
-        }
-        return { ...res };
-      });
+          if (res.success) {
+            const staff = res?.staff;
+            authStore.autoLogin(staff);
+          }
+          return { ...res };
+        },
+        { hideSuccessToast: true }
+      );
       setIsFirstVisit(false);
     };
     loadData();
@@ -151,7 +154,7 @@ function App() {
 
       <ToastContainer
         position="top-right"
-        autoClose={500}
+        autoClose={1500}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

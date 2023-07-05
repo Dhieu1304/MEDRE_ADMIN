@@ -167,20 +167,23 @@ function DoctorScheduleList({ staff }) {
   const loadData = async () => {
     const { from, to } = filterForm.watch();
 
-    await fetchApi(async () => {
-      const staffId = staff?.id;
-      const res = await scheduleServices.getScheduleListByDoctorId(staffId, from, to);
-      let schedulesData = [];
-      //
-      if (res.success) {
-        schedulesData = res?.schedules || [];
-        resetSelectScheduleForm(schedulesData);
-        setSchedules(schedulesData);
+    await fetchApi(
+      async () => {
+        const staffId = staff?.id;
+        const res = await scheduleServices.getScheduleListByDoctorId(staffId, from, to);
+        let schedulesData = [];
+        //
+        if (res.success) {
+          schedulesData = res?.schedules || [];
+          resetSelectScheduleForm(schedulesData);
+          setSchedules(schedulesData);
+          return { ...res };
+        }
+        setSchedules([]);
         return { ...res };
-      }
-      setSchedules([]);
-      return { ...res };
-    });
+      },
+      { hideSuccessToast: true }
+    );
   };
 
   useEffect(() => {

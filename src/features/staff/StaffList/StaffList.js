@@ -367,24 +367,27 @@ function StaffList({ expertisesList }) {
       order
     };
 
-    await fetchApi(async () => {
-      const res = await staffServices.getStaffList(paramsObj);
+    await fetchApi(
+      async () => {
+        const res = await staffServices.getStaffList(paramsObj);
 
-      let countData = 0;
-      let staffsData = [];
+        let countData = 0;
+        let staffsData = [];
 
-      if (res.success) {
-        staffsData = res?.staffs || [];
-        countData = res?.count;
-        setStaffs(staffsData);
-        setCount(countData);
+        if (res.success) {
+          staffsData = res?.staffs || [];
+          countData = res?.count;
+          setStaffs(staffsData);
+          setCount(countData);
 
-        return { success: true };
-      }
-      setStaffs([]);
-      setCount(0);
-      return { error: res.message };
-    });
+          return { success: true };
+        }
+        setStaffs([]);
+        setCount(0);
+        return { error: res.message };
+      },
+      { hideSuccessToast: true }
+    );
   };
 
   useEffect(() => {

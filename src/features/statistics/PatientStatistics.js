@@ -75,14 +75,17 @@ function PatientStatistics() {
 
   const loadData = async () => {
     const params = { ...watch() };
-    await fetchApi(async () => {
-      const res = await statisticsServices.getStatisticsByPatient(params);
-      if (res.success) {
-        setData([...res.data]);
+    await fetchApi(
+      async () => {
+        const res = await statisticsServices.getStatisticsByPatient(params);
+        if (res.success) {
+          setData([...res.data]);
+          return { ...res };
+        }
         return { ...res };
-      }
-      return { ...res };
-    });
+      },
+      { hideSuccessToast: true }
+    );
   };
 
   useEffect(() => {

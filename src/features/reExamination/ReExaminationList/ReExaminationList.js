@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Box, Checkbox, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, Checkbox, Typography, useTheme } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import qs from "query-string";
 import { FormProvider, useForm } from "react-hook-form";
 import formatDate from "date-and-time";
-import { CalendarMonth as CalendarMonthIcon, Preview as PreviewIcon } from "@mui/icons-material";
+import { CalendarMonth as CalendarMonthIcon } from "@mui/icons-material";
 import reExaminationServices from "../../../services/reExaminationServices";
 import { useAppConfigStore } from "../../../store/AppConfigStore";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
@@ -22,8 +22,8 @@ import { Can } from "../../../store/AbilityStore";
 import { reExaminationActionAbility } from "../../../entities/ReExamination";
 import entities from "../../../entities/entities";
 import routeConfig from "../../../config/routeConfig";
-import { useCustomModal } from "../../../components/CustomModal";
-import BookingAnInfoModal from "../../booking/components/BookingAnInfoModal";
+// import { useCustomModal } from "../../../components/CustomModal";
+// import BookingAnInfoModal from "../../booking/components/BookingAnInfoModal";
 
 function ReExaminationList() {
   const { locale } = useAppConfigStore();
@@ -46,7 +46,7 @@ function ReExaminationList() {
   const { t: tReExamination } = useTranslation("reExaminationEntity", { keyPrefix: "properties" });
   const { t: tReExaminationConstants } = useTranslation("reExaminationEntity", { keyPrefix: "constants" });
 
-  const bookingAnInfoModal = useCustomModal();
+  // const bookingAnInfoModal = useCustomModal();
 
   const [showTableColsMenu, setShowTableColsMenu] = useState(null);
   const [showCols, setShowCols] = useState({
@@ -97,24 +97,27 @@ function ReExaminationList() {
       order
     };
 
-    await fetchApi(async () => {
-      const res = await reExaminationServices.getReExaminationList(paramsObj);
+    await fetchApi(
+      async () => {
+        const res = await reExaminationServices.getReExaminationList(paramsObj);
 
-      let countData = 0;
-      let reExaminationsData = [];
+        let countData = 0;
+        let reExaminationsData = [];
 
-      if (res.success) {
-        reExaminationsData = res?.reExaminations || [];
-        countData = res?.count;
-        setReExaminations(reExaminationsData);
-        setCount(countData);
+        if (res.success) {
+          reExaminationsData = res?.reExaminations || [];
+          countData = res?.count;
+          setReExaminations(reExaminationsData);
+          setCount(countData);
 
+          return { ...res };
+        }
+        setReExaminations([]);
+        setCount(0);
         return { ...res };
-      }
-      setReExaminations([]);
-      setCount(0);
-      return { ...res };
-    });
+      },
+      { hideSuccessToast: true }
+    );
   };
 
   const handleSaveReExamination = async (id, newIsRemind) => {
@@ -124,13 +127,16 @@ function ReExaminationList() {
     };
     // console.log("data: ", data);
 
-    await fetchApi(async () => {
-      const res = await reExaminationServices.updateReExamination(data);
-      if (res?.success) {
-        await loadData({ page: watch().page });
-      }
-      return { ...res };
-    });
+    await fetchApi(
+      async () => {
+        const res = await reExaminationServices.updateReExamination(data);
+        if (res?.success) {
+          await loadData({ page: watch().page });
+        }
+        return { ...res };
+      },
+      { hideSuccessToast: true }
+    );
   };
 
   const columns = useMemo(() => {
@@ -213,24 +219,23 @@ function ReExaminationList() {
             date: reExamination?.dateReExam
           };
           const scheduleSearchParamsUrl = qs.stringify(scheduleSearchParams);
+          // {
+          //    <IconButton
+          //   sx={{ p: 0 }}
+          //   onClick={() => {
+          //     if (reExamination?.reExamOfBooking) {
+          //       bookingAnInfoModal.setShow(true);
+          //       bookingAnInfoModal.setData(reExamination?.reExamOfBooking);
+          //     }
+          //   }}
+          // >
+          //   <PreviewIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
+          // </IconButton>
+          // }
           return (
-            <>
-              <IconButton
-                sx={{ p: 0 }}
-                onClick={() => {
-                  if (reExamination?.reExamOfBooking) {
-                    bookingAnInfoModal.setShow(true);
-                    bookingAnInfoModal.setData(reExamination?.reExamOfBooking);
-                  }
-                }}
-              >
-                <PreviewIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
-              </IconButton>
-
-              <Box sx={{ ml: 2, mt: 0.5 }} component={Link} to={`${routeConfig.schedule}?${scheduleSearchParamsUrl}`}>
-                <CalendarMonthIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
-              </Box>
-            </>
+            <Box sx={{ ml: 2, mt: 0.5 }} component={Link} to={`${routeConfig.schedule}?${scheduleSearchParamsUrl}`}>
+              <CalendarMonthIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
+            </Box>
           );
         },
         action: true
@@ -318,14 +323,14 @@ function ReExaminationList() {
         />
       </Box>
 
-      {bookingAnInfoModal.show && (
+      {/* {bookingAnInfoModal.show && (
         <BookingAnInfoModal
           show={bookingAnInfoModal.show}
           setShow={bookingAnInfoModal.setShow}
           data={bookingAnInfoModal.data}
           setData={bookingAnInfoModal.setData}
         />
-      )}
+      )} */}
     </>
   );
 }

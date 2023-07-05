@@ -58,18 +58,21 @@ function ExpertiseList() {
   );
 
   const loadData = async () => {
-    await fetchApi(async () => {
-      const res = await expertiseServices.getExpertiseList();
+    await fetchApi(
+      async () => {
+        const res = await expertiseServices.getExpertiseList();
 
-      if (res.success) {
-        const expertisesData = res?.expertises || [];
-        setExpertises(expertisesData);
+        if (res.success) {
+          const expertisesData = res?.expertises || [];
+          setExpertises(expertisesData);
 
+          return { ...res };
+        }
+        setExpertises([]);
         return { ...res };
-      }
-      setExpertises([]);
-      return { ...res };
-    });
+      },
+      { hideSuccessToast: true }
+    );
   };
 
   useEffect(() => {

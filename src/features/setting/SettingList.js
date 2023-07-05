@@ -38,6 +38,11 @@ function SettingList() {
         label: tSetting("descName"),
         minWidth: 100
       },
+      // {
+      //   id: "unit",
+      //   label: tSetting("unit"),
+      //   minWidth: 20
+      // },
       {
         id: "value",
         label: tSetting("value"),
@@ -73,18 +78,21 @@ function SettingList() {
   }, [locale]);
 
   const loadData = async () => {
-    await fetchApi(async () => {
-      const res = await settingServices.getSettingList();
+    await fetchApi(
+      async () => {
+        const res = await settingServices.getSettingList();
 
-      if (res.success) {
-        const settingsData = res?.settings || [];
-        setSettings(settingsData);
+        if (res.success) {
+          const settingsData = res?.settings || [];
+          setSettings(settingsData);
 
+          return { ...res };
+        }
+        setSettings([]);
         return { ...res };
-      }
-      setSettings([]);
-      return { ...res };
-    });
+      },
+      { hideSuccessToast: true }
+    );
   };
 
   // console.log("settings ", settings);

@@ -176,24 +176,27 @@ function TicketList() {
       order
     };
 
-    await fetchApi(async () => {
-      const res = await ticketServices.getTickets(paramsObj);
+    await fetchApi(
+      async () => {
+        const res = await ticketServices.getTickets(paramsObj);
 
-      let countData = 0;
-      let ticketsData = [];
+        let countData = 0;
+        let ticketsData = [];
 
-      if (res.success) {
-        ticketsData = res?.tickets || [];
-        countData = res?.count;
-        setTickets(ticketsData);
-        setCount(countData);
+        if (res.success) {
+          ticketsData = res?.tickets || [];
+          countData = res?.count;
+          setTickets(ticketsData);
+          setCount(countData);
 
+          return { ...res };
+        }
+        setTickets([]);
+        setCount(0);
         return { ...res };
-      }
-      setTickets([]);
-      setCount(0);
-      return { ...res };
-    });
+      },
+      { hideSuccessToast: true }
+    );
   };
 
   useEffect(() => {

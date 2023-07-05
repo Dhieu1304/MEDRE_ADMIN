@@ -339,24 +339,27 @@ function BookingList() {
 
     // console.log("paramsObj: ", paramsObj);
 
-    await fetchApi(async () => {
-      const res = await bookingServices.getBookingList(paramsObj);
+    await fetchApi(
+      async () => {
+        const res = await bookingServices.getBookingList(paramsObj);
 
-      let countData = 0;
-      let bookingsData = [];
+        let countData = 0;
+        let bookingsData = [];
 
-      if (res.success) {
-        bookingsData = res?.bookings || [];
-        countData = res?.count;
-        setBookings(bookingsData);
-        setCount(countData);
+        if (res.success) {
+          bookingsData = res?.bookings || [];
+          countData = res?.count;
+          setBookings(bookingsData);
+          setCount(countData);
 
+          return { ...res };
+        }
+        setBookings([]);
+        setCount(0);
         return { ...res };
-      }
-      setBookings([]);
-      setCount(0);
-      return { ...res };
-    });
+      },
+      { hideSuccessToast: true }
+    );
   };
 
   useEffect(() => {

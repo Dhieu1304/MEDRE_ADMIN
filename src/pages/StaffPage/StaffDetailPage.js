@@ -72,16 +72,19 @@ function StaffDetailPage() {
 
   const { isLoading, fetchApi } = useFetchingStore();
   const loadData = async () => {
-    await fetchApi(async () => {
-      const res = await staffServices.getStaffDetail(staffId);
-      if (res.success) {
-        const staffData = { ...res.staff };
-        setStaff(staffData);
+    await fetchApi(
+      async () => {
+        const res = await staffServices.getStaffDetail(staffId);
+        if (res.success) {
+          const staffData = { ...res.staff };
+          setStaff(staffData);
+          return { ...res };
+        }
+        setStaff({});
         return { ...res };
-      }
-      setStaff({});
-      return { ...res };
-    });
+      },
+      { hideSuccessToast: true }
+    );
   };
   useEffect(() => {
     if (staffId) {

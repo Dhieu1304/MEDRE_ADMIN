@@ -212,24 +212,27 @@ function PatientList() {
       order
     };
 
-    await fetchApi(async () => {
-      const res = await patientServices.getPatients(paramsObj);
+    await fetchApi(
+      async () => {
+        const res = await patientServices.getPatients(paramsObj);
 
-      let countData = 0;
-      let patientsData = [];
+        let countData = 0;
+        let patientsData = [];
 
-      if (res.success) {
-        patientsData = res?.patients || [];
-        countData = res?.count;
-        setPatients(patientsData);
-        setCount(countData);
+        if (res.success) {
+          patientsData = res?.patients || [];
+          countData = res?.count;
+          setPatients(patientsData);
+          setCount(countData);
 
+          return { ...res };
+        }
+        setPatients([]);
+        setCount(0);
         return { ...res };
-      }
-      setPatients([]);
-      setCount(0);
-      return { ...res };
-    });
+      },
+      { hideSuccessToast: true }
+    );
   };
 
   useEffect(() => {

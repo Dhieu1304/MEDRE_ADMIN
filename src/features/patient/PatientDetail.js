@@ -47,25 +47,28 @@ function PatientDetail() {
   });
 
   const loadData = async () => {
-    await fetchApi(async () => {
-      const res = await patientServices.getPatientDetail(patientId);
+    await fetchApi(
+      async () => {
+        const res = await patientServices.getPatientDetail(patientId);
 
-      if (res.success) {
-        const patientData = res?.patient;
-        setPatient(patientData);
+        if (res.success) {
+          const patientData = res?.patient;
+          setPatient(patientData);
 
-        const newDefaultValues = {
-          ...mergeObjectsWithoutNullAndUndefined(defaultValues, patientData)
-        };
+          const newDefaultValues = {
+            ...mergeObjectsWithoutNullAndUndefined(defaultValues, patientData)
+          };
 
-        setDefaultValues(newDefaultValues);
-        reset(newDefaultValues);
+          setDefaultValues(newDefaultValues);
+          reset(newDefaultValues);
 
+          return { ...res };
+        }
+        setPatient({});
         return { ...res };
-      }
-      setPatient({});
-      return { ...res };
-    });
+      },
+      { hideSuccessToast: true }
+    );
   };
   useEffect(() => {
     loadData();

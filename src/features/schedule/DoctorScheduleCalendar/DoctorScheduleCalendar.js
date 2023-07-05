@@ -402,7 +402,8 @@ function DoctorScheduleCalendar({ timesList, staff }) {
         sx={{
           border: "1px solid rgba(0,0,0,0.4)",
           p: 0,
-          position: "relative"
+          position: "relative",
+          minWidth: 200
         }}
         align="center"
       >
@@ -588,7 +589,8 @@ function DoctorScheduleCalendar({ timesList, staff }) {
               <TableRow>
                 <TableCell
                   sx={{
-                    border: "1px solid rgba(0,0,0,0.2)"
+                    border: "1px solid rgba(0,0,0,0.2)",
+                    minWidth: 200
                   }}
                 />
                 {heads.map((cell) => {
@@ -599,7 +601,8 @@ function DoctorScheduleCalendar({ timesList, staff }) {
                         border: "1px solid rgba(0,0,0,0.2)",
                         fontWeight: "600",
                         backgroundColor: isToday && theme.palette.primary.main,
-                        color: isToday && "white"
+                        color: isToday && "white",
+                        minWidth: 200
                       }}
                       key={cell}
                       align="center"
@@ -621,7 +624,7 @@ function DoctorScheduleCalendar({ timesList, staff }) {
                       sx={{
                         border: "1px solid rgba(0,0,0,0.2)",
                         fontWeight: "600",
-                        width: 120
+                        minWidth: 200
                       }}
                       component="th"
                       scope="row"

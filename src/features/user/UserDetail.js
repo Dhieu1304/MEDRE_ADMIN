@@ -63,27 +63,30 @@ function UserDetail() {
   });
 
   const loadData = async () => {
-    await fetchApi(async () => {
-      const res = await userServices.getUserDetail(userId);
+    await fetchApi(
+      async () => {
+        const res = await userServices.getUserDetail(userId);
 
-      if (res.success) {
-        const userData = res.user;
-        setUser({ ...userData });
+        if (res.success) {
+          const userData = res.user;
+          setUser({ ...userData });
 
-        const newDefaultValues = {
-          ...mergeObjectsWithoutNullAndUndefined(defaultValues, userData),
-          status: userData?.blocked ? userStatuses.STATUS_BLOCK : userStatuses.STATUS_UNBLOCK
-          // gender: ""
-        };
+          const newDefaultValues = {
+            ...mergeObjectsWithoutNullAndUndefined(defaultValues, userData),
+            status: userData?.blocked ? userStatuses.STATUS_BLOCK : userStatuses.STATUS_UNBLOCK
+            // gender: ""
+          };
 
-        setDefaultValues(newDefaultValues);
-        reset(newDefaultValues);
+          setDefaultValues(newDefaultValues);
+          reset(newDefaultValues);
 
+          return { ...res };
+        }
+        setUser({});
         return { ...res };
-      }
-      setUser({});
-      return { ...res };
-    });
+      },
+      { hideSuccessToast: true }
+    );
   };
   useEffect(() => {
     loadData();

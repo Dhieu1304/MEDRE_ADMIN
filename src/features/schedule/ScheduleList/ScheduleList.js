@@ -122,25 +122,28 @@ function ScheduleList({ timesList }) {
     let bookingSchedulesData = [];
     let timeOffsGroupByDoctorIdData = {};
 
-    await fetchApi(async () => {
-      // console.log("loadDoctorData");
+    await fetchApi(
+      async () => {
+        // console.log("loadDoctorData");
 
-      const paramsObj = {
-        role: staffRoles.ROLE_DOCTOR,
-        limit: 200,
-        date: formatDate.format(currentDate, "YYYY-MM-DD")
-      };
-      const res = await staffServices.getStaffListWithSchedules(paramsObj);
+        const paramsObj = {
+          role: staffRoles.ROLE_DOCTOR,
+          limit: 200,
+          date: formatDate.format(currentDate, "YYYY-MM-DD")
+        };
+        const res = await staffServices.getStaffListWithSchedules(paramsObj);
 
-      // let countData = 0;
-      // let staffsData = [];
+        // let countData = 0;
+        // let staffsData = [];
 
-      if (res.success) {
-        doctorsData = [...res.staffs];
+        if (res.success) {
+          doctorsData = [...res.staffs];
+          return { ...res };
+        }
         return { ...res };
-      }
-      return { ...res };
-    });
+      },
+      { hideSuccessToast: true }
+    );
 
     const doctorIds = [];
     const expertiseIds = [];
@@ -160,51 +163,57 @@ function ScheduleList({ timesList }) {
     // console.log("Doctors ID:", doctorIds);
     // console.log("Expertise IDs:", expertiseIds);
 
-    await fetchApi(async () => {
-      // console.log("loadBookingSchedulesData");
-      // console.log("expertiseIds: ", expertiseIds);
-      const res = await bookingServices.getCountBookingScheduleByManyStaff({
-        expertiseIds,
-        doctorIds,
-        from: formatDate.format(currentDate, "YYYY-MM-DD"),
-        to: formatDate.format(currentDate, "YYYY-MM-DD"),
-        bookingMethod: bookingMethods.REDIRECT
-      });
+    await fetchApi(
+      async () => {
+        // console.log("loadBookingSchedulesData");
+        // console.log("expertiseIds: ", expertiseIds);
+        const res = await bookingServices.getCountBookingScheduleByManyStaff({
+          expertiseIds,
+          doctorIds,
+          from: formatDate.format(currentDate, "YYYY-MM-DD"),
+          to: formatDate.format(currentDate, "YYYY-MM-DD"),
+          bookingMethod: bookingMethods.REDIRECT
+        });
 
-      if (res.success) {
-        bookingSchedulesData = [...res.bookingSchedules];
+        if (res.success) {
+          bookingSchedulesData = [...res.bookingSchedules];
+          return { ...res };
+        }
         return { ...res };
-      }
-      return { ...res };
-    });
+      },
+      { hideSuccessToast: true }
+    );
 
     // Load TimeOffs
-    await fetchApi(async () => {
-      // console.log("loadTimeOffs");
-      const res = await timeOffServices.getTimeOffByDoctorId(undefined, {
-        from: formatDate.format(currentDate, "YYYY-MM-DD"),
-        to: formatDate.format(currentDate, "YYYY-MM-DD")
-      });
-      if (res.success) {
-        const timeOffsData = res.timeOffs;
+    await fetchApi(
+      async () => {
+        // console.log("loadTimeOffs");
+        const res = await timeOffServices.getTimeOffByDoctorId(undefined, {
+          from: formatDate.format(currentDate, "YYYY-MM-DD"),
+          to: formatDate.format(currentDate, "YYYY-MM-DD")
+        });
+        if (res.success) {
+          const timeOffsData = res.timeOffs;
 
-        const timeOffsObjData = timeOffsData.reduce((result, timeOff) => {
-          const newResult = { ...result };
-          if (!newResult[timeOff.doctorId]) {
-            newResult[timeOff.idDoctor] = [];
-          }
-          newResult[timeOff.idDoctor].push(timeOff);
-          return { ...newResult };
-        }, {});
+          const timeOffsObjData = timeOffsData.reduce((result, timeOff) => {
+            const newResult = { ...result };
+            if (!newResult[timeOff.doctorId]) {
+              newResult[timeOff.idDoctor] = [];
+            }
+            newResult[timeOff.idDoctor].push(timeOff);
+            return { ...newResult };
+          }, {});
 
-        timeOffsGroupByDoctorIdData = { ...timeOffsObjData };
-        // setTimeOffsGroupByDoctorId({ ...timeOffsObjData });
+          timeOffsGroupByDoctorIdData = { ...timeOffsObjData };
+          // setTimeOffsGroupByDoctorId({ ...timeOffsObjData });
+
+          return { ...res };
+        }
 
         return { ...res };
-      }
-
-      return { ...res };
-    });
+      },
+      { hideSuccessToast: true }
+    );
 
     setDoctors([...doctorsData]);
     setBookingSchedules([...bookingSchedulesData]);
@@ -497,7 +506,7 @@ function ScheduleList({ timesList }) {
             p: 0,
             position: "relative",
             bgcolor: isTimeOff ? "rgba(255, 246, 143, 0.4)" : "inherit",
-            minWidth: 180
+            minWidth: 200
           }}
           align="center"
         >
@@ -544,7 +553,8 @@ function ScheduleList({ timesList }) {
           sx={{
             border: "1px solid rgba(0,0,0,0.4)",
             p: 0,
-            position: "relative"
+            position: "relative",
+            minWidth: 200
           }}
           align="center"
         />
@@ -653,7 +663,8 @@ function ScheduleList({ timesList }) {
                       position: "sticky",
                       left: 0,
                       zIndex: 2,
-                      backgroundColor: "#fff"
+                      backgroundColor: "#fff",
+                      minWidth: 200
                     }}
                   />
                   {timesList?.map((time) => {
@@ -664,7 +675,8 @@ function ScheduleList({ timesList }) {
                           fontWeight: "600",
                           position: "sticky",
                           left: 0,
-                          zIndex: 1
+                          zIndex: 1,
+                          minWidth: 200
                         }}
                         key={time?.id}
                         align="center"

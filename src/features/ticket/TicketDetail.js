@@ -48,18 +48,21 @@ function TicketDetail() {
   const { isLoading, fetchApi } = useFetchingStore();
 
   const loadData = async () => {
-    await fetchApi(async () => {
-      const res = await ticketServices.getTicketDetail(ticketId);
+    await fetchApi(
+      async () => {
+        const res = await ticketServices.getTicketDetail(ticketId);
 
-      if (res.success) {
-        const ticketData = res?.ticket;
-        setTicket(ticketData);
+        if (res.success) {
+          const ticketData = res?.ticket;
+          setTicket(ticketData);
 
+          return { ...res };
+        }
+        setTicket({});
         return { ...res };
-      }
-      setTicket({});
-      return { ...res };
-    });
+      },
+      { hideSuccessToast: true }
+    );
   };
   useEffect(() => {
     if (ticketId) {

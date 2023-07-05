@@ -114,24 +114,27 @@ function DoctorTimeOff({ staff }) {
 
     // console.log("loadData ");
 
-    await fetchApi(async () => {
-      const staffId = staff?.id;
-      const res = await timeOffServices.getTimeOffByDoctorId(staffId, paramsObj);
-      let countData = 0;
-      let timeOffsData = [];
-      // console.log("res: ", res);
-      if (res.success) {
-        timeOffsData = res?.timeOffs || [];
-        countData = res?.count;
-        // console.log("timeOffsData ", timeOffsData);
-        setTimeOffs(timeOffsData);
-        setCount(countData);
+    await fetchApi(
+      async () => {
+        const staffId = staff?.id;
+        const res = await timeOffServices.getTimeOffByDoctorId(staffId, paramsObj);
+        let countData = 0;
+        let timeOffsData = [];
+        // console.log("res: ", res);
+        if (res.success) {
+          timeOffsData = res?.timeOffs || [];
+          countData = res?.count;
+          // console.log("timeOffsData ", timeOffsData);
+          setTimeOffs(timeOffsData);
+          setCount(countData);
+          return { ...res };
+        }
+        setTimeOffs([]);
+        setCount(0);
         return { ...res };
-      }
-      setTimeOffs([]);
-      setCount(0);
-      return { ...res };
-    });
+      },
+      { hideSuccessToast: true }
+    );
   };
 
   useEffect(() => {

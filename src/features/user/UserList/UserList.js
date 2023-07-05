@@ -299,24 +299,27 @@ function UserList() {
       order
     };
 
-    await fetchApi(async () => {
-      const res = await userServices.getUserList(paramsObj);
+    await fetchApi(
+      async () => {
+        const res = await userServices.getUserList(paramsObj);
 
-      let countData = 0;
-      let usersData = [];
+        let countData = 0;
+        let usersData = [];
 
-      if (res.success) {
-        usersData = res?.users || [];
-        countData = res?.count;
-        setUsers(usersData);
-        setCount(countData);
+        if (res.success) {
+          usersData = res?.users || [];
+          countData = res?.count;
+          setUsers(usersData);
+          setCount(countData);
 
+          return { ...res };
+        }
+        setUsers([]);
+        setCount(0);
         return { ...res };
-      }
-      setUsers([]);
-      setCount(0);
-      return { ...res };
-    });
+      },
+      { hideSuccessToast: true }
+    );
   };
 
   useEffect(() => {
