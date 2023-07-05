@@ -18,7 +18,7 @@ import { AbilityContext } from "../../store/AbilityStore";
 import { NotHaveAccessModal } from "../auth";
 import { mergeObjectsWithoutNullAndUndefined } from "../../utils/objectUtil";
 import { BlockUserModal, UnblockUserModal } from "./components";
-import { useUserGendersContantTranslation } from "./hooks/useUserConstantsTranslation";
+import { useUserGendersContantTranslation, useUserStatusesContantTranslation } from "./hooks/useUserConstantsTranslation";
 import SectionContent from "../../components/SectionContent";
 import PersonDetailWrapper from "../../components/PersonDetailWrapper/PersonDetailWrapper";
 import entities from "../../entities/entities";
@@ -55,6 +55,7 @@ function UserDetail() {
   const { isLoading, fetchApi } = useFetchingStore();
 
   const [userGenderContantList, userGenderContantListObj] = useUserGendersContantTranslation();
+  const [, userStatusContantListObj] = useUserStatusesContantTranslation();
 
   const { control, trigger, watch, reset, handleSubmit } = useForm({
     mode: "onChange",
@@ -73,7 +74,10 @@ function UserDetail() {
 
           const newDefaultValues = {
             ...mergeObjectsWithoutNullAndUndefined(defaultValues, userData),
-            status: userData?.blocked ? userStatuses.STATUS_BLOCK : userStatuses.STATUS_UNBLOCK
+            // status: userData?.blocked ? userStatuses.STATUS_BLOCK : userStatuses.STATUS_UNBLOCK,
+            status: userData?.blocked
+              ? userStatusContantListObj[userStatuses.STATUS_BLOCK]?.label
+              : userStatusContantListObj[userStatuses.STATUS_UNBLOCK]?.label
             // gender: ""
           };
 

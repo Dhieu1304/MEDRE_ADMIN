@@ -28,8 +28,13 @@
     },
 
     "maintains": {
-      "true": "Đang bảo trì",
-      "false": "Đang hoạt động"
+      "true": "Có",
+      "false": "Không"
+    },
+
+    "maintainGuides": {
+      "true": "Bật",
+      "false": "Tắt"
     }
   }
 }

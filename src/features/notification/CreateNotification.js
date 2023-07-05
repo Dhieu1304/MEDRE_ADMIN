@@ -357,10 +357,10 @@ function CreateNotification() {
           rules={{
             required: tInputValidation("required"),
             maxLength: {
-              // value: staffInputValidate.ADDRESS_MAX_LENGTH,
-              // message: tInputValidation("maxLength", {
-              //   maxLength: staffInputValidate.ADDRESS_MAX_LENGTH
-              // })
+              value: 512,
+              message: tInputValidation("maxLength", {
+                maxLength: 512
+              })
             }
           }}
           label={tNotification("title")}
@@ -368,7 +368,7 @@ function CreateNotification() {
           name="title"
           type="text"
           multiline
-          rows={6}
+          rows={2}
         />
       </Box>
 
@@ -382,10 +382,10 @@ function CreateNotification() {
           rules={{
             required: tInputValidation("required"),
             maxLength: {
-              // value: staffInputValidate.ADDRESS_MAX_LENGTH,
-              // message: tInputValidation("maxLength", {
-              //   maxLength: staffInputValidate.ADDRESS_MAX_LENGTH
-              // })
+              value: 1024,
+              message: tInputValidation("maxLength", {
+                maxLength: 1024
+              })
             }
           }}
           label={tNotification("content")}
@@ -393,16 +393,33 @@ function CreateNotification() {
           name="content"
           type="text"
           multiline
-          rows={2}
+          rows={4}
         />
       </Box>
+
+      <Typography
+        sx={{
+          fontSize: 18,
+          fontWeight: 600,
+          mt: 2,
+          mb: 2
+        }}
+      >
+        {tNotification("description")}
+      </Typography>
       <Box sx={{ mb: 10 }}>
         <CustomHtmlInput
           label={tNotification("description")}
           control={control}
           name="description"
           rules={{
-            required: tInputValidation("required")
+            required: tInputValidation("required"),
+            maxLength: {
+              value: 2048,
+              message: tInputValidation("maxLength", {
+                maxLength: 2048
+              })
+            }
           }}
         />
       </Box>

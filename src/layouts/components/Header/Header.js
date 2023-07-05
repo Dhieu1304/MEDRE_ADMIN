@@ -27,7 +27,6 @@ import { useAuthStore } from "../../../store/AuthStore/hooks";
 import CustomAppBar from "../../../components/CustomAppBar";
 import routeConfig from "../../../config/routeConfig";
 import { useAppConfigStore } from "../../../store/AppConfigStore/hooks";
-import { DARK, LIGHT } from "../../../config/themeConfig";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
 import localStorageUtil from "../../../utils/localStorageUtil";
 import CustomNotification from "../../../components/CustomNotification";
@@ -43,7 +42,7 @@ function Header({ open, handleDrawerOpen }) {
 
   const [anchorElUser, setAnchorElUser] = useState(null);
 
-  const { mode, setMode, locale, setLocale, notifications, unreadNotificationCount } = useAppConfigStore();
+  const { locale, setLocale, notifications, unreadNotificationCount } = useAppConfigStore();
 
   const { t, i18n } = useTranslation("layout", { keyPrefix: "header" });
 
@@ -169,25 +168,6 @@ function Header({ open, handleDrawerOpen }) {
               </MenuItem>
             </Box>
 
-            <MenuItem>
-              <FormGroup>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={mode === DARK}
-                      onClick={() => {
-                        setMode((prev) => {
-                          return prev === LIGHT ? DARK : LIGHT;
-                        });
-                      }}
-                    />
-                  }
-                  sx={{ ml: 0 }}
-                  label="Dark mode"
-                  labelPlacement="start"
-                />
-              </FormGroup>
-            </MenuItem>
             <MenuItem>
               <FormGroup sx={{ justifyContent: "flex-start" }}>
                 <FormControlLabel

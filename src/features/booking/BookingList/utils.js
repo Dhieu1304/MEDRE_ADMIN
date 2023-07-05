@@ -1,5 +1,6 @@
 import { bookingPaymentStatuses, bookingStatuses as bookingStatusesConstants } from "../../../entities/Booking";
 import { staffRoles } from "../../../entities/Staff";
+import { getNextDay } from "../../../utils/datetimeUtil";
 import { removeKeys } from "../../../utils/objectUtil";
 import {
   normalizeStrToArray,
@@ -107,6 +108,9 @@ export const createDefaultValues = (
   } = {},
   staff = null
 ) => {
+  const defaultFrom = new Date();
+  const defaultTo = getNextDay(defaultFrom, 6);
+  // console.log({defaultFrom, defaultTo });
   const defaultValuesInUrl = {
     patientPhoneNumber: normalizeStrToStr(patientPhoneNumber),
     userId: normalizeStrToStr(userId),
@@ -116,8 +120,8 @@ export const createDefaultValues = (
     staffCancelId: normalizeStrToStr(staffCancelId),
     type: normalizeStrToStr(type),
     isPayment: normalizeStrToStr(isPayment),
-    from: normalizeStrToDateStr(from),
-    to: normalizeStrToDateStr(to),
+    from: normalizeStrToDateStr(from, defaultFrom),
+    to: normalizeStrToDateStr(to, defaultTo),
     bookingStatuses: normalizeStrToArray(bookingStatuses),
     page: normalizeStrToInt(page, 1),
     limit: normalizeStrToInt(limit, 10)

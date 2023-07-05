@@ -100,6 +100,13 @@ const createDateByDateAndTimeStr = (date, timeStr) => {
   return newDate;
 };
 
+function getNextDay(date, num = 1) {
+  const nextDay = new Date(date.getTime());
+  nextDay.setDate(nextDay.getDate() + num); // Thêm 7 ngày vào ngày hiện tại
+
+  return nextDay;
+}
+
 export {
   getNext7DaysFrom,
   formatDateLocale,
@@ -108,5 +115,6 @@ export {
   isEqualDateWithoutTime,
   isBetweenOrEqualWithoutTime,
   createDateByDateAndTimeStr,
-  isBetweenAndNoEqual
+  isBetweenAndNoEqual,
+  getNextDay
 };

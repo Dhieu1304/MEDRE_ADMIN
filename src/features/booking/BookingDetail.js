@@ -28,6 +28,7 @@ import { useForm } from "react-hook-form";
 import { decode } from "html-entities";
 import { useAbility } from "@casl/react";
 import { subject } from "@casl/ability";
+import ReactQuill from "react-quill";
 import bookingServices from "../../services/bookingServices";
 import { useFetchingStore } from "../../store/FetchingApiStore";
 import { useAppConfigStore } from "../../store/AppConfigStore";
@@ -359,10 +360,8 @@ function BookingDetail() {
             }
           }}
         >
-          {canUpdateBooking && booking?.bookingOfUser?.id && (
-            <CopyButton content={booking?.bookingOfUser?.id} label={t("button.copyUserId")} />
-          )}
-          {canUpdateBooking && booking?.bookingOfPatient?.id && (
+          {booking?.bookingOfUser?.id && <CopyButton content={booking?.bookingOfUser?.id} label={t("button.copyUserId")} />}
+          {booking?.bookingOfPatient?.id && (
             <CopyButton content={booking?.bookingOfPatient?.id} label={t("button.copyPatientId")} />
           )}
 
@@ -564,15 +563,21 @@ function BookingDetail() {
             </Grid>
 
             <Box sx={{ mb: 4 }}>
-              <CustomHtmlInput
-                label={tBooking("conclusion")}
-                disabled={!canUpdateBookingConlusion}
-                control={control}
-                name="conclusion"
-                rules={{
-                  required: tInputValidation("required")
-                }}
-              />
+              {canUpdateBookingConlusion ? (
+                <CustomHtmlInput
+                  label={tBooking("conclusion")}
+                  disabled={!canUpdateBookingConlusion}
+                  control={control}
+                  name="conclusion"
+                  rules={{
+                    required: tInputValidation("required")
+                  }}
+                />
+              ) : (
+                <Box sx={{ border: "1px solid #ccc", borderRadius: 2 }}>
+                  <ReactQuill value={decode(booking?.conclusion)} readOnly theme="bubble" />
+                </Box>
+              )}
             </Box>
           </Box>
 
@@ -593,13 +598,21 @@ function BookingDetail() {
             </Typography>
 
             <Box sx={{ mb: 4 }}>
-              <CustomHtmlInput
-                disabled={!canUpdateBookingConlusion}
-                label={tBooking("note")}
-                control={control}
-                name="note"
-                sx={{ height: 100 }}
-              />
+              <Box sx={{ mb: 4 }}>
+                {canUpdateBookingConlusion ? (
+                  <CustomHtmlInput
+                    disabled={!canUpdateBookingConlusion}
+                    label={tBooking("note")}
+                    control={control}
+                    name="note"
+                    sx={{ height: 100 }}
+                  />
+                ) : (
+                  <Box sx={{ border: "1px solid #ccc", borderRadius: 2 }}>
+                    <ReactQuill value={decode(booking?.note)} readOnly theme="bubble" />
+                  </Box>
+                )}
+              </Box>
             </Box>
           </Box>
 
@@ -623,7 +636,17 @@ function BookingDetail() {
             )}
 
             {watch().prescription && (
-              <Box sx={{ mb: 4, border: "1px solid #ccc", borderRadius: 10, p: 4 }}>
+              <Box
+                sx={{
+                  mb: 4,
+                  border: "1px solid #ccc",
+                  borderRadius: 2,
+                  p: 4,
+                  width: 500,
+                  display: "flex",
+                  justifyContent: "center"
+                }}
+              >
                 <Box
                   component="img"
                   sx={{

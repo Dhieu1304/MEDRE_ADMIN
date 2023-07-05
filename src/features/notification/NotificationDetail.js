@@ -35,7 +35,7 @@ function NotificationDetail() {
       );
     };
     loadData();
-  }, []);
+  }, [notificationId]);
 
   return (
     <>

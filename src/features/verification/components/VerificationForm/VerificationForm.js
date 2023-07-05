@@ -92,9 +92,11 @@ function VerificationForm({ sendVerificationOtpToPhone, sendVerificationToEmail 
     }
   };
 
-  const handleVerifyOtp = async ({ otp }) => {
+  const handleVerifyOtp = async () => {
+    const { phoneNumberOrEmail } = infoForm.watch();
+
     await fetchApi(async () => {
-      const res = await authServices.verifyOtpToVerfifyPhoneNumber(otp);
+      const res = await authServices.verifyOtpToVerfifyPhoneNumber(phoneNumberOrEmail);
       if (res.success) {
         setStep(steps.FINISH.OTP);
         return { ...res };

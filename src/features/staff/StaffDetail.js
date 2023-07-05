@@ -36,6 +36,7 @@ import SectionContent from "../../components/SectionContent";
 import PersonDetailWrapper from "../../components/PersonDetailWrapper/PersonDetailWrapper";
 import routeConfig from "../../config/routeConfig";
 import entities from "../../entities/entities";
+import { useStaffRolesContantTranslation, useStaffStatusesContantTranslation } from "./hooks/useStaffConstantsTranslation";
 
 function StaffDetail({ staff, loadData, expertisesList }) {
   // const [staff, setStaff] = useState();
@@ -113,6 +114,9 @@ function StaffDetail({ staff, loadData, expertisesList }) {
     }, {});
   }, [staffGendersList]);
 
+  const [, staffRoleContantListObj] = useStaffRolesContantTranslation();
+  const [, staffStatusContantListObj] = useStaffStatusesContantTranslation();
+
   const { control, trigger, watch, reset, handleSubmit } = useForm({
     mode: "onChange",
     defaultValues,
@@ -161,7 +165,11 @@ function StaffDetail({ staff, loadData, expertisesList }) {
       const newDefaultValues = {
         ...mergeObjectsWithoutNullAndUndefined(defaultValues, staffData),
         expertises: expertiseIds,
-        status: staffData?.blocked ? staffStatuses.STATUS_BLOCK : staffStatuses.STATUS_UNBLOCK
+        status: staffData?.blocked
+          ? staffStatusContantListObj[staffStatuses.STATUS_BLOCK]?.label
+          : staffStatusContantListObj[staffStatuses.STATUS_UNBLOCK]?.label,
+        role: staffRoleContantListObj?.[staffData?.role]?.label || ""
+
         // gender: ""
       };
       setDefaultValues(newDefaultValues);

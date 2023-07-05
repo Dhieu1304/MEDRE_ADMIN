@@ -14,7 +14,7 @@ import CustomTableCell, { customTableCellVariant } from "../../components/Custom
 import { useCustomModal } from "../../components/CustomModal";
 import ChangeSettingModal from "./components/ChangeSettingModal";
 import { Can } from "../../store/AbilityStore";
-import { settingActionAbility } from "../../entities/Setting";
+import { settingActionAbility, settingNames } from "../../entities/Setting";
 import entities from "../../entities/entities";
 
 function SettingList() {
@@ -26,6 +26,7 @@ function SettingList() {
 
   const { t } = useTranslation("settingFeature", { keyPrefix: "SettingList" });
   const { t: tSetting } = useTranslation("settingEntity", { keyPrefix: "properties" });
+  const { t: tSettingMaintains } = useTranslation("settingEntity", { keyPrefix: "constants.maintains" });
   const { t: tSettingNames } = useTranslation("settingEntity", { keyPrefix: "constants.names" });
   const { t: tSettingUnits } = useTranslation("settingEntity", { keyPrefix: "constants.units" });
 
@@ -105,6 +106,13 @@ function SettingList() {
     await loadData();
   };
 
+  const renderMaintaince = (value) => {
+    if (value === 1 || value === "1") {
+      return tSettingMaintains("true");
+    }
+    return tSettingMaintains("false");
+  };
+
   return (
     <>
       <CustomOverlay open={isLoading} />
@@ -145,11 +153,11 @@ function SettingList() {
                           }}
                           endIcon={<EditIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />}
                         >
-                          {setting?.value}
+                          {setting?.name === settingNames.maintain ? renderMaintaince(setting?.value) : setting?.value}
                         </Button>
                       </Can>
                       <Can not I={settingActionAbility.UPDATE} a={entities.SETTING}>
-                        {setting?.value}
+                        {setting?.name === settingNames.maintain ? renderMaintaince(setting?.value) : setting?.value}
                       </Can>
                     </CustomTableCell>
                   </TableRow>

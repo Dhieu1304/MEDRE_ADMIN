@@ -41,7 +41,7 @@ export const createDefaultValues = ({
   // address,
   // healthInsurance,
   status,
-  gender,
+  // gender,
   page,
   limit
 } = {}) => {
@@ -52,7 +52,7 @@ export const createDefaultValues = ({
     // address: normalizeStrToStr(address),
     // healthInsurance: normalizeStrToStr(healthInsurance),
     status: normalizeStrToStr(status),
-    gender: normalizeStrToStr(gender),
+    // gender: normalizeStrToStr(gender),
 
     page: normalizeStrToInt(page, 1),
     limit: normalizeStrToInt(limit, 10)

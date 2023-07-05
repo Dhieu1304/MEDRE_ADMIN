@@ -115,6 +115,7 @@ const useNotificationBackground = () => {
     socket.emit(SOCKET.JOIN_ROOM, Cookies.get(cookiesUtil.COOKIES.ACCESS_TOKEN));
     await loadNotifications();
     const token = await requestPermission();
+    // console.log("token: ");
     if (token) {
       await notificationServices.subscribeTopic(token);
     }

@@ -28,8 +28,13 @@
     },
 
     "maintains": {
-      "true": "Active",
-      "false": "Disabled"
+      "true": "Yes",
+      "false": "No"
+    },
+
+    "maintainGuides": {
+      "true": "Turn on",
+      "false": "Turn off"
     }
   }
 }

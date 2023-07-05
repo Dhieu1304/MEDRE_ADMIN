@@ -162,15 +162,15 @@ function TicketDetail() {
           <Box>
             <List sx={{ height: "60vh", overflowY: "auto" }}>
               {ticket?.ticketDetails?.map((item) => {
-                return item?.idUser ? (
+                return item?.idStaff ? (
                   <ListItem key={item?.id}>
                     <Grid container>
                       <Grid item xs={12}>
-                        <ListItemText sx={{ textAlign: "left" }} primary={item?.content} />
+                        <ListItemText sx={{ textAlign: "right" }} primary={item?.content} />
                       </Grid>
                       <Grid item xs={12}>
                         <ListItemText
-                          sx={{ textAlign: "left" }}
+                          sx={{ textAlign: "right" }}
                           secondary={formatDate.format(new Date(item?.createdAt), "DD/MM/YY hh:mm")}
                         />
                       </Grid>
@@ -180,11 +180,11 @@ function TicketDetail() {
                   <ListItem key={item?.id}>
                     <Grid container>
                       <Grid item xs={12}>
-                        <ListItemText sx={{ textAlign: "right" }} primary={item?.content} />
+                        <ListItemText sx={{ textAlign: "left" }} primary={item?.content} />
                       </Grid>
                       <Grid item xs={12}>
                         <ListItemText
-                          sx={{ textAlign: "right" }}
+                          sx={{ textAlign: "left" }}
                           secondary={formatDate.format(new Date(item?.createdAt), "DD/MM/YY hh:mm")}
                         />
                       </Grid>

@@ -53,7 +53,7 @@ export const createDefaultValues = ({
   // type,
   role,
   status,
-  gender,
+  // gender,
   expertises,
   page,
   limit,
@@ -73,7 +73,7 @@ export const createDefaultValues = ({
     // type: normalizeStrToStr(type),
     role: normalizeStrToStr(role),
     status: normalizeStrToStr(status),
-    gender: normalizeStrToStr(gender),
+    // gender: normalizeStrToStr(gender),
 
     expertises: normalizeStrToArray(expertises),
 

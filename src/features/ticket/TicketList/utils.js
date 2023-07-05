@@ -1,3 +1,4 @@
+import { ticketStatuses } from "../../../entities/Ticket";
 import { normalizeStrToInt, normalizeStrToStr } from "../../../utils/standardizedForForm";
 
 /*
@@ -31,8 +32,9 @@ export const initialShowCols = Object.keys(columnsIds).reduce((obj, key) => {
     - we will reformat the correct format to be the value for the input in the filter form
 */
 export const createDefaultValues = ({ status, page, limit } = {}) => {
+  const defaultStatus = ticketStatuses.OPEN;
   const result = {
-    status: normalizeStrToStr(status),
+    status: status ? normalizeStrToStr(status) : defaultStatus,
     page: normalizeStrToInt(page, 1),
     limit: normalizeStrToInt(limit, 10)
   };

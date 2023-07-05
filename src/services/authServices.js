@@ -145,7 +145,7 @@ const sendResetPasswordToEmail = async (email) => {
   }
 };
 
-const sendVerificationOtpToPhone = async (phoneNumber) => {
+const sendVerificationOtpToPhone = async () => {
   // const dataBody = cleanUndefinedAndEmptyStrValueObject({
   //   phone_number: phoneNumber
   // });
@@ -175,11 +175,11 @@ const sendVerificationOtpToPhone = async (phoneNumber) => {
 
   return {
     success: true,
-    message: phoneNumber
+    message: ""
   };
 };
 
-const sendResetPasswordOtpToPhone = async (phoneNumber) => {
+const sendResetPasswordOtpToPhone = async () => {
   // const dataBody = cleanUndefinedAndEmptyStrValueObject({
   //   phone_number: phoneNumber
   // });
@@ -209,45 +209,46 @@ const sendResetPasswordOtpToPhone = async (phoneNumber) => {
 
   return {
     success: true,
-    message: phoneNumber
+    message: ""
   };
 };
 
-const verifyOtpToVerfifyPhoneNumber = async (otp) => {
-  // const dataBody = cleanUndefinedAndEmptyStrValueObject({
-  //   otp
-  // });
-  // console.log("dataBody: ", dataBody);
-  // try {
-  //   const res = await axiosClient.post(authApi.verifyOtpToVerfifyPhoneNumber(), dataBody);
-  //   console.log("res: ", res);
-  //   if (res?.status) {
-  //     return {
-  //       success: true,
-  //       message: res?.message,
-  //       ...res
-  //     };
-  //   }
-  //   return {
-  //     success: false,
-  //     message: res?.message,
-  //       ...res
-  //   };
-  // } catch (e) {
-  //   // console.error(e.message);
-  //   return {
-  //     success: false,
-  //     message: e.message
-  //   };
-  // }
+const verifyOtpToVerfifyPhoneNumber = async (phoneNumber) => {
+  const dataBody = cleanUndefinedAndEmptyStrValueObject({
+    phone_number: phoneNumber,
+    type: 2
+  });
 
-  return {
-    success: true,
-    message: otp
-  };
+  try {
+    await axiosClient.post(authApi.verifyOtpToVerfifyPhoneNumber(), dataBody);
+
+    return {
+      success: true,
+      message: ""
+    };
+
+    // if (res?.status) {
+    //   return {
+    //     success: true,
+    //     message: res?.message,
+    //     ...res
+    //   };
+    // }
+    // return {
+    //   success: false,
+    //   message: res?.message,
+    //   ...res
+    // };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
 };
 
-const verifyOtpToResetPasswordPhoneNumber = async (otp) => {
+const verifyOtpToResetPasswordPhoneNumber = async () => {
   // const dataBody = cleanUndefinedAndEmptyStrValueObject({
   //   otp
   // });
@@ -277,7 +278,7 @@ const verifyOtpToResetPasswordPhoneNumber = async (otp) => {
 
   return {
     success: true,
-    message: otp
+    message: ""
   };
 };
 

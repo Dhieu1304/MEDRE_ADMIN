@@ -230,11 +230,11 @@ function BookingList() {
           return (
             <>
               {booking?.bookingSchedule?.type === scheduleTypes.TYPE_ONLINE && booking?.isPayment && booking?.code && (
-                <Box sx={{ ml: 2 }} component={Link} to={`${routeConfig.meeting}/${booking?.id}`}>
+                <Box sx={{ ml: 1 }} component={Link} to={`${routeConfig.meeting}/${booking?.id}`}>
                   <VideoCallIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
                 </Box>
               )}
-              <Box sx={{ ml: 2 }} component={Link} to={`${bookingPath}/${booking?.id}`}>
+              <Box sx={{ ml: 1 }} component={Link} to={`${bookingPath}/${booking?.id}`}>
                 <PreviewIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
               </Box>
 
@@ -249,7 +249,9 @@ function BookingList() {
                 <PreviewIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
               </IconButton> */}
 
-              <CopyButton content={booking?.id} />
+              <Box sx={{ ml: 1 }}>
+                <CopyButton content={booking?.id} />
+              </Box>
             </>
           );
         },

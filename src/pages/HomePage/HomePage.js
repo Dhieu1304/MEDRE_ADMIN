@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
-import qs from "query-string";
-import formatDate from "date-and-time";
+// import qs from "query-string";
+// import formatDate from "date-and-time";
 import { useAuthStore } from "../../store/AuthStore";
 import { staffRoles } from "../../entities/Staff";
 import routeConfig from "../../config/routeConfig";
@@ -13,16 +13,16 @@ function HomePage() {
     case staffRoles.ROLE_ADMIN:
       return <Navigate to={routeConfig.statistics} replace />;
     case staffRoles.ROLE_DOCTOR: {
-      const doctorBookingSearchParams = {
-        from: formatDate.format(new Date(), "YYYY-MM-DD"),
-        to: formatDate.format(new Date(), "YYYY-MM-DD")
-      };
-      const doctorBookingSearchParamsUrl = qs.stringify(doctorBookingSearchParams);
-      // <Box sx={{ ml: 2 }} component={Link} to={`${routeConfig.booking}?${userBookingSearchParamsUrl}`}>
-      //         <CalendarMonthIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
-      //       </Box>
+      // const doctorBookingSearchParams = {
+      //   from: formatDate.format(new Date(), "YYYY-MM-DD"),
+      //   to: formatDate.format(new Date(), "YYYY-MM-DD")
+      // };
+      // const doctorBookingSearchParamsUrl = qs.stringify(doctorBookingSearchParams);
+      // // <Box sx={{ ml: 2 }} component={Link} to={`${routeConfig.booking}?${userBookingSearchParamsUrl}`}>
+      // //         <CalendarMonthIcon fontSize="medium" sx={{ color: theme.palette.success.main }} />
+      // //       </Box>
 
-      return <Navigate to={`${routeConfig.booking}?${doctorBookingSearchParamsUrl}`} replace />;
+      return <Navigate to={`${routeConfig.booking}`} replace />;
     }
 
     case staffRoles.ROLE_NURSE:

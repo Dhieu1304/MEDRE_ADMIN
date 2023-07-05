@@ -2,12 +2,14 @@ import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useMemo } from "react";
+import { Box, Typography } from "@mui/material";
 import CustomModal from "../../../components/CustomModal";
 
 import { useFetchingStore } from "../../../store/FetchingApiStore";
 import settingServices from "../../../services/settingServices";
 import CustomInput from "../../../components/CustomInput/CustomInput";
 import { useAppConfigStore } from "../../../store/AppConfigStore";
+import { settingNames } from "../../../entities/Setting";
 
 function ChangeSettingModal({ show, setShow, data, setData, handleAfterEditSetting }) {
   const { handleSubmit, control, trigger } = useForm({
@@ -24,6 +26,8 @@ function ChangeSettingModal({ show, setShow, data, setData, handleAfterEditSetti
 
   const { t: tSettingNames } = useTranslation("settingEntity", { keyPrefix: "constants.names" });
   const { t: tSettingUnits } = useTranslation("settingEntity", { keyPrefix: "constants.units" });
+  const { t: tSettingMaintainGuides } = useTranslation("settingEntity", { keyPrefix: "constants.maintainGuides" });
+
   const settingLabelObj = useMemo(() => {
     return {
       maintain: {
@@ -66,6 +70,47 @@ function ChangeSettingModal({ show, setShow, data, setData, handleAfterEditSetti
     });
   };
 
+  const rules =
+    data?.name === settingNames.maintain
+      ? {
+          min: {
+            value: 0,
+            message: tInputValidation("gt", {
+              left: settingLabelObj[data?.name]?.label,
+              right: 0
+            })
+          },
+          max: {
+            value: 1,
+            message: tInputValidation("lt", {
+              left: settingLabelObj[data?.name]?.label,
+              right: 1
+            })
+          }
+        }
+      : {
+          min: {
+            value: 0,
+            message: tInputValidation("gt", {
+              left: settingLabelObj[data?.name]?.label,
+              right: 0
+            })
+          }
+        };
+
+  const renderGuide = () => {
+    // console.log("data: ", data);
+    if (data?.name === settingNames.maintain) {
+      return (
+        <Box>
+          <Typography sx={{}}>- {tSettingMaintainGuides("true")}: 1</Typography>
+          <Typography sx={{}}>- {tSettingMaintainGuides("false")}: 0</Typography>
+        </Box>
+      );
+    }
+    return null;
+  };
+
   return (
     <CustomModal
       show={show}
@@ -75,17 +120,27 @@ function ChangeSettingModal({ show, setShow, data, setData, handleAfterEditSetti
       title={t("title")}
       submitBtnLabel={t("button.save")}
       onSubmit={handleSubmit(handleEditSetting)}
+      width={500}
     >
-      <CustomInput
-        control={control}
-        rules={{
-          required: tInputValidation("required")
+      <Box
+        sx={{
+          width: "100%"
         }}
-        label={settingLabelObj[data?.name]?.label}
-        trigger={trigger}
-        name="value"
-        type="number"
-      />
+      >
+        <CustomInput
+          control={control}
+          rules={{
+            required: tInputValidation("required"),
+            ...rules
+          }}
+          label={settingLabelObj[data?.name]?.label}
+          trigger={trigger}
+          name="value"
+          type="number"
+        />
+
+        {renderGuide()}
+      </Box>
     </CustomModal>
   );
 }

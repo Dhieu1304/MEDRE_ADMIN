@@ -11,6 +11,13 @@
     }
   },
 
+  "CustomDateInput": {
+    "preview": "Preview",
+    "button": {
+      "submit": "Submit"
+    }
+  },
+
   "NoDataBox": {
     "title": "No relevant data available"
   },
