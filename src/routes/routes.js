@@ -16,7 +16,7 @@ import AuthLayout from "../layouts/AuthLayout";
 import ChangePasswordPage from "../pages/ChangePasswordPage";
 import ReExaminationListPage from "../pages/ReExaminationPage";
 import ExpertisePage from "../pages/ExpertisePage";
-import StatisticsPage from "../pages/StatisticsPage";
+import StatisticsPage from "../pages/StatisticsPage/StatisticsPage";
 import SupportPage from "../pages/SupportPage";
 
 // Public routes
