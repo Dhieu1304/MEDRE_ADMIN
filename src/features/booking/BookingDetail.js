@@ -116,7 +116,7 @@ function BookingDetail() {
 
         if (res.success) {
           const bookingData = res.booking;
-          setBooking(bookingData);
+          setBooking({ ...bookingData });
 
           let newDefaultValues = {
             ...mergeObjectsWithoutNullAndUndefined(defaultValues, bookingData),
