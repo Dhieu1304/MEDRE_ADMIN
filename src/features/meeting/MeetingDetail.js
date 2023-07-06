@@ -40,6 +40,8 @@ function MeetingDetail() {
     loadData();
   }, []);
 
+  // console.log("booking: ", booking);
+
   const handleJitsiIFrameRef = (iframeRef) => {
     // eslint-disable-next-line no-param-reassign
     iframeRef.style.border = "10px solid #3d3d3d";
@@ -84,7 +86,7 @@ function MeetingDetail() {
             DISABLE_JOIN_LEAVE_NOTIFICATIONS: true
           }}
           userInfo={{
-            displayName: booking?.bookingOfPatient?.name
+            displayName: booking?.bookingSchedule?.scheduleOfStaff?.name
           }}
           // onApiReady={(externalApi) => {
           //   // here you can attach custom event listeners to the Jitsi Meet External API

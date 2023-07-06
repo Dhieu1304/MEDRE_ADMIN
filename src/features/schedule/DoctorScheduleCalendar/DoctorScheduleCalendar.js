@@ -523,7 +523,7 @@ function DoctorScheduleCalendar({ timesList, staff }) {
                 endIcon={<AddIcon fontSize="large" />}
                 sx={{
                   bgcolor: theme.palette.success.light,
-                  width: 400,
+                  width: 200,
                   mr: 2
                 }}
               >
@@ -533,15 +533,17 @@ function DoctorScheduleCalendar({ timesList, staff }) {
             {/* <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center", mx: 2 }}>
               {formatDate.format(heads[0], "DD/MM/YYYY")} - {formatDate.format(heads[6], "DD/MM/YYYY")}
             </Box> */}
-            <CustomDateInput
-              label={t("filter.week")}
-              setDate={(date) => setCurrentDate(new Date(date))}
-              rules={{}}
-              date={formatDate.format(currentDate, "YYYY-MM-DD")}
-              render={() => {
-                return `${formatDate.format(heads[0], "DD/MM/YYYY")} - ${formatDate.format(heads[6], "DD/MM/YYYY")}`;
-              }}
-            />
+            <Box sx={{ width: 250 }}>
+              <CustomDateInput
+                label={t("filter.week")}
+                setDate={(date) => setCurrentDate(new Date(date))}
+                rules={{}}
+                date={formatDate.format(currentDate, "YYYY-MM-DD")}
+                render={() => {
+                  return `${formatDate.format(heads[0], "DD/MM/YYYY")} - ${formatDate.format(heads[6], "DD/MM/YYYY")}`;
+                }}
+              />
+            </Box>
             <IconButton
               onClick={() => {
                 const newCurrentDate = new Date(currentDate);
