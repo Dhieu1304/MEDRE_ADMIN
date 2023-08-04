@@ -1,0 +1,122 @@
+{
+  "BookingList": {
+    "title": "Tìm kiếm lịch được đặt",
+    "filter": {
+      "patientPhoneNumber": "SĐT bệnh nhân",
+      "userId": "ID người dùng",
+      "patientId": "ID bệnh nhân",
+      "doctorId": "ID bác sĩ",
+      "staffBookingId": "ID nhân viên đặt lịch",
+      "staffCancelId": "ID nhân viên hủy lịch",
+      "type": "Loại khám",
+      "isPayment": "Tình trạng thanh toán",
+      "from": "Từ ngày",
+      "to": "Đến ngày",
+      "bookingStatuses": "Tình trạng lịch",
+      "bookingRange": "Khoảng ngày",
+      "bookingRangePreview": "Xem trước"
+    },
+    "select": {
+      "types": {
+        "offline": "Trực tiếp",
+        "online": "Trực tuyến",
+        "all": "Tất cả"
+      },
+      "isPayment": {
+        "paid": "Đã thanh toán",
+        "unpaid": "Chưa thanh toán",
+        "all": "Tất cả"
+      },
+      "statuses": {
+        "cancel": "Hủy lịch",
+        "booked": "Đã đặt",
+        "waiting": "Chờ thanh toán"
+      }
+    }
+  },
+
+  "BookingDetail": {
+    "title": "Chi tiết lịch khám",
+    "subTitle": {
+      "scheduleInfo": "Thông tin lịch khám",
+      "doctorInfo": "Thông tin bác sĩ",
+      "patientInfo": "Thông tin bệnh nhân",
+      "doctorConclusion": "Kết luận của bác sĩ",
+      "doctorNote": "Ghi chú của bác sĩ",
+      "doctorPrescription": "Đơn thuốc"
+    },
+    "button": {
+      "exportFile": "Xuất file",
+      "payment": "Thanh toán",
+      "meet": "Khám",
+      "save": "Lưu",
+
+      "paid": "Đã thanh toán",
+      "unpaid": "Chưa thanh toán",
+      "cancel": "Hủy lịch",
+      "canceled": "Đã hủy lịch",
+      "booked": "Đã đặt",
+      "waiting": "Đang đợi",
+      "reset": "Đặt lại",
+
+      "copyUserId": "Sao chép ID người dùng",
+      "copyPatientId": "Sao chép ID bệnh nhân",
+      "oldBooking": "Thông tin khám cũ"
+    }
+  },
+
+  "BookingInfoModal": {
+    "title": "Thông tin lịch đặt",
+    "button": {
+      "save": "Lưu",
+      "detail": "Chi tiết",
+      "reset": "Đặt lại",
+      "copyUserId": "Sao chép ID người dùng",
+      "copyPatientId": "Sao chép ID bệnh nhân",
+      "meet": "Khám",
+      "oldBooking": "Thông tin khám cũ"
+    }
+  },
+
+  "BookingAnInfoModal": {
+    "title": "Thông tin lịch đặt",
+    "button": {
+      "save": "Lưu",
+      "detail": "Chi tiết",
+      "reset": "Đặt lại",
+      "copyUserId": "Sao chép ID người dùng",
+      "copyPatientId": "Sao chép ID bệnh nhân",
+      "meet": "Khám",
+      "oldBooking": "Thông tin khám cũ"
+    }
+  },
+
+  "BookingModal": {
+    "title": "Đặt lịch",
+    "subTitle": {
+      "patientInfo": "Thông tin bệnh nhân",
+      "searchUser": "Tìm kiếm người dùng",
+      "searchPatient": "Tìm kiếm bệnh nhân",
+      "userInformationFound": "Thông tin bệnh nhân tìm được",
+      "patientInformationFound": "Thông tin bệnh nhân tìm được"
+    },
+    "tabLabels": {
+      "user": "Người dùng",
+      "patient": "Bệnh nhân",
+      "newPatient": "Bệnh nhân mới"
+    },
+    "form": {
+      "bookingFor": "Đặt lịch cho",
+      "self": "Bản thân",
+      "other": "Người khác"
+    },
+    "button": {
+      "book": "Đặt lịch"
+    }
+  },
+
+  "BookingNoDataModal": {
+    "title": "Thông tin lịch đặt",
+    "noDataMessage": "Không có lịch hẹn nào"
+  }
+}

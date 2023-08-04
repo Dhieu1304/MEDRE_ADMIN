@@ -1,0 +1,69 @@
+{
+  "CustomModal": {
+    "button": {
+      "cancel": "Thoát"
+    }
+  },
+  "CustomDateFromToInput": {
+    "preview": "Xem trước",
+    "button": {
+      "submit": "Xác nhận"
+    }
+  },
+
+  "CustomDateInput": {
+    "preview": "Xem trước",
+    "button": {
+      "submit": "Xác nhận"
+    }
+  },
+
+  "NoDataBox": {
+    "title": "Không có dữ liệu phù hợp"
+  },
+
+  "ListPageAction": {
+    "button": {
+      "showMenuColumns": "Hiện",
+      "reset": "Đặt lại"
+    }
+  },
+
+  "ListPageTop": {
+    "button": {
+      "hideFilterCollapse": "Ẩn bộ lọc",
+      "showFilterCollapse": "Hiện bộ lọc"
+    }
+  },
+
+  "PersonDetailWrapper": {
+    "PersonDetailAction": {
+      "button": {
+        "reset": "Đặt lại",
+        "save": "Lưu"
+      }
+    }
+  },
+  "CustomNotification": {
+    "title": "Thông báo",
+    "button": {
+      "seeMore": "Xem thêm"
+    }
+  },
+
+  "CopyButton": {
+    "label": "Sao chép",
+    "message": {
+      "success": "Sao chép {{content}} thành công",
+      "error": "Sao chép thất bại"
+    }
+  },
+
+  "ClipboardButton": {
+    "label": "Dán",
+    "message": {
+      "success": "Dán {{content}} thành công",
+      "error": "Dán thất bại"
+    }
+  }
+}

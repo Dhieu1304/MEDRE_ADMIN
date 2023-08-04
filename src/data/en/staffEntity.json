@@ -1,0 +1,53 @@
+{
+  "properties": {
+    "id": "ID",
+    "username": "Username",
+    "phoneNumber": "Phone Number",
+    "email": "Email",
+    "emailOrUsernameOrPhoneNumber": "Email, username or phone number",
+    "phoneNumberOrEmail": "Email or phone number",
+    "password": "Password",
+    "oldPassword": "Old password",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm password",
+    "name": "Name",
+    "image": "Image",
+    "address": "Address",
+    "gender": "Gender",
+    "dob": "Date of Birth",
+    "role": "Role",
+    "healthInsurance": "Health Insurance",
+    "description": "Description",
+    "education": "Education",
+    "certificate": "Certificate",
+    "createdAt": "Created at",
+    "updatedAt": "Updated at",
+    "deletedAt": "Deleted at",
+    "status": "Status",
+    "expertises": "Expertises"
+  },
+
+  "constants": {
+    "genders": {
+      "male": "Male",
+      "female": "Female",
+      "other": "Other"
+    },
+    "roles": {
+      "admin": "Admin",
+      "doctor": "Doctor",
+      "nurse": "Nurse",
+      "customerService": "Customer Service"
+    },
+    "statuses": {
+      "block": "Blocked",
+      "unblock": "Unblocked"
+    }
+  },
+  "messages": {
+    "emailVerifiedSuccess": "Email verification successfully",
+    "emailVerifiedFailed": "Email verification failed",
+    "phoneVerifiedSuccess": "Phone number verification successfully",
+    "phoneVerifiedFailed": "Phone number verification failed"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "validation": {
+    "required": "field is required",
+    "maxLength": "cannot be more than {{maxLength}} characters",
+    "minLength": "cannot be less than {{minLength}} characters",
+    "format": "field is not correct format",
+    "lt": "{{left}} must be less than {{right}}",
+    "gt": "{{left}} must be greater than {{right}}",
+    "lte": "{{left}} must be less than or equal {{right}}",
+    "gte": "{{left}} must be greater than or equal {{right}}",
+    "same": "{{left}} must be same as {{right}}",
+    "passwordFormat": "must contain at least one digit and one character",
+    "length": "{{label}} must have {{length}} characters"
+  },
+  "messages": {
+    "general": "There was an error, please check the input again"
+  }
+}

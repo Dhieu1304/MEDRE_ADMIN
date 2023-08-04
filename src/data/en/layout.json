@@ -1,0 +1,23 @@
+{
+  "sidebar": {
+    "staff_label": "Staff",
+    "user_label": "User",
+    "patient_label": "Patient",
+    "payment_label": "Payment",
+    "schedule_label": "Schedule",
+    "setting_label": "Setting",
+    "expertise_label": "Expertise",
+    "meeting_label": "Metting",
+    "booking_label": "Reservation",
+    "notification_label": "Notification",
+    "re_examination_label": "Re-examination",
+    "statistics_label": "Statistics",
+    "support_label": "Ticket",
+    "doctor_calendar_label": "My calendar"
+  },
+  "header": {
+    "profile_label": "Profile",
+    "change_password_label": "Change password",
+    "logout_label": "Logout"
+  }
+}

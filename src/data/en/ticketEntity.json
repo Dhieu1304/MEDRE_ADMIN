@@ -1,0 +1,18 @@
+{
+  "properties": {
+    "id": "ID",
+    "title": "Title",
+    "userName": "User Name",
+    "createdAt": "Created at",
+    "updatedAt": "Updated at",
+    "deletedAt": "Deleted at",
+    "status": "Status"
+  },
+
+  "constants": {
+    "statuses": {
+      "open": "open",
+      "close": "Close"
+    }
+  }
+}

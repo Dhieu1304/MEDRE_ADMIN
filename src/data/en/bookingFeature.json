@@ -1,0 +1,123 @@
+{
+  "BookingList": {
+    "title": "Find reservation",
+    "filter": {
+      "patientPhoneNumber": "Patient phone number",
+      "userId": "User ID",
+      "patientId": "Patient ID",
+      "doctorId": "Doctor ID",
+      "staffBookingId": "Staff Booking ID",
+      "staffCancelId": "Staff cancel ID",
+      "type": "Type",
+      "isPayment": "Is payment",
+      "from": "From",
+      "to": "To",
+      "bookingStatuses": "Booking status",
+      "bookingRange": "Range",
+      "bookingRangePreview": "Preview"
+    },
+    "select": {
+      "types": {
+        "offline": "Offline",
+        "online": "Online",
+        "all": "All"
+      },
+      "isPayment": {
+        "paid": "Paid",
+        "unpaid": "Unpaid",
+        "all": "All"
+      },
+      "statuses": {
+        "cancel": "Cancel",
+        "booked": "Booked",
+        "waiting": "Waiting for payment"
+      }
+    }
+  },
+
+  "BookingDetail": {
+    "title": "Booking detail",
+    "subTitle": {
+      "scheduleInfo": "Schedule information",
+      "doctorInfo": "Doctor information",
+      "patientInfo": "Patient information",
+      "doctorConclusion": "Doctor conclusion",
+      "doctorNote": "Doctor note",
+      "doctorPrescription": "Prescription"
+    },
+    "button": {
+      "exportFile": "Export file",
+      "meet": "Meet",
+      "payment": "Payment",
+
+      "save": "Save",
+      "reset": "Reset",
+
+      "paid": "Paid",
+      "unpaid": "Unpaid",
+      "booked": "Booked",
+      "cancel": "Cancel",
+      "canceled": "Canceled",
+      "waiting": "Waiting",
+
+      "copyUserId": "Copy user ID",
+      "copyPatientId": "Copy patient ID",
+      "oldBooking": "Old bookings"
+    }
+  },
+
+  "BookingInfoModal": {
+    "title": "Booking detail",
+    "button": {
+      "save": "Save",
+      "detail": "Detail",
+
+      "copyUserId": "Copy user ID",
+      "copyPatientId": "Copy patient ID",
+      "meet": "Meet",
+      "oldBooking": "Old bookings"
+    }
+  },
+
+  "BookingAnInfoModal": {
+    "title": "Booking detail",
+    "button": {
+      "save": "Save",
+      "detail": "Detail",
+
+      "copyUserId": "Copy user ID",
+      "copyPatientId": "Copy patient ID",
+      "meet": "Meet",
+      "oldBooking": "Old bookings"
+    }
+  },
+
+  "BookingModal": {
+    "title": "Booking",
+    "subTitle": {
+      "patientInfo": "Patient information",
+      "searchUser": "Search user",
+      "searchPatient": "Search patient",
+      "userInformationFound": "User information found",
+      "patientInformationFound": "Patient information found"
+    },
+    "tabLabels": {
+      "user": "User",
+      "patient": "Patient",
+      "newPatient": "New patient"
+    },
+    "form": {
+      "bookingFor": "Booking for",
+      "self": "Self",
+      "other": "Other"
+    },
+    "button": {
+      "book": "Book"
+    }
+  },
+
+  "BookingNoDataModal": {
+    "title": "Booking detail",
+    "noDataMessage": "No bookings yet"
+  }
+}

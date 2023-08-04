@@ -1,0 +1,18 @@
+{
+  "properties": {
+    "id": "ID",
+    "title": "Chủ đề",
+    "userName": "Tên người gửi",
+    "createdAt": "Ngày tạo",
+    "updatedAt": "Ngày cập nhật",
+    "deletedAt": "Ngày xóa",
+    "status": "Tình trạng"
+  },
+
+  "constants": {
+    "statuses": {
+      "open": "Đang mở",
+      "close": "Đã đóng"
+    }
+  }
+}

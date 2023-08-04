@@ -1,0 +1,34 @@
+{
+  "bookingList": {
+    "filter": {
+      "patient": "Patient name",
+      "doctor": "Doctor name",
+      "date": "Date"
+    },
+    "select": {}
+  },
+
+  "bookingDetail": {
+    "bookingDate": "Date",
+    "bookingStatus": "Status",
+    "paymentStatus": "Payment",
+    "reason": "Reason",
+    "note": "Note",
+    "conclusion": "Conclusion",
+    "bookedAt": "Booked Time",
+    "timeStart": "Start",
+    "timeEnd": "End",
+    "type": "Type",
+    "schedule_expertise": "Expertise",
+    "schedule_staff": "Doctor",
+    "userBookName": "Name",
+    "userBookEmail": "Email",
+    "userBookPhone": "Phone Booking",
+    "patientName": "Name",
+    "patientPhone": "Phone Patient",
+    "patientGender": "Gender",
+    "patientAddress": "Address",
+    "patientDob": "Date of birth",
+    "patientHealthInsurance": "Health Insurance"
+  }
+}

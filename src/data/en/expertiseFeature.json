@@ -1,0 +1,24 @@
+{
+  "ExpertiseList": {
+    "title": "Expertise",
+    "button": {
+      "edit": "Edit",
+      "add": "Add"
+    }
+  },
+
+  "ChangeExpertiseModal": {
+    "title": "Change expertise",
+    "button": {
+      "save": "Save"
+    }
+  },
+
+  "AddExpertiseModal": {
+    "title": "Add Expertise",
+    "expertise": "Expertise",
+    "button": {
+      "add": "Add"
+    }
+  }
+}

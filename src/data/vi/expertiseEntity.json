@@ -1,0 +1,13 @@
+{
+  "properties": {
+    "id": "ID",
+    "name": "Tên",
+    "offlinePrice": "Giá khám trực tiếp",
+    "onlinePrice": "Giá khám trực tuyến",
+    "offlinePriceLabel": "Giá khám trực tiếp (VND)",
+    "onlinePriceLabel": "Giá khám trực tuyến (VND)",
+    "createdAt": "Ngày tạo",
+    "updatedAt": "Ngày cập nhật",
+    "deletedAt": "Ngày xóa"
+  }
+}

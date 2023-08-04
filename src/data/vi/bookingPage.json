@@ -1,0 +1,34 @@
+{
+  "bookingList": {
+    "filter": {
+      "patient": "Tên bệnh nhân",
+      "doctor": "Tên bác sĩ",
+      "date": "Ngày"
+    },
+    "select": {}
+  },
+
+  "bookingDetail": {
+    "bookingDate": "Ngày khám",
+    "bookingStatus": "Trạng thái",
+    "paymentStatus": "Thanh toán",
+    "reason": "Lý do khám",
+    "conclusion": "Kết luận",
+    "note": "Ghi chú",
+    "bookedAt": "Thời gian đặt ",
+    "timeStart": "Bắt đầu",
+    "timeEnd": "Kết thúc",
+    "type": "Hình thức",
+    "schedule_expertise": "Khoa khám",
+    "schedule_staff": "Bác sĩ",
+    "userBookName": "Họ tên",
+    "userBookEmail": "Email",
+    "userBookPhone": "Điện thoại đặt",
+    "patientName": "Họ tên",
+    "patientPhone": "Điện thoại khám",
+    "patientGender": "Giới tính",
+    "patientAddress": "Địa chỉ",
+    "patientDob": "Ngày sinh",
+    "patientHealthInsurance": "Tiền sử bệnh"
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "StaffList": {
+    "title": "Find staff",
+    "filter": {
+      "name": "Search by name",
+      "email": "Email",
+      "phone": "Phone",
+      "username": "Username",
+      "type": "Type",
+      "date": "Date",
+      "expertises": "Expertises",
+      "gender": "Gender",
+      "status": "Status",
+      "role": "Role",
+      "healthInsurance": "Health Insurance",
+      "description": "Description",
+      "education": "Education",
+      "certificate": "Certificate",
+      "address": "Address",
+      "schedules": "Schedules",
+      "from": "From",
+      "to": "To",
+      "scheduleFromToPreview": "Preview"
+    },
+
+    "select": {
+      "genders": {
+        "male": "Male",
+        "female": "Female",
+        "other": "other",
+        "all": "All"
+      },
+      "roles": {
+        "admin": "Admin",
+        "doctor": "Doctor",
+        "nurse": "Nurse",
+        "customerService": "Customer Service",
+        "all": "All"
+      },
+      "statuses": {
+        "block": "Block",
+        "unblock": "Unblock",
+        "all": "All"
+      },
+      "types": {
+        "offline": "Offline",
+        "online": "Online",
+        "all": "All"
+      }
+    },
+
+    "button": {
+      "reset": "Reset",
+      "hideFilterCollapse": "Hide filter",
+      "showFilterCollapse": "Show Filter",
+      "showMenuColumns": "Show",
+      "add": "Add",
+      "save": "Save",
+      "verify": "Verify"
+    }
+  },
+
+  "StaffDetail": {
+    "title": {
+      "identify": "Identify Information",
+      "account": "Account Information",
+      "personality": "Personality Information",
+      "doctor": "Doctor Information"
+    },
+    "button": {
+      "reset": "Reset",
+      "save": "Save",
+      "verify": "Verify"
+    }
+  },
+
+  "EditStaffRoleModal": {
+    "title": "Edit staff role",
+    "button": {
+      "save": "Save"
+    }
+  },
+
+  "BlockStaffModal": {
+    "title": "Block Staff",
+    "button": {
+      "block": "Block"
+    },
+    "form": {
+      "reason": "Reason"
+    },
+    "confirmQuestion": "Do you want to block staff - {{name}}?"
+  },
+
+  "UnblockStaffModal": {
+    "title": "Unblock Staff",
+    "button": {
+      "unblock": "Unblock"
+    },
+    "form": {
+      "reason": "Reason"
+    },
+    "confirmQuestion": "Do you want to unblock staff - {{name}}?"
+  },
+
+  "ChangeAvatarModal": {
+    "title": "Change Avatar",
+    "button": {
+      "upload": "Upload",
+      "save": "Save"
+    }
+  }
+}

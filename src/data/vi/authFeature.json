@@ -1,0 +1,32 @@
+{
+  "Login": {
+    "title": "Đăng nhập",
+    "button": {
+      "login": "Đăng nhập"
+    },
+    "link": {
+      "verification": "Xác thực tài khoản",
+      "forgotPassword": "Quên mật khẩu"
+    }
+  },
+
+  "NotHaveAccessModal": {
+    "title": "Cảnh báo",
+    "errorMessage": "Bạn không có quyền truy cập"
+  },
+
+  "NotHaveAccess": {
+    "errorMessage": "Bạn không có quyền truy cập"
+  },
+
+  "ForgotPassword": {
+    "title": "Đặt lại mật khẩu"
+  },
+
+  "ChangePassword": {
+    "title": "Thay đổi mật khẩu",
+    "button": {
+      "save": "Lưu"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "sidebar": {
+    "staff_label": "Nhân viên",
+    "user_label": "Người dùng",
+    "patient_label": "Bệnh nhân",
+    "payment_label": "Thanh toán",
+    "schedule_label": "Lịch biểu",
+    "setting_label": "Cài đặt",
+    "expertise_label": "Khoa khám",
+    "meeting_label": "Cuộc hẹn",
+    "booking_label": "Lịch được đặt",
+    "notification_label": "Thông báo",
+    "re_examination_label": "Tái khám",
+    "statistics_label": "Thống kê",
+    "support_label": "Phản hồi khách hàng",
+    "doctor_calendar_label": "Lịch khám của tôi"
+  },
+  "header": {
+    "profile_label": "Thông tin cá nhân",
+    "change_password_label": "Đổi mật khẩu",
+    "logout_label": "Đăng xuất"
+  }
+}

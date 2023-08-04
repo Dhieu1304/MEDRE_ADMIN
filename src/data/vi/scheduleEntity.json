@@ -1,0 +1,36 @@
+{
+  "properties": {
+    "dayOfWeek": "Ngày trong tuần",
+    "timeSchedule": "Thời gian",
+    "type": "Loại khám",
+    "applyTime": "Thời gian áp dụng",
+    "applyFrom": "Áp dụng từ ngày",
+    "applyTo": "Áp dụng đến ngày",
+    "applyFromLabel": "Ngày bắt đầu",
+    "applyToLabel": "Ngày kết thúc",
+    "repeatOn": "Ngày áp dụng",
+    "expertise": "Chuyên khoa",
+    "session": "Buổi"
+  },
+  "constants": {
+    "types": {
+      "online": "Trực tuyến",
+      "offline": "Trực tiếp"
+    },
+    "sessions": {
+      "morning": "Buổi sáng",
+      "afternoon": "Buổi chiều",
+      "evening": "Buổi tối",
+      "wholeDay": "Cả ngày"
+    },
+    "daysOfWeek": {
+      "monday": "Thứ 2",
+      "tuesday": "Thứ 3",
+      "wednesday": "Thứ 4",
+      "thursday": "Thứ 5",
+      "friday": "Thứ 6",
+      "saturday": "Thứ 7",
+      "sunday": "Chủ nhật"
+    }
+  }
+}

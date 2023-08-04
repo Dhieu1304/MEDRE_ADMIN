@@ -1,0 +1,15 @@
+{
+  "SettingList": {
+    "title": "Cài đặt hệ thống",
+    "button": {
+      "edit": "Chỉnh sửa"
+    }
+  },
+
+  "ChangeSettingModal": {
+    "title": "Thay đổi cài đặt",
+    "button": {
+      "save": "Lưu"
+    }
+  }
+}

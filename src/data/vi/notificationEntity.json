@@ -1,0 +1,39 @@
+{
+  "properties": {
+    "id": "ID",
+    "title": "Tiêu đề",
+    "content": "Mô tả ngắn gọn",
+    "description": "Mô tả chi tiết",
+    "type": "Loại",
+    "notificationFor": "Thông báo cho",
+    "createdBy": "Tạo bởi",
+    "createdAt": "Ngày tạo",
+    "updatedAt": "Ngày cập nhật",
+    "deletedAt": "Ngày xóa",
+    "userOrStaffId": "ID người nhận",
+    "userOrStaffEmailPhoneId": "Email, sđt hoặc id người nhận",
+    "personalType": "Người nhận"
+  },
+
+  "constants": {
+    "types": {
+      "booking": "Lịch hẹn",
+      "event": "Sự kiện",
+      "avertisement": "Quảng cáo"
+    },
+    "notificationFor": {
+      "allSystem": "Toàn hệ thống",
+      "personal": "Cá nhân",
+      "user": "Người dùng",
+      "staff": "Nhân viên",
+      "admin": "Admin",
+      "doctor": "Bác sĩ",
+      "nurse": "Y tá",
+      "customerService": "CSKH"
+    },
+    "personalTypes": {
+      "user": "Người dùng",
+      "staff": "Nhân viên"
+    }
+  }
+}

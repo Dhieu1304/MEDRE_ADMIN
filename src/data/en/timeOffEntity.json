@@ -1,0 +1,26 @@
+{
+  "properties": {
+    "id": "ID",
+    "date": "Date range",
+    "from": "From",
+    "to": "To",
+    "fromLabel": "Date start",
+    "toLabel": "Date end",
+    "timeStart": "Time Start",
+    "timeEnd": "Time End",
+    "timeStartLabel": "Time Start",
+    "timeEndLabel": "Time End",
+    "session": "Session",
+    "createdAt": "Created at",
+    "updatedAt": "Updated at",
+    "time": "Time"
+  },
+  "constants": {
+    "sessions": {
+      "morning": "Morning",
+      "afternoon": "Afternoon",
+      "evening": "Evening",
+      "wholeDay": "Whole day"
+    }
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "StaffList": {
+    "title": "Tìm kiếm nhân viên",
+    "filter": {
+      "name": "Tìm kiếm theo tên",
+      "email": "Email",
+      "phone": "Số điện thoại",
+      "username": "Username",
+      "type": "Loại khám",
+      "date": "Ngày",
+      "expertises": "Chuyên môn",
+      "gender": "Giới tính",
+      "status": "Tình trạng",
+      "role": "Vai trò",
+      "healthInsurance": "Bảo hiểm y tế",
+      "description": "Mô tả",
+      "education": "Học vấn",
+      "certificate": "Chứng nhận",
+      "address": "Địa chỉ",
+      "schedules": "Lịch khám",
+      "from": "Từ",
+      "to": "Đến",
+      "scheduleFromToPreview": "Thời gian"
+    },
+
+    "select": {
+      "genders": {
+        "male": "Nam",
+        "female": "Nữ",
+        "other": "Khác",
+        "all": "Tất cả"
+      },
+      "roles": {
+        "admin": "Admin",
+        "doctor": "Bác sĩ",
+        "nurse": "Y tá",
+        "customerService": "Nhân viên CSKH",
+        "all": "Tất cả"
+      },
+      "statuses": {
+        "block": "Khóa",
+        "unblock": "Mở khóa",
+        "all": "Tất cả"
+      },
+      "types": {
+        "offline": "Trực tiếp",
+        "online": "Trực tuyến",
+        "all": "Tất cả"
+      }
+    },
+
+    "button": {
+      "reset": "Đặt lại",
+      "hideFilterCollapse": "Ẩn bộ lọc",
+      "showFilterCollapse": "Hiện bộ lọc",
+      "showMenuColumns": "Hiện",
+      "add": "Thêm",
+      "verify": "Xác thực"
+    }
+  },
+
+  "StaffDetail": {
+    "title": {
+      "identify": "Thông tin xác thực",
+      "account": "Thông tin tài khoản",
+      "personality": "Thông tin cá nhân",
+      "doctor": "Thông tin bác sĩ"
+    },
+    "button": {
+      "reset": "Đặt lại",
+      "save": "Lưu",
+      "verify": "Xác thực"
+    }
+  },
+
+  "EditStaffRoleModal": {
+    "title": "Chỉnh sửa vai trò nhân viên",
+    "button": {
+      "save": "Lưu"
+    }
+  },
+
+  "BlockStaffModal": {
+    "title": "Khóa tài khoản nhân viên",
+    "button": {
+      "block": "Khóa"
+    },
+    "form": {
+      "reason": "Lý do"
+    },
+    "confirmQuestion": "Bạn có chắc chắn khóa nhân viên - {{name}}?"
+  },
+
+  "UnblockStaffModal": {
+    "title": "Mở khóa tài khoản nhân viên",
+    "button": {
+      "unblock": "Mở khóa"
+    },
+    "form": {
+      "reason": "Lý do"
+    },
+    "confirmQuestion": "Bạn có chắc chắn mở khóa nhân viên - {{name}}?"
+  },
+
+  "ChangeAvatarModal": {
+    "title": "Thay đổi ảnh đại diện",
+    "button": {
+      "upload": "Tải ảnh lên",
+      "save": "Lưu"
+    }
+  },
+
+  "AddStaffModal": {
+    "title": "Thêm nhân viên",
+    "button": {
+      "add": "Thêm"
+    }
+  }
+}

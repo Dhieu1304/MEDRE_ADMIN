@@ -1,0 +1,34 @@
+{
+  "ReExaminationList": {
+    "title": "Re examination",
+    "filter": {
+      "isApply": "Is apply",
+      "isRemind": "Is remind",
+      "dateRemind": "Date Remind",
+      "dateReExam": "Date ReExam",
+      "idStaffRemind": "Staff remind id"
+    },
+
+    "select": {
+      "isApply": {
+        "true": "Yes",
+        "false": "No",
+        "all": "All"
+      },
+      "isRemind": {
+        "true": "Yes",
+        "false": "No",
+        "all": "All"
+      }
+    },
+
+    "button": {
+      "reset": "Reset",
+      "hideFilterCollapse": "Hide filter",
+      "showFilterCollapse": "Show Filter",
+      "showMenuColumns": "Show",
+      "add": "Add",
+      "me": "Me"
+    }
+  }
+}

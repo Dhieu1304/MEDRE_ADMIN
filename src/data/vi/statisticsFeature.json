@@ -1,0 +1,136 @@
+{
+  "UserStatistics": {
+    "title": "Thống kê người dùng",
+    "chart": {
+      "title": {
+        "day": "Biểu đồ số lượng người dùng theo ngày",
+        "week": "Biểu đồ số lượng người dùng theo tuần",
+        "month": "Biểu đồ số lượng người dùng theo tháng",
+        "year": "Biểu đồ số lượng người dùng theo năm"
+      },
+      "xLabel": "Thời gian",
+      "yLabel": "Số lượng",
+      "seriName": {
+        "total": "Số lượng"
+      }
+    },
+    "table": {
+      "title": {
+        "day": "Bảng số lượng người dùng theo ngày",
+        "week": "Bảng số lượng người dùng theo tuần",
+        "month": "Bảng số lượng người dùng theo tháng",
+        "year": "Bảng số lượng người dùng theo năm"
+      },
+      "col": {
+        "time": "Thời gian",
+        "total": "Số lượng"
+      }
+    }
+  },
+  "BookingStatistics": {
+    "title": "Thống kê lịch được đặt",
+    "chart": {
+      "title": {
+        "day": "Biểu đồ số lượng lịch được đặt theo ngày",
+        "week": "Biểu đồ số lượng lịch được đặt theo tuần",
+        "month": "Biểu đồ số lượng lịch được đặt theo tháng",
+        "year": "Biểu đồ số lượng lịch được đặt theo năm"
+      },
+      "xLabel": "Thời gian",
+      "yLabel": "Số lượng",
+      "seriName": {
+        "totalOff": "Số lượng khám trực tiếp",
+        "totalOnl": "Số lượng khám trực tuyến"
+      }
+    },
+    "table": {
+      "title": {
+        "day": "Bảng số lượng lịch được đặt theo ngày",
+        "week": "Bảng số lượng lịch được đặt theo tuần",
+        "month": "Bảng số lượng lịch được đặt theo tháng",
+        "year": "Bảng số lượng lịch được đặt theo năm"
+      },
+      "col": {
+        "time": "Thời gian",
+        "totalOff": "Số lượng khám trực tiếp",
+        "totalOnl": "Số lượng khám trực tuyến"
+      }
+    }
+  },
+
+  "PatientStatistics": {
+    "title": "Thống kê bệnh nhân",
+    "chart": {
+      "title": {
+        "day": "Biểu đồ số lượng bệnh nhân theo ngày",
+        "week": "Biểu đồ số lượng bệnh nhân theo tuần",
+        "month": "Biểu đồ số lượng bệnh nhân theo tháng",
+        "year": "Biểu đồ số lượng bệnh nhân theo năm"
+      },
+      "xLabel": "Thời gian",
+      "yLabel": "Số lượng",
+      "seriName": {
+        "total": "Số lượng"
+      }
+    },
+    "table": {
+      "title": {
+        "day": "Bảng số lượng bệnh nhân theo ngày",
+        "week": "Bảng số lượng bệnh nhân theo tuần",
+        "month": "Bảng số lượng bệnh nhân theo tháng",
+        "year": "Bảng số lượng bệnh nhân theo năm"
+      },
+      "col": {
+        "time": "Thời gian",
+        "total": "Số lượng"
+      }
+    }
+  },
+
+  "RevenueStatistics": {
+    "title": "Thống kê doanh thu",
+    "chart": {
+      "title": {
+        "day": "Biểu đồ doanh thu theo ngày",
+        "week": "Biểu đồ doanh thu theo tuần",
+        "month": "Biểu đồ doanh thu theo tháng",
+        "year": "Biểu đồ doanh thu theo năm"
+      },
+      "xLabel": "Thời gian",
+      "yLabel": "Doanh thu",
+      "seriName": {
+        "totalOff": "Doanh thu trực tiếp",
+        "totalOnl": "Doanh thu trực tuyến"
+      }
+    },
+    "table": {
+      "title": {
+        "day": "Bảng doanh thu theo ngày",
+        "week": "Bảng doanh thu theo tuần",
+        "month": "Bảng doanh thu theo tháng",
+        "year": "Bảng doanh thu theo năm"
+      },
+      "col": {
+        "time": "Thời gian",
+        "totalOff": "Doanh thu trực tiếp",
+        "totalOnl": "Doanh thu trực tuyến"
+      }
+    }
+  },
+
+  "StatisticsFilter": {
+    "types": {
+      "day": "Ngày",
+      "week": "Tuần",
+      "month": "Tháng",
+      "year": "Năm"
+    }
+  },
+
+  "StatisticsFilterForm": {
+    "filter": {
+      "from": "Từ ngày",
+      "to": "Đến ngày"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "ExpertiseList": {
+    "title": "Khoa khám",
+    "button": {
+      "edit": "Chỉnh sửa",
+      "add": "Thêm"
+    }
+  },
+
+  "ChangeExpertiseModal": {
+    "title": "Thay đổi khoa khám",
+    "button": {
+      "save": "Lưu"
+    }
+  },
+
+  "AddExpertiseModal": {
+    "title": "Thêm chuyên khoa",
+    "expertise": "Chuyên khoa",
+    "button": {
+      "add": "Thêm"
+    }
+  }
+}

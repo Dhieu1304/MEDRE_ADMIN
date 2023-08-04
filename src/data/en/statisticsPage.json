@@ -1,0 +1,10 @@
+{
+  "StatisticsPage": {
+    "tabs": {
+      "user": "User",
+      "booking": "Booking",
+      "patient": "Patient",
+      "revenue": "Revenue"
+    }
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "DoctorScheduleCalendar": {
+    "title": "Calendar",
+    "filter": {
+      "week": "Week"
+    },
+    "button": {
+      "currentWeek": "Current week",
+      "addTimeOff": "Add time off",
+      "booked": "Booked",
+      "book": "Book",
+      "fullSlot": "Full",
+      "view": "View"
+    }
+  },
+
+  "ScheduleList": {
+    "title": "Schedule",
+    "filter": {
+      "date": "Date"
+    },
+    "button": {
+      "today": "Today",
+      "booked": "Booked",
+      "book": "Book",
+      "fullSlot": "Full",
+      "view": "View"
+    }
+  },
+
+  "AddNewTimeOffModal": {
+    "title": "Add time off",
+    "button": {
+      "save": "Save"
+    }
+  },
+
+  "EditTimeOffModal": {
+    "title": "Edit time off",
+    "question": "Are you sure to edit this time off",
+    "button": {
+      "save": "Save"
+    }
+  },
+
+  "DeleteTimeOffModal": {
+    "title": "Delete time off",
+    "question": "Are you sure to delete this time off",
+    "button": {
+      "save": "Save"
+    }
+  },
+
+  "DoctorTimeOff": {
+    "title": "Doctor time off",
+    "filter": {
+      "dateRange": "Date range"
+    },
+    "button": {
+      "addTimeOff": "Add time off"
+    }
+  },
+
+  "DoctorScheduleList": {
+    "title": "Doctor Schedule List",
+    "filter": {
+      "dateRange": "Date range",
+      "from": "Apply from",
+      "to": "To"
+    },
+    "button": {
+      "addSchedule": "Add schedule",
+      "editAll": "Edit",
+      "delete": "Delete"
+    },
+    "changeApplyTimeModal": {
+      "title": "Change Apply Time",
+      "dateRange": "Date range",
+      "applyFrom": "Apply from",
+      "applyTo": "To",
+      "button": {
+        "save": "Save"
+      }
+    },
+
+    "deleteScheduleModal": {
+      "title": "Delete Schedules",
+      "question": "Are you sure to delete those schedules",
+      "button": {
+        "save": "Save"
+      }
+    }
+  },
+
+  "AddScheduleModal": {
+    "title": "Add doctor schedule",
+    "button": {
+      "save": "save",
+      "addRow": "Add"
+    },
+    "form": {
+      "dateRange": "Date range",
+      "applyFrom": "Apply from",
+      "applyTo": "To",
+      "applyFromLabel": "Start date",
+      "applyToLabel": "End date"
+    }
+  }
+}

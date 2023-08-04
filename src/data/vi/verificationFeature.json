@@ -1,0 +1,59 @@
+{
+  "Verification": {
+    "title": "Xác thực thông tin"
+  },
+
+  "VerificationForm": {
+    "InfoForm": {
+      "title": "Nhập thông tin",
+      "button": {
+        "send": "Gửi xác thực"
+      },
+
+      "link": {
+        "verification": "Xác thực",
+        "signIn": "Đăng nhập",
+        "signUp": "Đăng ký"
+      }
+    },
+
+    "OtpVerify": {
+      "title": "Nhập OTP từ điện thoại",
+      "button": {
+        "verifyOtp": "Xác nhận OTP"
+      },
+
+      "link": {
+        "verification": "Xác thực",
+        "signIn": "Đăng nhập",
+        "signUp": "Đăng ký",
+        "back": "Quay lại",
+        "resend": "Gửi lại otp"
+      }
+    },
+
+    "EmailVerify": {
+      "title": "Email đã được gửi",
+      "subTitle": {
+        "askToCheckMail": "Vui lòng kiểm tra email của bạn"
+      },
+      "link": {
+        "signIn": "Đăng nhập",
+        "signUp": "Đăng ký",
+        "back": "Quay lại",
+        "resend": "Gửi lại email"
+      }
+    },
+
+    "FinishOtpVerify": {
+      "title": "Xác thực OTP",
+      "subTitle": {
+        "congratulation": "Xác thực OTP thành công"
+      },
+      "link": {
+        "signIn": "Đăng nhập",
+        "signUp": "Đăng ký"
+      }
+    }
+  }
+}

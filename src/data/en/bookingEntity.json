@@ -1,0 +1,54 @@
+{
+  "properties": {
+    "date": "Date",
+    "time": "Time",
+    "status": "Status",
+    "code": "Code",
+    "paymentStatus": "Payment",
+    "reason": "Reason",
+    "note": "Note",
+    "ordinalNumber": "Ordinal Number",
+    "conclusion": "Doctor's Conclusion",
+    "userId": "User ID",
+    "emailPhoneNumberOrUserId": "Email, phone or user id",
+    "patientId": "Patient ID",
+    "phoneNumberOrPatientId": "Phone or patient id",
+    "price": "Price",
+
+    "patientName": "Patient name",
+    "patientPhoneNumber": "Patient phone number",
+    "doctorName": "Doctor name",
+    "type": "Type",
+    "expertise": "Expertise",
+
+    "reExamination": "Re-examination date",
+    "dateReExam": "Re-examination date",
+
+    "schedule": {
+      "expertise": "Expertise"
+    },
+    "patient": {
+      "phoneNumber": "Phone number",
+      "name": "Name",
+      "address": "Address",
+      "gender": "Gender",
+      "dob": "Date of birth",
+      "healthInsurance": "Health insurance"
+    },
+    "doctor": {
+      "name": "Name",
+      "expertises": "Expertises"
+    }
+  },
+  "constants": {
+    "statuses": {
+      "cancel": "Cancel",
+      "booked": "Booked",
+      "waiting": "Waiting for payment"
+    },
+    "paymentStatuses": {
+      "paid": "Paid",
+      "unpaid": "Unpaid"
+    }
+  }
+}

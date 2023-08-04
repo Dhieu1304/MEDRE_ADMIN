@@ -1,0 +1,35 @@
+{
+  "TicketList": {
+    "title": "Danh sách phản hồi của khách hàng",
+
+    "filter": {
+      "status": "Tình trạng"
+    },
+
+    "select": {
+      "statuses": {
+        "open": "Đang mở",
+        "close": "Đã đóng",
+        "all": "Tất cả"
+      }
+    },
+
+    "button": {
+      "reset": "Đặt lại",
+      "hideFilterCollapse": "Ẩn bộ lọc",
+      "showFilterCollapse": "Hiện bộ lọc",
+      "showMenuColumns": "Hiện",
+      "add": "Thêm"
+    }
+  },
+
+  "TicketDetail": {
+    "title": "Chi tiết phản hồi khách hàng",
+    "button": {
+      "back": "Quay lại",
+      "save": "Lưu",
+      "markFinish": "Đánh dấu kết thúc",
+      "finished": "Đã kết thúc"
+    }
+  }
+}

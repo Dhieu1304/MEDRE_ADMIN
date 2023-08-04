@@ -1,0 +1,40 @@
+{
+  "properties": {
+    "id": "ID",
+    "name": "Name",
+    "descName": "Desc name",
+    "unit": "Unit",
+    "value": "Value",
+    "createdAt": "Created at",
+    "updatedAt": "Updated at",
+    "deletedAt": "Deleted at"
+  },
+
+  "constants": {
+    "names": {
+      "maintain": "System maintenance",
+      "bookAdvanceDay": "Number of days required to book in advance",
+      "bookAfterDay": "Number of days allowed to book after",
+      "createScheduleAdvanceDay": "Number of days required to create schedule in advance",
+      "cancelOnlineBookingAfterMinute": "Number of minutes to cancel online booking"
+    },
+
+    "units": {
+      "maintain": "",
+      "bookAdvanceDay": "Days",
+      "bookAfterDay": "Days",
+      "createScheduleAdvanceDay": "Days",
+      "cancelOnlineBookingAfterMinute": "Minutes"
+    },
+
+    "maintains": {
+      "true": "Yes",
+      "false": "No"
+    },
+
+    "maintainGuides": {
+      "true": "Turn on",
+      "false": "Turn off"
+    }
+  }
+}

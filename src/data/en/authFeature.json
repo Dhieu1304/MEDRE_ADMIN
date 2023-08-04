@@ -1,0 +1,33 @@
+{
+  "Login": {
+    "title": "Sign in",
+    "button": {
+      "login": "Login"
+    },
+
+    "link": {
+      "verification": "Verification account",
+      "forgotPassword": "Forgot password"
+    }
+  },
+
+  "NotHaveAccessModal": {
+    "title": "Warning",
+    "errorMessage": "You don't have access"
+  },
+
+  "NotHaveAccess": {
+    "errorMessage": "You don't have access"
+  },
+
+  "ForgotPassword": {
+    "title": "Reset password"
+  },
+
+  "ChangePassword": {
+    "title": "Change password",
+    "button": {
+      "save": "Save"
+    }
+  }
+}

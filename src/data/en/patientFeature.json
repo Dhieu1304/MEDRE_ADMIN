@@ -1,0 +1,42 @@
+{
+  "PatientList": {
+    "title": "Find patient",
+    "filter": {
+      "name": "Search by name",
+      "email": "Email",
+      "phoneNumber": "Phone",
+      "gender": "Gender",
+      "healthInsurance": "Health Insurance",
+      "address": "Address"
+    },
+
+    "select": {
+      "genders": {
+        "male": "Male",
+        "female": "Female",
+        "other": "other",
+        "all": "All"
+      }
+    },
+
+    "button": {
+      "reset": "Reset",
+      "hideFilterCollapse": "Hide filter",
+      "showFilterCollapse": "Show Filter",
+      "showMenuColumns": "Show",
+      "add": "Add"
+    }
+  },
+
+  "PatientDetail": {
+    "title": {
+      "identify": "Identify Information",
+      "account": "Account Information",
+      "personality": "Personality Information"
+    },
+    "button": {
+      "reset": "Reset",
+      "save": "Save"
+    }
+  }
+}

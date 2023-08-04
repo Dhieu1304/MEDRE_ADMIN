@@ -1,0 +1,15 @@
+{
+  "SettingList": {
+    "title": "Setting",
+    "button": {
+      "edit": "Edit"
+    }
+  },
+
+  "ChangeSettingModal": {
+    "title": "Change setting",
+    "button": {
+      "save": "Save"
+    }
+  }
+}

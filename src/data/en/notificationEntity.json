@@ -1,0 +1,41 @@
+{
+  "properties": {
+    "id": "ID",
+    "title": "Title",
+    "content": "Brief description",
+    "description": "Detailed description",
+    "type": "Type",
+    "notificationFor": "Notification for",
+    "createdBy": "Created by",
+    "createdAt": "Created at",
+    "updatedAt": "Updated at",
+    "deletedAt": "Deleted at",
+    "userId": "User ID",
+    "staffId": "Staff ID",
+    "userOrStaffId": "Received Id",
+    "userOrStaffEmailPhoneId": "Email, phone or id receiver",
+    "personalType": "Personal type"
+  },
+
+  "constants": {
+    "types": {
+      "booking": "Booking",
+      "event": "Event",
+      "avertisement": "Avertisement"
+    },
+    "notificationFor": {
+      "allSystem": "AllSystem",
+      "personal": "Personal",
+      "user": "User",
+      "staff": "Staff",
+      "admin": "Admin",
+      "doctor": "Doctor",
+      "nurse": "Nurse",
+      "customerService": "Customer Service"
+    },
+    "personalTypes": {
+      "user": "User",
+      "staff": "Staff"
+    }
+  }
+}

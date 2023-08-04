@@ -1,0 +1,81 @@
+{
+  "UserList": {
+    "title": "Tìm kiếm người dùng",
+    "filter": {
+      "name": "Tìm kiếm theo tên",
+      "email": "Email",
+      "phoneNumber": "Số điện thoại",
+      "gender": "Giới tính",
+      "status": "Tình trạng",
+      "healthInsurance": "Bảo hiểm y tế",
+      "address": "Địa chỉ"
+    },
+
+    "select": {
+      "genders": {
+        "male": "Nam",
+        "female": "Nữ",
+        "other": "Khác",
+        "all": "Tất cả"
+      },
+      "statuses": {
+        "block": "Khóa",
+        "unblock": "Mở khóa",
+        "all": "Tất cả"
+      }
+    },
+
+    "button": {
+      "reset": "Đặt lại",
+      "hideFilterCollapse": "Ẩn bộ lọc",
+      "showFilterCollapse": "Hiện bộ lọc",
+      "showMenuColumns": "Hiện",
+      "add": "Thêm"
+    }
+  },
+
+  "UserDetail": {
+    "title": {
+      "identify": "Thông tin xác thực",
+      "account": "Thông tin tài khoản",
+      "personality": "Thông tin cá nhân"
+    },
+    "button": {
+      "reset": "Đặt lại",
+      "save": "Lưu"
+    }
+  },
+
+  "BlockUserModal": {
+    "title": "Khóa tài khoản người dùng",
+    "button": {
+      "block": "Khóa"
+    },
+    "confirmQuestion": "Bạn có chắc chắn khóa người dùng - {{name}}?",
+    "reason": "Lý do"
+  },
+
+  "UnblockUserModal": {
+    "title": "Mở khóa tài khoản người dùng",
+    "button": {
+      "unblock": "Mở khóa"
+    },
+    "confirmQuestion": "Bạn có chắc chắn mở khóa người dùng - {{name}}?",
+    "reason": "Lý do"
+  },
+
+  "ChangeAvatarModal": {
+    "title": "Thay đổi ảnh đại diện",
+    "button": {
+      "upload": "Tải ảnh lên",
+      "save": "Lưu"
+    }
+  },
+
+  "AddUserModal": {
+    "title": "Thêm người dùng",
+    "button": {
+      "add": "Thêm"
+    }
+  }
+}

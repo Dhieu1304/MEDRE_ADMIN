@@ -1,0 +1,36 @@
+{
+  "properties": {
+    "dayOfWeek": "Day of week",
+    "timeSchedule": "Time",
+    "type": "Type",
+    "applyTime": "Apply time",
+    "applyFrom": "Apply from",
+    "applyTo": "Apply to",
+    "applyFromLabel": "Start date",
+    "applyToLabel": "End date",
+    "repeatOn": "Repeat on",
+    "expertise": "Expertise",
+    "session": "Session"
+  },
+  "constants": {
+    "types": {
+      "online": "Online",
+      "offline": "Offline"
+    },
+    "sessions": {
+      "morning": "Morning",
+      "afternoon": "Afternoon",
+      "evening": "Evening",
+      "wholeDay": "Whole day"
+    },
+    "daysOfWeek": {
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday"
+    }
+  }
+}

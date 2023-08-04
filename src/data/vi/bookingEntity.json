@@ -1,0 +1,55 @@
+{
+  "properties": {
+    "date": "Ngày khám",
+    "time": "Ca khám",
+    "status": "Tình trạng",
+    "code": "Code",
+    "paymentStatus": "Thanh toán",
+    "reason": "Lý do khám",
+    "note": "Ghi chú",
+    "ordinalNumber": "Số thứ tự",
+    "conclusion": "Kết luận bác sĩ",
+    "userId": "ID người dùng",
+    "patientId": "ID bệnh nhân",
+    "emailPhoneNumberOrUserId": "Email, số điện thoại hoặc id user",
+    "phoneNumberOrPatientId": "Số điện thoại hoặc id bệnh nhân",
+    "price": "Giá khám",
+
+    "patientName": "Họ tên bệnh nhân",
+    "patientPhoneNumber": "SĐT bệnh nhân",
+    "doctorName": "Tên bác sĩ",
+    "type": "Loại khám",
+    "expertise": "Chuyên khoa",
+
+    "reExamination": "Ngày tái khám",
+    "dateReExam": "Ngày tái khám",
+
+    "schedule": {
+      "expertise": "Chuyên khoa"
+    },
+
+    "patient": {
+      "phoneNumber": "Số điện thoại",
+      "name": "Họ tên",
+      "address": "Địa chỉ",
+      "gender": "Giới tính",
+      "dob": "Ngày sinh",
+      "healthInsurance": "Bảo hiểm y tế"
+    },
+    "doctor": {
+      "name": "Họ tên",
+      "expertises": "Chuyên khoa"
+    }
+  },
+  "constants": {
+    "statuses": {
+      "booked": "Đã đặt",
+      "cancel": "Hủy lịch",
+      "waiting": "Chờ thanh toán"
+    },
+    "paymentStatuses": {
+      "paid": "Đã thanh toán",
+      "unpaid": "Chưa thanh toán"
+    }
+  }
+}

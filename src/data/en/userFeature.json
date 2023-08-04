@@ -1,0 +1,81 @@
+{
+  "UserList": {
+    "title": "Find user",
+    "filter": {
+      "name": "Search by name",
+      "email": "Email",
+      "phoneNumber": "Phone",
+      "gender": "Gender",
+      "status": "Status",
+      "healthInsurance": "Health Insurance",
+      "address": "Address"
+    },
+
+    "select": {
+      "genders": {
+        "male": "Male",
+        "female": "Female",
+        "other": "other",
+        "all": "All"
+      },
+      "statuses": {
+        "block": "Block",
+        "unblock": "Unblock",
+        "all": "All"
+      }
+    },
+
+    "button": {
+      "reset": "Reset",
+      "hideFilterCollapse": "Hide filter",
+      "showFilterCollapse": "Show Filter",
+      "showMenuColumns": "Show",
+      "add": "Add"
+    }
+  },
+
+  "UserDetail": {
+    "title": {
+      "identify": "Identify Information",
+      "account": "Account Information",
+      "personality": "Personality Information"
+    },
+    "button": {
+      "reset": "Reset",
+      "save": "Save"
+    }
+  },
+
+  "BlockUserModal": {
+    "title": "Block User",
+    "button": {
+      "block": "Block"
+    },
+    "confirmQuestion": "Do you want to block user - {{name}}?",
+    "reason": "Reason"
+  },
+
+  "UnblockUserModal": {
+    "title": "Unblock User",
+    "button": {
+      "unblock": "Unblock"
+    },
+    "confirmQuestion": "Do you want to unblock user - {{name}}?",
+    "reason": "Reason"
+  },
+
+  "ChangeAvatarModal": {
+    "title": "Change Avatar",
+    "button": {
+      "upload": "Upload",
+      "save": "Save"
+    }
+  },
+
+  "AddUserModal": {
+    "title": "Add User",
+    "button": {
+      "add": "Add"
+    }
+  }
+}

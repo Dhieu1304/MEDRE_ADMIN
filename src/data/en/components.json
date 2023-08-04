@@ -1,0 +1,70 @@
+{
+  "CustomModal": {
+    "button": {
+      "cancel": "Cancel"
+    }
+  },
+  "CustomDateFromToInput": {
+    "preview": "Preview",
+    "button": {
+      "submit": "Submit"
+    }
+  },
+
+  "CustomDateInput": {
+    "preview": "Preview",
+    "button": {
+      "submit": "Submit"
+    }
+  },
+
+  "NoDataBox": {
+    "title": "No relevant data available"
+  },
+
+  "ListPageAction": {
+    "button": {
+      "showMenuColumns": "Show",
+      "reset": "Reset"
+    }
+  },
+
+  "ListPageTop": {
+    "button": {
+      "hideFilterCollapse": "Hide filter",
+      "showFilterCollapse": "Show Filter"
+    }
+  },
+
+  "PersonDetailWrapper": {
+    "PersonDetailAction": {
+      "button": {
+        "reset": "Reset",
+        "save": "Save"
+      }
+    }
+  },
+
+  "CustomNotification": {
+    "title": "Notifications",
+    "button": {
+      "seeMore": "See more"
+    }
+  },
+
+  "CopyButton": {
+    "label": "Copy",
+    "message": {
+      "success": "Copied {{content}} successfully",
+      "error": "Failed to copy to clipboard"
+    }
+  },
+
+  "ClipboardButton": {
+    "label": "Paste",
+    "message": {
+      "success": "Paste {{content}} successfully",
+      "error": "Failed to paste to clipboard"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "StaffPage": {},
+  "StaffDetailPage": {
+    "tabs": {
+      "info": "Thông tin",
+      "calendar": "Lịch khám",
+      "schedule": "Quản lý lịch",
+      "addSchedule": "Thêm lịch",
+      "timeOff": "Lịch nghỉ"
+    }
+  }
+}

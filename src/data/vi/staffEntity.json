@@ -1,0 +1,53 @@
+{
+  "properties": {
+    "id": "ID",
+    "username": "Username",
+    "phoneNumber": "Số điện thoại",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "oldPassword": "Mật khẩu cũ",
+    "newPassword": "Mật khẩu mới",
+    "confirmPassword": "Xác nhận mật khẩu",
+    "emailOrUsernameOrPhoneNumber": "Email, username hoặc số điện thoại",
+    "phoneNumberOrEmail": "Email hoặc số điện thoại",
+    "name": "Họ tên",
+    "image": "Ảnh",
+    "address": "Địa chỉ",
+    "gender": "Giới tính",
+    "dob": "Ngày sinh",
+    "role": "Vai trò",
+    "healthInsurance": "Bảo hiểm y tế",
+    "description": "Mô tả",
+    "education": "Học vấn",
+    "certificate": "Chứng nhận",
+    "createdAt": "Ngày tạo",
+    "updatedAt": "Ngày cập nhật",
+    "deletedAt": "Ngày xóa",
+    "status": "Tình trạng",
+    "expertises": "Chuyên môn"
+  },
+
+  "constants": {
+    "genders": {
+      "male": "Nam",
+      "female": "Nữ",
+      "other": "Khác"
+    },
+    "roles": {
+      "admin": "Admin",
+      "doctor": "Bác sĩ",
+      "nurse": "Y tá",
+      "customerService": "NV CSKH"
+    },
+    "statuses": {
+      "block": "Khóa",
+      "unblock": "Mở khóa"
+    }
+  },
+  "messages": {
+    "emailVerifiedSuccess": "Xác minh email thành công",
+    "emailVerifiedFailed": "Xác minh email thất bại",
+    "phoneVerifiedSuccess": "Xác minh số điện thoại thành công",
+    "phoneVerifiedFailed": "Xác minh số điện thoại thất bại"
+  }
+}
